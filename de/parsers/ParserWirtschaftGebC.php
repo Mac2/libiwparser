@@ -36,6 +36,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
     parent::__construct();
 
     $this->setIdentifier('de_wirtschaft_geb');
+    $this->setName('Geb&auml;ude&uuml;bersicht');
     $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s+Forschungs.{1,3}bersicht\s+Werft.{1,3}bersicht\s+Defence.{1,3}bersicht.*Geb.{1,3}ude.{1,3}bersicht(?:.*Geb.{1,3}ude.{1,3}bersicht)?/sm');
     $this->setRegExpBeginData( '/Geb.+ude.+bersicht/sm' );
     $this->setRegExpEndData( '' );

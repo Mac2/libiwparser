@@ -28,22 +28,15 @@ return array(
         'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
                         'de'              . DIRECTORY_SEPARATOR .
                         'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserMsgGeoscansC.php',
-        'classname' => 'ParserMsgGeoscansC',
+                        'ParserInfoGebC.php',
+        'classname' => 'ParserInfoGebC',
       ),
       array(
         'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
                         'de'              . DIRECTORY_SEPARATOR .
                         'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserUniversumC.php',
-        'classname' => 'ParserUniversumC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserMsgScansC.php',
-        'classname' => 'ParserMsgScansC',
+                        'ParserWirtschaftGebC.php',
+        'classname' => 'ParserWirtschaftGebC',
       ),
     ),
     'aPathesAutoload' => array(

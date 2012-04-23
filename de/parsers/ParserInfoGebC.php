@@ -36,6 +36,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
     parent::__construct();
 
     $this->setIdentifier('de_info_geb');
+    $this->setName("Geb&auml;udeinformationen");
     $this->setRegExpCanParseText('/Geb.{1,3}udeinfo\s+Geb.{1,3}udeinfo/s');
     $this->setRegExpBeginData( '' );
     $this->setRegExpEndData( '' );

@@ -34,7 +34,7 @@ class ParserFactoryConfigC implements ParserFactoryI
    *
    * Use getInstance() to get an instance of the factory.
    */
-  private function __construct()
+  public function __construct()
   {
     $aConfiguredParsers = ConfigC::get('lib.aRegisteredParsers');
     $rcParser           = NULL;
@@ -119,8 +119,6 @@ class ParserFactoryConfigC implements ParserFactoryI
   public function getParser( $text, $parserId = '' )
   {
     $retVal = false;
-    
-    $this->cleanupText( $text );
     
     if( $parserId === '' )
     {

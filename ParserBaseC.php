@@ -10,6 +10,7 @@
  */
 /**
  * @author Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @author Mac <MacXY@herr-der-mails.de>
  * @package libIwParsers
  * @subpackage parsers
  */
@@ -36,6 +37,11 @@ class ParserBaseC extends ParserFunctionC
    */
   private $_strIdentifier = '';
 
+  /**
+   * @var string identifier of the concrete parser
+   */
+  private $_strName = '';
+  
   /**
    * @var string regExp, checking if the concrete parser is able to parse the
    *             text provided.
@@ -148,6 +154,16 @@ class ParserBaseC extends ParserFunctionC
 
   /////////////////////////////////////////////////////////////////////////////
 
+  /**
+   * @see ParserI::getName()
+   */
+  public function getName()
+  {
+    return $this->_strName;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+  
   protected function getRegExpCanParseText()
   {
     return $this->_reCanParseText;
@@ -179,6 +195,13 @@ class ParserBaseC extends ParserFunctionC
   protected function setIdentifier( $value )
   {
     $this->_strIdentifier = PropertyValueC::ensureString($value);
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  protected function setName( $value )
+  {
+    $this->_strName = PropertyValueC::ensureString($value);
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -226,7 +249,7 @@ class ParserBaseC extends ParserFunctionC
       'Vanilleeis'               => 'Eis',
       'Eismatsch'                => 'Wasser',
       'Traubenzucker'            => 'Energie',
-      'Kekse'                    => 'Credits',
+      ' Kekse '                    => ' Credits ',  //! Mac: Workaround um nicht Teile eines Wortes/Gebäudenamens zu ersetzen
 
       'Systrans (Systransporter Klasse 1)'  => 'Systrans (Systemtransporter Klasse 1)',
       'Lurch (Systransporter Klasse 2)'     => 'Lurch (Systemtransporter Klasse 2)',

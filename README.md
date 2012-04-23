@@ -1,4 +1,4 @@
 libiwparser
 ===========
 
-Parser Bibliothek für das Onlinegame Icewars
+allgemeine Parserbibliothek für das Browsergame Icewars
