@@ -19,6 +19,24 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
+
+require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
+              '..'              . DIRECTORY_SEPARATOR .
+              '..'              . DIRECTORY_SEPARATOR .
+              'ParserBaseC.php' );
+require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
+              '..'              . DIRECTORY_SEPARATOR .
+              '..'              . DIRECTORY_SEPARATOR .
+              'ParserI.php' );
+require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
+              '..'              . DIRECTORY_SEPARATOR .
+              '..'              . DIRECTORY_SEPARATOR .
+              'HelperC.php' );
+require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
+              '..'              . DIRECTORY_SEPARATOR .
+              'parserResults'   . DIRECTORY_SEPARATOR .
+              'DTOParserMsgResultC.php' );
+
 /**
  * Parses a Building Information
  *

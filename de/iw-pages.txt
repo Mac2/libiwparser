@@ -1,0 +1,105 @@
+-> Startseite:				+ done
+    -> Ressourcen:          + done
+	-> Werft:				+ done
+	-> Gebaeudebau:			+ done
+    -> Koloinfo:            + done
+        -> Forschung:		+ done
+        -> Verteidigung:    + done
+        -> Schiffe:         + done
+    -> Shoutbox:            rejected
+-> Bauen:					+ done
+-> Forschung:				+ done
+-> Schiffbau:				* open
+-> Verteidigung:			* open
+-> Handel:					- none
+	-> Ress:				rejected
+	-> Bank:				* open
+	-> Shiffhandel:			rejected
+-> Wirtschaft:				- none
+    -> Produktion:          * open
+	-> Koloinfo:			* open
+	-> Koloress:			+ done
+	-> Gebaeude:			+ done
+	-> Forschung:			rejected
+	-> Werft:				* open
+	-> Defence:				* done
+	-> Klonen:				rejected
+	-> Universum:			rejected
+	-> Massdriver:			rejected
+	-> Artfverwaltung:		* open
+	-> Artfübersicht:		* open
+-> Mil:						- none
+	-> Stat:				* open
+	-> Fremde:				* open
+	-> Schiffe:				+ done
+	-> Flotten:				* open
+-> Universum:				+ done
+-> Simulator:				- none
+-> Personal: 				* open
+	-> Timeline: 			rejected
+	-> Stat:				rejected
+		-> Research:		+ done
+		-> Building:		rejected
+		-> Ships:			rejected
+		-> Resourcen:		rejected
+	-> Settings:			rejected
+	-> Genetik:				* open
+	-> Staatsform:			+ done
+	-> SigImage:			rejected
+-> Story/Quest:             - none
+    -> Kriege:              * open
+    -> Allianzen:           * open
+    -> AlliInfosystem:      * open
+-> Alli:					- none
+	-> NewLeader:			rejected
+	-> Del:					rejected
+	-> Edit:				rejected
+	-> Settings:			rejected
+	-> Politik:				* open
+	-> Kasse:				+ done
+	-> MemberSettings:		rejected
+	-> AlliMsg:				rejected
+	-> Wing:				rejected
+	-> Memberlist:			+ done
+	-> History:				* open
+	-> Stat:				- none
+		-> Building:		rejected
+		-> Ships:			rejected
+	-> Kasse:				* done
+-> Msg:						- none
+	-> Msg:					+ done
+	-> Transport:			+ done
+	-> Sonden:				+ done
+	-> Geo:					+ done
+	-> War:					* open
+	-> Outbox:				+ done
+	-> Events:				+ done
+	-> Tagebuch:			* open
+	-> News:				rejected
+	-> Help:				rejected
+	-> AlliMsg:				* open
+-> Profil:					- none
+-> Highscore:               - none
+    -> eigene HS:           + done
+    -> globale HS:          - none
+        -> Spieler:         + done
+        -> Allianzen:       * open
+-> Special:					- none
+	-> Umwandlung:			rejected
+	-> Notizblock:			rejected
+	-> Planirename:			* open
+-> Info:					- none
+	-> Alli:				* open
+	-> User:				+ done
+	-> Planet:				+ done
+	-> Ship:				+ done
+	-> Building:			+ done
+	-> Research: 			+ done
+-> XML:						- none
+	-> UniXML:				+ done
+	-> KB:					+ done
+	-> RessScan:			+ done
+	-> BuildingScan:		+ done
+	-> Handelskurse:		+ done
+	-> Schiffe:				+ done
+	-> Resourcen:			+ done
