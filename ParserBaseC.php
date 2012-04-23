@@ -226,7 +226,7 @@ class ParserBaseC extends ParserFunctionC
       'Vanilleeis'               => 'Eis',
       'Eismatsch'                => 'Wasser',
       'Traubenzucker'            => 'Energie',
-      'Kekse'                    => 'Credits',
+      ' Kekse '                    => ' Credits ',  //! Mac: Workaround um nicht Teile eines Wortes/Gebäudenamens zu ersetzen
 
       'Systrans (Systransporter Klasse 1)'  => 'Systrans (Systemtransporter Klasse 1)',
       'Lurch (Systransporter Klasse 2)'     => 'Lurch (Systemtransporter Klasse 2)',
