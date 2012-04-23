@@ -1,0 +1,5 @@
+# ignore temporary files
+*~
+*.bak
+/nbproject/private/
+/nbproject
