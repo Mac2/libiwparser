@@ -38,6 +38,13 @@ return array(
                         'ParserWirtschaftGebC.php',
         'classname' => 'ParserWirtschaftGebC',
       ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserIndexC.php',
+        'classname' => 'ParserIndexC',
+      ),
     ),
     'aPathesAutoload' => array(
       dirname(__FILE__),
