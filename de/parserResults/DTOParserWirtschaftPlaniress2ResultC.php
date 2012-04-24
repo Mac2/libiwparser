@@ -64,6 +64,24 @@ class DTOParserWirtschaftPlaniress2ResultC
    * @var float $fCreditAlliance the credit alliance tax
    */
   public $fCreditAlliance = 0.00;
+  
+  /**
+   * @soap
+   * @var integer $iPeopleWithoutWork
+   */
+  public $iPeopleWithoutWork = 0;
+
+  /**
+   * @soap
+   * @var integer $iPeopleWithWork
+   */
+  public $iPeopleWithWork = 0;
+
+  /**
+   * @soap
+   * @var integer $iPeopleCouldWork the maximum people
+   */
+  public $iPeopleCouldWork = 0;
 
 }
 

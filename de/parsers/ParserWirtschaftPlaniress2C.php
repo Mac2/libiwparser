@@ -79,7 +79,10 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $retVal->fCreditAlliance = PropertyValueC::ensureFloat( $result['credits_alliance'] );
         if (($retVal->fCreditProduction+$retVal->fCreditAlliance) != 0)
             $steuer=$retVal->fCreditAlliance/($retVal->fCreditProduction+$retVal->fCreditAlliance);
-
+        $retVal->iPeopleWithoutWork = PropertyValueC::ensureInteger( $result['people_free'] );  
+        $retVal->iPeopleWithWork = PropertyValueC::ensureInteger( $result['people_there'] );
+        $retVal->iPeopleCouldWork = PropertyValueC::ensureInteger( $result['people_max'] );
+        
       } else {
 
         $strCoords = $result['coords'];
