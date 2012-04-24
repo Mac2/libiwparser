@@ -52,6 +52,62 @@ return array(
                         'ParserAlliMemberlisteC.php',
         'classname' => 'ParserAlliMemberlisteC',
       ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserMilSchiffUebersichtC.php',
+        'classname' => 'ParserMilSchiffUebersichtC',
+      ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserWirtschaftPlaniressC.php',
+        'classname' => 'ParserWirtschaftPlaniressC',
+      ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserWirtschaftPlaniress2C.php',
+        'classname' => 'ParserWirtschaftPlaniress2C',
+      ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserAlliKasseInhaltC.php',
+        'classname' => 'ParserAlliKasseInhaltC',
+      ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserAlliKasseLogAllisC.php',
+        'classname' => 'ParserAlliKasseLogAllisC',
+      ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserAlliKasseLogMemberC.php',
+        'classname' => 'ParserAlliKasseLogMemberC',
+      ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserAlliKasseMemberC.php',
+        'classname' => 'ParserAlliKasseMemberC',
+      ),
+//      array(
+//        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+//                        'de'              . DIRECTORY_SEPARATOR .
+//                        'parsers'         . DIRECTORY_SEPARATOR .
+//                        'ParserC.php',
+//        'classname' => 'ParserC',
+//      ),
     ),
     'aPathesAutoload' => array(
       dirname(__FILE__),
