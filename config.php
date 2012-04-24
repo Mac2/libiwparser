@@ -45,6 +45,13 @@ return array(
                         'ParserIndexC.php',
         'classname' => 'ParserIndexC',
       ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserAlliMemberlisteC.php',
+        'classname' => 'ParserAlliMemberlisteC',
+      ),
     ),
     'aPathesAutoload' => array(
       dirname(__FILE__),
