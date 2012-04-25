@@ -60,7 +60,6 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
 
     $aResult = array();
     $fRetVal = preg_match_all( $regExp, $this->getText(), $aResult, PREG_SET_ORDER );
-// print_die($aResult);
     if( $fRetVal !== false && $fRetVal > 0 )
     {
       $parserResult->bSuccessfullyParsed = true;
@@ -79,9 +78,15 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
         $log->iDateTime = PropertyValueC::ensureInteger( $iDateTime );
         $log->iCredits   = PropertyValueC::ensureInteger( $iCredits );
         $retVal->aLogs[] = $log;
-	if (isset($result['strAlliance']) && !empty($result['strAlliance'])) $strAlliance = PropertyValueC::ensureString( $result['strAlliance'] );
+        if (isset($result['strAlliance']) && !empty($result['strAlliance'])) $strAlliance = PropertyValueC::ensureString( $result['strAlliance'] );
       }
-	$retVal->strAlliance      = $strAlliance;
+      $retVal->strAlliance      = $strAlliance;
+    }
+    //! Mac: klappt noch nicht richtig, da das nur eigentlich nur bei "leerem" Input kommen sollte - nicht 0 Matches
+    else if( $fRetVal !== false && $fRetVal == 0 )
+    {
+      $parserResult->bSuccessfullyParsed = true;
+      $parserResult->aErrors[] = 'no Data found';
     }
     else
     {

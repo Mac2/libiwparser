@@ -39,6 +39,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
     $this->setName("Allianzkasse Auszahlungen(Allianzen)");
     $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
     $this->setRegExpBeginData( '/Allianzkasse\sAllianzkasse/sm' );
+//    $this->setRegExpBeginData( '/Auszahlungslog\san\sWings\/etc\sder\sletzten\sdrei\sWochen\s/' );    //! Mac: effizienter, da Input kleiner  ?
     $this->setRegExpEndData( '' );
   }
 
@@ -50,50 +51,49 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
    */
   public function parseText( DTOParserResultC& $parserResult )
   {
-    $parserResult->objResultData = new DTOParserAlliKasseLogResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
+        $parserResult->objResultData = new DTOParserAlliKasseLogResultC();
+        $retVal =& $parserResult->objResultData;
+        $fRetVal = 0;
 
-    $this->stripTextToData();
+        $this->stripTextToData();
 
-    $regExp = $this->getRegularExpression();
+        $regExp = $this->getRegularExpression();
 
-    $aResult = array();
-    $fRetVal = preg_match_all( $regExp, $this->getText(), $aResult, PREG_SET_ORDER );
-// print_pre($this->getText());
-// print_die($aResult);
-    if( $fRetVal !== false && $fRetVal > 0 )
-    {
-      $parserResult->bSuccessfullyParsed = true;
-	$strAlliance = "";
-      foreach( $aResult as $result )
-      {
-    $log = new DTOParserAlliKasseLogMemberResultC;
+        $aResult = array();
+        $fRetVal = preg_match_all( $regExp, $this->getText(), $aResult, PREG_SET_ORDER );
+        if( $fRetVal !== false && $fRetVal > 0 )
+        {
+            $parserResult->bSuccessfullyParsed = true;
+            $strAlliance = "";
+            foreach( $aResult as $result )
+            {
+                $log = new DTOParserAlliKasseLogMemberResultC;
 
-    $iDateTime = HelperC::convertDateTimeToTimestamp($result['reDateTime']);
-    $iCredits = $result['iCredits'];
+                $iDateTime = HelperC::convertDateTimeToTimestamp($result['reDateTime']);
+                $iCredits = $result['iCredits'];
 
-        $log->strFromUser    = PropertyValueC::ensureString( $result['strFromUser'] );
-        $log->strAlliName      = PropertyValueC::ensureString( $result['strAlliName'] );
-    $log->strAlliTag      = PropertyValueC::ensureString( $result['strAlliTag'] );
-        $log->iDateTime = PropertyValueC::ensureInteger( $iDateTime );
-        $log->iCredits   = PropertyValueC::ensureInteger( $iCredits );
+                $log->strFromUser    = PropertyValueC::ensureString( $result['strFromUser'] );
+                $log->strAlliName      = PropertyValueC::ensureString( $result['strAlliName'] );
+                $log->strAlliTag      = PropertyValueC::ensureString( $result['strAlliTag'] );
+                $log->iDateTime = PropertyValueC::ensureInteger( $iDateTime );
+                $log->iCredits   = PropertyValueC::ensureInteger( $iCredits );
 
-        $retVal->aLogs[] = $log;
-        if (isset($result['strAlliance']) && !empty($result['strAlliance'])) $strAlliance = PropertyValueC::ensureString( $result['strAlliance'] );
-      }
-	$retVal->strAlliance      = $strAlliance;
-    }
-//     else if( $fRetVal !== false && $fRetVal == 0 )
-//     {
-//       $parserResult->bSuccessfullyParsed = false;
-//       $parserResult->aErrors[] = 'no Data found';
-//     }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-    }
+                $retVal->aLogs[] = $log;
+                if (isset($result['strAlliance']) && !empty($result['strAlliance'])) $strAlliance = PropertyValueC::ensureString( $result['strAlliance'] );
+            }
+            $retVal->strAlliance      = $strAlliance;
+        }
+        //! Mac: klappt noch nicht richtig, da das nur eigentlich nur bei "leerem" Input kommen sollte - nicht 0 Matches
+        else if( $fRetVal !== false && $fRetVal == 0 )
+        {
+            $parserResult->bSuccessfullyParsed = true;
+            $parserResult->aErrors[] = 'no Data found';
+        }
+        else
+        {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[] = 'Unable to match the pattern.';
+        }
   }
 
   /////////////////////////////////////////////////////////////////////////////
