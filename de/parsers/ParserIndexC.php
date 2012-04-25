@@ -231,7 +231,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
                 (?:\s+\(Es\ssind\sfremde\sFlotten\s.{1,3}ber\sdem\sPlaneten\sstationiert\.\))?
                 (?:\s+Ziel\s+Start\s+Ankunft\s+Aktionen\s+(?:(?:\*\s)?\+))?
             )|
-            (?P<shoutbox>Allianz\sShoutbox\s+Inhalt.+neue\sMitteilung\s+Mitteilung)
+            (?P<shoutbox>Allianz\sShoutbox\s*Inhalt.+neue\sMitteilung\s+Mitteilung)
             )\s*?
         ';
     $regExp .= '/mxs';
