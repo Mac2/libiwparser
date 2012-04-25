@@ -254,7 +254,7 @@ class ParserBaseC extends ParserFunctionC
       'Systrans (Systransporter Klasse 1)'  => 'Systrans (Systemtransporter Klasse 1)',
       'Lurch (Systransporter Klasse 2)'     => 'Lurch (Systemtransporter Klasse 2)',
       'Crux (Systransporter Kolonisten)'    => 'Crux (Systemtransporter Kolonisten)',
-      'Pflaumenmus (Carrier)'               => 'Pflaumenmus  (kleiner Carrier)',
+      'Pflaumenmus (kleiner Carrier)'       => 'Pflaumenmus (Carrier)',     //! Mac: noetig, da Forschung anders heißt als das Schiff
       
       '\\\%' => '\%',
 
