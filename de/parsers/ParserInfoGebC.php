@@ -372,7 +372,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
     $regExp  .= ')';
 
     $regExp  .= 'Kosten\s+?(?P<kosten>(?:(?:(?:globale\sAnzahl|Stufe)\s(?:\d)+\:\s)?(?:'.$reResource.'\:\s'.$reDecNumber.'\s)*[\n\t]*)+)';
-    $regExp  .= 'Dauer\s+?(?P<dauer>(?:(?:globale\sAnzahl\s(?:\d)+\:\s)?'.$reMixedTime.'[\n\t]*)+)';
+    $regExp  .= 'Dauer\s+?(?P<dauer>(?:(?:globale\sAnzahl\s(?:\d)+\:\s)?'.$reMixedTime.'[\n\t]*)+)\s*';
 
     //! ausnahme fuer Forschungsgebaeude da sonst zu fuzzy
     $regExp  .= '(?:';
