@@ -63,7 +63,8 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
 //    print_pre($this->getText());
     $aResult = array();
     $fRetVal = preg_match( $regExp, $this->getText(), $aResult );
-//     print_die($aResult);
+//     print_r($aResult);
+//     die();
     if( $fRetVal !== false && $fRetVal > 0 )
     {
         $parserResult->bSuccessfullyParsed = true;
@@ -144,12 +145,12 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
 
 //     $reResearch                = '[a-zA-Z][^\n\t\r\:\+\%\.]{3,}';
     $reResearch         = $this->getRegExpSingleLineText3();        //! accepted also numbers in ResearchName
-    $reSchiffeName           = $this->getRegExpSingleLineText3();
-    $reBracketString           = $this->getRegExpBracketString();
-    $reAreas         = $this->getRegExpAreas();
-    $reFP            = $this->getRegExpDecimalNumber();
-    $rePoints        = $this->getRegExpDecimalNumber();
-    $reCosts        = $this->getRegExpDecimalNumber();
+    $reSchiffeName      = $this->getRegExpSingleLineText3();
+    $reBracketString    = $this->getRegExpBracketString();
+    $reAreas            = $this->getRegExpAreas();
+    $reFP               = $this->getRegExpDecimalNumber();
+    $rePoints           = $this->getRegExpDecimalNumber();
+    $reCosts            = $this->getRegExpDecimalNumber();
     $reResource         = $this->getRegExpResource();
 
     
@@ -176,7 +177,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     $regExp  .= '(?P<strMiscCosts>'.'Die\srealen\sForschungskosten\ssind\svon\sweiteren\sParametern\sabh.{1,3}ngig\.)';
     $regExp  .= '\s+?)?';
 
-    $regExp .= '(?:\s+?\(von\s(?P<count>\d+)(?:\%|\\\%)\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\%|\\\%)\sFPKosten\)';
+    $regExp .= '(?:\s*?\(von\s(?P<count>\d+)(?:\%|\\\%)\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\%|\\\%)\sFPKosten\)';
     $regExp  .= '[\n\r]+';
     $regExp  .= '|)';
 
@@ -188,7 +189,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     // $regExp  .= '(?P<iPoints>'.$rePoints.')\s*?';
     // $regExp  .= '[\n\r]+';
     $regExp  .= '(?:';
-    $regExp  .= 'Prototyp\s+?';
+    $regExp  .= '\s*Prototyp\s+?';
     $regExp  .= 'Die\sForschung\sbringt\seinen\sPrototyp\svon\s(?P<strPrototypName>'        . $reSchiffeName       . ')\s*?';
     $regExp  .= '[\n\r]+';
     $regExp  .= '|)';
