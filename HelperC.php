@@ -425,17 +425,23 @@ class HelperC
     $retVal = false;
 
     $treffer = array();
-    if (preg_match('/(?P<digit>.*)[^\d](?P<part>\d{0,2})$/', $value, $treffer))
+    if (preg_match('/(?P<sign>(?:\-|\+){0,1})(?P<digit>.*)[^\d](?P<part>\d{0,2})$/', $value, $treffer))
     {
       $digit = $treffer['digit'];
       $digit = self::stripThousandSeperators($digit);
       $digit = (int) $digit;
-
+      if ($treffer["sign"] == '-')
+         $digit *= -1;
+      
       $part = $treffer['part'];
       $pot = strlen($part);
       $part = (int) $part;
 
-      if ($digit >= 0) {
+      if ($digit == 0) {    //! Mac: Null ist weder positiv noch negativ
+        $retVal = ($part / Pow(10, $pot));
+        if ($treffer["sign"] == '-')
+            $retVal *= -1;
+      } else if ($digit > 0) {
         $retVal = $digit + ($part / Pow(10, $pot));
       } else {
         $retVal = $digit - ($part / Pow(10, $pot));
