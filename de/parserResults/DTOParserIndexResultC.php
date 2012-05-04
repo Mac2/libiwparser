@@ -30,9 +30,23 @@ class DTOParserIndexResultC
    */
   public $aContainer = array ();
 
+  /**
+   * @soap
+   * @var integer $iUnreadMsg
+   */
   public $iUnreadMsg = 0;
+  
+  /**
+   * @soap
+   * @var integer $iUnreadAllyMsg
+   */
   public $iUnreadAllyMsg = 0;
-
+  
+  /**
+   * @soap
+   * @var integer $iUnreadAllyMsg
+   */
+  public $bOngoingResearch = false;
 }
 
 class DTOParserIndexResultIndexC

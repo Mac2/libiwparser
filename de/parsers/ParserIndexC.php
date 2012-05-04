@@ -153,6 +153,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
           }
           else if ($parser == 'Research')
           {
+            $retVal->bOngoingResearch = true;
             $parser = new ParserIndexResearchC;
           }
           else if ($parser == 'KoloInfos')
