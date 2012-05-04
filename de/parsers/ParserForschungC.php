@@ -92,17 +92,25 @@ class ParserForschungC extends ParserBaseC implements ParserI
                 continue;
             }
 
+            if (isset($result["research"]))
+                str_replace("orbitale_Verteidigung","orbitale Verteidigung",$result["research"]);	//! Mac: da sonst Probleme mit regExpAreas auftreten, muss hier eine Ersetzung erfolgen
+            else 
+                $result["research"] = "";
+            
             if (!isset($result['state']) || empty($result['state']))
             {
-                error('DIE_ERROR','Etwas sehr schlimmes ist geschehen (s=SF)',__FILE__,__LINE__);
+                $parserResult->bSuccessfullyParsed = false;
+                $parserResult->aErrors[] = 'Forschungsstatus ('.$result["research"].') konnte nicht korrekt ermittelt werden';
+                continue;
             }
-
-            str_replace("orbitale_Verteidigung","orbitale Verteidigung",$result["research"]);	//! Mac: da sonst Probleme mit regExpAreas auftreten, muss hier eine Ersetzung erfolgen
-
+            
             if (empty($result['prozent'])) $result['prozent'] = 100;
             if (empty($result['malus'])) $result['malus'] = 100;
             $result['faktor'] = (float) $result['prozent'] * $result['malus'] / 100;
-            $result['fp'] = PropertyValueC::ensureInteger($result['fp']);         //! da sonst beim Punkt abgeschnitten wird
+            if (isset($result["fp"]))
+                $result['fp'] = PropertyValueC::ensureInteger($result['fp']);         //! da sonst beim Punkt abgeschnitten wird
+            else
+                $result['fp'] = 0;
 
 
             if (isset($result['state']) && $result['state'] == 'erforscht')
