@@ -260,7 +260,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
                 '           |'.$reObject.'\s*'.$regExpOpera.'(?=\s+'.$reShipActions.')'.                        //! nach Ankunft: beliebiger Text
                 '       )';
 	$regExp  .= '		\s+(?P<eTransfairType>'.$reShipActions.')';
-	$regExp  .= '(\s(?<!Rückkehr\s)
+	$regExp  .= '(\s+(?<!Rückkehr\s)
                        (?P<strObjecte>(?:'.$reCount.'\s+?'.$reObject.'\s*?)+)\s*(?:\*\s\+|\+)
                        |(?:\*\s\+|\+)
                     )?';
