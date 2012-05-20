@@ -35,6 +35,12 @@ class DTOParserInfoForschungResultC
    */
   public $strResearchComment = '';  
 
+  /**
+   * @soap
+   * @var string $strResearchFirst the shortline of the first researcher
+   */
+  public $strResearchFirst = '';  
+  
    /**
    * @soap
    * @var string $strStatus erforscht oder erforschbar

@@ -88,7 +88,13 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
         $retVal->strAreaName = PropertyValueC::ensureString( $aResult['strAreaName'] );
         $retVal->strStatus = PropertyValueC::ensureString( $aResult['strStatus'] );
         
-        $retVal->strResearchComment = PropertyValueC::ensureString( $aResult['comment'] );
+        if (isset($aResult['first']) && !empty($aResult['first'])) {
+            $retVal->strResearchComment = PropertyValueC::ensureString( $aResult['comment'] );
+            $retVal->strResearchFirst = PropertyValueC::ensureString( $aResult['first'] );
+        }
+        else
+            $retVal->strResearchComment = PropertyValueC::ensureString( $aResult['commentonly'] );
+        
         $retVal->iFP = PropertyValueC::ensureInteger( $aResult['fp'] );
         // $retVal->iHS = PropertyValueC::ensureInteger( $aResult['iPoints'] );
         $retVal->iPeopleResearched = PropertyValueC::ensureInteger( $aResult['count'] );
@@ -149,7 +155,6 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     $reBracketString    = $this->getRegExpBracketString();
     $reAreas            = $this->getRegExpAreas();
     $reFP               = $this->getRegExpDecimalNumber();
-    $rePoints           = $this->getRegExpDecimalNumber();
     $reCosts            = $this->getRegExpDecimalNumber();
     $reResource         = $this->getRegExpResource();
 
@@ -159,15 +164,23 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     $regExp  .= '(?P<strResearchName>'.$reResearch.')\s*?';
     $regExp  .= '[\n\r]+';
     $regExp  .= 'Status\s+?';
-    $regExp  .= '(?P<strStatus>'.'(erforscht|erforschbar|nicht\serforschbar|erforschbar,\saber\sGeb.{1,3}ude\sfehlt)'.')\s*?';
+    $regExp  .= '(?P<strStatus>'.'(?:erforscht|erforschbar|nicht\serforschbar|erforschbar,\saber\sGeb.{1,3}ude\sfehlt)'.')\s*?';
     $regExp  .= '[\n\r]+';
     $regExp  .= 'Gebiet\s+?';
     $regExp  .= '(?P<strAreaName>'.$reAreas.')\s*?';
     $regExp  .= '[\n\r]+';
-    $regExp  .= '(?:(?P<comment>[\s\S]*?)';
-    $regExp  .= '[\n\r]+|)';
-    $regExp  .= '(?:Zuerst\serforscht\svon\s*(?P<first>[^\n\r]+?';
-    $regExp  .= '[\n\r]+))?';
+    $regExp  .= '(?:';
+    //! schon erforschte Variante
+    $regExp  .= '   (?:(?P<comment>[\s\S]*?)';
+    $regExp  .= '   [\n\r]+|)';
+    $regExp  .= '   (?:Zuerst\serforscht\svon\s*(?P<first>[^\n\r]+?';
+    $regExp  .= '   [\n\r]+))';
+    $regExp  .= '|';
+    //! noch nicht erforschte Variante
+    $regExp  .= '   (?:(?P<commentonly>[\s\S]*?)';
+    $regExp  .= '   [\n\r]+|)';
+    $regExp  .= ')';
+    
     $regExp  .= 'Kosten\s+?';
     $regExp .= '(?P<fp>'        . $reFP       . ')\sForschungspunkte';
     $regExp .= '(?P<kosten>(?:\s'.$reResource.'\:\s'.$reCosts.')*)';
@@ -203,7 +216,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     $regExp  .= 'Voraussetzungen\sObjekte\s+?';
     $regExp  .= '(?P<strObjectsNeeded>'.$reBracketString.'){0,1}';
     $regExp  .= '\s+?';
-    $regExp  .= '(\s+?';
+    $regExp  .= '(?:\s+?';
     $regExp  .= '(?P<strMiscNeeded>'.'Es\ssind\sweitere\sVoraussetzungen\szu\serf.{1,3}llen,\sum\sdiese\sForschung\serforschen\szu\skönnen\.'.'){0,1}';
     $regExp  .= '\s+?)?';
 
