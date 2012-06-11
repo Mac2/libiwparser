@@ -47,7 +47,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
   /**
    * @see ParserI::parseText()
    */
-  public function parseText( DTOParserResultC& $parserResult )
+  public function parseText( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserMilSchiffUebersichtResultC();
     $retVal =& $parserResult->objResultData;
@@ -219,5 +219,3 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-?>

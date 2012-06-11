@@ -52,7 +52,7 @@ class ParserAlliMemberlisteC extends ParserBaseC implements ParserI
    * @todo date of entry may be hidden
    * @todo user title may be hidden
    */
-  public function parseText( DTOParserResultC& $parserResult )
+  public function parseText( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserAlliMemberlisteResultC();
     $retVal =& $parserResult->objResultData;
@@ -220,7 +220,3 @@ class ParserAlliMemberlisteC extends ParserBaseC implements ParserI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-?>

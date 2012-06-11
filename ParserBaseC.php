@@ -122,7 +122,7 @@ class ParserBaseC extends ParserFunctionC
   /**
    * @see ParserI::canParseText()
    */
-  public function canParseText( &$text )
+  public function canParseText( $text )
   {
     $retVal = preg_match( $this->getRegExpCanParseText(), $text, $aMatches );
 
@@ -213,7 +213,7 @@ class ParserBaseC extends ParserFunctionC
 
   /////////////////////////////////////////////////////////////////////////////
 
-  protected function setRegExpBeginData($value)
+  protected function setRegExpBeginData( $value )
   {
     $this->_reBeginData = PropertyValueC::ensureString($value);
   }
@@ -374,7 +374,3 @@ class ParserBaseC extends ParserFunctionC
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-?>

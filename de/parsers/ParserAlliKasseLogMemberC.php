@@ -48,7 +48,7 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
    * @see ParserI::parseText()
    * @todo: Parsen von eingezahlten Credits, aufgrund Bankmangel noch nicht nachvollziehbar wie das aussieht.
    */
-  public function parseText( DTOParserResultC& $parserResult )
+  public function parseText( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserAlliKasseLogResultC();
     $retVal =& $parserResult->objResultData;
@@ -154,5 +154,3 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-?>

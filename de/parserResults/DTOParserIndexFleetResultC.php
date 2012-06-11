@@ -116,5 +116,3 @@ class DTOParserIndexFleetResultFleetC
   public $aObjects = array();
 
 }
-
-?>

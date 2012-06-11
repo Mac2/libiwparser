@@ -65,7 +65,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
   /**
    * @see ParserI::parseText()
    */
-  public function parseText( DTOParserResultC& $parserResult )
+  public function parseText( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserIndexResultC();
     $retVal =& $parserResult->objResultData;
@@ -261,5 +261,3 @@ class ParserIndexC extends ParserBaseC implements ParserI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-?>

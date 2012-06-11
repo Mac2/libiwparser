@@ -46,7 +46,7 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
   /**
    * @see ParserI::parseText()
    */
-  public function parseText( DTOParserResultC& $parserResult )
+  public function parseText( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserWirtschaftPlaniressResultC();
     $retVal =& $parserResult->objResultData;
@@ -303,5 +303,3 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-?>

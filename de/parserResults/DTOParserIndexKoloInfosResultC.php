@@ -108,5 +108,3 @@ class DTOParserIndexKoloInfosResultKoloInfoC
 
   public $strProblems = "";
 }
-
-?>

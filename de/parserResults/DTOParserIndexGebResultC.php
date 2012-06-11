@@ -73,5 +73,3 @@ class DTOParserIndexGebResultGebC
    */
   public $iDateOfFinish = 0;
 }
-
-?>
