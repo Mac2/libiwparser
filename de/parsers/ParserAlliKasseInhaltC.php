@@ -46,7 +46,7 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
   /**
    * @see ParserI::parseText()
    */
-  public function parseText( DTOParserResultC& $parserResult )
+  public function parseText( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserAlliKasseInhaltResultC();
     $retVal =& $parserResult->objResultData;
@@ -117,5 +117,3 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-?>

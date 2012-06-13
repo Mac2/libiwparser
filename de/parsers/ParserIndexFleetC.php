@@ -71,7 +71,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
   /**
    * @see ParserMsgI::parseMsg()
    */
-  public function parseMsg( DTOParserResultC& $parserResult )
+  public function parseMsg( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserIndexFleetResultC();
     $retVal =& $parserResult->objResultData;
@@ -290,5 +290,3 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-?>

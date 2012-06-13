@@ -63,5 +63,3 @@ class DTOParserIndexSchiffResultSchiffC
   public $iAnzWerften = 0;
 
 }
-
-?>

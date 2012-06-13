@@ -64,7 +64,7 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
   /**
    * @see ParserMsgI::parseMsg()
    */
-  public function parseMsg( DTOParserResultC& $parserResult )
+  public function parseMsg( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserIndexGebResultC();
     $retVal =& $parserResult->objResultData;
@@ -189,7 +189,3 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-?>

@@ -68,7 +68,7 @@ interface ParserI
    * @param string &$text a reference to the text to be parsed
    * @return bool if the parser claims to be the right one for the text provided
    */
-  public function canParseText( &$text );
+  public function canParseText( $text );
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +80,7 @@ interface ParserI
    *
    * @param DTOParserResult &$parserResult - Ergebnisse und Fehler des Parsevorgangs
    */
-  public function parseText( DTOParserResultC& $parserResult );
+  public function parseText( DTOParserResultC $parserResult );
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -89,5 +89,3 @@ interface ParserI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-?>

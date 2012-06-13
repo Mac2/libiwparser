@@ -64,7 +64,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
   /**
    * @see ParserMsgI::parseMsg()
    */
-  public function parseMsg( DTOParserResultC& $parserResult )
+  public function parseMsg( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserIndexKoloInfosResultC();
     $retVal =& $parserResult->objResultData;
@@ -283,7 +283,3 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-?>
