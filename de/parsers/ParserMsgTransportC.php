@@ -60,18 +60,25 @@ class ParserMsgTransportC extends ParserMsgBaseC implements ParserMsgI
   /**
    * @see ParserMsgI::parseMsg()
    */
-  public function parseMsg( DTOParserResultC& $parserResult )
+  public function parseMsg( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserMsgResultMsgTransportC();
     $retVal =& $parserResult->objResultData;
     $regExpText = $this->getRegularExpressionText();
     $msg = $this->getMsg();
-
+    $msg->strParserText = trim($msg->strParserText);
+    
     foreach($msg as $key => $value)
     {
-      $retVal->$key = $value;
+        $retVal->$key = $value;
     }
 
+    if (empty($msg->strParserText)) {  //! Mac: leerer Input, evtl. nicht ausgeklappt ?
+        $retVal->bSuccessfullyParsed = false;
+        $retVal->aErrors[] = 'found empty TransportMsg';
+        return;
+    }
+      
     $aResultText = array();
     $fRetValText = preg_match($regExpText, $msg->strParserText, $aResultText);
 

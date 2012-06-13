@@ -60,25 +60,31 @@ class ParserMsgGaveC extends ParserMsgBaseC implements ParserMsgI
   /**
    * @see ParserMsgI::parseMsg()
    */
-  public function parseMsg( DTOParserResultC& $parserResult )
+  public function parseMsg( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserMsgResultMsgGaveC();
     $retVal =& $parserResult->objResultData;
 
     $regExpText = $this->getRegularExpressionText();
-  #$regExpTitle = $this->getRegularExpressionTitle();
-  $msg = $this->getMsg();
+    $msg = $this->getMsg();
+    $msg->strParserText = trim($msg->strParserText);
 
     foreach($msg as $key => $value) {
      $retVal->$key = $value;
     }
 
+    if (empty($msg->strParserText)) {  //! Mac: leerer Input, evtl. nicht ausgeklappt ?
+        $retVal->bSuccessfullyParsed = false;
+        $retVal->aErrors[] = 'found empty GaveMsg';
+        return;
+    }
+    
     $aResultText = array();
     $fRetValText = preg_match( $regExpText, $msg->strParserText, $aResultText);
 
     if( $fRetValText !== false && $fRetValText > 0)
     {
-    $retVal->bSuccessfullyParsed = true;
+        $retVal->bSuccessfullyParsed = true;
 
         $strPlanetName = '';
         $strFromUserName = '';

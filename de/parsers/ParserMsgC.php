@@ -68,7 +68,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
    * @see ParserI::parseText()
    * @todo Messages können vielleicht später an die Fabrik überreicht werden.
    */
-  public function parseText( DTOParserResultC& $parserResult )
+  public function parseText( DTOParserResultC $parserResult )
   {
 
     $parserResult->objResultData = new DTOParserMsgResultC();

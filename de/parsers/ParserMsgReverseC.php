@@ -61,18 +61,25 @@ class ParserMsgReverseC extends ParserMsgBaseC implements ParserMsgI
   /**
    * @see ParserMsgI::parseMsg()
    */
-  public function parseMsg( DTOParserResultC& $parserResult )
+  public function parseMsg( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserMsgResultMsgReverseC();
     $retVal =& $parserResult->objResultData;
 
     $regExpText = $this->getRegularExpressionText();
-  #$regExpTitle = $this->getRegularExpressionTitle();
     $msg = $this->getMsg();
+    $msg->strParserText = trim($msg->strParserText);
 
     foreach($msg as $key => $value) {
-     $retVal->$key = $value;
+        $retVal->$key = $value;
     }
+    
+    if (empty($msg->strParserText)) {  //! Mac: leerer Input, evtl. nicht ausgeklappt ?
+        $retVal->bSuccessfullyParsed = false;
+        $retVal->aErrors[] = 'found empty ReverseMsg';
+        return;
+    }
+    
     $aResultText = array();
     $fRetValText = preg_match( $regExpText, $msg->strParserText, $aResultText);
 
@@ -80,7 +87,7 @@ class ParserMsgReverseC extends ParserMsgBaseC implements ParserMsgI
     {
     $parserResult->bSuccessfullyParsed = true;
 
-        $strPlanetName = '';
+    $strPlanetName = '';
     $strCoords = '';
     $aCoords = array();
     $iCoordsGal = -1;
@@ -133,7 +140,7 @@ class ParserMsgReverseC extends ParserMsgBaseC implements ParserMsgI
       }
     }
 
-        $retVal->strPlanetName = PropertyValueC::ensureString( $strPlanetName );
+    $retVal->strPlanetName = PropertyValueC::ensureString( $strPlanetName );
     $retVal->strCoords = PropertyValueC::ensureString( $strCoords );
     $retVal->aCoords = $aCoords;
     $retVal->aSchiffe = $aSchiffe;

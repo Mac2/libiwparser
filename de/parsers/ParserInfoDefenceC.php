@@ -46,7 +46,7 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
   /**
    * @see ParserI::parseText()
    */
-  public function parseText( DTOParserResultC& $parserResult )
+  public function parseText( DTOParserResultC $parserResult )
   {
     $parserResult->objResultData = new DTOParserInfoDefenceResultC();
     $retVal =& $parserResult->objResultData;
