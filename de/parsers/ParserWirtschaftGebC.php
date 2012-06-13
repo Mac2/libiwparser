@@ -144,7 +144,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
 
     $regExp  = '/^
           (?P<area_name>[\&\w\süÜäÄöÖ]+)[\\n\\r]+
-          \\t
+          \\t?
           (?P<kolo_line>
           '.$reKoloCoords.'
             (
