@@ -35,6 +35,7 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
     parent::__construct();
 
     $this->setIdentifier('de_info_defence');
+    $this->setName('Verteidigungsinfo');
     $this->setRegExpCanParseText('/Verteidigungseinrichtungen\s-\sInfo\s+Verteidigungseinrichtungen\s-\sInfo/s');
     $this->setRegExpBeginData( '' );
     $this->setRegExpEndData( '' );

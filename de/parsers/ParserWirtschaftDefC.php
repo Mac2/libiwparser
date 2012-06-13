@@ -35,6 +35,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
     parent::__construct();
 
     $this->setIdentifier('de_wirtschaft_def');
+    $this->setName('Verteidigungs&uuml;bersicht');
     $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s+Forschungs.{1,3}bersicht\s+Werft.{1,3}bersicht\s+Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht(?:.*Verteidigungs.{1,3}bersicht)?/sm');
     $this->setRegExpBeginData( '/Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht/sm' );
     $this->setRegExpEndData( '' );

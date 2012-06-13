@@ -143,6 +143,13 @@ return array(
                         'ParserMsgTransportC.php',
         'classname' => 'ParserMsgTransportC',
       ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserMsgC.php',
+        'classname' => 'ParserMsgC',
+      ),
 //      array(
 //        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
 //                        'de'              . DIRECTORY_SEPARATOR .
