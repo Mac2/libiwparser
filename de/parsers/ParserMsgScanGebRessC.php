@@ -52,8 +52,8 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
     parent::__construct();
 
     $this->setIdentifier('de_msg_scan_gebress');
+    $this->setName('Gebäudescan');
     $this->setCanParseMsg('Sondierung (Gebäude/Ress)');
-//     $this->setCanParseMsg('Sondierung (Gebäude)');
   }
 
  /////////////////////////////////////////////////////////////////////////////
