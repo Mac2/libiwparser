@@ -105,7 +105,7 @@ class ParserXmlC extends ParserBaseC implements ParserI
   {
       $regExp  = '%';
       $regExp .= '(?:(?<=\s)|(?<=^))';  //shall start in a whitesace or start of line
-      $regExp .= 'http:\/\/www2?\.icewars\.de\/portal\/kb\/de\/(?P<type>kb|sb)\.php\?id=(?P<id>\d+)\&md_hash=(?P<hash>[\w\d]+)';
+      $regExp .= 'http:\/\/www2?\.icewars\.de\/portal\/kb\/de\/(?P<type>kb|sb)\.php\?id=(?P<id>\d+)\&md_hash=(?P<hash>[\w\d]+)(?:&server_id=)?';
       $regExp .= '(?=\s|$)';            //shall end in a whitespace or end of line     
       $regExp .= '%';
       return $regExp;
