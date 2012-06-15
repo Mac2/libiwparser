@@ -92,8 +92,8 @@ class ParserForschungC extends ParserBaseC implements ParserI
                 continue;
             }
 
-            if (isset($result["research"]))
-                str_replace("orbitale_Verteidigung","orbitale Verteidigung",$result["research"]);	//! Mac: da sonst Probleme mit regExpAreas auftreten, muss hier eine Ersetzung erfolgen
+            if (isset($result['research']))
+                $result["research"] = str_replace("orbitale_Verteidigung","orbitale Verteidigung",$result["research"]);	//! Mac: da sonst Probleme mit regExpAreas auftreten, muss hier eine Ersetzung erfolgen
             else 
                 $result["research"] = "";
             
