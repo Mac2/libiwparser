@@ -206,9 +206,8 @@ class ParserMsgC extends ParserBaseC implements ParserI
             }
             break;
         case "Sondierung (Geologie)":
-            //! Mac: link wird schon vorher in paParser ausgewertet  - GILDE Hack
-            break;
-        
+            //! Mac: Werden ueber die vorhandenen Links im ParserXMLC ausgewertet
+            $retVal->iMessageCount--;
 //            $parser = new ParserMsgGeoscansC;
 //            $result = new DTOParserResultC ($parser);
 //            if ($parser->canParseMsg($msg))
@@ -275,9 +274,10 @@ class ParserMsgC extends ParserBaseC implements ParserI
     $reAuthor     = $this->getRegExpLowUserName();
     $reDateTime   = $this->getRegExpDateTime();
     $reShipActions = $this->getRegExpShipActions();
-
+    $reLine        = $this->getRegExpSingleLineText();
+    
     $reHeader = '(?:';
-    $reHeader .= '\b'.$reTitle;
+    $reHeader .= '\t\b'.$reTitle;
     $reHeader .= '[\s\t]+';
     $reHeader .= '(?:'.$reAuthor;
     $reHeader .= '[\s\t]+';
@@ -318,7 +318,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
     $regExp .= '[\s\n]+';
     $regExp .= ')';
     $regExp .= ')';
-    $regExp .= '(?:(?P<msgText>(?:(?:(?:[^\n])|[^\n][^\t])+))';
+    $regExp .= '(?:(?P<msgText>'.$reLine.'\s*)+';
     $regExp .= '(?='.$reHeader.'|\Z)';
     $regExp .= ')';
     $regExp .= '/mxU';
