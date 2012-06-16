@@ -35,10 +35,9 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
     parent::__construct();
 
     $this->setIdentifier('de_mil_schiff_uebersicht');
-    $this->setName('Schiffs&uuml;bersicht');
-    $this->setRegExpCanParseText('/Milit.+r[\s\S]*Schiff.+bersicht[\s\S]*Schiffs.+bersicht/');
-//     $this->setRegExpBeginData( '/Schiffe.+bersicht/sm' );
-    $this->setRegExpBeginData( '/HILFE/sm' );
+    $this->setName('Schiffsübersicht');
+    $this->setRegExpCanParseText('/Milit.{1,3}r[\s\S]*Schiff.{1,3}bersicht[\s\S]*Schiffs.{1,3}bersicht/');
+    $this->setRegExpBeginData( '/Schiffs.{1,3}bersicht/sm' );
     $this->setRegExpEndData( '' );
   }
 
