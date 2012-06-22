@@ -318,7 +318,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
     $regExp .= '[\s\n]+';
     $regExp .= ')';
     $regExp .= ')';
-    $regExp .= '(?P<msgText>(?:(?:[^\n]|[^\n][^\t])+)';    //$regExp .= '(?:(?P<msgText>'.$reLine.'\s*)+'; does not work
+    $regExp .= '(?:(?P<msgText>('.$reLine.'\s*)+)';
     $regExp .= '(?='.$reHeader.'|\Z)';
     $regExp .= ')';
     $regExp .= '/mxU';
