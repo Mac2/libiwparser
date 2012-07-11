@@ -10,6 +10,7 @@
  */
 /**
  * @author Martin Martimeo <martin@martimeo.de>
+ * @author Mac <MacXY@herr-der-mails.de>
  * @package libIwParsers
  * @subpackage parsers_de
  */
@@ -74,7 +75,8 @@ class DTOParserMsgResultC
   public $aScanSchiffeDefRessMsgs = array();
   public $aScanGebRessMsgs    = array();
   public $aScanGeoMsgs	      = array();
-
+  public $aScanFailMsgs         = array();
+  
   /**
    * @soap
    * @var integer $iMessageCount
@@ -250,6 +252,27 @@ class DTOParserMsgResultMsgScanSchiffeDefRessC extends DTOParserMsgResultMsgC
    * @var array $aDefences array of ident => defence_name, defence_count
    */
   public $aDefences = array();  
+
+}
+
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+
+class DTOParserMsgResultMsgScanFailC extends DTOParserMsgResultMsgC
+{
+  
+  /**
+   * @soap
+   * @var string $strCoords the coords
+   */
+  public $strCoords = '';
+
+  /**
+   * @soap
+   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => int
+   */
+  public $aCoords = array();
 
 }
 

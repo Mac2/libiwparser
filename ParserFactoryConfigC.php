@@ -38,7 +38,7 @@ class ParserFactoryConfigC implements ParserFactoryI
   {
     $aConfiguredParsers = ConfigC::get('lib.aRegisteredParsers');
     $rcParser           = NULL;
-    
+
     foreach( $aConfiguredParsers as $parserInfo )
     {
       require_once( $parserInfo['filename'] );
@@ -82,9 +82,9 @@ class ParserFactoryConfigC implements ParserFactoryI
   public function getParserIdsFor( $text )
   {
     $retVal = array();
-    
+
     $this->cleanupText( $text );
-    
+
     foreach( $this->_aRegisteredParsers as $parserId => $parser )
     {
       if( $parser->canParseText($text) )

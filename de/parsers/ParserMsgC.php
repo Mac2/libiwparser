@@ -174,49 +174,80 @@ class ParserMsgC extends ParserBaseC implements ParserI
             }
             break;
         case "Sondierung (Schiffe/Def/Ress)":
-
             if (strpos($msg->strMsgTitle,"Eigener Planet wurde sondiert") !== false)	//! Mac: werden direkt in paParser ausgelesen,
                 break;
-            if (strpos($msg->strMsgTitle,"Sondierung vereitelt") !== false)		//! Mac: werden direkt in paParser ausgelesen,
+            else if (strpos($msg->strMsgTitle,"Sondierung vereitelt") !== false)		//! Mac: werden direkt in paParser ausgelesen,
                 break;
-            if (strpos($msg->strMsgTitle,"Sondierung fehlgeschlagen") !== false)	//! Mac: werden direkt in paParser ausgelesen, da keine wichtigen Infos drin stecken, aber der User die Anzahl der Sonden angeben kann
-                break;
-
-            $parser = new ParserMsgScanSchiffeDefRessC();
-            $result = new DTOParserResultC ($parser);
-            if ($parser->canParseMsg($msg))
-            {
-              $parser->parseMsg ($result);
-              $msg = $result->objResultData;
-              $retVal->aScanSchiffeDefRessMsgs[] = $msg;
-//               $retVal->aMsgs[] = & $retVal->aScanSchiffeDefRessMsgs[count($retVal->aScanSchiffeDefRessMsgs)-1];
-              if (!empty($msg->aErrors)) $retVal->aErrors[]  = $msg->aErrors;
+            //! Mac: da keine weitere Verarbeitung nötig ist, einfach hier die Koordinaten parsen und fertig
+            //! @todo: besser einen eigenen ParserMsgScanFailC Parser verwenden, damit alles konsistent ist (-> Overhead?)
+            else if (strpos($msg->strMsgTitle,"Sondierung fehlgeschlagen") !== false) { 
+                $msg->strCoords="";
+                $msg->aCoords = array("gal"=>0,"sys"=>0,"planet"=>0);
+                if (preg_match('/Sondierung des Planeten (\d+):(\d+):(\d+)/', $msg->strParserText, $match) > 0) {
+                    $msg->strCoords = $match[1] . ":" . $match[2] . ":" . $match[3];
+                    $msg->aCoords = array("gal" => $match[1], "sys" => $match[2], "planet" => $match[3]);
+                }
+                $retVal->aScanFailMsgs[] = $msg;
+            }
+            else {
+                $parser = new ParserMsgScanSchiffeDefRessC();
+                $result = new DTOParserResultC ($parser);
+                if ($parser->canParseMsg($msg))
+                {
+                    $parser->parseMsg ($result);
+                    $msg = $result->objResultData;
+                    $retVal->aScanSchiffeDefRessMsgs[] = $msg;
+        //               $retVal->aMsgs[] = & $retVal->aScanSchiffeDefRessMsgs[count($retVal->aScanSchiffeDefRessMsgs)-1];
+                    if (!empty($msg->aErrors)) $retVal->aErrors[]  = $msg->aErrors;
+                }
             }
             break;
         case "Sondierung (Gebäude/Ress)":
-            $parser = new ParserMsgScanGebRessC();
-            $result = new DTOParserResultC ($parser);
-            if ($parser->canParseMsg($msg))
-            {
-              $parser->parseMsg ($result);
-              $msg = $result->objResultData;
-              $retVal->aScanGebRessMsgs[] = $msg;
-//               $retVal->aMsgs[] = & $retVal->aScanGebRessMsgs[count($retVal->aScanGebRessMsgs)-1];
-              $retVal->aErrors[] = $msg->aErrors;
+            if (strpos($msg->strMsgTitle,"Sondierung fehlgeschlagen") !== false) { 
+                $msg->strCoords="";
+                $msg->aCoords = array("gal"=>0,"sys"=>0,"planet"=>0);
+                if (preg_match('/Sondierung des Planeten (\d+):(\d+):(\d+)/', $msg->strParserText, $match) > 0) {
+                    $msg->strCoords = $match[1] . ":" . $match[2] . ":" . $match[3];
+                    $msg->aCoords = array("gal" => $match[1], "sys" => $match[2], "planet" => $match[3]);
+                }
+                $retVal->aScanFailMsgs[] = $msg;
+            }
+            else {
+                $parser = new ParserMsgScanGebRessC();
+                $result = new DTOParserResultC ($parser);
+                if ($parser->canParseMsg($msg))
+                {
+                $parser->parseMsg ($result);
+                $msg = $result->objResultData;
+                $retVal->aScanGebRessMsgs[] = $msg;
+    //               $retVal->aMsgs[] = & $retVal->aScanGebRessMsgs[count($retVal->aScanGebRessMsgs)-1];
+                $retVal->aErrors[] = $msg->aErrors;
+                }
             }
             break;
         case "Sondierung (Geologie)":
-            //! Mac: Werden ueber die vorhandenen Links im ParserXMLC ausgewertet
-            $retVal->iMessageCount--;
-//            $parser = new ParserMsgGeoscansC;
-//            $result = new DTOParserResultC ($parser);
-//            if ($parser->canParseMsg($msg))
-//            {
-//              $parser->parseMsg ($result);
-//              $msg = $result->objResultData;
-//              $retVal->aScanGeoMsgs[] = $msg;
-//               $retVal->aMsgs[] = & $retVal->aScanGeoMsgs[count($retVal->aScanGeoMsgs)-1];
-//            }
+            if (strpos($msg->strMsgTitle,"Sondierung fehlgeschlagen") !== false) { 
+                $msg->strCoords="";
+                $msg->aCoords = array("gal"=>0,"sys"=>0,"planet"=>0);
+                if (preg_match('/Sondierung des Planeten (\d+):(\d+):(\d+)/', $msg->strParserText, $match) > 0) {
+                    $msg->strCoords = $match[1] . ":" . $match[2] . ":" . $match[3];
+                    $msg->aCoords = array("gal" => $match[1], "sys" => $match[2], "planet" => $match[3]);
+                }
+                $retVal->aScanFailMsgs[] = $msg;
+            }
+            else {
+                //! Mac: Werden ueber die vorhandenen Links im ParserXMLC ausgewertet
+                $retVal->iMessageCount--;
+    //            $parser = new ParserMsgGeoscansC;
+    //            $result = new DTOParserResultC ($parser);
+    //            if ($parser->canParseMsg($msg))
+    //            {
+    //              $parser->parseMsg ($result);
+    //              $msg = $result->objResultData;
+    //              $retVal->aScanGeoMsgs[] = $msg;
+    //               $retVal->aMsgs[] = & $retVal->aScanGeoMsgs[count($retVal->aScanGeoMsgs)-1];
+    //            }
+            }
             break;
         case "Banküberweisung":
             // @todo!
