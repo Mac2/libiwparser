@@ -157,6 +157,13 @@ return array(
                         'ParserXmlC.php',
         'classname' => 'ParserXmlC',
       ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserInfoUserC.php',
+        'classname' => 'ParserInfoUserC',
+      ),
 //      array(
 //        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
 //                        'de'              . DIRECTORY_SEPARATOR .
