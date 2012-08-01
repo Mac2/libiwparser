@@ -206,6 +206,13 @@ return array(
                         'ParserBauenAktuellC.php',
         'classname' => 'ParserBauenAktuellC',
       ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserUniversumC.php',
+        'classname' => 'ParserUniversumC',
+      ),
 //      array(
 //        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
 //                        'de'              . DIRECTORY_SEPARATOR .
