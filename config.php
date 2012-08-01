@@ -171,6 +171,13 @@ return array(
                         'ParserAccountHighscoreC.php',
         'classname' => 'ParserAccountHighscoreC',
       ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserInfoSchiffC.php',
+        'classname' => 'ParserInfoSchiffC',
+      ),
 
 //      array(
 //        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
