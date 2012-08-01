@@ -185,6 +185,20 @@ return array(
                         'ParserHighscoreC.php',
         'classname' => 'ParserHighscoreC',
       ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserPersonalStatForschungenC.php',
+        'classname' => 'ParserPersonalStatForschungenC',
+      ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserPersonalStaatsformC.php',
+        'classname' => 'ParserPersonalStaatsformC',
+      ),
 //      array(
 //        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
 //                        'de'              . DIRECTORY_SEPARATOR .
