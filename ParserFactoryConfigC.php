@@ -142,6 +142,19 @@ class ParserFactoryConfigC implements ParserFactoryI
   }
 
   ///////////////////////////////////////////////////////////////////////
+  
+  public function getParserList()
+  {
+      $list = array();
+      foreach( $this->_aRegisteredParsers as $parserId => $parser )
+      {
+          $list[$parserId] = $parser->getName();
+      }
+      
+      return $list;
+  }
+  
+  ///////////////////////////////////////////////////////////////////////
 
   protected function cleanupText( &$text )
   {

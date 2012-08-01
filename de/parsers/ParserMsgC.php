@@ -174,10 +174,17 @@ class ParserMsgC extends ParserBaseC implements ParserI
             }
             break;
         case "Sondierung (Schiffe/Def/Ress)":
-            if (strpos($msg->strMsgTitle,"Eigener Planet wurde sondiert") !== false)	//! Mac: werden direkt in paParser ausgelesen,
-                break;
-            else if (strpos($msg->strMsgTitle,"Sondierung vereitelt") !== false)		//! Mac: werden direkt in paParser ausgelesen,
-                break;
+            if (strpos($msg->strMsgTitle,"Eigener Planet wurde sondiert") !== false ||
+                strpos($msg->strMsgTitle,"Sondierung vereitelt") !== false)	{
+                $parser = new ParserMsgSondierungC();
+                $parser->setMsg($msg);
+                $result = new DTOParserResultC ($parser);
+                $parser->parseMsg ($result);
+                $msg = $result->objResultData;
+                $retVal->aSondierungMsgs[] = $msg;
+                if (!empty($msg->aErrors)) $retVal->aErrors[]  = $msg->aErrors;
+
+            }
             //! Mac: da keine weitere Verarbeitung nötig ist, einfach hier die Koordinaten parsen und fertig
             //! @todo: besser einen eigenen ParserMsgScanFailC Parser verwenden, damit alles konsistent ist (-> Overhead?)
             else if (strpos($msg->strMsgTitle,"Sondierung fehlgeschlagen") !== false) { 
@@ -203,7 +210,17 @@ class ParserMsgC extends ParserBaseC implements ParserI
             }
             break;
         case "Sondierung (Gebäude/Ress)":
-            if (strpos($msg->strMsgTitle,"Sondierung fehlgeschlagen") !== false) { 
+            if (strpos($msg->strMsgTitle,"Eigener Planet wurde sondiert") !== false ||
+                strpos($msg->strMsgTitle,"Sondierung vereitelt") !== false)	{
+                $parser = new ParserMsgSondierungC();
+                $parser->setMsg($msg);
+                $result = new DTOParserResultC ($parser);
+                $parser->parseMsg ($result);
+                $msg = $result->objResultData;
+                $retVal->aSondierungMsgs[] = $msg;
+                if (!empty($msg->aErrors)) $retVal->aErrors[]  = $msg->aErrors;
+            }
+            else if (strpos($msg->strMsgTitle,"Sondierung fehlgeschlagen") !== false) { 
                 $msg->strCoords="";
                 $msg->aCoords = array("gal"=>0,"sys"=>0,"planet"=>0);
                 if (preg_match('/Sondierung des Planeten (\d+):(\d+):(\d+)/', $msg->strParserText, $match) > 0) {
@@ -220,13 +237,22 @@ class ParserMsgC extends ParserBaseC implements ParserI
                 $parser->parseMsg ($result);
                 $msg = $result->objResultData;
                 $retVal->aScanGebRessMsgs[] = $msg;
-    //               $retVal->aMsgs[] = & $retVal->aScanGebRessMsgs[count($retVal->aScanGebRessMsgs)-1];
                 $retVal->aErrors[] = $msg->aErrors;
                 }
             }
             break;
         case "Sondierung (Geologie)":
-            if (strpos($msg->strMsgTitle,"Sondierung fehlgeschlagen") !== false) { 
+            if (strpos($msg->strMsgTitle,"Eigener Planet wurde sondiert") !== false ||
+                strpos($msg->strMsgTitle,"Sondierung vereitelt") !== false)	{
+                $parser = new ParserMsgSondierungC();
+                $parser->setMsg($msg);
+                $result = new DTOParserResultC ($parser);
+                $parser->parseMsg ($result);
+                $msg = $result->objResultData;
+                $retVal->aSondierungMsgs[] = $msg;
+                if (!empty($msg->aErrors)) $retVal->aErrors[]  = $msg->aErrors;
+            }
+            else if (strpos($msg->strMsgTitle,"Sondierung fehlgeschlagen") !== false) { 
                 $msg->strCoords="";
                 $msg->aCoords = array("gal"=>0,"sys"=>0,"planet"=>0);
                 if (preg_match('/Sondierung des Planeten (\d+):(\d+):(\d+)/', $msg->strParserText, $match) > 0) {

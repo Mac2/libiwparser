@@ -226,7 +226,7 @@ class ParserFunctionC
    */
   protected function getRegExpUserName()
   {
-    $retVal = '';
+    $retVal = '(?:';
 
     $retVal .= '(?:(?<=\s)|(?<=^)|(?<=\>))';//the user name shall start in a whitesace or start of line or >
     $retVal .= '(?!\s\s)';            //the user name must not contain multiple spaces
@@ -238,7 +238,8 @@ class ParserFunctionC
     $retVal .= ')?';
 
     $retVal .= '(?=\s|$|\.|\<)';  //the username shall end in a whitesace or end of line or a dot (see messages) or <
-
+    $retVal .= ')';
+    
     return $retVal;
   }
   
@@ -454,14 +455,15 @@ class ParserFunctionC
    */
   protected function getRegExpKoloCoords()
   {
-    $retVal = '';
+    $retVal = '(?:';
 
     $retVal .= '\d{1,2}';
     $retVal .= '\:';
     $retVal .= '\d{1,3}';
     $retVal .= '\:';
     $retVal .= '\d{1,2}';
-
+    $retVal .= ')';
+    
     return $retVal;
   }
 

@@ -76,6 +76,7 @@ class DTOParserMsgResultC
   public $aScanGebRessMsgs    = array();
   public $aScanGeoMsgs	      = array();
   public $aScanFailMsgs         = array();
+  public $aSondierungMsgs       = array();
   
   /**
    * @soap
@@ -274,6 +275,51 @@ class DTOParserMsgResultMsgScanFailC extends DTOParserMsgResultMsgC
    */
   public $aCoords = array();
 
+}
+
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+
+class DTOParserMsgResultMsgSondierungC extends DTOParserMsgResultMsgC
+{
+  
+  /**
+   * @soap
+   * @var string $strCoordsFrom the coords
+   */
+  public $strCoordsFrom = '';
+
+  /**
+   * @soap
+   * @var array $aCoordsFrom array of (coords_gal,coords_sol,coords_pla) => int
+   */
+  public $aCoordsFrom = array();
+
+  /**
+   * @soap
+   * @var string $strAllianceFrom
+   */
+  public $strAllianceFrom = '';
+  
+  /**
+   * @soap
+   * @var string $strCoordsTo the coords
+   */
+  public $strCoordsTo = '';
+
+  /**
+   * @soap
+   * @var array $aCoordsTo array of (coords_gal,coords_sol,coords_pla) => int
+   */
+  public $aCoordsTo = array();
+  
+  /**
+   * @soap
+   * @var bool $bSuccess 
+   */
+  public $bSuccess=false;
+          
 }
 
 /////////////////////////////////////////////////////////////////////////

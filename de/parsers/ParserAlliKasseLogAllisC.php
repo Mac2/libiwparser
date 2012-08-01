@@ -104,9 +104,9 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
     */
 
   $reDateTime      = $this->getRegExpDateTime();
-  $reFromUser         = $this->getRegExpUserName();
+  $reFromUser      = $this->getRegExpUserName();
   $reInteger       = $this->getRegExpDecimalNumber();
-  $reAlliance         = $this->getRegExpSingleLineText();
+  $reAlliance      = $this->getRegExpSingleLineText();
 
   $regExp  = '/^';
   $regExp .= '((\(Wing (?P<strAlliance>.*)\)\s*)?';
