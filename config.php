@@ -199,6 +199,13 @@ return array(
                         'ParserPersonalStaatsformC.php',
         'classname' => 'ParserPersonalStaatsformC',
       ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserBauenAktuellC.php',
+        'classname' => 'ParserBauenAktuellC',
+      ),
 //      array(
 //        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
 //                        'de'              . DIRECTORY_SEPARATOR .
