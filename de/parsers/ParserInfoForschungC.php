@@ -60,7 +60,6 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     $regExp = $this->getRegularExpression();
     $regExpRess = $this->getRegularExpressionRess();
 
-//    print_pre($this->getText());
     $aResult = array();
     $fRetVal = preg_match( $regExp, $this->getText(), $aResult );
 //     print_r($aResult);

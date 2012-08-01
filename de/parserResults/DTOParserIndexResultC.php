@@ -44,7 +44,7 @@ class DTOParserIndexResultC
   
   /**
    * @soap
-   * @var integer $iUnreadAllyMsg
+   * @var bool $bOngoingResearch
    */
   public $bOngoingResearch = false;
 }
