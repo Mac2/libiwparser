@@ -178,7 +178,13 @@ return array(
                         'ParserInfoSchiffC.php',
         'classname' => 'ParserInfoSchiffC',
       ),
-
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserHighscoreC.php',
+        'classname' => 'ParserHighscoreC',
+      ),
 //      array(
 //        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
 //                        'de'              . DIRECTORY_SEPARATOR .
