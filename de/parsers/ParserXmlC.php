@@ -72,22 +72,29 @@ class ParserXmlC extends ParserBaseC implements ParserI
 
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER); 
-    
+
         if ( $fRetVal !== FALSE && $fRetVal > 0)
         {
             foreach ($aResult as $xmlinfo)
             {
                 $link = new DTOParserXmlResultLinkC();
-                $link->iId = $xmlinfo['id'];
-                $link->strHash = $xmlinfo['hash'];
-                $link->strUrl = $xmlinfo[0] . '&typ=xml';
-                $link->strType = $xmlinfo['type'];
-
-                if ($link->strType == 'kb') {
-                    $retVal->aKbLinks[] = $link;
+                if (isset($xmlinfo['unilink']) && !empty($xmlinfo['unilink'])) {
+                    $link->strUrl = $xmlinfo['unilink'];
+                    $link->strType = "universe";
+                    $retVal->aUniversumLinks[] = $link;
                 }
-                else if ($link->strType == 'sb') {
-                    $retVal->aSbLinks[] = $link;
+                else {
+                    $link->iId = $xmlinfo['id'];
+                    $link->strHash = $xmlinfo['hash'];
+                    $link->strUrl = $xmlinfo[0] . '&typ=xml';
+                    $link->strType = $xmlinfo['type'];
+
+                    if ($link->strType == 'kb') {
+                        $retVal->aKbLinks[] = $link;
+                    }
+                    else if ($link->strType == 'sb') {
+                        $retVal->aSbLinks[] = $link;
+                    }
                 }
             }
             $parserResult->bSuccessfullyParsed = true;
@@ -105,7 +112,8 @@ class ParserXmlC extends ParserBaseC implements ParserI
   {
       $regExp  = '%';
       $regExp .= '(?:(?<=\s)|(?<=^))';  //shall start in a whitesace or start of line
-      $regExp .= 'http:\/\/www2?\.icewars\.de\/portal\/kb\/de\/(?P<type>kb|sb)\.php\?id=(?P<id>\d+)\&md_hash=(?P<hash>[\w\d]+)(?:&server_id=)?';
+      $regExp .= '(?:http:\/\/www2?\.icewars\.de\/portal\/kb\/de\/(?P<type>kb|sb)\.php\?id=(?P<id>\d+)\&md_hash=(?P<hash>[\w\d]+)(?:&server_id=)?';
+      $regExp .= '|(?P<unilink>http:\/\/www\.icewars\.de/xml/user_univ_scan/\w+\.xml))';
       $regExp .= '(?=\s|$)';            //shall end in a whitespace or end of line     
       $regExp .= '%';
       return $regExp;
