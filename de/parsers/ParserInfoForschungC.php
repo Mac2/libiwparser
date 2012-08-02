@@ -39,7 +39,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_info_forschung');
     $this->setName("Forschungsinfo");
-    $this->setRegExpCanParseText('/Forschungsinfo\s*Forschungsinfo/s');
+    $this->setRegExpCanParseText('/Forschungsinfo\s*Forschungsinfo|Forschungsinfo:.+Status.+Farbenlegende:/sm');
     $this->setRegExpBeginData( '' );
     $this->setRegExpEndData( '' );
   }

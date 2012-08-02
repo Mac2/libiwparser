@@ -37,7 +37,7 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_info_schiff');
     $this->setName('Schiffsinformation');
-    $this->setRegExpCanParseText('/Schiffinfo\s+Schiffinfo/s');
+    $this->setRegExpCanParseText('/Schiffinfo\s+Schiffinfo|Schiffinfo.+Daten.+Kampfdaten.+Besonderheiten/s');
     $this->setRegExpBeginData( '' );
     $this->setRegExpEndData( '' );
   }
