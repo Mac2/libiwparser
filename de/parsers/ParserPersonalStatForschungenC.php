@@ -104,8 +104,8 @@ class ParserPersonalStatForschungenC extends ParserBaseC implements ParserI
     $reResearch          = $this->getRegExpSingleLineText();
 
     $regExp  = '/^';
-    $regExp .= '(?P<dateOfResearch>'     . $reDateOfResearch    . ')\s+?';
-    $regExp .= '(?P<dateExpired>'        . $reDateExpired       . ')\s+?';
+    $regExp .= '(?P<dateOfResearch>'     . $reDateOfResearch    . ')\s*';
+    $regExp .= '(?P<dateExpired>'        . $reDateExpired       . ')\s*';
     $regExp .= '(?P<research>'       . $reResearch         . ')';
     $regExp .= '$/m';
 
