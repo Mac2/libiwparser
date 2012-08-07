@@ -176,7 +176,7 @@ class ParserMsgSondierungC extends ParserMsgBaseC implements ParserMsgI
 //    $reText         = $this->getRegExpSingleLineText3();
         
     $regExp = '/';
-    $regExp .= '(?P<name1>'.$reUserName.')';
+    $regExp .= '(?P<name1>'.$reAlliance.')';
     $regExp .= '   (?:\s+\[(?P<ally1>'.$reAlliance.')\])?';
     $regExp .= '   \s+(?:\((?P<coords1>'.$reCoords.')\))';
     $regExp .= '\s*';

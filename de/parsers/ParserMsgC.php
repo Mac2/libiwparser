@@ -57,7 +57,8 @@ class ParserMsgC extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_msg');
     $this->setName('Nachrichtenzentrale');
-    $this->setRegExpCanParseText('/Nachrichtenzentrale.*(?:Nachrichtenzentrale.*Nachrichtenzentrale|Neue\sNachricht\sverfassen)/smU');		//! Mac: requires Ungreedy U Modifier because charsize could be larger than 500k!
+//    $this->setRegExpCanParseText('/Nachrichtenzentrale.*(?:Nachrichtenzentrale.*Nachrichtenzentrale|Neue\sNachricht\sverfassen)/smU');		//! Mac: requires Ungreedy U Modifier because charsize could be larger than 500k!
+    $this->setRegExpCanParseText('/'.$this->getRegularExpressionHeader().'/mxU');
     $this->setRegExpBeginData('/(?:(Nachrichtenzentrale\s\-\sNachrichten[\s\n\r\t]+\b\w+\b\s+alle\sNachrichten\s.+ffnen\s\/\salle\sNachrichten\sschliessen\s\/\salle\sNachrichten\sselektieren\s\/\salle\sNachrichten\sdeselektieren\s+Seitenanzeige[\d\[\]\s\t\n\r]+)|(Nachrichtenzentrale\s\-\sNeue\sNachrichten[\s\n\r\t]neue\sNachrichten))/s' );
     $this->setRegExpEndData('/Seitenanzeige[\d\[\]\s\t\n\r]+alle\sNachrichten\s.+ffnen.+alle\sNachrichten\sschliessen.+alle\sNachrichten\sselektieren.+alle\sNachrichten\sdeselektieren/s' );
   }
@@ -316,6 +317,36 @@ class ParserMsgC extends ParserBaseC implements ParserI
 
   /////////////////////////////////////////////////////////////////////////////
 
+  private function getRegularExpressionHeader()
+  {
+        $reTitle      = $this->getRegExpSingleLineText();
+        $reAuthor     = $this->getRegExpLowUserName();
+        $reDateTime   = $this->getRegExpDateTime();
+        $reShipActions = $this->getRegExpShipActions();
+    
+        $reHeader = '(?:';
+        $reHeader .= '(\t\b)'.$reTitle;
+        $reHeader .= '[\s\t]+';
+        $reHeader .= '(?:'.$reAuthor;
+        $reHeader .= '[\s\t]+';
+        $reHeader .= $reDateTime;
+        $reHeader .= '[\s\n\r]+';
+        $reHeader .= '(?:Spielernachricht|Outbox)';
+        $reHeader .= '[\t\s]+';
+        $reHeader .= 'Antworten[\s|\t]+Petzen\s\-\sDem\sAdmin\smelden';
+        $reHeader .= '[\s\n\r]+';
+        $reHeader .= '|';
+        $reHeader .= '(?:Systemnachricht|von:Systemnachricht)';
+        $reHeader .= '[\s\t]+';
+        $reHeader .= $reDateTime;
+        $reHeader .= '[\s\n\t\r]+';
+        $reHeader .= $reShipActions;
+        $reHeader .= '[\s\n]+';
+        $reHeader .= ')';
+        $reHeader .= ')';
+
+        return $reHeader;
+  }
   /**
    * @todo msgText: überprüfung ob eine andere Möglichkeit als [^\t] besteht, da dies den IE ausschließt.
    */
@@ -333,26 +364,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
     $reShipActions = $this->getRegExpShipActions();
     $reLine        = $this->getRegExpSingleLineText();
     
-    $reHeader = '(?:';
-    $reHeader .= '(\t\b|\s+)'.$reTitle;
-    $reHeader .= '[\s\t]+';
-    $reHeader .= '(?:'.$reAuthor;
-    $reHeader .= '[\s\t]+';
-    $reHeader .= $reDateTime;
-    $reHeader .= '[\s\n\r]+';
-    $reHeader .= '(?:Spielernachricht|Outbox)';
-    $reHeader .= '[\t\s]+';
-    $reHeader .= 'Antworten[\s|\t]+Petzen\s\-\sDem\sAdmin\smelden';
-    $reHeader .= '[\s\n\r]+';
-    $reHeader .= '|';
-    $reHeader .= '(?:Systemnachricht|von:Systemnachricht)';
-    $reHeader .= '[\s\t]+';
-    $reHeader .= $reDateTime;
-    $reHeader .= '[\s\n\t\r]+';
-    $reHeader .= $reShipActions;
-    $reHeader .= '[\s\n]+';
-    $reHeader .= ')';
-    $reHeader .= ')';
+    $reHeader = $this->getRegularExpressionHeader();
 
     //Just even don't think to ask anything about this regexp, fu!
     $regExp  = '/';
