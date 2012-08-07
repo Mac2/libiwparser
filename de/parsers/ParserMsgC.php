@@ -334,7 +334,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
     $reLine        = $this->getRegExpSingleLineText();
     
     $reHeader = '(?:';
-    $reHeader .= '\t\b'.$reTitle;
+    $reHeader .= '(\t\b|\s+)'.$reTitle;
     $reHeader .= '[\s\t]+';
     $reHeader .= '(?:'.$reAuthor;
     $reHeader .= '[\s\t]+';

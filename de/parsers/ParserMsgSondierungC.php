@@ -98,11 +98,21 @@ class ParserMsgSondierungC extends ParserMsgBaseC implements ParserMsgI
                 $retVal->bSuccess = false;
         }
 
-        if (!empty($aResultText['ally'])) {
-            
-            $retVal->strAllianceFrom = PropertyValueC::ensureString($aResultText['ally']);
-            $c = explode(":",$aResultText['coords_ally']);
-            $retVal->strCoordsFrom = $aResultText['coords_ally'];
+        if (!empty($aResultText['ally1'])) {
+            $retVal->strAllianceFrom = PropertyValueC::ensureString($aResultText['ally1']);
+            $c = explode(":",$aResultText['coords1']);
+            $retVal->strCoordsFrom = $aResultText['coords1'];
+
+            $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
+            $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
+            $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
+            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+            $retVal->aCoordsFrom = $aCoords;
+        }
+        else if (!empty($aResultText['ally2'])) {
+            $retVal->strAllianceFrom = PropertyValueC::ensureString($aResultText['ally2']);
+            $c = explode(":",$aResultText['coords2']);
+            $retVal->strCoordsFrom = $aResultText['coords2'];
 
             $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
             $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
@@ -111,17 +121,12 @@ class ParserMsgSondierungC extends ParserMsgBaseC implements ParserMsgI
             $retVal->aCoordsFrom = $aCoords;
         }
         else {
+            $c="";
             if (!empty($aResultText['coords1']) && $aResultText['coords1'] != $retVal->strCoordsTo) {
                 $c = $aResultText['coords1'];
             }
-            else if (!empty($aResultText['coords_name']) && $aResultText['coords_name'] != $retVal->strCoordsTo) {
-                $c = $aResultText['coords_name'];
-            }
             else if (!empty($aResultText['coords2']) && $aResultText['coords2'] != $retVal->strCoordsTo) {
                 $c = $aResultText['coords2'];
-            }
-            else if (isset($aResultText['coords3']) && !empty($aResultText['coords3']) && $aResultText['coords3'] != $retVal->strCoordsTo) {
-                $c = $aResultText['coords3'];
             }
             
             $retVal->strCoordsFrom = $c;
@@ -168,18 +173,18 @@ class ParserMsgSondierungC extends ParserMsgBaseC implements ParserMsgI
     $reUserName     = $this->getRegExpUserName();
     $reCoords       = $this->getRegExpKoloCoords();
     $reAlliance     = $this->getRegExpSingleLineText();
-    $reText         = $this->getRegExpSingleLineText3();
+//    $reText         = $this->getRegExpSingleLineText3();
         
     $regExp = '/';
-    $regExp .= $reText.'(?:\((?P<coords1>'.$reCoords.')\)'.$reText.')?';
-    $regExp .= '(?:';
-    $regExp .= '((?P<name_ally>'.$reUserName.')\s+(?:\[(?P<ally>(?:'.$reAlliance.'))\])\s+(?:\((?P<coords_ally>'.$reCoords.')\)))';
-    $regExp .= '|';
-    $regExp .= '((?P<name>'.$reUserName.')\s+(?:\((?P<coords_name>'.$reCoords.')\)))';
-    $regExp .= ')';
-    $regExp .= '(('.$reText.')?(?:\((?P<coords2>'.$reCoords.')\)'.$reText.'))?';
-    $regExp .= '(('.$reText.')?(?:\((?P<coords3>'.$reCoords.')\)'.$reText.'))?';
-    $regExp .= '/s';
+    $regExp .= '(?P<name1>'.$reUserName.')';
+    $regExp .= '   (?:\s+\[(?P<ally1>'.$reAlliance.')\])?';
+    $regExp .= '   \s+(?:\((?P<coords1>'.$reCoords.')\))';
+    $regExp .= '\s*';
+    $regExp .= '(?:[^\[\]]+)?';    
+    $regExp .= '(?P<name2>'.$reAlliance.')';
+    $regExp .= '   (?:\s*\[(?P<ally2>'.$reAlliance.')\])?';
+    $regExp .= '   \s+(?:\((?P<coords2>'.$reCoords.')\))';
+    $regExp .= '/sxU';
        
     return $regExp;
   }

@@ -262,7 +262,7 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
   $regExp  .= '(?P<strTime>'.$reMixedTime.')\s*?';
   $regExp  .= '[\n\r]+';
   $regExp  .= 'Voraussetzungen\sForschungen\s+?';
-  $regExp  .= '(?P<strResearchs>'.$reResearchName.'){0,1}';
+  $regExp  .= '(?P<strResearchs>'.$reResearchName.'){0,1}\s*';
   $regExp  .= '[\n\r]+';
   $regExp  .= '(?:aufr.{1,3}stbar\szu\s+?';
   $regExp  .= '(?P<strUpgrade>'.$reSchiffName.')';
