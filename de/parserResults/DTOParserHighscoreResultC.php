@@ -39,6 +39,18 @@ class DTOParserHighscoreResultC
    */
   public $bDateOfEntryVisible = false;
 
+  /**
+   * @soap
+   * @var integer $iTimestamp
+   */
+  public $iTimestamp = 0;
+  
+  /**
+   * @soap
+   * @var string $strType Type of Highscore (e.g. Demokraten,Kommunisten,..)
+   */
+  public $strType = '';
+  
 }
 
 
@@ -67,13 +79,15 @@ class DTOParserHighscoreResultMemberC
    * @soap
    * @var int $iDabeiSeit since when the member is in IW
    */
-  public $iDabeiSeit = 0;
+  public $iDabeiSeit = -1;
 
   public $iGesamtP = 0;
   public $iFP = 0;
   public $iGebP = 0;
   public $iPperDay = 0;
 
+  public $iPosChange = 0;
+  public $iPos = 0;
 
 }
 
@@ -82,7 +96,3 @@ class DTOParserHighscoreResultMemberC
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
-
-
-?>

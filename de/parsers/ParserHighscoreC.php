@@ -38,8 +38,9 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_highscore');
     $this->setName('Ingame Highscore (Spieler)');
-    $this->setRegExpCanParseText('/Highscore\s+Highscore.+Highscore.+Pos\s+?Name\s+?Allianz/sm');
-    $this->setRegExpBeginData('/Highscore\s-\sMen.{1,3}.+Highscore\s+Highscore/sm');
+    //! Standard + Textskin FF14
+    $this->setRegExpCanParseText('/eigene\s+Highscore\s+globale\s+Highscores\s+Highscore\s+Wackelpudding.+Letzte\s+Aktualisierung.+Highscore.+Pos\s+?Name\s+?Allianz/sm');    
+    $this->setRegExpBeginData('/eigene\s+Highscore\s+globale\s+Highscores\s+Highscore\s+Wackelpudding/sm');
     $this->setRegExpEndData( '' );
   }
 
@@ -69,34 +70,31 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
       $parserResult->bSuccessfullyParsed = true;
       
       if( $this->getDateOfEntryVisible() )
-      {
         $retVal->bDateOfEntryVisible = true;
-      }
       else
-      {
         $retVal->bDateOfEntryVisible = false;
-      }
 
+      $retVal->iTimestamp = $this->getDateOfUpdate();
+      $retVal->strType    = $this->getTypeOfHighscore();
+      
       foreach( $aResult as $result )
-      {
-        $iDateOfEntry = -1;
-
-        if( $retVal->bDateOfEntryVisible === true )
-        {
-          $iDateOfEntry = HelperC::convertDateToTimestamp($result['dateOfEntry']);
-        }
-
+      {        
         $member = new DTOParserHighscoreResultMemberC;
-
+        
+        $member->iPos       = PropertyValueC::ensureInteger( $result['userPos'] );
         $member->strName    = PropertyValueC::ensureString( $result['userName'] );
         $member->strAllianz    = PropertyValueC::ensureString( $result['userAllianz'] );
-        $member->iDabeiSeit = PropertyValueC::ensureInteger( $iDateOfEntry );
-
-        $member->iGesamtP = PropertyValueC::ensureInteger( $result['userGesP'] );
-        $member->iFP      = PropertyValueC::ensureInteger( $result['userFP'] );
         $member->iGebP    = PropertyValueC::ensureInteger( $result['userGebP'] );
+        $member->iFP      = PropertyValueC::ensureInteger( $result['userFP'] );
+        $member->iGesamtP = PropertyValueC::ensureInteger( $result['userGesP'] );
         $member->iPperDay = PropertyValueC::ensureInteger( $result['userPerDay'] );
-
+        
+        if (!in_array($result['userChange'],array('neu,','+','-','o')))
+            $member->iPosChange = PropertyValueC::ensureInteger( $result['userChange'] );
+        
+        if( $retVal->bDateOfEntryVisible === true )
+          $member->iDabeiSeit = HelperC::convertDateToTimestamp($result['dateOfEntry']);
+        
         //! Position und Aenderung nicht ablegen, da abh. von angezeigter Sortierung
         $retVal->aMembers[] = $member;
       }
@@ -130,6 +128,42 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
     return $retVal;
   }
 
+  private function getDateOfUpdate()
+  {
+    $reDate  = $this->getRegExpDateTime();
+
+    $regExp  = '/Letzte\sAktualisierung\s+';
+    $regExp .= '(?P<date>' . $reDate . ')';
+    $regExp .= '/m';
+    
+    $aResult = array();
+    $fRetVal = preg_match( $regExp, $this->getText(), $aResult );
+
+    if( $fRetVal !== false && $fRetVal > 0 )
+    {
+        return HelperC::convertDateToTimestamp($aResult['date']);
+    }
+
+    return false;
+  }
+  
+  private function getTypeOfHighscore()
+  {
+
+    $regExp  = '/Manueller\sStart\:\s+';
+    $regExp .= 'Highscore\s+-\s+(?P<type>'.'\w+'.')\s+';
+    $regExp .= '/m';
+    
+    $aResult = array();
+    $fRetVal = preg_match( $regExp, $this->getText(), $aResult );
+    if( $fRetVal !== false && $fRetVal > 0 )
+    {
+        return PropertyValueC::ensureString($aResult['type']);
+    }
+
+    return false;
+  }
+  
   /////////////////////////////////////////////////////////////////////////////
 /*
   private function getUserTitleVisible()
@@ -166,9 +200,7 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
 
     $reName       = $this->getRegExpUserName();
     $reAllianz    = $this->getRegExpSingleLineText();
-    $reRang       = $this->getRegExpUserRank_de();
     $reDabeiSeit  = $this->getRegExpDate();
-    $reTitel      = $this->getRegExpUserTitle();
     $rePoints     = $this->getRegExpDecimalNumber();
     $rePoints2     = $this->getRegExpFloatingDouble();
 
@@ -181,7 +213,7 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
     $regExp .= '(?P<userFP>'        . $rePoints       . ')\s+?';
     $regExp .= '(?P<userGesP>'        . $rePoints2       . ')\s+?';
     $regExp .= '(?P<userPerDay>'        . $rePoints2       . ')\s+?';
-    $regExp .= '(?P<userChange>(?:'        . $rePoints       . '|neu))\s+?';
+    $regExp .= '(?P<userChange>(?:'        . $rePoints       . '|neu|\-|\+|o))\s+?';
 //
     $regExp .= '(?P<dateOfEntry>'     . $reDabeiSeit  . '|---)\s*?';
     $regExp .= '[\n\r\t]+/m';
@@ -208,7 +240,3 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-?>

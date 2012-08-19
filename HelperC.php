@@ -70,7 +70,7 @@ class HelperC
     );
     
     $aResult  = array();
-    $aMktime  = array();
+    $mktime  = array();
     if (preg_match('@(\d{1,2})\w{0,2}(\s|\.)(\d{1,2}|\w+)(\s|\.)(\d{4})@i', $value, $aResult ) != false)
     {
       $mktime['d'] = (int) $aResult[1];
