@@ -10,6 +10,7 @@
  */
 /**
  * @author Martin Martimeo <martin@martimeo.de>
+ * @author Mac <MacXY@herr-der-mails.de>
  * @package libIwParsers
  * @subpackage parsers_de
  */
@@ -89,11 +90,12 @@ class ParserUniversumC extends ParserBaseC implements ParserI
       $retVal = true;
       $this->_strParserToUse = self::ID_PARSER_XML;
     }
-    elseif( $this->_parserPlainText->canParseText($text) )
-    {
-      $retVal = true;
-      $this->_strParserToUse = self::ID_PARSER_PLAIN_TEXT;
-    }
+    //! XML sollte ueber SimpleXML und nicht per RegEx geparsed werden
+//    elseif( $this->_parserPlainText->canParseText($text) )
+//    {
+//      $retVal = true;
+//      $this->_strParserToUse = self::ID_PARSER_PLAIN_TEXT;
+//    }
 
     return $retVal;
   }
@@ -400,15 +402,29 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
     $this->setText($textCopy);
     $this->stripTextToData();
 
-    $xmlString = $this->getText();
+    $xmlStrings = $this->getText();     //! kann auch mehrere Berichte enthalten, deswegen nochmal aufsplitten
 
-    //supress errors, otherwise this parser may crash the
-    //application if it is provided non-xml data!
-    $fRetVal = @$dom->loadXml( $xmlString, LIBXML_NOERROR );
-
-    if( $fRetVal === true )
+    $reStartData = $this->getRegExpStartData();
+    
+    if( $reStartData !== '' )
     {
-      $retVal = $dom->relaxNGValidate( $rngFileUniverse );
+      $aStart = preg_split( $reStartData, $xmlStrings );
+
+      for ($n=1; $n<count($aStart); $n++) {     //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
+        if( isset($aStart[$n]) && !empty($aStart[$n]))
+        {
+            //supress errors, otherwise this parser may crash the
+            //application if it is provided non-xml data!
+            $fRetVal = @$dom->loadXml( $aStart[$n], LIBXML_NOERROR );
+
+            if( $fRetVal === true )
+            {
+                $retVal = $dom->relaxNGValidate( $rngFileUniverse );
+                if ($retVal === true)
+                    return $retVal;
+            }
+        }
+      }
     }
 
     return $retVal;
@@ -428,7 +444,7 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
 
     $this->stripTextToData();
 
-    $xmlString = $this->getText();
+    $xmlStrings = array();
 /*
   // Create a XSLT Processor
   // "$xsltproc" is the XSLT processor resource.
@@ -475,53 +491,67 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
 print_die("bla"); 
 */
  
-
-    //load the xml and replace nebula names
-    $dom = $this->xmlInjectNebulaNames(utf8_decode($xmlString));
-
-    //I prefer to use simpleXml...
-    $xml = simplexml_import_dom( $dom );
-
-    $retVal->iTimestamp = PropertyValueC::ensureInteger( $xml->informationen->aktualisierungszeit );
-
-    foreach( $xml->planet as $xmlPlanet )
+    $reStartData = $this->getRegExpStartData();
+    
+    if( $reStartData !== '' )
     {
- 
-      $planet = new DTOParserUniversumPlanetResultC();
-      $objCoordinates = new DTOCoordinatesC();
+      $aStart = preg_split( $reStartData, $this->getText() );
 
-      $iCoordsPla = PropertyValueC::ensureInteger($xmlPlanet->koordinaten->pla);
-      $iCoordsGal = PropertyValueC::ensureInteger($xmlPlanet->koordinaten->gal);
-      $iCoordsSol = PropertyValueC::ensureInteger($xmlPlanet->koordinaten->sol);
-      $strCoords = PropertyValueC::ensureString($xmlPlanet->koordinaten->string);
-      $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-
-      $objCoordinates->iGalaxy = $iCoordsGal;
-      $objCoordinates->iPlanet = $iCoordsPla;
-      $objCoordinates->iSystem = $iCoordsSol;
-
-      $planet->aCoords = $aCoords;
-      $planet->bHasNebula = count($xmlPlanet->xpath('nebel')) === 0 ? false : true;
-      $planet->eObjectType = PropertyValueC::ensureEnum( $xmlPlanet->objekt_typ, 'eObjectTypes' );
-      $planet->ePlanetType = PropertyValueC::ensureEnum( $xmlPlanet->planet_typ, 'ePlanetTypes' );
-      $planet->iIngamePlaiid = PropertyValueC::ensureInteger( $xmlPlanet->id );
-      $planet->objCoordinates = $objCoordinates;
-      $planet->strCoords = $strCoords;
-      $planet->strObjectType = PropertyValueC::ensureString( $xmlPlanet->objekt_typ );
-      $planet->strPlanetName = PropertyValueC::ensureString( $xmlPlanet->name );
-      $planet->strPlanetType = PropertyValueC::ensureString( $xmlPlanet->planet_typ );
-      $planet->strUserAlliance = PropertyValueC::ensureString( $xmlPlanet->user->allianz_tag );
-      $planet->strUserName = PropertyValueC::ensureString( $xmlPlanet->user->name );
-
-      if( $planet->bHasNebula === true )
-      {
-        $planet->eNebula = PropertyValueC::ensureEnum( $xmlPlanet->injectedNebulaName, 'ePlanetSpecials' );
-        $planet->strNebula = PropertyValueC::ensureString( $xmlPlanet->nebel );
+      for ($n=1; $n<count($aStart); $n++) {     //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
+        if( isset($aStart[$n]) && !empty($aStart[$n]))
+        {
+            $xmlStrings[] = $aStart[$n];
+        }
       }
-
-      $retVal->aPlanets[$strCoords] = $planet;
     }
 
+    foreach ($xmlStrings as $xmlString) {
+        //load the xml and replace nebula names
+        $dom = $this->xmlInjectNebulaNames(utf8_decode($xmlString));
+
+        //I prefer to use simpleXml...
+        $xml = simplexml_import_dom( $dom );
+
+        $retVal->iTimestamp = PropertyValueC::ensureInteger( $xml->informationen->aktualisierungszeit );
+
+        foreach( $xml->planet as $xmlPlanet )
+        {
+
+            $planet = new DTOParserUniversumPlanetResultC();
+            $objCoordinates = new DTOCoordinatesC();
+
+            $iCoordsPla = PropertyValueC::ensureInteger($xmlPlanet->koordinaten->pla);
+            $iCoordsGal = PropertyValueC::ensureInteger($xmlPlanet->koordinaten->gal);
+            $iCoordsSol = PropertyValueC::ensureInteger($xmlPlanet->koordinaten->sol);
+            $strCoords = PropertyValueC::ensureString($xmlPlanet->koordinaten->string);
+            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+
+            $objCoordinates->iGalaxy = $iCoordsGal;
+            $objCoordinates->iPlanet = $iCoordsPla;
+            $objCoordinates->iSystem = $iCoordsSol;
+
+            $planet->aCoords = $aCoords;
+            $planet->bHasNebula = count($xmlPlanet->xpath('nebel')) === 0 ? false : true;
+            $planet->eObjectType = PropertyValueC::ensureEnum( $xmlPlanet->objekt_typ, 'eObjectTypes' );
+            $planet->ePlanetType = PropertyValueC::ensureEnum( $xmlPlanet->planet_typ, 'ePlanetTypes' );
+            $planet->iIngamePlaiid = PropertyValueC::ensureInteger( $xmlPlanet->id );
+            $planet->objCoordinates = $objCoordinates;
+            $planet->strCoords = $strCoords;
+            $planet->strObjectType = PropertyValueC::ensureString( $xmlPlanet->objekt_typ );
+            $planet->strPlanetName = PropertyValueC::ensureString( $xmlPlanet->name );
+            $planet->strPlanetType = PropertyValueC::ensureString( $xmlPlanet->planet_typ );
+            $planet->strUserAlliance = PropertyValueC::ensureString( $xmlPlanet->user->allianz_tag );
+            $planet->strUserName = PropertyValueC::ensureString( $xmlPlanet->user->name );
+
+            if( $planet->bHasNebula === true )
+            {
+                $planet->eNebula = PropertyValueC::ensureEnum( $xmlPlanet->injectedNebulaName, 'ePlanetSpecials' );
+                $planet->strNebula = PropertyValueC::ensureString( $xmlPlanet->nebel );
+            }
+
+            $retVal->aPlanets[$strCoords] = $planet;
+        }
+    }
     $parserResult->bSuccessfullyParsed = true;
   }
 
