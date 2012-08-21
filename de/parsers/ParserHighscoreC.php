@@ -89,13 +89,12 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
         $member->iGesamtP = PropertyValueC::ensureInteger( $result['userGesP'] );
         $member->iPperDay = PropertyValueC::ensureInteger( $result['userPerDay'] );
         
-        if (!in_array($result['userChange'],array('neu,','+','-','o')))
+        if (!in_array($result['userChange'],array('neu','+','-','o')))
             $member->iPosChange = PropertyValueC::ensureInteger( $result['userChange'] );
         
         if( $retVal->bDateOfEntryVisible === true )
           $member->iDabeiSeit = HelperC::convertDateToTimestamp($result['dateOfEntry']);
-        
-        //! Position und Aenderung nicht ablegen, da abh. von angezeigter Sortierung
+
         $retVal->aMembers[] = $member;
       }
     }
