@@ -57,9 +57,9 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
   {
     $parserResult->objResultData = new DTOParserHighscoreResultC();
     $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
+    $fRetVal = 0;    
     $this->stripTextToData();
-    
+
     $regExp = $this->getRegularExpression();
 
     $aResult = array();
@@ -80,7 +80,7 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
       foreach( $aResult as $result )
       {        
         $member = new DTOParserHighscoreResultMemberC;
-        
+
         $member->iPos       = PropertyValueC::ensureInteger( $result['userPos'] );
         $member->strName    = PropertyValueC::ensureString( $result['userName'] );
         $member->strAllianz    = PropertyValueC::ensureString( $result['userAllianz'] );

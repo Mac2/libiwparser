@@ -99,22 +99,28 @@ class ParserBaseC extends ParserFunctionC
     if( $reStartData !== '' )
     {
       $aStart = preg_split( $reStartData, $this->getText() );
-      
-      if( isset($aStart[1]) )
-      {
-        $this->setText( trim($aStart[1]) );
+
+      $text = '';
+      for ($n=1; $n<count($aStart); $n++) {     //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
+        if( isset($aStart[$n]) )
+        {
+            if( $reEndData !== '' )
+            {
+                $aEnd = preg_split( $reEndData, $aStart[$n] );  //! jeden Bericht einzeln auf ein Ende pruefen
+
+                if( isset($aEnd[0]) )
+                {
+                    $text .= trim($aEnd[0]);
+                }
+            }
+        }
       }
     }
     
-    if( $reEndData !== '' )
-    {
-      $aStart = preg_split( $reEndData, $this->getText() );
+    if (!empty($text)) 
+        $this->setText( $text );
     
-      if( isset($aStart[0]) )
-      {
-        $this->setText( trim($aStart[0]) );
-      }
-    }
+    return;
   }
 
   /////////////////////////////////////////////////////////////////////////////
