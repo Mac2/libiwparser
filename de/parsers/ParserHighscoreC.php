@@ -74,7 +74,7 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
       else
         $retVal->bDateOfEntryVisible = false;
 
-      $retVal->iTimestamp = $this->getDateOfUpdate();
+      $retVal->iTimestamp = $this->getDateTimeOfUpdate();
       $retVal->strType    = $this->getTypeOfHighscore();
       
       foreach( $aResult as $result )
@@ -127,7 +127,7 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
     return $retVal;
   }
 
-  private function getDateOfUpdate()
+  private function getDateTimeOfUpdate()
   {
     $reDate  = $this->getRegExpDateTime();
 
@@ -140,7 +140,7 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
 
     if( $fRetVal !== false && $fRetVal > 0 )
     {
-        return HelperC::convertDateToTimestamp($aResult['date']);
+        return HelperC::convertDateTimeToTimestamp($aResult['date']);
     }
 
     return false;
