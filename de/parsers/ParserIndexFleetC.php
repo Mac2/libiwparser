@@ -85,7 +85,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
     $aResult = array();
 
     $fRetVal = preg_match_all( $regExp, $msg->strParserText, $aResult, PREG_SET_ORDER );
-
+    
     if( $fRetVal !== false && $fRetVal > 0 )
     {
       $parserResult->bSuccessfullyParsed = true;
@@ -226,7 +226,8 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
     $reDateTime       = $this->getRegExpDateTime();
     $reMixedTime      = $this->getRegExpMixedTime();
     $reShipActions    = $this->getRegExpShipActions();
-    $reObject         = '(?:'.$this->getRegExpResource() . '|' . $this->getRegExpSchiffe() . ')';
+    $reShipTexts      = $this->getRegExpShipTexts();        //! Mac: zufaellige Texte nach Ankunft
+    $reObject         = '(?:'.$this->getRegExpResource() . '|' . $this->getRegExpSchiffe() . '|' . $reShipTexts . ')';
     $reCount          = $this->getRegExpDecimalNumber();
 //    $reCoords         = $this->getRegExpKoloCoords();
 

@@ -526,6 +526,7 @@ class ParserFunctionC
     $retVal .= 'Transport|';
     $retVal .= 'Stationieren\s\&\sVerteidigen|';
     $retVal .= 'Stationieren|';
+//    $retVal .= 'Ressourcenhandel\s\(ok\)|';
     $retVal .= 'Ressourcenhandel|';
     $retVal .= 'Ressourcen\sabholen|';
     $retVal .= 'Angriff|';
@@ -550,6 +551,38 @@ class ParserFunctionC
 
   /////////////////////////////////////////////////////////////////////////////
 
+  /////////////////////////////////////////////////////////////////////////////
+
+  /**
+   * returns a regular expression patter matching possible flotten texts, after arrival
+   *
+   */
+  protected function getRegExpShipTexts()
+  {
+    // Texte fuer angekommende Fluege (zuefaellig)
+    $retVal = '';
+    $retVal .= '(?:';
+    $retVal .= 'Lädt\sRess\sein\sund\saus|';
+    $retVal .= 'Surft\sim\sBordnetz|';
+    $retVal .= 'Schaut\sder\sfeschen\sPilotin\shinterher|';
+    $retVal .= 'Hört\sMusik|';
+    $retVal .= 'Erforscht\sgrade\sseine\sNase|';
+    $retVal .= 'Faselt\swas\svon\sWurzelzwergen|';
+    $retVal .= 'Im\sLandeanflug|';
+    $retVal .= 'Sabbert\sdie\sInstrumente\svoll|';
+    $retVal .= 'Versucht\sdie\srichtigen\sKnöpfe\sfür\sdie\sLandung\szu\sfinden|';
+    $retVal .= 'Faselt\swirres\sZeug\sins\sInterkom|';
+    $retVal .= 'Pfeift\sder\sfeschen\sPilotin\shinterher\sund\smacht\skomische\sAndeutungen|';
+    $retVal .= 'Wartet\sauf\sWeihnachten|';
+    $retVal .= 'Erklaert\sdie\sInfinitesimalrechnung|';
+    $retVal .= 'Quatscht\smit\sder\sBodenkontrolle|';
+    $retVal .= 'Wurzelzwergen,\süberall\sWurzelzwergen|';
+    $retVal .= 'Liegt\sbesoffen\sin\sder\sEcke';
+    $retVal .= ')';
+    
+    return $retVal;
+  }
+  
   /////////////////////////////////////////////////////////////////////////////
 
   /**
