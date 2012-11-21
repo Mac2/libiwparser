@@ -25,22 +25,19 @@ class DTOParserXmlResultC
 {
   /**
    * @soap
-   * @var array $aKbLinks an array of objects of type
-   *      DTOParserXmlResultLinkC
+   * @var array $aKbLinks an array of objects of type DTOParserXmlResultLinkC
    */
   public $aKbLinks = array();
 
   /**
    * @soap
-   * @var array $aSbLinks an array of objects of type
-   *      DTOParserXmlResultLinkC
+   * @var array $aSbLinks an array of objects of type DTOParserXmlResultLinkC
    */
   public $aSbLinks = array();
 
   /**
    * @soap
-   * @var array $aUniversumLinks an array of objects of type
-   *      DTOParserXmlResultLinkC
+   * @var array $aUniversumLinks an array of objects of type DTOParserXmlResultLinkC
    */
   public $aUniversumLinks = array();
 
