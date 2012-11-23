@@ -23,7 +23,7 @@
 class ParserFactoryConfigC implements ParserFactoryI
 {
 
-  static private $_instance    = NULL;
+  static private $_instance    = null;
   private $_aRegisteredParsers = array();
   
 
@@ -37,7 +37,7 @@ class ParserFactoryConfigC implements ParserFactoryI
   public function __construct()
   {
     $aConfiguredParsers = ConfigC::get('lib.aRegisteredParsers');
-    $rcParser           = NULL;
+    $rcParser           = null;
 
     foreach( $aConfiguredParsers as $parserInfo )
     {
@@ -62,7 +62,7 @@ class ParserFactoryConfigC implements ParserFactoryI
    */
   static public function getInstance()
   {
-    if( self::$_instance === NULL )
+    if( self::$_instance === null )
     {
       self::$_instance = new ParserFactoryConfigC();
     }
@@ -156,25 +156,26 @@ class ParserFactoryConfigC implements ParserFactoryI
   
   ///////////////////////////////////////////////////////////////////////
 
-  protected function cleanupText( &$text )
-  {
-    //replace different line endings by \n
-    $replacements = array (
-      chr(13) . chr(10) => chr(10),   //windows
-      //chr(10)           => chr(10),   //linux
-      chr(13)           => chr(10),   //mac
-    );
-  
-    if ( get_magic_quotes_gpc() )
+    protected function cleanupText(&$text)
     {
-      $replacements["\\\""] = "\"";
-      $replacements["\\\'"] = "\'";
+        //replace different line endings by \n
+        $replacements = array(
+            chr(13) . chr(10) => chr(10), //windows
+            //chr(10)           => chr(10),   //linux
+            chr(13)           => chr(10), //mac
+        );
+
+        $text = str_replace(
+            array_keys($replacements),
+            array_values($replacements),
+            $text
+        );
+
+        //undo magic quotes
+        if (get_magic_quotes_gpc()) {
+            $text = stripslashes($text);
+        }
     }
-    
-    $text = str_replace( array_keys($replacements),
-                         array_values($replacements),
-                         $text );
-  }
   
   ///////////////////////////////////////////////////////////////////////
 
