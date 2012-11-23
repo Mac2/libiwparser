@@ -292,20 +292,17 @@ class ParserBaseC extends ParserFunctionC
 //      $this->_wasUTF8 = true;
 //    }
   
-    
-    
-    if ( get_magic_quotes_gpc() )
-    {
-      $replacements["\\\""] = "\"";
-      $replacements["\\\'"] = "\'";
-    }
-    
-    $value = str_replace( array_keys($replacements),
+      $value = str_replace( array_keys($replacements),
                           array_values($replacements),
                           $value );
-    
-    //set text
-    $this->_strText = PropertyValueC::ensureString($value);
+
+      //undo magic quotes
+      if (ini_get("magic_quotes_gpc") == 1) {
+          $value = stripslashes($value);
+      }
+
+      //set text
+      $this->_strText = PropertyValueC::ensureString($value);
   }
 
   /////////////////////////////////////////////////////////////////////////////
