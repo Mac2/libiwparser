@@ -68,7 +68,7 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
 	$member = new DTOParserAlliKasseMemberResultMemberC;
 	
 	$iDateTime = HelperC::convertDateTimeToTimestamp($result['iDateTime']);
-	$fCreditsPaid = HelperC::castFloat ($result['fCreditsPaid']);
+	$fCreditsPaid = PropertyValueC::ensureFloat($result['fCreditsPaid']);
 	
 	if ($result['bHasNotAccepted'] == "*")
 	{

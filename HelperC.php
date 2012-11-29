@@ -26,14 +26,16 @@ class HelperC
 
   /////////////////////////////////////////////////////////////////////////////
 
-  /**
-  * Tries to convert the given parameter into a unix timestamp.
-  *
-  *
-  * @return mixed - integer if conversion was successfull
-  *                 boolean false if the provided parameter couldn't be
-  *                 recognized as a date
-  */
+    /**
+     * Tries to convert the given parameter into a unix timestamp.
+     *
+     *
+     * @param $value string timestring
+     *
+     * @return int|bool - integer if conversion was successfull
+     *                 boolean false if the provided parameter couldn't be
+     *                 recognized as a date
+     */
   static public function convertDateToTimestamp( $value )
   {
     static $month2int = array(
@@ -114,14 +116,16 @@ class HelperC
   
   /////////////////////////////////////////////////////////////////////////////
 
-  /**
-  * Tries to convert the given parameter into a unix timestamp.
-  *
-  *
-  * @return mixed - integer if conversion was successfull
-  *                 boolean false if the provided parameter couldn't be
-  *                 recognized as a date
-  */
+    /**
+     * Tries to convert the given parameter into a unix timestamp.
+     *
+     *
+     * @param $value String timestring
+     *
+     * @return int|bool - integer if conversion was successfull
+     *                 boolean false if the provided parameter couldn't be
+     *                 recognized as a date
+     */
   static public function convertMixedTimeToTimestamp( $value )
   {
       $aResult  = array();
@@ -154,14 +158,16 @@ class HelperC
 
   /////////////////////////////////////////////////////////////////////////////
 
-  /**
-  * Tries to convert the given parameter into a unix timestamp.
-  *
-  *
-  * @return mixed - integer if conversion was successfull
-  *                 boolean false if the provided parameter couldn't be
-  *                 recognized as a date
-  */
+    /**
+     * Tries to convert the given parameter into a unix timestamp.
+     *
+     *
+     * @param $value string timestring
+     *
+     * @return Int|bool integer if conversion was successfull
+     *                 boolean false if the provided parameter couldn't be
+     *                 recognized as a date
+     */
   static public function convertTimeToTimestamp( $value )
   {
     $aResult  = array();
@@ -205,7 +211,7 @@ class HelperC
 
   /**
    * Converts the given string into an coordinates result DTO.
-   * @param $strCoordinates a string of the format gal:sys:pla
+   * @param $strCoordinates string a string of the format gal:sys:pla
    * @return DTOCoordinatesC
    */
   static public function convertCoordinates( $strCoordinates )
@@ -225,14 +231,16 @@ class HelperC
   
   /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * Tries to convert the given parameter into a unix timestamp.
-   *
-   *
-   * @return mixed - integer if conversion was successfull
-   *                 boolean false if the provided parameter couldn't be
-   *                 recognized as a date
-   */
+    /**
+     * Tries to convert the given parameter into a unix timestamp.
+     *
+     *
+     * @param $value string timestring
+     *
+     * @return int|bool - integer if conversion was successfull
+     *                 boolean false if the provided parameter couldn't be
+     *                 recognized as a date
+     */
   static public function convertDateTimeToTimestamp( $value )
   {
     static $month2int = array(
@@ -390,97 +398,31 @@ class HelperC
   
   /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * Removes all thousand seperators from the argument
-   */
-  static public function stripThousandSeperators ( $value )
-  {
-    $retVal = false;
-    $supportedThousandSeperators = ConfigC::get( 'lib.aThousandSeperators' );
-
-    $retVal = str_replace( $supportedThousandSeperators, '', $value );
-
-    return $retVal;
-  }
-  
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * cast a string to float
-   * @deprecated
-   *
-   * Use PropertyValueC::ensureFloat instead.
-   *
-   * Most parsers will return strings, and castFloat will handle them
-   * well. However, with growing support for XML-parsing, more and more
-   * parsers might return SimpleXmlElement-Objects or even other Structures.
-   *
-   * My suggestion is to move this method to PropertyValueC.php and to make
-   * it private or protected, to hold the lib's interface consistent.
-   * There should only be one method that cares for converting and setting
-   * float values.
-   */
-  static public function castFloat( $value )
-  {
-    $retVal = false;
-
-    $treffer = array();
-    if (preg_match('/(?P<sign>(?:\-|\+){0,1})(?P<digit>.*)[^\d](?P<part>\d{0,2})$/', $value, $treffer))
-    {
-      $digit = $treffer['digit'];
-      $digit = self::stripThousandSeperators($digit);
-      $digit = (int) $digit;
-      if ($treffer["sign"] == '-')
-         $digit *= -1;
-      
-      $part = $treffer['part'];
-      $pot = strlen($part);
-      $part = (int) $part;
-
-      if ($digit == 0) {    //! Mac: Null ist weder positiv noch negativ
-        $retVal = ($part / Pow(10, $pot));
-        if ($treffer["sign"] == '-')
-            $retVal *= -1;
-      } else if ($digit > 0) {
-        $retVal = $digit + ($part / Pow(10, $pot));
-      } else {
-        $retVal = $digit - ($part / Pow(10, $pot));
-      }
-    }
-    else
-    {
-      $retVal = self::stripThousandSeperators($retVal);
-    }
-
-    return $retVal;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * Includes resource names into a xml document
-   *
-   * The method takes a source xml, which is processed and searched
-   * for occurences of resource definitions. For every definition that
-   * is found, the corresponding resource name retrieved from
-   * http://www.icewars.de/portal/xml/de/ressourcen.xml will be injected.
-   *
-   * @param mixed $xml the method tries to figure out what you provided.
-   *        It supports xml-strings, xml files, DOMDocuments and
-   *        SimpleXMLElements.
-   * $param string $language optional. Providing this parameter, you can
-   *        define if you want the german or the englisch resource names
-   *        being injected. Valid inputs are 'de' and 'en'. The default
-   *        id 'de'.
-   * @return mixed. Reference to the DOMDocument representing the new XML
-   *        document or NULL if an error occured.
-   */
+    /**
+     * Includes resource names into a xml document
+     *
+     * The method takes a source xml, which is processed and searched
+     * for occurences of resource definitions. For every definition that
+     * is found, the corresponding resource name retrieved from
+     * http://www.icewars.de/portal/xml/de/ressourcen.xml will be injected.
+     *
+     * @param mixed  $xml the method tries to figure out what you provided.
+     *                    It supports xml-strings, xml files, DOMDocuments and
+     *                    SimpleXMLElements.
+     * @param string $language optional. Providing this parameter, you can
+     *                    define if you want the german or the englisch resource names
+     *                    being injected. Valid inputs are 'de' and 'en'. The default
+     *                    id 'de'.
+     *
+     * @return mixed. Reference to the DOMDocument representing the new XML
+     *        document or NULL if an error occured.
+     */
   static public function &xmlInjectResourceNames( $xml, $language = 'de' )
   {
-    $retVal = NULL;
+    $retVal = null;
     $xsltProcessor = new XSLTProcessor();
     $docInjectionXsl = new DOMDocument();
-    $docSourceXml = NULL;
+    $docSourceXml = null;
     $filenameResources = "http://www.icewars.de/portal/xml/$language/ressourcen.xml";
     $filenameInjectionXsl = ConfigC::get( 'path.xslt' ) . DIRECTORY_SEPARATOR . 'injectResourceNames.xsl';
 
@@ -524,7 +466,7 @@ class HelperC
         if( $fRetVal === false )
         {
           //I give up.
-          $docSourceXml = NULL;
+          $docSourceXml = null;
         }
       }
     }
@@ -537,7 +479,7 @@ class HelperC
       //TODO: error processing
       if( $retVal === false )
       {
-        $retVal = NULL;
+        $retVal = null;
       }
     }
 
