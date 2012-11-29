@@ -22,6 +22,7 @@
 
 return array(
   'lib' =>  array(
+    'aThousandSeperators' => array( '.', ' ', "'", '"', 'k', '`', '´',','),
     'aRegisteredParsers'  => array(
       array(
         'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
