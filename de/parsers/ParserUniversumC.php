@@ -15,6 +15,17 @@
  * @subpackage parsers_de
  */
 
+namespace libIwParsers\de\parsers;
+use libIwParsers\PropertyValueC;
+use libIwParsers\DTOParserResultC;
+use libIwParsers\ParserBaseC;
+use libIwParsers\ParserI;
+use libIwParsers\ConfigC;
+use libIwParsers\de\parserResults\DTOParserUniversumResultC;
+use libIwParsers\de\parserResults\DTOParserUniversumPlanetResultC;
+use libIwParsers\de\parserResults\DTOCoordinatesC;
+use libIwParsers\de\parserResults\DTOParserUniversumXmlTextC;
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -176,7 +187,6 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
     {
         $parserResult->objResultData = new DTOParserUniversumResultC();
         $retVal =& $parserResult->objResultData;
-        $fRetVal = 0;
         $this->stripTextToData();
 
         $regText = $this->getText();
@@ -235,7 +245,7 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
                     $planet->strPlanetType = "Sonne";
                 }
 
-                //! Mac: Problem Opera liefert keine Informationen ueber den Planetentyp!
+                //! Mac: Problem Opera liefert keine Informationen über den Planetentyp!
                 $planet->eObjectType = PropertyValueC::ensureEnum($planet->strObjectType, "eObjectTypes");
                 $planet->ePlanetType = PropertyValueC::ensureEnum($planet->strPlanetType, "ePlanetTypes");
 
@@ -261,20 +271,6 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
             $parserResult->aErrors[] = 'Unable to match the pattern.';
         }
 
-    }
-
-    /////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * For debugging with "The Regex Coach" which doesn't support named groups
-     */
-    private function getRegularExpressionWithoutNamedGroups()
-    {
-        $retValLine = $this->getRegularExpression();
-
-        $retValLine = preg_replace('/\?P<\w+>/', '', $retValLine);
-
-        return $retValLine;
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -395,7 +391,7 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
     {
         $retVal = false;
         $fRetVal = false;
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
         $xmlString = '';
         $rngFileUniverse = $this->getRngFileUniverse();
 
@@ -456,7 +452,7 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
             }
         }
 
-        $retVal->aXmlText = $xmlStrings;           //give the text to unixml-parser -> nothing more here
+        $retVal->aXmlText = $xmlStrings; //give the text to unixml-parser -> nothing more here
 
         $parserResult->bSuccessfullyParsed = true;
     }

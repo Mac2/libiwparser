@@ -9,10 +9,17 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parsers;
+use libIwParsers\PropertyValueC;
+use libIwParsers\DTOParserResultC;
+use libIwParsers\ParserBaseC;
+use libIwParsers\ParserI;
+use libIwParsers\de\parserResults\DTOParserAlliKasseInhaltResultC;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -28,92 +35,68 @@
 class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
-
-    $this->setIdentifier('de_alli_kasse_inhalt');
-    $this->setName("Allianzkasse Kontostand");
-    $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData( '/Allianzkasse\sAllianzkasse/sm' );
-    $this->setRegExpEndData( '/Auszahlung/sm' );
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * @see ParserI::parseText()
-   */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserAlliKasseInhaltResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $this->stripTextToData();
-
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match( $regExp, $this->getText(), $aResult );
-
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function __construct()
     {
-      $parserResult->bSuccessfullyParsed = true;
+        parent::__construct();
 
-    $fCredits = $aResult['fCredits'];
-    $retVal->fCredits    = PropertyValueC::ensureFloat( $fCredits );
-
-    $strAlliance = $aResult['strAlliance'];
-    $retVal->strAlliance    = PropertyValueC::ensureString( $strAlliance );
-    }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
+        $this->setIdentifier('de_alli_kasse_inhalt');
+        $this->setName("Allianzkasse Kontostand");
+        $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
+        $this->setRegExpBeginData('/Allianzkasse\sAllianzkasse/sm');
+        $this->setRegExpEndData('/Auszahlung/sm');
     }
 
-  }
+    /////////////////////////////////////////////////////////////////////////////
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  private function getRegularExpression()
-  {
     /**
-    */
+     * @see ParserI::parseText()
+     */
+    public function parseText(DTOParserResultC $parserResult)
+    {
+        $parserResult->objResultData = new DTOParserAlliKasseInhaltResultC();
+        $retVal =& $parserResult->objResultData;
 
-  $reFloatingDouble       = $this->getRegExpFloatingDouble();
+        $this->stripTextToData();
 
-    $regExp  = '/^';
-    $regExp .= '(\(Wing (?P<strAlliance>.*)\)\s*)?';
-    $regExp .= '(^.*$\n)+';
-    $regExp .= '^Kasseninhalt\s';
-    $regExp .= '(?P<fCredits>'.$reFloatingDouble.')\s(?:Credits|Kekse)';
-    $regExp .= '$/m';
+        $regExp = $this->getRegularExpression();
 
-    return $regExp;
-  }
+        $aResult = array();
+        $fRetVal = preg_match($regExp, $this->getText(), $aResult);
 
-  /////////////////////////////////////////////////////////////////////////////
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
 
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    $retVal = $this->getRegularExpression();
+            $fCredits = $aResult['fCredits'];
+            $retVal->fCredits = PropertyValueC::ensureFloat($fCredits);
 
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
+            $strAlliance = $aResult['strAlliance'];
+            $retVal->strAlliance = PropertyValueC::ensureString($strAlliance);
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[] = 'Unable to match the pattern.';
+        }
 
-    return $retVal;
-  }
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+
+    private function getRegularExpression()
+    {
+        /**
+         */
+
+        $reFloatingDouble = $this->getRegExpFloatingDouble();
+
+        $regExp = '/^';
+        $regExp .= '(\(Wing (?P<strAlliance>.*)\)\s*)?';
+        $regExp .= '(^.*$\n)+';
+        $regExp .= '^Kasseninhalt\s';
+        $regExp .= '(?P<fCredits>' . $reFloatingDouble . ')\s(?:Credits|Kekse)';
+        $regExp .= '$/m';
+
+        return $regExp;
+    }
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

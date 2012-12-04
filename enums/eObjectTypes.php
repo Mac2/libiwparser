@@ -9,34 +9,27 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage enums
  */
 
-
+namespace libIwParsers\enums;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
 
 /**
  * @TODO: complete the enumeration
  */
 class eObjectTypes
 {
-  const noObject = 'noObject';
+    const noObject = 'noObject';
 
-  const Kolonie = 'colony';
-  const Raumstation = 'spaceStation';
-  const Artefaktbasis = 'artifactStation';
-  const Kampfbasis = 'battleStation';
-  const Sammelbasis = 'miningStation';
+    const Kolonie = 'colony';
+    const Raumstation = 'spaceStation';
+    const Artefaktbasis = 'artifactStation';
+    const Kampfbasis = 'battleStation';
+    const Sammelbasis = 'miningStation';
 }
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

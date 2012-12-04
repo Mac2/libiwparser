@@ -14,28 +14,16 @@
  * @subpackage parsers_de
  */
 
+namespace libIwParsers\de\parsers;
+use libIwParsers\DTOParserResultC;
+use libIwParsers\ParserBaseC;
+use libIwParsers\ParserI;
+use libIwParsers\de\parserResults\DTOParserIndexResultC;
+use libIwParsers\de\parserResults\DTOParserIndexResultIndexC;
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'ParserBaseC.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'ParserI.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'HelperC.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'parserResults'   . DIRECTORY_SEPARATOR .
-              'DTOParserMsgResultC.php' );
 
 /**
  * Parser for Mainpage
@@ -47,156 +35,133 @@ require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
 class ParserIndexC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
-
-    $this->setIdentifier('de_index');
-    $this->setName("Startseite");
-    $this->setRegExpCanParseText('/Notizblock.*Umwandlung.*Serverzeit/smU');        //! Mac: requires Ungreedy U Modifier because charsize could be too large!
-    $this->setRegExpBeginData('/Lade\sneue\sSpieler\sein\sund\sgewinne\seine\s.{1,3}berraschung\s*?/s' );
-    $this->setRegExpEndData('/__\s+X/s' );
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * @see ParserI::parseText()
-   */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserIndexResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $this->stripTextToData();
-
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $aResult = preg_split( $regExp, $this->getText(), -1, PREG_SPLIT_DELIM_CAPTURE );
-
-    if( !empty($aResult) )
+    public function __construct()
     {
-      $parserResult->bSuccessfullyParsed = true;
+        parent::__construct();
 
-      $parser = "";
-
-      foreach( $aResult as $result )
-      {
-        if (empty($result))
-        {
-          continue;
-        }
-
-        $treffer = array();
-        if (preg_match( $regExp, $result, $treffer ))
-        {
-
-          $parser = "";
-          if (isset($treffer['FleetOwn']) && !empty($treffer['FleetOwn']))
-          {
-            $fleetType = 'own';
-            $parser = 'Fleet';
-          }
-          if (isset($treffer['FleetOpposit']) && !empty($treffer['FleetOpposit']))
-          {
-            $fleetType = 'opposit';
-            $parser = 'Fleet';
-          }
-          if (isset($treffer['Research']) && !empty($treffer['Research']))
-          {
-            $parser = 'Research';
-          }
-          if (isset($treffer['KoloInfos']) && !empty($treffer['KoloInfos']))
-          {
-            $parser = 'KoloInfos';
-            $temp = $treffer['KoloInfos'];
-          }
-          if (isset($treffer['Geb']) && !empty($treffer['Geb']))
-          {
-            $parser = 'Geb';
-          }
-          if (isset($treffer['Schiff']) && !empty($treffer['Schiff']))
-          {
-            $parser = 'Schiff';
-          }
-          if (isset($treffer['Ressen']) && !empty($treffer['Ressen']))
-          {
-            $parser = 'Ressen';
-          }
-          if (isset($treffer['shoutbox']) && !empty($treffer['shoutbox']))
-          {
-            $parser = '';   //! erstmal skippen, da zuviele falsch positiven Ergebnisse
-          }
-          if (isset($treffer['MessagePostit']) && !empty($treffer['MessagePostit']))
-          {
-            if (isset($treffer['unreadMsg']) && !empty($treffer['unreadMsg']))
-                $retVal->iUnreadMsg = $treffer['unreadMsg'];
-            if (isset($treffer['unreadAMsg']) && !empty($treffer['unreadAMsg']))
-                $retVal->iUnreadAllyMsg = $treffer['unreadAMsg'];
-          }
-          continue;
-        }
-        if (!empty($parser))
-        {
-          $msg = new DTOParserIndexResultIndexC;
-
-          $msg->eParserType = $parser;
-
-          if ($parser == 'Fleet')
-          {
-            $parser = new ParserIndexFleetC;
-            $parser->setType( $fleetType );
-          }
-          else if ($parser == 'Research')
-          {
-            $retVal->bOngoingResearch = true;
-            $parser = new ParserIndexResearchC;
-          }
-          else if ($parser == 'KoloInfos')
-          {
-            $parser = new ParserIndexKoloInfosC;
-            $temp .= $result;
-            $result = $temp;
-          }
-          else if ($parser == 'Geb')
-          {
-            $parser = new ParserIndexGebC;
-          }
-          else if ($parser == 'Schiff')
-          {
-            $parser = new ParserIndexSchiffC;
-          }
-          else if ($parser == 'Ressen')
-          {
-            $parser = new ParserIndexRessourcenC;
-          }
-
-          $msg->strParserText = $result;
-
-          $return = new DTOParserResultC ($parser);
-          $b = $parser->canParseMsg($msg);
-          if (!$b) break;
-          $parser->parseMsg ($return);
-          $retVal->aContainer[] = $return;
-
-          $parser = '';
-          $fleetType = '';
-          continue;
-        }
-      }
+        $this->setIdentifier('de_index');
+        $this->setName("Startseite");
+        $this->setRegExpCanParseText('/Notizblock.*Umwandlung.*Serverzeit/smU'); //! Mac: requires Ungreedy U Modifier because charsize could be too large!
+        $this->setRegExpBeginData('/Lade\sneue\sSpieler\sein\sund\sgewinne\seine\s.{1,3}berraschung\s*?/s');
+        $this->setRegExpEndData('/__\s+X/s');
     }
-    else
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * @see ParserI::parseText()
+     */
+    public function parseText(DTOParserResultC $parserResult)
     {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-    }
-  }
+        $parserResult->objResultData = new DTOParserIndexResultC();
+        $retVal =& $parserResult->objResultData;
+        $fRetVal = 0;
 
-  /////////////////////////////////////////////////////////////////////////////
+        $this->stripTextToData();
+
+        $regExp = $this->getRegularExpression();
+
+        $aResult = array();
+        $aResult = preg_split($regExp, $this->getText(), -1, PREG_SPLIT_DELIM_CAPTURE);
+
+        if (!empty($aResult)) {
+            $parserResult->bSuccessfullyParsed = true;
+
+            $parser = "";
+
+            foreach ($aResult as $result) {
+                if (empty($result)) {
+                    continue;
+                }
+
+                $treffer = array();
+                if (preg_match($regExp, $result, $treffer)) {
+
+                    $parser = "";
+
+                    if (isset($treffer['FleetOwn']) && !empty($treffer['FleetOwn'])) {
+                        $fleetType = 'own';
+                        $parser = 'Fleet';
+                    }
+                    if (isset($treffer['FleetOpposit']) && !empty($treffer['FleetOpposit'])) {
+                        $fleetType = 'opposit';
+                        $parser = 'Fleet';
+                    }
+                    if (isset($treffer['Research']) && !empty($treffer['Research'])) {
+                        $parser = 'Research';
+                    }
+                    if (isset($treffer['KoloInfos']) && !empty($treffer['KoloInfos'])) {
+                        $parser = 'KoloInfos';
+                        $temp = $treffer['KoloInfos'];
+                    }
+                    if (isset($treffer['Geb']) && !empty($treffer['Geb'])) {
+                        $parser = 'Geb';
+                    }
+                    if (isset($treffer['Schiff']) && !empty($treffer['Schiff'])) {
+                        $parser = 'Schiff';
+                    }
+                    if (isset($treffer['Ressen']) && !empty($treffer['Ressen'])) {
+                        $parser = 'Ressen';
+                    }
+                    if (isset($treffer['shoutbox']) && !empty($treffer['shoutbox'])) {
+                        $parser = ''; //! erstmal skippen, da zuviele falsch positiven Ergebnisse
+                    }
+                    if (isset($treffer['MessagePostit']) && !empty($treffer['MessagePostit'])) {
+                        if (isset($treffer['unreadMsg']) && !empty($treffer['unreadMsg'])) {
+                            $retVal->iUnreadMsg = $treffer['unreadMsg'];
+                        }
+                        if (isset($treffer['unreadAMsg']) && !empty($treffer['unreadAMsg'])) {
+                            $retVal->iUnreadAllyMsg = $treffer['unreadAMsg'];
+                        }
+                    }
+                    continue;
+                }
+                if (!empty($parser)) {
+                    $msg = new DTOParserIndexResultIndexC;
+
+                    $msg->eParserType = $parser;
+
+                    if ($parser == 'Fleet') {
+                        $parser = new ParserIndexFleetC;
+                        $parser->setType($fleetType);
+                    } else if ($parser == 'Research') {
+                        $retVal->bOngoingResearch = true;
+                        $parser = new ParserIndexResearchC;
+                    } else if ($parser == 'KoloInfos') {
+                        $parser = new ParserIndexKoloInfosC;
+                        $temp .= $result;
+                        $result = $temp;
+                    } else if ($parser == 'Geb') {
+                        $parser = new ParserIndexGebC;
+                    } else if ($parser == 'Schiff') {
+                        $parser = new ParserIndexSchiffC;
+                    } else if ($parser == 'Ressen') {
+                        $parser = new ParserIndexRessourcenC;
+                    }
+
+                    $msg->strParserText = $result;
+
+                    $return = new DTOParserResultC ($parser);
+                    if (!$parser->canParseMsg($msg)) {
+                        break;
+                    }
+                    $parser->parseMsg($return);
+                    $retVal->aContainer[] = $return;
+
+                    $parser = '';
+                    $fleetType = '';
+                    continue;
+                }
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[] = 'Unable to match the pattern.';
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
 
   /**
    */
@@ -240,24 +205,4 @@ class ParserIndexC extends ParserBaseC implements ParserI
     return $regExp;
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    $retVal = $this->getRegularExpression();
-
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
-
-    return $retVal;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

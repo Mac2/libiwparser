@@ -9,16 +9,16 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage parsers
  */
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+namespace libIwParsers;
 
-
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 /**
  * Class returned by all parsers
@@ -28,48 +28,39 @@
  */
 class DTOParserResultC
 {
-  /**
-   * @soap
-   * @var string $strIdentifier identifier of the parser that generater these
-   *      results
-   */
-  public $strIdentifier = '';
+    /**
+     * @soap
+     * @var string $strIdentifier identifier of the parser that generater these
+     *      results
+     */
+    public $strIdentifier = '';
 
-  /**
-   * @soap
-   * @var bool $bSuccessfullyParsed hopefully true, false if any errors occured
-   */
-  public $bSuccessfullyParsed = false;
+    /**
+     * @soap
+     * @var bool $bSuccessfullyParsed hopefully true, false if any errors occured
+     */
+    public $bSuccessfullyParsed = false;
 
-  /**
-   * @soap
-   * @var array $aErrors if any errors occured, this array holds additional
-   *      information
-   */
-  public $aErrors = array();
+    /**
+     * @soap
+     * @var array $aErrors if any errors occured, this array holds additional
+     *      information
+     */
+    public $aErrors = array();
 
-  /**
-   * @soap
-   * @var object $objResultData the DTO the parser creates.
-   */
-  public $objResultData = NULL;
+    /**
+     * @soap
+     * @var object $objResultData the DTO the parser creates.
+     */
+    public $objResultData = null;
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct( $parent )
-  {
-    if( $parent instanceof ParserI )
+    public function __construct($parent)
     {
-      $this->strIdentifier = $parent->getIdentifier();
+        if ($parent instanceof ParserI) {
+            $this->strIdentifier = $parent->getIdentifier();
+        }
     }
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
 
 }
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

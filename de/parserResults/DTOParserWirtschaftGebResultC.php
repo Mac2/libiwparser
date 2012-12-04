@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,21 +25,21 @@
  */
 class DTOParserWirtschaftGebResultC
 {
-  /**
-   * @soap
-   * @var array $aAreas an array of objects of type
-   *      DTOParserWirtschaftGebAreaResultC, which represent the complete parsed area
-   *      at the building economy list
-   */
-  public $aAreas = array();
+    /**
+     * @soap
+     * @var array $aAreas an array of objects of type
+     *      DTOParserWirtschaftGebAreaResultC, which represent the complete parsed area
+     *      at the building economy list
+     */
+    public $aAreas = array();
 
-  /**
-   * @soap
-   * @var array $aKolos an array of objects of type
-   *      DTOParserWirtschaftGebKoloResultC, which represent the complete parsed kolos
-   *      at the building economy list
-   */
-  public $aKolos = array();  
+    /**
+     * @soap
+     * @var array $aKolos an array of objects of type
+     *      DTOParserWirtschaftGebKoloResultC, which represent the complete parsed kolos
+     *      at the building economy list
+     */
+    public $aKolos = array();
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -46,23 +48,23 @@ class DTOParserWirtschaftGebResultC
 
 class DTOParserWirtschaftGebKoloResultC
 {
-  /**
-   * @soap
-   * @var array $aCoords the coords
-   */
-  public $aCoords = '';
+    /**
+     * @soap
+     * @var array $aCoords the coords
+     */
+    public $aCoords = '';
 
-  /**
-   * @soap
-   * @var string $strCoords the coords
-   */
-  public $strCoords = '';  
+    /**
+     * @soap
+     * @var string $strCoords the coords
+     */
+    public $strCoords = '';
 
-  /**
-   * @soap
-   * @var string $strObjectType the type of this kolo
-   */
-  public $strObjectType = '';  
+    /**
+     * @soap
+     * @var string $strObjectType the type of this kolo
+     */
+    public $strObjectType = '';
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -71,19 +73,19 @@ class DTOParserWirtschaftGebKoloResultC
 
 class DTOParserWirtschaftGebAreaResultC
 {
-  /**
-   * @soap
-   * @var array $aBuildings an array of objects of type
-   *      DTOParserWirtschaftGebBuildingResultC, which represent a building line
-   *      at the building economy list
-   */
-  public $aBuildings = '';
+    /**
+     * @soap
+     * @var array $aBuildings an array of objects of type
+     *      DTOParserWirtschaftGebBuildingResultC, which represent a building line
+     *      at the building economy list
+     */
+    public $aBuildings = '';
 
-  /**
-   * @soap
-   * @var string $strAreaName the name of the area
-   */
-  public $strAreaName = '';    
+    /**
+     * @soap
+     * @var string $strAreaName the name of the area
+     */
+    public $strAreaName = '';
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -93,19 +95,16 @@ class DTOParserWirtschaftGebAreaResultC
 class DTOParserWirtschaftGebBuildingResultC
 {
 
-  /**
-   * @soap
-   * @var array (coords => building_count) $aCounts 
-   */
-  public $aCounts = '';    
+    /**
+     * @soap
+     * @var array (coords => building_count) $aCounts
+     */
+    public $aCounts = '';
 
-  /**
-   * @soap
-   * @var string $strBuildingName the name of the building
-   */
-  public $strBuildingName = '';     
+    /**
+     * @soap
+     * @var string $strBuildingName the name of the building
+     */
+    public $strBuildingName = '';
+
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

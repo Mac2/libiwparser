@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,25 +25,21 @@
  */
 class DTOParserPersonalStaatsformResultC
 {
-  /**
-   * @soap
-   * @var boolean $bStaatsformChosen
-   */
-  public $bStaatsformChosen = false;
+    /**
+     * @soap
+     * @var boolean $bStaatsformChosen
+     */
+    public $bStaatsformChosen = false;
 
-  /**
-   * @soap
-   * @var string $strStaatsform the choosen Staatsform
-   */
-  public $strStaatsform = '';  
+    /**
+     * @soap
+     * @var string $strStaatsform the choosen Staatsform
+     */
+    public $strStaatsform = '';
 
-  /**
-   * @soap
-   * @var string $strVorteile die Vor und Nachteile
-   */
-  public $strVorteile = '';    
+    /**
+     * @soap
+     * @var string $strVorteile die Vor und Nachteile
+     */
+    public $strVorteile = '';
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

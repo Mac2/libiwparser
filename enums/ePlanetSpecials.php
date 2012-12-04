@@ -9,51 +9,43 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage enums
  */
 
-
+namespace libIwParsers\enums;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
 
 /**
  * @TODO: define englisch constants
  */
 class ePlanetSpecials
 {
-  const alteRuinen       = 'oldRuins';
-  const Asteroidengürtel = 'asteroidBelt';
-  const instabilerKern   = 'instableCore';
-  const Gold             = 'gold';
-  const Mond             = 'moon';
-  const natürlicheQuelle = 'naturalWell';
-  const NatürlicheQuelle = 'naturalWell';
-  const planetarerRing   = 'planetaryRing';
-  const radioaktiv       = 'radiactive';
-  const toxisch          = 'toxic';
-  const Ureinwohner      = 'natives';
-  const wenigRohstoffe   = 'fewResources';
-  const WenigRohstoffe   = 'fewResources';
-  const BlauerNebel      = 'blueNebula';
-  const GelberNebel      = 'yellowNebula';
-  const GrünerNebel      = 'greenNebula';
-  const RoterNebel       = 'redNebula';
-  const VioletterNebel   = 'violetNebula';
-  const blauerNebel      = 'blueNebula';
-  const gelberNebel      = 'yellowNebula';
-  const grünerNebel      = 'greenNebula';
-  const roterNebel       = 'redNebula';
-  const violetterNebel   = 'violetNebula';
+    const alteRuinen = 'oldRuins';
+    const Asteroidengürtel = 'asteroidBelt';
+    const instabilerKern = 'instableCore';
+    const Gold = 'gold';
+    const Mond = 'moon';
+    const natürlicheQuelle = 'naturalWell';
+    const NatürlicheQuelle = 'naturalWell';
+    const planetarerRing = 'planetaryRing';
+    const radioaktiv = 'radiactive';
+    const toxisch = 'toxic';
+    const Ureinwohner = 'natives';
+    const wenigRohstoffe = 'fewResources';
+    const WenigRohstoffe = 'fewResources';
+    const BlauerNebel = 'blueNebula';
+    const GelberNebel = 'yellowNebula';
+    const GrünerNebel = 'greenNebula';
+    const RoterNebel = 'redNebula';
+    const VioletterNebel = 'violetNebula';
+    const blauerNebel = 'blueNebula';
+    const gelberNebel = 'yellowNebula';
+    const grünerNebel = 'greenNebula';
+    const roterNebel = 'redNebula';
+    const violetterNebel = 'violetNebula';
 }
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

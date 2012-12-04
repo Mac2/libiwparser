@@ -9,49 +9,42 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage enums
  */
 
-
+namespace libIwParsers\enums;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
 
 class eResources
 {
-  const Eisen        = 'iron';
-  const Stahl        = 'steel';
-  const VV4A         = 'vv4a';
-  const chemElemente = 'chemicals';
-  const Eis          = 'ice';
-  const Wasser       = 'water';
-  const Energie      = 'energy';
-  const Pinguine     = 'penguins';
-  const Credits      = 'credits';
-  const Bevölkerung  = 'population';
+    const Eisen = 'Eisen';
+    const Stahl = 'Stahl';
+    const VV4A = 'VV4A';
+    const chemElemente = 'chem. Elemente';
+    const Eis = 'Eis';
+    const Wasser = 'Wasser';
+    const Energie = 'Energie';
+    const Pinguine = 'Pinguine';
+    const Credits = 'Credits';
+    const Bevölkerung = 'Bevölkerung';
+    const FP = 'FP';
 
-  const Iron         = 'iron';
-  const steel        = 'steel';
-  //const VV4A         = 'vv4a';
-  const Chemelements = 'chemicals';
-  const Ice          = 'ice';
-  const Water        = 'water';
-  const Energy       = 'energy';
-  const Penguins     = 'penguins';
-  const Rabbits      = 'credits';
-  const Population   = 'population';
+    const Iron = 'iron';
+    const steel = 'steel';
+    //const VV4A         = 'vv4a';
+    const Chemelements = 'chemicals';
+    const Ice = 'ice';
+    const Water = 'water';
+    const Energy = 'energy';
+    const Penguins = 'penguins';
+    const Rabbits = 'credits';
+    const Population = 'population';
 
-  //TODO: figure out what muffins are. Equivalent to 'Bierflaschen'?
-  //public const Muffins     = '???';
+    //TODO: figure out what muffins are. Equivalent to 'Bierflaschen'?
+    //public const Muffins     = '???';
 }
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

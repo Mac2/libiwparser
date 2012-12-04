@@ -14,28 +14,18 @@
  * @subpackage parsers_de
  */
 
+namespace libIwParsers\de\parsers;
+use libIwParsers\PropertyValueC;
+use libIwParsers\DTOParserResultC;
+use libIwParsers\ParserMsgBaseC;
+use libIwParsers\ParserMsgI;
+use libIwParsers\HelperC;
+use libIwParsers\de\parserResults\DTOParserIndexFleetResultC;
+use libIwParsers\de\parserResults\DTOParserIndexFleetResultFleetC;
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'ParserBaseC.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'ParserI.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'HelperC.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'parserResults'   . DIRECTORY_SEPARATOR .
-              'DTOParserMsgResultC.php' );
 
 /**
  * Parser for Mainpage
@@ -76,7 +66,6 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
     $parserResult->objResultData = new DTOParserIndexFleetResultC();
     $retVal =& $parserResult->objResultData;
     $retVal->strType = $this->type;
-    $fRetVal = 0;
 
     $regExp = $this->getRegularExpression();
     $msg = $this->getMsg();
@@ -126,19 +115,22 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
         $retObj->aCoordsTo = $aCoords;
         $retObj->strCoordsTo = $strCoords;
 
-        if (!empty($result['dtDateTime']))
+        if (!empty($result['dtDateTime'])) {
                 $retObj->iAnkunft = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
-        else
+        } else {
             $retObj->iAnkunft = 0;
 //            $retObj->iAnkunft = GetVar("now");  //! Mac: darf nicht, da sonst parsen innerhalb dieser Zeit, jedesmal als neuer Flug erkannt wird
+        }
 
-//        if (!$retObj->iAnkunft)
+//        if (!$retObj->iAnkunft) {
 //                $retObj->iAnkunft = array();
+//        }
 
-        if (!empty($result['mtMixedTime']))
+        if (!empty($result['mtMixedTime'])) {
                 $retObj->iAnkunftIn = HelperC::convertMixedTimeToTimestamp( $result['mtMixedTime'] );
-        else
+        } else {
             $retObj->iAnkunftIn = 0;
+        }
 
         if ($retVal->bObjectsVisible) {
             if (isset($result['strObjecte'])) {
@@ -209,8 +201,9 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
       }
     }
 
-    if ($onlyReturn)
+    if ($onlyReturn) {
         return true;
+    }
 
     return $retVal;
   }
@@ -240,8 +233,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
         |)
         \((?P<iCoordsGalTo>\d{1,2})\:(?P<iCoordsSolTo>\d{1,3})\:(?P<iCoordsPlaTo>\d{1,2})\)
         [\s\t\n\r]+';
-	$regExp  .= '		(?:\(\s*via\s+\d+\:\d+\:\d+\s+via\s+\d+\:\d+\:\d+\s\)|)
-				\s*';
+	$regExp  .= '		(?:\(\s*via\s+\d+\:\d+\:\d+\s+via\s+\d+\:\d+\:\d+\s\)|)\s*';
 	$regExp  .= '		(?:(?P<strPlanetNameFrom>'.$rePlanetName.')\s|)';
 	$regExp  .= '		\((?P<iCoordsGalFrom>\d+)\:(?P<iCoordsSolFrom>\d+)\:(?P<iCoordsPlaFrom>\d+)\)';
 	$regExp  .= '		\s+';
@@ -270,24 +262,4 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
     return $regExp;
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    $retVal = $this->getRegularExpression();
-
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
-
-    return $retVal;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

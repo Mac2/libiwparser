@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,18 +26,18 @@
 class DTOParserWirtschaftDefResultC
 {
 
-  /**
-   * @soap
-   * @var array $aKolos an array of objects of type
-   *      DTOParserWirtschaftDefKoloResultC, which represent the complete parsed kolos
-   *      at the defence economy list
-   */
-  public $aKolos = array();  
-  
-  public $aDefences = array();
-  
-  public $aSlots = array();
-  
+    /**
+     * @soap
+     * @var array $aKolos an array of objects of type
+     *      DTOParserWirtschaftDefKoloResultC, which represent the complete parsed kolos
+     *      at the defence economy list
+     */
+    public $aKolos = array();
+
+    public $aDefences = array();
+
+    public $aSlots = array();
+
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -44,23 +46,23 @@ class DTOParserWirtschaftDefResultC
 
 class DTOParserWirtschaftDefKoloResultC
 {
-  /**
-   * @soap
-   * @var array $aCoords the coords
-   */
-  public $aCoords = '';
+    /**
+     * @soap
+     * @var array $aCoords the coords
+     */
+    public $aCoords = '';
 
-  /**
-   * @soap
-   * @var string $strCoords the coords
-   */
-  public $strCoords = '';  
+    /**
+     * @soap
+     * @var string $strCoords the coords
+     */
+    public $strCoords = '';
 
-  /**
-   * @soap
-   * @var string $strObjectType the type of this kolo
-   */
-  public $strObjectType = '';  
+    /**
+     * @soap
+     * @var string $strObjectType the type of this kolo
+     */
+    public $strObjectType = '';
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -69,12 +71,18 @@ class DTOParserWirtschaftDefKoloResultC
 
 class DTOParserWirtschaftDefSlotResultC
 {
-  
-  /**
-   * @soap
-   * @var string $strSlotType the name of the DefenceType
-   */
-  public $strSlotType = '';    
+
+    /**
+     * @soap
+     * @var string $strSlotType the name of the DefenceType
+     */
+    public $strSlotType = '';
+
+    public $aAvailable = '';
+
+    public $aUsed = '';
+
+    public $aTotal = '';
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -84,25 +92,22 @@ class DTOParserWirtschaftDefSlotResultC
 class DTOParserWirtschaftDefDefenceResultC
 {
 
-  /**
-   * @soap
-   * @var array (coords => defence_count) $aCounts 
-   */
-  public $aCounts = '';    
+    /**
+     * @soap
+     * @var array (coords => defence_count) $aCounts
+     */
+    public $aCounts = '';
 
-  /**
-   * @soap
-   * @var array (coords => defence_count) $aCounts 
-   */
-  public $aMaxCounts = '';    
-  
-  /**
-   * @soap
-   * @var string $strDefenceName the name of the defence
-   */
-  public $strDefenceName = '';     
+    /**
+     * @soap
+     * @var array (coords => defence_count) $aCounts
+     */
+    public $aMaxCounts = '';
+
+    /**
+     * @soap
+     * @var string $strDefenceName the name of the defence
+     */
+    public $strDefenceName = '';
+
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

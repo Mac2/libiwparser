@@ -9,64 +9,52 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage helpers
  */
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+namespace libIwParsers;
 
-
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 class ConfigC
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  private $_aConfig = NULL;
-  static private $_instance = NULL;
+    private $_aConfig = null;
+    static private $_instance = null;
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  static private function &getInstance()
-  {
-    if( self::$_instance === NULL )
+    static private function &getInstance()
     {
-      self::$_instance = new ConfigC;
-      self::$_instance->_aConfig = include(
-        dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php' );
+        if (self::$_instance === null) {
+            self::$_instance = new ConfigC;
+            self::$_instance->_aConfig = require(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php');
+        }
+
+        return self::$_instance;
     }
-    
-    return self::$_instance;
-  }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  static public function get( $key )
-  {
-    $me =& ConfigC::getInstance();
-    $retVal =& $me->_aConfig;
-    $breadcrumbs = explode('.', $key);
-    
-    foreach( $breadcrumbs as $breadcrumb )
+    static public function get($key)
     {
-      if( array_key_exists($breadcrumb, $retVal) )
-      {
-        $retVal =& $retVal[$breadcrumb];
-      }
-    }
-    
-    return $retVal;
-  }
+        $me =& ConfigC::getInstance();
+        $retVal =& $me->_aConfig;
+        $breadcrumbs = explode('.', $key);
 
-  /////////////////////////////////////////////////////////////////////////////
+        foreach ($breadcrumbs as $breadcrumb) {
+            if (array_key_exists($breadcrumb, $retVal)) {
+                $retVal =& $retVal[$breadcrumb];
+            }
+        }
+
+        return $retVal;
+    }
 
 }
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

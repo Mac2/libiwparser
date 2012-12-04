@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,34 +25,30 @@
  */
 class DTOParserAlliKasseLogMemberResultC
 {
-  /**
-   * @soap
-   * @var integer $iDateTime unix timestamp of log
-   */
-  public $iDateTime = 0;
+    /**
+     * @soap
+     * @var integer $iDateTime unix timestamp of log
+     */
+    public $iDateTime = 0;
 
-  /**
-   * @soap
-   * @var string $strFromUser user that paid
-   */
-  public $strFromUser = ""; 
+    /**
+     * @soap
+     * @var string $strFromUser user that paid
+     */
+    public $strFromUser = "";
 
-  /**
-   * @soap
-   * @var string $strToUser user that got paid
-   */
-  public $strToUser = ""; 
+    /**
+     * @soap
+     * @var string $strToUser user that got paid
+     */
+    public $strToUser = "";
 
-  public $strReason = ""; 
+    public $strReason = "";
 
-  /**
-   * @soap
-   * @var integer $iCredits amount of paid credits
-   */
-  public $iCredits = 0; 
+    /**
+     * @soap
+     * @var integer $iCredits amount of paid credits
+     */
+    public $iCredits = 0;
 
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,15 +26,11 @@
 class DTOParserAlliKasseInhaltResultC
 {
 
-   /**
-   * @soap
-   * @var float $fCredits the amount of credits at the alli bank
-   */
-  public $fCredits = 0; 
-  public $strAlliance = ""; 
+    /**
+     * @soap
+     * @var float $fCredits the amount of credits at the alli bank
+     */
+    public $fCredits = 0;
+    public $strAlliance = "";
 
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

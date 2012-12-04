@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,37 +25,34 @@
  */
 class DTOPlanetModifiersC
 {
-  /**
-   * @soap
-   * @var float $fResearch
-   */
-  public $fResearch = 0.0;
+    /**
+     * @soap
+     * @var float $fResearch
+     */
+    public $fResearch = 0.0;
 
-  /**
-   * @soap
-   * @var float $fBuildingCosts
-   */
-  public $fBuildingCosts = 0.0;
+    /**
+     * @soap
+     * @var float $fBuildingCosts
+     */
+    public $fBuildingCosts = 0.0;
 
-  /**
-   * @soap
-   * @var float $fBuildingTime
-   */
-  public $fBuildingTime = 0.0;
+    /**
+     * @soap
+     * @var float $fBuildingTime
+     */
+    public $fBuildingTime = 0.0;
 
-  /**
-   * @soap
-   * @var float $fShipCosts
-   */
-  public $fShipCosts = 0.0;
+    /**
+     * @soap
+     * @var float $fShipCosts
+     */
+    public $fShipCosts = 0.0;
 
-  /**
-   * @soap
-   * @var float $fShipTime
-   */
-  public $fShipTime = 0.0;
+    /**
+     * @soap
+     * @var float $fShipTime
+     */
+    public $fShipTime = 0.0;
+
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

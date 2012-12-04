@@ -9,16 +9,23 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+namespace libIwParsers\de\parsers;
+use libIwParsers\PropertyValueC;
+use libIwParsers\DTOParserResultC;
+use libIwParsers\ParserBaseC;
+use libIwParsers\ParserI;
+use libIwParsers\HelperC;
+use libIwParsers\de\parserResults\DTOParserAlliMemberlisteResultC;
+use libIwParsers\de\parserResults\DTOParserAlliMemberlisteResultMemberC;
 
-
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 /**
  * Parser for the alliance member list
@@ -30,193 +37,157 @@
 class ParserAlliMemberlisteC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
-
-    $this->setIdentifier('de_alli_memberliste');
-    $this->setName("Allianzmitgliederliste");
-    $this->setRegExpCanParseText('/Mitgliederliste\s+?Name\s+?Rang/sm');
-    $this->setRegExpBeginData( $this->getRegExpCanParseText() );
-    $this->setRegExpEndData( '' );
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * @see ParserI::parseText()
-   * @todo Points may be hidden (FP,Geb,Gesamt)
-   * @todo If points are hidden, does this also affect points/day?
-   * @todo date of entry may be hidden
-   * @todo user title may be hidden
-   */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserAlliMemberlisteResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-    $this->stripTextToData();
-    
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match_all( $regExp, $this->getText()."\n", $aResult, PREG_SET_ORDER );
-
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function __construct()
     {
-      $parserResult->bSuccessfullyParsed = true;
-      
-      if( $this->getDateOfEntryVisible() )
-      {
-        $retVal->bDateOfEntryVisible = true;
-      }
-      else
-      {
-        $retVal->bDateOfEntryVisible = false;
-      }
+        parent::__construct();
 
-      if( $this->getUserTitleVisible() )
-      {
-        $retVal->bUserTitleVisible = true;
-      }
-      else
-      {
-        $retVal->bUserTitleVisible = false;
-      }
-
-      foreach( $aResult as $result )
-      {
-        $iDateOfEntry = -1;
-        $strUserTitle = '';
-
-        if( $retVal->bDateOfEntryVisible === true )
-        {
-          $iDateOfEntry = HelperC::convertDateToTimestamp($result['dateOfEntry']);
-        }
-        
-        if( $retVal->bUserTitleVisible === true )
-        {
-          $strUserTitle = $result['userTitle'];
-        }
-
-        $member = new DTOParserAlliMemberlisteResultMemberC;
-
-        $member->strName    = PropertyValueC::ensureString( $result['userName'] );
-        $member->eRank      = PropertyValueC::ensureString( $result['userRank'] );
-        $member->iDabeiSeit = PropertyValueC::ensureInteger( $iDateOfEntry );
-        $member->strTitel   = PropertyValueC::ensureString( $strUserTitle );
-
-        $member->iGesamtP = PropertyValueC::ensureInteger( $result['userGesP'] );
-        $member->iFP      = PropertyValueC::ensureInteger( $result['userFP'] );
-        $member->iGebP    = PropertyValueC::ensureInteger( $result['userGebP'] );
-        $member->iPperDay = PropertyValueC::ensureInteger( $result['userPerDay'] );
-
-        $retVal->aMembers[] = $member;
-      }
-    }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
+        $this->setIdentifier('de_alli_memberliste');
+        $this->setName("Allianzmitgliederliste");
+        $this->setRegExpCanParseText('/Mitgliederliste\s+?Name\s+?Rang/sm');
+        $this->setRegExpBeginData($this->getRegExpCanParseText());
+        $this->setRegExpEndData('');
     }
 
-  }
+    /////////////////////////////////////////////////////////////////////////////
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  private function getDateOfEntryVisible()
-  {
-    $retVal = false;
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match( $regExp, $this->getText(), $aResult );
-
-    if( $fRetVal !== false && $fRetVal > 0 )
-    {
-      if( $aResult['dateOfEntry'] !== '---' )
-      {
-        $retVal = true;
-      }
-    }
-
-    return $retVal;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  private function getUserTitleVisible()
-  {
-    $retVal = false;
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match_all( $regExp, $this->getText(), $aResult, PREG_SET_ORDER );
-
-    if( $fRetVal !== false && $fRetVal > 0 )
-    {
-      foreach( $aResult as $result )
-      {
-        if( $result['userTitle'] !== '---' )
-        {
-          $retVal = true;
-          break;
-        }
-      }
-    }
-
-    return $retVal;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  private function getRegularExpression()
-  {
     /**
-    * die Daten sind Zeilen, von denen jede folgendermaßen aussieht:
-    * Name | Rang | dabei seit | Titel
-    */
+     * @see  ParserI::parseText()
+     * @todo Points may be hidden (FP,Geb,Gesamt)
+     * @todo If points are hidden, does this also affect points/day?
+     * @todo date of entry may be hidden
+     * @todo user title may be hidden
+     */
+    public function parseText(DTOParserResultC $parserResult)
+    {
+        $parserResult->objResultData = new DTOParserAlliMemberlisteResultC();
+        $retVal =& $parserResult->objResultData;
+        $this->stripTextToData();
 
-    $reName       = $this->getRegExpUserName();
-    $reRang       = $this->getRegExpUserRank_de();
-    $reDabeiSeit  = $this->getRegExpDate();
-    $reTitel      = $this->getRegExpUserTitle();
-    $rePoints     = $this->getRegExpDecimalNumber();
+        $regExp = $this->getRegularExpression();
 
-    $regExp  = '/^';
-    $regExp .= '(?P<userName>'        . $reName       . ')\s+?';
-    $regExp .= '(?P<userRank>'        . $reRang       . ')\s+?';
+        $aResult = array();
+        $fRetVal = preg_match_all($regExp, $this->getText() . "\n", $aResult, PREG_SET_ORDER);
 
-    $regExp .= '(?P<userGebP>'        . $rePoints       . ')\s+?';
-    $regExp .= '(?P<userFP>'        . $rePoints       . ')\s+?';
-    $regExp .= '(?P<userGesP>'        . $rePoints       . ')\s+?';
-    $regExp .= '(?P<userPerDay>'        . $rePoints       . ')\s+?';
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
 
-    $regExp .= '(?P<dateOfEntry>'     . $reDabeiSeit  . '|---)\s*?';
-    $regExp .= '(?P<userTitle>'       . $reTitel      . '|)\s*';  //title might be empty
-    $regExp .= '\n/m';
-    
-    return $regExp;
-  }
+            if ($this->getDateOfEntryVisible()) {
+                $retVal->bDateOfEntryVisible = true;
+            } else {
+                $retVal->bDateOfEntryVisible = false;
+            }
 
-  /////////////////////////////////////////////////////////////////////////////
+            if ($this->getUserTitleVisible()) {
+                $retVal->bUserTitleVisible = true;
+            } else {
+                $retVal->bUserTitleVisible = false;
+            }
 
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    return HelperC::removeNamedGroups( $this->getRegularExpression() );
-  }
-  
-  /////////////////////////////////////////////////////////////////////////////
+            foreach ($aResult as $result) {
+                $iDateOfEntry = -1;
+                $strUserTitle = '';
+
+                if ($retVal->bDateOfEntryVisible === true) {
+                    $iDateOfEntry = HelperC::convertDateToTimestamp($result['dateOfEntry']);
+                }
+
+                if ($retVal->bUserTitleVisible === true) {
+                    $strUserTitle = $result['userTitle'];
+                }
+
+                $member = new DTOParserAlliMemberlisteResultMemberC;
+
+                $member->strName = PropertyValueC::ensureString($result['userName']);
+                $member->eRank = PropertyValueC::ensureString($result['userRank']);
+                $member->iDabeiSeit = PropertyValueC::ensureInteger($iDateOfEntry);
+                $member->strTitel = PropertyValueC::ensureString($strUserTitle);
+
+                $member->iGesamtP = PropertyValueC::ensureInteger($result['userGesP']);
+                $member->iFP = PropertyValueC::ensureInteger($result['userFP']);
+                $member->iGebP = PropertyValueC::ensureInteger($result['userGebP']);
+                $member->iPperDay = PropertyValueC::ensureInteger($result['userPerDay']);
+
+                $retVal->aMembers[] = $member;
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[] = 'Unable to match the pattern.';
+        }
+
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    private function getDateOfEntryVisible()
+    {
+        $retVal = false;
+        $regExp = $this->getRegularExpression();
+
+        $aResult = array();
+        $fRetVal = preg_match($regExp, $this->getText(), $aResult);
+
+        if ($fRetVal !== false && $fRetVal > 0) {
+            if ($aResult['dateOfEntry'] !== '---') {
+                $retVal = true;
+            }
+        }
+
+        return $retVal;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    private function getUserTitleVisible()
+    {
+        $retVal = false;
+        $regExp = $this->getRegularExpression();
+
+        $aResult = array();
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
+
+        if ($fRetVal !== false && $fRetVal > 0) {
+            foreach ($aResult as $result) {
+                if ($result['userTitle'] !== '---') {
+                    $retVal = true;
+                    break;
+                }
+            }
+        }
+
+        return $retVal;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    private function getRegularExpression()
+    {
+        /**
+         * die Daten sind Zeilen, von denen jede folgendermaßen aussieht:
+         * Name | Rang | dabei seit | Titel
+         */
+
+        $reName = $this->getRegExpUserName();
+        $reRang = $this->getRegExpUserRank_de();
+        $reDabeiSeit = $this->getRegExpDate();
+        $reTitel = $this->getRegExpUserTitle();
+        $rePoints = $this->getRegExpDecimalNumber();
+
+        $regExp = '/^';
+        $regExp .= '(?P<userName>' . $reName . ')\s+?';
+        $regExp .= '(?P<userRank>' . $reRang . ')\s+?';
+
+        $regExp .= '(?P<userGebP>' . $rePoints . ')\s+?';
+        $regExp .= '(?P<userFP>' . $rePoints . ')\s+?';
+        $regExp .= '(?P<userGesP>' . $rePoints . ')\s+?';
+        $regExp .= '(?P<userPerDay>' . $rePoints . ')\s+?';
+
+        $regExp .= '(?P<dateOfEntry>' . $reDabeiSeit . '|---)\s*?';
+        $regExp .= '(?P<userTitle>' . $reTitel . '|)\s*'; //title might be empty
+        $regExp .= '\n/m';
+
+        return $regExp;
+    }
 
 }
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,15 +26,11 @@
 class DTOParserAlliKasseLogResultC
 {
 
-   /**
-   * @soap
-   * @var array $aLogs the array of logs
-   */
-  public $aLogs = array(); 
-  public $strAlliance = ""; 
+    /**
+     * @soap
+     * @var array $aLogs the array of logs
+     */
+    public $aLogs = array();
+    public $strAlliance = "";
 
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

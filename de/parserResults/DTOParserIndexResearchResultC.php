@@ -9,26 +9,27 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+namespace libIwParsers\de\parserResults;
 
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 /**
  * Result DTO of parser de_index_research
  */
 class DTOParserIndexResearchResultC
 {
-  /**
-   * @soap
-   * @var array $aFleets
-   */
-  public $aResearch = array ();
+    /**
+     * @soap
+     * @var array $aFleets
+     */
+    public $aResearch = array();
 
 }
 
@@ -37,23 +38,22 @@ class DTOParserIndexResearchResultC
  */
 class DTOParserIndexResearchResultResearchC
 {
-  /**
-   * @soap
-   * @var string $strResearchName
-   */
-  public $strResearchName = '';
-   
-  /**
-   * @soap
-   * @var date 
-   */
-  public $iResearchEnd = array();
-  
-  /**
-   * @soap
-   * @var date 
-   */
-  public $iResearchEndIn = array();
-  
+    /**
+     * @soap
+     * @var string $strResearchName
+     */
+    public $strResearchName = '';
+
+    /**
+     * @soap
+     * @var int unixtime
+     */
+    public $iResearchEnd = array();
+
+    /**
+     * @soap
+     * @var int unixtime
+     */
+    public $iResearchEndIn = array();
 
 }

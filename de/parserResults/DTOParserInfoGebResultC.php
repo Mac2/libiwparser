@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,77 +25,73 @@
  */
 class DTOParserInfoGebResultC
 {
-   /**
-   * @soap
-   * @var string $strGebName the name of the building
-   */
-  public $strGebName = '';
+    /**
+     * @soap
+     * @var string $strGebName the name of the building
+     */
+    public $strGebName = '';
 
-   /**
-   * @soap
-   * @var string $strGebComment the shortline comment of the building
-   */
-  public $strGebComment = '';  
+    /**
+     * @soap
+     * @var string $strGebComment the shortline comment of the building
+     */
+    public $strGebComment = '';
 
-   /**
-   * @soap
-   * @var integer $iaktSufe
-   */
-  public $bIsStufenGeb = false;
-  public $iStufe = 0;    
+    /**
+     * @soap
+     * @var integer $iaktSufe
+     */
+    public $bIsStufenGeb = false;
+    public $iStufe = 0;
 
-  /**
-   * @soap
-   * @var integer $iHS how many points does the building give
-   */
-  public $iHS = 0;
-  public $imaxAnz = 0;  
+    /**
+     * @soap
+     * @var integer $iHS how many points does the building give
+     */
+    public $iHS = 0;
+    public $imaxAnz = 0;
 
-  /**
-   * @soap
-   * @var array $aResearchsNeeded
-   */
-  public $aResearchsNeeded = array();
+    /**
+     * @soap
+     * @var array $aResearchsNeeded
+     */
+    public $aResearchsNeeded = array();
 
-  /**
-   * @soap
-   * @var array $aBuildingsNeeded
-   */
-  public $aBuildingsNeeded = array();
-  
-  public $aDestroyable = array();
+    /**
+     * @soap
+     * @var array $aBuildingsNeeded
+     */
+    public $aBuildingsNeeded = array();
 
-  /**
-   * @soap
-   * @var array $aResearchsDevelop
-   */
-  public $aResearchsDevelop = array();
+    public $aDestroyable = array();
 
-  /**
-   * @soap
-   * @var array $aBuildingsDevelop
-   */
-  public $aBuildingsDevelop = array();
+    /**
+     * @soap
+     * @var array $aResearchsDevelop
+     */
+    public $aResearchsDevelop = array();
 
-
-  /**
-   * @soap
-   * @var array $aCosts further Costs, etc for this building
-   *      arrays because rise of costs possible
-   */
-  public $aCosts = array();
-  public $aMaintenance = array();
-  public $aBuildTime = array();
-  public $aEffect = array();
+    /**
+     * @soap
+     * @var array $aBuildingsDevelop
+     */
+    public $aBuildingsDevelop = array();
 
 
-  public $aPlanetPropertiesNeeded = array();
-  public $strObjectTypesNeeded = "";
-  public $strPlanetNeeded = "";
-  public $strRiseType = "";
+    /**
+     * @soap
+     * @var array $aCosts further Costs, etc for this building
+     *      arrays because rise of costs possible
+     */
+    public $aCosts = array();
+    public $aMaintenance = array();
+    public $aBuildTime = array();
+    public $aEffect = array();
+
+
+    public $aPlanetPropertiesNeeded = array();
+    public $strObjectTypesNeeded = "";
+    public $strPlanetNeeded = "";
+    public $strRiseType = "";
 
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

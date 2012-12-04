@@ -9,31 +9,21 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+namespace libIwParsers\de\parsers;
+use libIwParsers\DTOParserResultC;
+use libIwParsers\ParserBaseC;
+use libIwParsers\ParserI;
+use libIwParsers\de\parserResults\DTOParserXmlResultC;
+use libIwParsers\de\parserResults\DTOParserXmlResultLinkC;
 
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'ParserBaseC.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'ParserI.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'HelperC.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'parserResults'   . DIRECTORY_SEPARATOR .
-              'DTOParserXmlResultC.php' );
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 /**
  * Parser for XML Links
@@ -45,45 +35,41 @@ require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
  */
 class ParserXmlC extends ParserBaseC implements ParserI
 {
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-    $this->setIdentifier('de_xml');
-    $this->setName('XML Link');
-    $this->setRegExpCanParseText($this->getRegularExpression());
-    $this->setRegExpBeginData('');
-    $this->setRegExpEndData('');
-  }
-  
-  /////////////////////////////////////////////////////////////////////////////
-  
-  public function parseText( DTOParserResultC $parserResult )
-  {
+        $this->setIdentifier('de_xml');
+        $this->setName('XML Link');
+        $this->setRegExpCanParseText($this->getRegularExpression());
+        $this->setRegExpBeginData('');
+        $this->setRegExpEndData('');
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    public function parseText(DTOParserResultC $parserResult)
+    {
         $parserResult->objResultData = new DTOParserXmlResultC();
         $retVal =& $parserResult->objResultData;
-        $fRetVal = 0;
 
         $this->stripTextToData();
 
         $regExp = $this->getRegularExpression();
 
         $aResult = array();
-        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER); 
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
-        if ( $fRetVal !== FALSE && $fRetVal > 0)
-        {
-            foreach ($aResult as $xmlinfo)
-            {
+        if ($fRetVal !== false && $fRetVal > 0) {
+            foreach ($aResult as $xmlinfo) {
                 $link = new DTOParserXmlResultLinkC();
                 if (isset($xmlinfo['unilink']) && !empty($xmlinfo['unilink'])) {
                     $link->strUrl = $xmlinfo['unilink'];
                     $link->strType = "universe";
                     $retVal->aUniversumLinks[] = $link;
-                }
-                else {
+                } else {
                     $link->iId = $xmlinfo['id'];
                     $link->strHash = $xmlinfo['hash'];
                     $link->strUrl = $xmlinfo[0] . '&typ=xml';
@@ -91,50 +77,31 @@ class ParserXmlC extends ParserBaseC implements ParserI
 
                     if ($link->strType == 'kb') {
                         $retVal->aKbLinks[] = $link;
-                    }
-                    else if ($link->strType == 'sb') {
+                    } else if ($link->strType == 'sb') {
                         $retVal->aSbLinks[] = $link;
                     }
                 }
             }
             $parserResult->bSuccessfullyParsed = true;
-        }
-        else {
+        } else {
             $parserResult->bSuccessfullyParsed = false;
             $parserResult->aErrors[] = "unable to match Pattern of xml-link";
         }
-        
-  }
-  
-  /////////////////////////////////////////////////////////////////////////////
-  
-  private function getRegularExpression()
-  {
-      $regExp  = '%';
-      $regExp .= '(?:(?<=\s)|(?<=^))';  //shall start in a whitesace or start of line
-      $regExp .= '(?:http:\/\/www2?\.icewars\.de\/portal\/kb\/de\/(?P<type>kb|sb)\.php\?id=(?P<id>\d+)\&md_hash=(?P<hash>[\w\d]+)(?:&server_id=)?';
-      $regExp .= '|(?P<unilink>http:\/\/www\.icewars\.de/xml/user_univ_scan/\w+\.xml))';
-      $regExp .= '(?=\s|$)';            //shall end in a whitespace or end of line     
-      $regExp .= '%';
-      return $regExp;
-  }
-  
-  /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    $retVal = $this->getRegularExpression();
+    }
 
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
+    /////////////////////////////////////////////////////////////////////////////
 
-    return $retVal;
-  }
-  
+    private function getRegularExpression()
+    {
+        $regExp = '%';
+        $regExp .= '(?:(?<=\s)|(?<=^))'; //shall start in a whitesace or start of line
+        $regExp .= '(?:https?:\/\/www2?\.icewars\.de\/portal\/kb\/de\/(?P<type>kb|sb)\.php\?id=(?P<id>\d+)\&md_hash=(?P<hash>[\w\d]+)(?:&server_id=)?';
+        $regExp .= '|(?P<unilink>https?:\/\/www2?\.icewars\.de/xml/user_univ_scan/\w+\.xml))';
+        $regExp .= '(?=\s|$)'; //shall end in a whitespace or end of line
+        $regExp .= '%';
+
+        return $regExp;
+    }
+
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

@@ -14,12 +14,20 @@
  * @subpackage helpers
  */
 
+namespace libIwParsers;
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 class PropertyValueC
 {
+    /////////////////////////////////////////////////////////////////////////////
+
+    public static function ensureBoolean($value)
+    {
+        return (boolean)$value;
+    }
 
     /////////////////////////////////////////////////////////////////////////////
 
@@ -37,13 +45,6 @@ class PropertyValueC
     public static function ensureInteger($value)
     {
         return (integer)round(PropertyValueC::ensureFloat($value));
-    }
-
-    /////////////////////////////////////////////////////////////////////////////
-
-    public static function ensureBoolean($value)
-    {
-        return (boolean)$value;
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -71,12 +72,12 @@ class PropertyValueC
             if (isset($numberpart['part'])) {                        //Nachkommastellen vorhanden?
                 if (strlen($numberpart['part']) === 2) {             //zwei Nachkommastellen
                     $filtered_number += $numberpart['part']/100;
-                } else {                                        //eine Nachkommastelle
+                } else {                                             //eine Nachkommastelle
                     $filtered_number += $numberpart['part']/10;
                 }
             }
 
-            if ($numberpart['sign'] === '-') {                        //evl. negatives Vorzeichen wieder dazu
+            if ($numberpart['sign'] === '-') {                       //evl. negatives Vorzeichen wieder dazu
                 $filtered_number = -$filtered_number;
             }
 
@@ -91,57 +92,6 @@ class PropertyValueC
     public static function ensureString($value)
     {
         $value = (string)$value;
-
-        return $value;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * @deprecated
-     *
-     * ParserBaseC::setText cares for the necessary replacements. So if
-     * the user inputs an IceWars page containing alternative resource names,
-     * these will be replaced by the normal resource names before any parser
-     * starts doing its work (this is also important to hold the parsers
-     * simple).
-     *
-     * Thus, any resource a parser can find and return should be a 'normal'
-     * resource name.
-     *
-     * To validate that a parser really matched a resource name and not some
-     * arbitrary string, you should use:
-     *
-     * PropertyValueC::ensureEnum( $value, 'eResources' );
-     */
-    public static function ensureResource($value)
-    {
-        $value = (string)$value;
-
-        if ($value == "Erdbeeren") {
-            $value = "Eisen";
-        } else if ($value == "Erdbeermarmelade") {
-            $value = "Stahl";
-        } else if (preg_match('/Erdbeerkonfit.+re/', $value) > 0) {
-            $value = "VV4A";
-        } else if ($value == "blubbernde Gallertmasse") {
-            $value = "Bevölkerung";
-        } else if (preg_match('/Bev.+lkerung/', $value) > 0) {
-            $value = "Bevölkerung";
-        } else if ($value == "Vanilleeis") {
-            $value = "Eis";
-        } else if ($value == "Eismatsch") {
-            $value = "Wasser";
-        } else if ($value == "Traubenzucker") {
-            $value = "Energie";
-        } else if ($value == "Kekse") {
-            $value = "Credits";
-        } else if ($value == "Brause") {
-            $value = "chem. Elemente";
-        }
-
-        //if ($value == "Chemie ") $value = "Brause";
-        //if (preg_match('/[cC]hem/',$value) > 0) $value = "Brause";
 
         return $value;
     }
@@ -189,7 +139,7 @@ class PropertyValueC
      */
     public static function ensureEnum($value, $enumName)
     {
-        $reflectionClass = new ReflectionClass($enumName);
+        $reflectionClass = new \ReflectionClass('libIwParsers\enums\\'.$enumName);
 
         //TODO: Find better solution
         //dirty hack for ePlanetObjects:
@@ -209,14 +159,10 @@ class PropertyValueC
         if ($reflectionClass->hasConstant($value)) {
             return $reflectionClass->getConstant($value);
         } else {
-            throw new Exception("'$value' is not a valid enumerable value for enum '$enumName'.");
+            throw new \Exception("'$value' is not a valid enumerable value for enum '$enumName'.");
         }
     }
 
     /////////////////////////////////////////////////////////////////////////////
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

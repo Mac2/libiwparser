@@ -9,10 +9,20 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parsers;
+use libIwParsers\PropertyValueC;
+use libIwParsers\DTOParserResultC;
+use libIwParsers\ParserBaseC;
+use libIwParsers\ParserI;
+use libIwParsers\de\parserResults\DTOParserWirtschaftDefResultC;
+use libIwParsers\de\parserResults\DTOParserWirtschaftDefKoloResultC;
+use libIwParsers\de\parserResults\DTOParserWirtschaftDefSlotResultC;
+use libIwParsers\de\parserResults\DTOParserWirtschaftDefDefenceResultC;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -28,29 +38,28 @@
 class ParserWirtschaftDefC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-    $this->setIdentifier('de_wirtschaft_def');
-    $this->setName('Verteidigungs&uuml;bersicht');
-    $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s+Forschungs.{1,3}bersicht\s+Werft.{1,3}bersicht\s+Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht(?:.*Verteidigungs.{1,3}bersicht)?/sm');
-    $this->setRegExpBeginData( '/Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht/sm' );
-    $this->setRegExpEndData( '' );
-  }
+        $this->setIdentifier('de_wirtschaft_def');
+        $this->setName('Verteidigungs&uuml;bersicht');
+        $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s+Forschungs.{1,3}bersicht\s+Werft.{1,3}bersicht\s+Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht(?:.*Verteidigungs.{1,3}bersicht)?/sm');
+        $this->setRegExpBeginData('/Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht/sm');
+        $this->setRegExpEndData('');
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * @see ParserI::parseText()
-   */
-  public function parseText(DTOParserResultC $parserResult) 
-  {
+    /**
+     * @see ParserI::parseText()
+     */
+    public function parseText(DTOParserResultC $parserResult)
+    {
         $parserResult->objResultData = new DTOParserWirtschaftDefResultC();
         $retVal = & $parserResult->objResultData;
-        $fRetVal = 0;
 
         $this->stripTextToData();
 
@@ -58,7 +67,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
         $aKolos = array();
-        
+
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
@@ -94,18 +103,20 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
                 $aSlotLines = explode("\n", $strSlotLine);
                 foreach ($aSlotLines as $strSlotLine) {
                     $aDataLine = explode("\t", $strSlotLine);
-                    
+
                     $strDefenceType = array_shift($aDataLine);
-                    if (strpos($strDefenceType,"orb") !== FALSE)
+                    if (strpos($strDefenceType, "orb") !== false) {
                         $strDefenceType = "orbital";
-                    else if (strpos($strDefenceType,"pla") !== FALSE)
+                    } else if (strpos($strDefenceType, "pla") !== false) {
                         $strDefenceType = "planetar";
-                    
+                    }
+
                     $slot = new DTOParserWirtschaftDefSlotResultC;
                     $slot->strSlotType = PropertyValueC::ensureString($strDefenceType);
 
-                    if (empty($strDefenceType))
+                    if (empty($strDefenceType)) {
                         continue;
+                    }
                     foreach ($aDataLine as $i => $strData) {
                         $values = explode("/", $strData);
                         $slot->aAvailable[$aKolos[$i]] = PropertyValueC::ensureInteger($values[0]);
@@ -114,7 +125,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
                     }
                     $retVal->aSlots[] = $slot;
                 }
-                
+
                 $aDataLines = explode("\n", $strDataLines);
                 foreach ($aDataLines as $strDataLine) {
                     $aDataLine = explode("\t", $strDataLine);
@@ -123,8 +134,9 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
                     $defence = new DTOParserWirtschaftDefDefenceResultC;
                     $defence->strDefenceName = PropertyValueC::ensureString($strDefenceName);
 
-                    if (empty($strDefenceName))
+                    if (empty($strDefenceName)) {
                         continue;
+                    }
                     foreach ($aDataLine as $i => $strData) {
                         $values = explode("/", $strData);
                         $defence->aCounts[$aKolos[$i]] = PropertyValueC::ensureInteger($values[0]);
@@ -138,86 +150,65 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
             $parserResult->bSuccessfullyParsed = false;
             $parserResult->aErrors[] = 'Unable to match the pattern.';
         }
-  }
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  private function getRegularExpression()
-  {
-    /**
-    */
+    private function getRegularExpression()
+    {
+        /**
+         */
 
-    $reKoloTypes        = $this->getRegExpKoloTypes();
-    $reKoloCoords       = $this->getRegExpKoloCoords();
-    $reNumber           = $this->getRegExpDecimalNumber();
-    
-    $regExp = '&';
-    $regExp .= '(?P<kolo_line>';
-    $regExp .=     $reKoloCoords;
-    $regExp .= '   (?:';
-    $regExp .= '     [\\n\\r]+';
-    $regExp .= '     \('.$reKoloTypes.'\)';
-    $regExp .= '     \\t';
-    $regExp .= '     '.$reKoloCoords.'';
-    $regExp .= '   )*';
-    $regExp .= '   [\\n\\r]+';
-    $regExp .= '   \('.$reKoloTypes.'\)';
-    $regExp .= ')';
-    $regExp .= '\s+';
-    $regExp .= '^Verteidigungsslots\s';
-    $regExp .= '(?P<slot_line>';
-    $regExp .= '   (?:(?:pla|orb)\sfrei/belegt/gesamt(?:\s+' . $reNumber . "\s/\s" . $reNumber . "\s/\s" . $reNumber . ')*\s+';
-    $regExp .= '   )+';
-    $regExp .= ')';
-    $regExp .= '^Verteidigungsanlagen\s\(Anzahl/Baubar\)';
-    $regExp .='(?P<data_lines>(?:';
-    $regExp .='      [\\n\\r]+';    //! Zeilenumbruch
-    $regExp .='      [^\\t\\n]+';   //! ein Wort
-    $regExp .='      (?:\t\d*\s/\s\d*)+';   //! Bundle von (Nr / Nr)
-    $regExp .='      )+';
-    $regExp .= ')\s+';
-    $regExp .= '&mx';
+        $reKoloTypes = $this->getRegExpKoloTypes();
+        $reKoloCoords = $this->getRegExpKoloCoords();
+        $reNumber = $this->getRegExpDecimalNumber();
 
-    return $regExp;
-  }
+        $regExp = '&';
+        $regExp .= '(?P<kolo_line>';
+        $regExp .= $reKoloCoords;
+        $regExp .= '   (?:';
+        $regExp .= '     [\\n\\r]+';
+        $regExp .= '     \(' . $reKoloTypes . '\)';
+        $regExp .= '     \\t';
+        $regExp .= '     ' . $reKoloCoords . '';
+        $regExp .= '   )*';
+        $regExp .= '   [\\n\\r]+';
+        $regExp .= '   \(' . $reKoloTypes . '\)';
+        $regExp .= ')';
+        $regExp .= '\s+';
+        $regExp .= '^Verteidigungsslots\s';
+        $regExp .= '(?P<slot_line>';
+        $regExp .= '   (?:(?:pla|orb)\sfrei/belegt/gesamt(?:\s+' . $reNumber . "\s/\s" . $reNumber . "\s/\s" . $reNumber . ')*\s+';
+        $regExp .= '   )+';
+        $regExp .= ')';
+        $regExp .= '^Verteidigungsanlagen\s\(Anzahl/Baubar\)';
+        $regExp .= '(?P<data_lines>(?:';
+        $regExp .= '      [\\n\\r]+'; //! Zeilenumbruch
+        $regExp .= '      [^\\t\\n]+'; //! ein Wort
+        $regExp .= '      (?:\t\d*\s/\s\d*)+'; //! Bundle von (Nr / Nr)
+        $regExp .= '      )+';
+        $regExp .= ')\s+';
+        $regExp .= '&mx';
 
-  /////////////////////////////////////////////////////////////////////////////
+        return $regExp;
+    }
 
-  private function getRegularExpressionKolo()
-  {
-    /**
-    */
+    /////////////////////////////////////////////////////////////////////////////
 
-    $reKoloTypes           = $this->getRegExpKoloTypes();
-    $reKoloCoords        = $this->getRegExpKoloCoords();
+    private function getRegularExpressionKolo()
+    {
+        /**
+         */
 
-    $regExpKolo  = '/
-          (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-          [\\n\\r]+
-          \((?P<kolo_type>'.$reKoloTypes.')\)
-    /mx';
+        $reKoloTypes = $this->getRegExpKoloTypes();
 
-    return $regExpKolo;
-  }
+        $regExpKolo = '/
+                          (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
+                          [\n\r]+
+                          \((?P<kolo_type>' . $reKoloTypes . ')\)
+                       /mx';
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    $retVal = $this->getRegularExpression();
-
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
-
-    return $retVal;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
+        return $regExpKolo;
+    }
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

@@ -9,49 +9,41 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage enums
  */
 
-
+namespace libIwParsers\enums;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
 
 class ePlanetTypes
 {
-  const Steinklumpen   = 'chunkOfStone';
-  const Asteroiden     = 'asteroid';
-  const Eisplanet      = 'icePlanet';
-  const Gasgigant      = 'gasGiant';
-  const Nichts         = 'void';
-  const Elektrosturm   = 'electricityStorm';
-  const Ionensturm     = 'ionStorm';
-  const Raumverzerrung = 'spaceDistortion';
-  const gravAnomalie   = 'gravimetricAnomaly';
-  const Sonne          = 'sun';
-  const schwarzesLoch  = 'blackHole';
+    const Steinklumpen = 'chunkOfStone';
+    const Asteroiden = 'asteroid';
+    const Eisplanet = 'icePlanet';
+    const Gasgigant = 'gasGiant';
+    const Nichts = 'void';
+    const Elektrosturm = 'electricityStorm';
+    const Ionensturm = 'ionStorm';
+    const Raumverzerrung = 'spaceDistortion';
+    const gravAnomalie = 'gravimetricAnomaly';
+    const Sonne = 'sun';
+    const schwarzesLoch = 'blackHole';
 
-  //TODO: validate englisch constants
-  const Chunkofstone       = 'chunkOfStone';
-  const Asteroid           = 'asteroid';
-  const Iceplanet          = 'icePlanet';
-  const Giantgasball       = 'gasGiant';
-  const Nothing            = 'void';
-  const Electricitystorm   = 'electricityStorm';
-  const Ionstorm           = 'ionStorm';
-  const Spacedistortion    = 'spaceDistortion';
-  const Gravitationanomaly = 'gravimetricAnomaly';
-  const Sun                = 'sun';
-  const BlackHole          = 'blackHole';
+    //TODO: validate englisch constants
+    const Chunkofstone = 'chunkOfStone';
+    const Asteroid = 'asteroid';
+    const Iceplanet = 'icePlanet';
+    const Giantgasball = 'gasGiant';
+    const Nothing = 'void';
+    const Electricitystorm = 'electricityStorm';
+    const Ionstorm = 'ionStorm';
+    const Spacedistortion = 'spaceDistortion';
+    const Gravitationanomaly = 'gravimetricAnomaly';
+    const Sun = 'sun';
+    const BlackHole = 'blackHole';
 }
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

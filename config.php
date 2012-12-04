@@ -9,255 +9,110 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage helpers
  */
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+namespace libIwParsers;
 
-
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 return array(
-  'lib' =>  array(
-    'aThousandSeperators' => array( '.', ' ', "'", '"', 'k', '`', '´',','),
-    'aRegisteredParsers'  => array(
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserInfoGebC.php',
-        'classname' => 'ParserInfoGebC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserWirtschaftGebC.php',
-        'classname' => 'ParserWirtschaftGebC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserIndexC.php',
-        'classname' => 'ParserIndexC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserAlliMemberlisteC.php',
-        'classname' => 'ParserAlliMemberlisteC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserMilSchiffUebersichtC.php',
-        'classname' => 'ParserMilSchiffUebersichtC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserWirtschaftPlaniressC.php',
-        'classname' => 'ParserWirtschaftPlaniressC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserWirtschaftPlaniress2C.php',
-        'classname' => 'ParserWirtschaftPlaniress2C',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserAlliKasseInhaltC.php',
-        'classname' => 'ParserAlliKasseInhaltC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserAlliKasseLogAllisC.php',
-        'classname' => 'ParserAlliKasseLogAllisC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserAlliKasseLogMemberC.php',
-        'classname' => 'ParserAlliKasseLogMemberC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserAlliKasseMemberC.php',
-        'classname' => 'ParserAlliKasseMemberC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserInfoForschungC.php',
-        'classname' => 'ParserInfoForschungC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserForschungC.php',
-        'classname' => 'ParserForschungC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserInfoDefenceC.php',
-        'classname' => 'ParserInfoDefenceC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserWirtschaftDefC.php',
-        'classname' => 'ParserWirtschaftDefC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserMsgTransfairC.php',
-        'classname' => 'ParserMsgTransfairC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserMsgTransportC.php',
-        'classname' => 'ParserMsgTransportC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserMsgC.php',
-        'classname' => 'ParserMsgC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserXmlC.php',
-        'classname' => 'ParserXmlC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserInfoUserC.php',
-        'classname' => 'ParserInfoUserC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserAccountHighscoreC.php',
-        'classname' => 'ParserAccountHighscoreC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserInfoSchiffC.php',
-        'classname' => 'ParserInfoSchiffC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserHighscoreC.php',
-        'classname' => 'ParserHighscoreC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserPersonalStatForschungenC.php',
-        'classname' => 'ParserPersonalStatForschungenC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserPersonalStaatsformC.php',
-        'classname' => 'ParserPersonalStaatsformC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserBauenAktuellC.php',
-        'classname' => 'ParserBauenAktuellC',
-      ),
-      array(
-        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        'de'              . DIRECTORY_SEPARATOR .
-                        'parsers'         . DIRECTORY_SEPARATOR .
-                        'ParserUniversumC.php',
-        'classname' => 'ParserUniversumC',
-      ),
-//      array(
-//        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-//                        'de'              . DIRECTORY_SEPARATOR .
-//                        'parsers'         . DIRECTORY_SEPARATOR .
-//                        'ParserC.php',
-//        'classname' => 'ParserC',
-//      ),
+    'lib'  => array(
+        'aRegisteredParsers'  => array(
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserInfoGebC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserWirtschaftGebC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserIndexC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserAlliMemberlisteC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserMilSchiffUebersichtC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserWirtschaftPlaniressC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserWirtschaftPlaniress2C',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserAlliKasseInhaltC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserAlliKasseLogAllisC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserAlliKasseLogMemberC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserAlliKasseMemberC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserInfoForschungC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserForschungC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserInfoDefenceC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserWirtschaftDefC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserMsgTransfairC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserMsgTransportC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserMsgC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserXmlC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserInfoUserC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserAccountHighscoreC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserInfoSchiffC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserHighscoreC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserPersonalStatForschungenC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserPersonalStaatsformC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserBauenAktuellC',
+            ),
+            array(
+                'class' => '\libIwParsers\de\parsers\ParserUniversumC',
+            ),
+        ),
     ),
-    'aPathesAutoload' => array(
-      dirname(__FILE__),
-      dirname(__FILE__) . DIRECTORY_SEPARATOR . 'de',
-      dirname(__FILE__) . DIRECTORY_SEPARATOR . 'enums',
-      dirname(__FILE__) . DIRECTORY_SEPARATOR . 'de'
-                        . DIRECTORY_SEPARATOR . 'parsers',
-      dirname(__FILE__) . DIRECTORY_SEPARATOR . 'de'
-                        . DIRECTORY_SEPARATOR . 'parserResults',
-      dirname(__FILE__) . DIRECTORY_SEPARATOR . '..'
-                        . DIRECTORY_SEPARATOR . '3rdParty'
-                        . DIRECTORY_SEPARATOR . 'dBug',
+    'test' => array(),
+    'path' => array(
+        'rng'      => dirname(__FILE__) . DIRECTORY_SEPARATOR .
+            'xml' . DIRECTORY_SEPARATOR .
+            'relaxng',
+        'xslt'     => dirname(__FILE__) . DIRECTORY_SEPARATOR .
+            'xml' . DIRECTORY_SEPARATOR .
+            'xslt',
     ),
-  ),
-  'test' =>  array(
-  ),
-  'path' =>  array(
-    '3rdParty'  => array(
-      'simpletest'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        '..'              . DIRECTORY_SEPARATOR .
-                        '3rdParty'        . DIRECTORY_SEPARATOR .
-                        'simpletest_1.0.1',
-      'dBug'        =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-                        '..'              . DIRECTORY_SEPARATOR .
-                        '3rdParty'        . DIRECTORY_SEPARATOR .
-                        'dBug',
-    ),
-    'rng' =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              'xml'             . DIRECTORY_SEPARATOR .
-              'relaxng',
-    'xslt' => dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              'xml'             . DIRECTORY_SEPARATOR .
-              'xslt',
-  ),
 );
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

@@ -9,26 +9,27 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+namespace libIwParsers\de\parserResults;
 
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 /**
  * Result DTO of parser de_index_geb
  */
 class DTOParserIndexGebResultC
 {
-  /**
-   * @soap
-   * @var array $aBuildings
-   */
-  public $aBuildings = array ();
+    /**
+     * @soap
+     * @var array $aBuildings
+     */
+    public $aBuildings = array();
 
 }
 
@@ -37,39 +38,40 @@ class DTOParserIndexGebResultC
  */
 class DTOParserIndexGebResultGebC
 {
-  /**
-   * @soap
-   * @var string $strPlanetName
-   */
-  public $strPlanetName = '';
+    /**
+     * @soap
+     * @var string $strPlanetName
+     */
+    public $strPlanetName = '';
 
-  /**
-   * @soap
-   * @var string $strCoords
-   */
-  public $strCoords = '';
+    /**
+     * @soap
+     * @var string $strCoords
+     */
+    public $strCoords = '';
 
-  /**
-   * @soap
-   * @var array $aCoords
-   */
-  public $aCoords = array();
+    /**
+     * @soap
+     * @var array $aCoords
+     */
+    public $aCoords = array();
 
-  /**
-   * @soap
-   * @var string $strBuilding the name of the building
-   */
-  public $strBuilding = '';
+    /**
+     * @soap
+     * @var string $strBuilding the name of the building
+     */
+    public $strBuilding = '';
 
-  /**
-   * @soap
-   * @var int $iDateToExpire the number of seconds the building need to be built
-   */
-  public $iDateToExpire = 0;
+    /**
+     * @soap
+     * @var int $iDateToExpire the number of seconds the building need to be built
+     */
+    public $iDateToExpire = 0;
 
-  /**
-   * @soap
-   * @var int $iDateOfFinish the number of seconds since 1900
-   */
-  public $iDateOfFinish = 0;
+    /**
+     * @soap
+     * @var int $iDateOfFinish the number of seconds since 1900
+     */
+    public $iDateOfFinish = 0;
+
 }

@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,44 +25,40 @@
  */
 class DTOResourceDepositsC
 {
-  /**
-   * @soap
-   * @var float $fIron
-   */
-  public $fIron = 0.0;
+    /**
+     * @soap
+     * @var float $fIron
+     */
+    public $fIron = 0.0;
 
-  /**
-   * @soap
-   * @var float $fIronTechTeam
-   */
-  public $fIronTechTeam = 0.0;
+    /**
+     * @soap
+     * @var float $fIronTechTeam
+     */
+    public $fIronTechTeam = 0.0;
 
-  /**
-   * @soap
-   * @var float $fChemicals
-   */
-  public $fChemicals = 0.0;
+    /**
+     * @soap
+     * @var float $fChemicals
+     */
+    public $fChemicals = 0.0;
 
-  /**
-   * @soap
-   * @var float $fChemicalsTechTeam
-   */
-  public $fChemicalsTechTeam = 0.0;
+    /**
+     * @soap
+     * @var float $fChemicalsTechTeam
+     */
+    public $fChemicalsTechTeam = 0.0;
 
-  /**
-   * @soap
-   * @var float $fIce
-   */
-  public $fIce = 0.0;
+    /**
+     * @soap
+     * @var float $fIce
+     */
+    public $fIce = 0.0;
 
-  /**
-   * @soap
-   * @var float $fIceTechTeam
-   */
-  public $fIceTechTeam = 0.0;
+    /**
+     * @soap
+     * @var float $fIceTechTeam
+     */
+    public $fIceTechTeam = 0.0;
 
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

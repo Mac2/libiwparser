@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -23,13 +25,13 @@
  */
 class DTOParserPersonalStatForschungenResultC
 {
-  /**
-   * @soap
-   * @var array $aResearchs an array of objects of type
-   *      DTOParserPersonalStatForschungenResearchResultC, which represent the researchs
-   *      of the user
-   */
-  public $aResearchs = array();
+    /**
+     * @soap
+     * @var array $aResearchs an array of objects of type
+     *      DTOParserPersonalStatForschungenResearchResultC, which represent the researchs
+     *      of the user
+     */
+    public $aResearchs = array();
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -38,25 +40,21 @@ class DTOParserPersonalStatForschungenResultC
 
 class DTOParserPersonalStatForschungenResearchResultC
 {
-  /**
-   * @soap
-   * @var string $strResearch the name of the research
-   */
-  public $strResearch = '';
+    /**
+     * @soap
+     * @var string $strResearch the name of the research
+     */
+    public $strResearch = '';
 
-  /**
-   * @soap
-   * @var int $iDateExpired the number of seconds since the user exists ingame
-   */
-  public $iDateExpired = 0;
+    /**
+     * @soap
+     * @var int $iDateExpired the number of seconds since the user exists ingame
+     */
+    public $iDateExpired = 0;
 
-  /**
-   * @soap
-   * @var int $iDateOfResearch the number of seconds since 1900
-   */
-  public $iDateOfResearch = 0;
+    /**
+     * @soap
+     * @var int $iDateOfResearch the number of seconds since 1900
+     */
+    public $iDateOfResearch = 0;
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

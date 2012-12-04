@@ -9,16 +9,16 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage interfaces
  */
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+namespace libIwParsers;
 
-
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 /**
  * A factory for instantiating parsers for a given text.
@@ -88,54 +88,50 @@
 interface ParserFactoryI
 {
 
-  ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
 
-  /**
-   * Returns an instance of the factory.
-   *
-   * @return instance of the factory.
-   */
-  static public function getInstance();
+    /**
+     * Returns an instance of the factory.
+     *
+     * @return object instance of the factory.
+     */
+    static public function getInstance();
 
-  ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
 
-  /**
-   * Checks for all known parsers if they can parse the provided text.
-   *
-   * @param $text string, the text to be parsed
-   * @return  array of strings, ids of the parsers, that can parse the
-   *          provided text.
-   */
-  public function getParserIdsFor( $text );
+    /**
+     * Checks for all known parsers if they can parse the provided text.
+     *
+     * @param $text string, the text to be parsed
+     *
+     * @return  array of strings, ids of the parsers, that can parse the
+     *          provided text.
+     */
+    public function getParserIdsFor($text);
 
-  ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
 
-  /**
-   * Gets an instance of the first parser the factory knows, that can
-   * parse the provided text. You can define the parser that is to be
-   * used to parse the text, by providing its id as second parameter.
-   *
-   * @param $text string, the text to be parsed
-   * @param $parserId string, the id of a known parser that shall be used
-   *        to parse the provided text
-   * @return  mixed
-   *          ParserI - instance of the parser that can be used to parse
-   *                    the provided text.
-   *          boolean - false, if
-   *                    1) no parser was found that could parse the provided
-   *                       text
-   *                    2) you provided a parser id that does not exist
-   *                    3) you provided a parser id of an existent parser, but
-   *                       that parser isn't able to parse the provided text.
-   */
-  public function getParser( $text, $parserId = '' );
+    /**
+     * Gets an instance of the first parser the factory knows, that can
+     * parse the provided text. You can define the parser that is to be
+     * used to parse the text, by providing its id as second parameter.
+     *
+     * @param $text     string, the text to be parsed
+     * @param $parserId string, the id of a known parser that shall be used
+     *                  to parse the provided text
+     *
+     * @return  mixed
+     *                       ParserI - instance of the parser that can be used to parse
+     *                       the provided text.
+     *                       boolean - false, if
+     *                    1) no parser was found that could parse the provided
+     *                       text
+     *                    2) you provided a parser id that does not exist
+     *                    3) you provided a parser id of an existent parser, but
+     *                       that parser isn't able to parse the provided text.
+     */
+    public function getParser($text, $parserId = '');
 
-  ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////
 
 }
-
-
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

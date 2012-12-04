@@ -9,10 +9,12 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
+
+namespace libIwParsers\de\parserResults;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -20,11 +22,11 @@
 
 class DTOParserBauenAktuellResultC
 {
-  /**
-   * @soap
-   * @var array $aBuildings
-   */
-  public $aBuildings = array ();
+    /**
+     * @soap
+     * @var array $aBuildings
+     */
+    public $aBuildings = array();
 
 }
 
@@ -33,25 +35,22 @@ class DTOParserBauenAktuellResultC
  */
 class DTOParserBauenAktuellResultBuildingC
 {
-  /**
-   * @soap
-   * @var string $strBuilding the name of the building
-   */
-  public $strBuilding = '';
+    /**
+     * @soap
+     * @var string $strBuilding the name of the building
+     */
+    public $strBuilding = '';
 
-  /**
-   * @soap
-   * @var int $iDateToExpire the number of seconds the building need to be built
-   */
-  public $iDateToExpire = 0;
+    /**
+     * @soap
+     * @var int $iDateToExpire the number of seconds the building need to be built
+     */
+    public $iDateToExpire = 0;
 
-  /**
-   * @soap
-   * @var int $iDateOfFinish the number of seconds since 1900
-   */
-  public $iDateOfFinish = 0;
+    /**
+     * @soap
+     * @var int $iDateOfFinish the number of seconds since 1900
+     */
+    public $iDateOfFinish = 0;
+
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
