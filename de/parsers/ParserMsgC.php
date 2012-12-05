@@ -62,7 +62,6 @@ class ParserMsgC extends ParserBaseC implements ParserI
 
         $parserResult->objResultData = new DTOParserMsgResultC();
         $retVal =& $parserResult->objResultData;
-        $fRetVal = 0;
 
         $this->stripTextToData();
 

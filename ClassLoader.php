@@ -53,6 +53,9 @@
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
+
+namespace libIwParsers;
+
 class ClassLoader
 {
     private $prefixes = array();

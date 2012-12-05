@@ -57,7 +57,6 @@ class ParserIndexC extends ParserBaseC implements ParserI
     {
         $parserResult->objResultData = new DTOParserIndexResultC();
         $retVal =& $parserResult->objResultData;
-        $fRetVal = 0;
 
         $this->stripTextToData();
 

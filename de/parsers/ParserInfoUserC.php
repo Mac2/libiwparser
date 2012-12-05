@@ -124,7 +124,6 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
         $reEntryDate = $this->getRegExpDate();
         $rePoints = $this->getRegExpResearchPoints();
         $reNumber = $this->getRegExpFloatingDouble();
-        $reDescr = $this->getRegExpSingleLineText3();
 
         $regExp = '/';
         $regExp .= 'Name\s+?';
