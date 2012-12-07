@@ -16,6 +16,7 @@
  */
 
 namespace libIwParsers\de\parsers;
+
 use libIwParsers\PropertyValueC;
 use libIwParsers\DTOParserResultC;
 use libIwParsers\ParserBaseC;

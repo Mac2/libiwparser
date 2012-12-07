@@ -22,17 +22,17 @@ namespace libIwParsers\enums;
 
 class ePlanetTypes
 {
-    const Steinklumpen = 'chunkOfStone';
-    const Asteroiden = 'asteroid';
-    const Eisplanet = 'icePlanet';
-    const Gasgigant = 'gasGiant';
-    const Nichts = 'void';
-    const Elektrosturm = 'electricityStorm';
-    const Ionensturm = 'ionStorm';
-    const Raumverzerrung = 'spaceDistortion';
-    const gravAnomalie = 'gravimetricAnomaly';
-    const Sonne = 'sun';
-    const schwarzesLoch = 'blackHole';
+    const Steinklumpen = 'Steinklumpen';
+    const Asteroiden = 'Asteroiden';
+    const Eisplanet = 'Eisplanet';
+    const Gasgigant = 'Gasgigant';
+    const Nichts = 'Nichts';
+    const Elektrosturm = 'Elektrosturm';
+    const Ionensturm = 'Ionensturm';
+    const Raumverzerrung = 'Raumverzerrung';
+    const gravAnomalie = 'gravAnomalie';
+    const Sonne = 'Sonne';
+    const schwarzesLoch = 'schwarzesLoch';
 
     //TODO: validate englisch constants
     const Chunkofstone = 'chunkOfStone';

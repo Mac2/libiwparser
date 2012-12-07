@@ -34,9 +34,10 @@ class eResources
     const Bevölkerung = 'Bevölkerung';
     const FP = 'FP';
 
+    //TODO: validate englisch constants
     const Iron = 'iron';
     const steel = 'steel';
-    //const VV4A         = 'vv4a';
+    const vv4a = 'vv4a';
     const Chemelements = 'chemicals';
     const Ice = 'ice';
     const Water = 'water';

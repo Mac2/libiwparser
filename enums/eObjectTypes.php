@@ -20,16 +20,20 @@ namespace libIwParsers\enums;
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-/**
- * @TODO: complete the enumeration
- */
 class eObjectTypes
 {
     const noObject = 'noObject';
 
-    const Kolonie = 'colony';
-    const Raumstation = 'spaceStation';
-    const Artefaktbasis = 'artifactStation';
-    const Kampfbasis = 'battleStation';
-    const Sammelbasis = 'miningStation';
+    const Kolonie = 'Kolonie';
+    const Raumstation = 'Raumstation';
+    const Artefaktbasis = 'Artefaktbasis';
+    const Kampfbasis = 'Kampfbasis';
+    const Sammelbasis = 'Sammelbasis';
+
+    //TODO: validate englisch constants
+    const colony = 'colony';
+    const spaceStation = 'spaceStation';
+    const artifactStation = 'artifactStation';
+    const battleStation = 'battleStation';
+    const miningStation = 'miningStation';
 }
