@@ -65,85 +65,128 @@ class ParserMsgSondierungC extends ParserMsgBaseC implements ParserMsgI
     $parserResult->objResultData = new DTOParserMsgResultMsgSondierungC();
     $retVal =& $parserResult->objResultData;
 
-    $regExpText = $this->getRegularExpressionText();
+    $regExpTextHardcoded = $this->getRegularExpressionTextHardcoded();
     $msg = $this->getMsg();
-    
+
     foreach($msg as $key => $value) {
         $retVal->$key = $value;
     }
 
+    //try hardcoded parser
     $aResultText = array();
-    $fRetValText = preg_match( $regExpText, $msg->strParserText, $aResultText);
+    $fRetValText = preg_match($regExpTextHardcoded, $msg->strParserText, $aResultText);
 
     if( $fRetValText !== false && $fRetValText > 0)
     {
 
         $retVal->bSuccessfullyParsed = true;
+        $retVal->bHardcodedParserUsed = true;
 
-        $aResultTitle = array();
-        $fRetValTitle = preg_match( $this->getRegularExpressionTitle(), $msg->strMsgTitle, $aResultTitle);
-        if( $fRetValTitle !== false && $fRetValTitle > 0)
-        {   
-            $c = explode(":",$aResultTitle['coords_to']);
-            $retVal->strCoordsTo = $aResultTitle['coords_to'];
+        $retVal->strCoordsTo = $aResultText['coords_to'];
+        $c = explode(":",$aResultText['coords_to']);
+        $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
+        $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
+        $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
+        $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+        $retVal->aCoordsTo = $aCoords;
 
-            $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
-            $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
-            $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
-            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-            $retVal->aCoordsTo = $aCoords;
-            if ($aResultTitle['status'] == 'Eigener Planet wurde sondiert')
-                $retVal->bSuccess = true;
-            else
-                $retVal->bSuccess = false;
+        $c = explode(":",$aResultText['coords_from']);
+        $retVal->strCoordsFrom = $aResultText['coords_from'];
+        $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
+        $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
+        $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
+        $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+        $retVal->aCoordsFrom = $aCoords;
+
+        $retVal->strAllianceFrom = PropertyValueC::ensureString($aResultText['ally_from']);
+        $retVal->strNameFrom = PropertyValueC::ensureString($aResultText['name_from']);
+        
+        if (!empty($aResultText['success'])) {
+            $retVal->bSuccess = true;
+        } else {
+            $retVal->bSuccess = false;
         }
-
-        if (!empty($aResultText['ally1'])) {
-            $retVal->strAllianceFrom = PropertyValueC::ensureString($aResultText['ally1']);
-            $c = explode(":",$aResultText['coords1']);
-            $retVal->strCoordsFrom = $aResultText['coords1'];
-
-            $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
-            $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
-            $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
-            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-            $retVal->aCoordsFrom = $aCoords;
+        
+        if (!empty($aResultText['tauben'])) {    
+            $retVal->iTauben = PropertyValueC::ensureInteger( $aResultText['tauben'] );
         }
-        else if (!empty($aResultText['ally2'])) {
-            $retVal->strAllianceFrom = PropertyValueC::ensureString($aResultText['ally2']);
-            $c = explode(":",$aResultText['coords2']);
-            $retVal->strCoordsFrom = $aResultText['coords2'];
+        
+    } else {
+        //try a more flexible parser
 
-            $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
-            $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
-            $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
-            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-            $retVal->aCoordsFrom = $aCoords;
-        }
-        else {
-            $c="";
-            if (!empty($aResultText['coords1']) && $aResultText['coords1'] != $retVal->strCoordsTo) {
-                $c = $aResultText['coords1'];
+        $regExpText= $this->getRegularExpressionText();
+        $fRetValText = preg_match( $regExpText, $msg->strParserText, $aResultText);
+
+        if( $fRetValText !== false && $fRetValText > 0)
+        {
+
+            $retVal->bSuccessfullyParsed = true;
+
+            $aResultTitle = array();
+            $fRetValTitle = preg_match( $this->getRegularExpressionTitle(), $msg->strMsgTitle, $aResultTitle);
+            if( $fRetValTitle !== false && $fRetValTitle > 0)
+            {   
+                $c = explode(":",$aResultTitle['coords_to']);
+                $retVal->strCoordsTo = $aResultTitle['coords_to'];
+
+                $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
+                $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
+                $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
+                $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                $retVal->aCoordsTo = $aCoords;
+                if ($aResultTitle['status'] == 'Eigener Planet wurde sondiert')
+                    $retVal->bSuccess = true;
+                else
+                    $retVal->bSuccess = false;
             }
-            else if (!empty($aResultText['coords2']) && $aResultText['coords2'] != $retVal->strCoordsTo) {
-                $c = $aResultText['coords2'];
+
+            if (!empty($aResultText['ally1'])) {
+                $retVal->strAllianceFrom = PropertyValueC::ensureString($aResultText['ally1']);
+                $c = explode(":",$aResultText['coords1']);
+                $retVal->strCoordsFrom = $aResultText['coords1'];
+
+                $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
+                $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
+                $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
+                $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                $retVal->aCoordsFrom = $aCoords;
             }
-            
-            $retVal->strCoordsFrom = $c;
-            $c = explode(":",$c);
-            $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
-            $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
-            $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
-            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-            $retVal->aCoordsFrom = $aCoords;
-        }       
-    }
-    else
-    {
-	  $retVal->bSuccessfullyParsed = false;
-	  $retVal->aErrors[] = 'Unable to match the pattern (Sondierungen).';
-	  $retVal->aErrors[] = '...'.$msg->strParserText;
-    }
+            else if (!empty($aResultText['ally2'])) {
+                $retVal->strAllianceFrom = PropertyValueC::ensureString($aResultText['ally2']);
+                $c = explode(":",$aResultText['coords2']);
+                $retVal->strCoordsFrom = $aResultText['coords2'];
+
+                $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
+                $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
+                $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
+                $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                $retVal->aCoordsFrom = $aCoords;
+            }
+            else {
+                $c="";
+                if (!empty($aResultText['coords1']) && $aResultText['coords1'] != $retVal->strCoordsTo) {
+                    $c = $aResultText['coords1'];
+                }
+                else if (!empty($aResultText['coords2']) && $aResultText['coords2'] != $retVal->strCoordsTo) {
+                    $c = $aResultText['coords2'];
+                }
+                
+                $retVal->strCoordsFrom = $c;
+                $c = explode(":",$c);
+                $iCoordsGal = PropertyValueC::ensureInteger( $c[0] );
+                $iCoordsSol = PropertyValueC::ensureInteger( $c[1] );
+                $iCoordsPla = PropertyValueC::ensureInteger( $c[2] );
+                $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                $retVal->aCoordsFrom = $aCoords;
+            }       
+        }
+        else
+        {
+          $retVal->bSuccessfullyParsed = false;
+          $retVal->aErrors[] = 'Unable to match the pattern (Sondierungen).';
+          $retVal->aErrors[] = '...'.$msg->strParserText;
+        }
+      }
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -161,6 +204,36 @@ class ParserMsgSondierungC extends ParserMsgBaseC implements ParserMsgI
        
     return $regExp;
   }
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  /**
+   */
+
+  private function getRegularExpressionTextHardcoded()
+  {
+
+    $reUserName     = $this->getRegExpUserName();
+    $reCoords       = $this->getRegExpKoloCoords();
+    $reAlliance     = $this->getRegExpSingleLineText();
+        
+    $regExp = '/.*(?J)';
+    //erfolgreiche
+    $regExp .= '(?P<success>Eilmeldung: Heute wurde einer unserer Planeten \((?P<coords_to>'.$reCoords.')\) von (?P<name_from>'.$reUserName.')(?: \[(?P<ally_from>'.$reAlliance.')\])? ausspioniert. Diese unerhörte Art der Aggression ging vom Planeten \((?P<coords_from>'.$reCoords.')\) aus.*)|';
+    $regExp .= '(?P<success>Planet \((?P<coords_to>'.$reCoords.')\) wurde ausspioniert. Von (?P<name_from>'.$reUserName.')(?: \[(?P<ally_from>'.$reAlliance.')\])? \((?P<coords_from>'.$reCoords.')\).*)|';
+    $regExp .= '(?P<success>Der MEEP MEEEEP MEEPMEEEEP MEEEEP MEEEP (?P<name_from>'.$reUserName.')(?: \[(?P<ally_from>'.$reAlliance.')\])? \((?P<coords_from>'.$reCoords.')\) hat unseren wichtigen Planeten \((?P<coords_to>'.$reCoords.')\) ausspioniert..*)|';
+    $regExp .= '(?P<success>Ok, der Planet \((?P<coords_to>'.$reCoords.')\) wurde ausspioniert. Und auch erfolgreich. Nämlich von (?P<name_from>'.$reUserName.')(?: \[(?P<ally_from>'.$reAlliance.')\])? \((?P<coords_from>'.$reCoords.')\).*)|';
+    $regExp .= '(?P<success>Der\/Die\/Das \(unzutreffendes bitte streichen\) (?P<name_from>'.$reUserName.')(?: \[(?P<ally_from>'.$reAlliance.')\])? \((?P<coords_from>'.$reCoords.')\) war gaaaaaanz gemein und hat dich ausspioniert \((?P<coords_to>'.$reCoords.')\).*)|';
+    $regExp .= '(?P<success>Heute hat es der fiese (?P<name_from>'.$reUserName.')(?: \[(?P<ally_from>'.$reAlliance.')\])? \((?P<coords_from>'.$reCoords.')\) gewagt, unseren schönen Planeten \((?P<coords_to>'.$reCoords.')\) auszuspionieren.*)|';
+    $regExp .= '(?P<success>Heute wurde unser schöner Planet \((?P<coords_to>'.$reCoords.')\) von dem bösen (?P<name_from>'.$reUserName.')(?: \[(?P<ally_from>'.$reAlliance.')\])? \((?P<coords_from>'.$reCoords.')\) ausspioniert! Die Sonden fielen in den Stadtpark und erschlugen (?P<tauben>\d+) Tauben.*)|';
+    //nicht erfolgreiche
+    $regExp .= '(?P<failed>Der\/Die\/Das \(unzutreffendes bitte streichen\) (?P<name_from>'.$reUserName.')(?: \[(?P<ally_from>'.$reAlliance.')\])? \((?P<coords_from>'.$reCoords.')\) war gaaaaaanz gemein und hat versucht dich auszuspähen \((?P<coords_to>'.$reCoords.')\).*)|';
+    $regExp .= '(?P<failed>Der eindeutig unfähige (?P<name_from>'.$reUserName.')(?: \[(?P<ally_from>'.$reAlliance.')\])? \((?P<coords_from>'.$reCoords.')\) hat vergeblich versucht, einen unserer Planeten \((?P<coords_to>'.$reCoords.')\) auszuspionieren.*)|';
+    $regExp .= '(?P<failed>Heute gab es einen wunderschönen feindlichen Sondenregen über \((?P<coords_to>'.$reCoords.')\). Die Trümmer der Sonden zauberten ein wundervolles Spektakel an den nächtlichen Himmel. (?P<name_from>'.$reUserName.')(?: \[(?P<ally_from>'.$reAlliance.')\])? \((?P<coords_from>'.$reCoords.')\) wird sich schwarz ärgern, das er keinerlei Informationen bekommen hat.)';    
+    $regExp .= '.*/sU';
+       
+    return $regExp;
+  }
   
   /////////////////////////////////////////////////////////////////////////////
 
@@ -170,11 +243,9 @@ class ParserMsgSondierungC extends ParserMsgBaseC implements ParserMsgI
   private function getRegularExpressionText()
   {
 
-    $reUserName     = $this->getRegExpUserName();
     $reCoords       = $this->getRegExpKoloCoords();
     $reAlliance     = $this->getRegExpSingleLineText();
-//    $reText         = $this->getRegExpSingleLineText3();
-        
+
     $regExp = '/';
     $regExp .= '(?P<name1>'.$reAlliance.')';
     $regExp .= '   (?:\s+\[(?P<ally1>'.$reAlliance.')\])?';
