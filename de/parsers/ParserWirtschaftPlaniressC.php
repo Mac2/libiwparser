@@ -67,7 +67,7 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
 
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
-        $ress = array('eisen' => 'Eisen', 'stahl' => 'Stahl', 'vv4a' => 'VV4A', 'chemie' => 'Brause', 'eis' => 'Eis', 'wasser' => 'Wasser', 'nrg' => 'Energie');
+        $ress = array('eisen' => 'Eisen', 'stahl' => 'Stahl', 'vv4a' => 'VV4A', 'chemie' => 'chem. Elemente', 'eis' => 'Eis', 'wasser' => 'Wasser', 'nrg' => 'Energie');
 
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;

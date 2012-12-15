@@ -46,7 +46,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
 
         $this->setIdentifier('de_msg');
         $this->setName('Nachrichtenzentrale');
-//    $this->setRegExpCanParseText('/Nachrichtenzentrale.*(?:Nachrichtenzentrale.*Nachrichtenzentrale|Neue\sNachricht\sverfassen)/smU');		//! Mac: requires Ungreedy U Modifier because charsize could be larger than 500k!
+//      $this->setRegExpCanParseText('/Nachrichtenzentrale.*(?:Nachrichtenzentrale.*Nachrichtenzentrale|Neue\sNachricht\sverfassen)/smU');		//! Mac: requires Ungreedy U Modifier because charsize could be larger than 500k!
         $this->setRegExpCanParseText('/' . $this->getRegularExpressionHeader() . '/mxU');
         $this->setRegExpBeginData('/(?:(Nachrichtenzentrale\s\-\sNachrichten[\s\n\r\t]+\b\w+\b\s+alle\sNachrichten\s.+ffnen\s\/\salle\sNachrichten\sschliessen\s\/\salle\sNachrichten\sselektieren\s\/\salle\sNachrichten\sdeselektieren\s+Seitenanzeige[\d\[\]\s\t\n\r]+)|(Nachrichtenzentrale\s\-\sNeue\sNachrichten[\s\n\r\t]neue\sNachrichten))/s');
         $this->setRegExpEndData('/Seitenanzeige[\d\[\]\s\t\n\r]+alle\sNachrichten\s.+ffnen.+alle\sNachrichten\sschliessen.+alle\sNachrichten\sselektieren.+alle\sNachrichten\sdeselektieren/s');
@@ -139,7 +139,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
                             $parser->parseMsg($result);
                             $msg = $result->objResultData;
                             $retVal->aReverseMsgs[] = $msg;
-//               $retVal->aMsgs[] = & $retVal->aReverseMsgs[count($retVal->aReverseMsgs)-1];
+//                          $retVal->aMsgs[] = & $retVal->aReverseMsgs[count($retVal->aReverseMsgs)-1];
                         }
                         break;
                     case "Übergabe":
@@ -149,7 +149,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
                             $parser->parseMsg($result);
                             $msg = $result->objResultData;
                             $retVal->aGaveMsgs[] = $msg;
-//               $retVal->aMsgs[] = & $retVal->aGaveMsgs[count($retVal->aGaveMsgs)-1];
+//                          $retVal->aMsgs[] = & $retVal->aGaveMsgs[count($retVal->aGaveMsgs)-1];
                         }
                         break;
                     case "Sondierung (Schiffe/Def/Ress)":
@@ -272,17 +272,21 @@ class ParserMsgC extends ParserBaseC implements ParserI
                             $parser->parseMsg($result);
                             $msg = $result->objResultData;
                             $retVal->aTransfairMsgs[] = $msg;
-//               $retVal->aMsgs[] = & $retVal->aTransfairMsgs[count($retVal->aTransfairMsgs)-1];
+//                          $retVal->aMsgs[] = & $retVal->aTransfairMsgs[count($retVal->aTransfairMsgs)-1];
                         }
                         break;
                     case "Ressourcenhandel":
                         // @todo!
                         $retVal->aMsgs[] = $msg;
                         break;
-                    default:
-//            if ($msg->bIsSystemNachricht)
-//                 print_die($msg);
+                    case "Stationieren":
+                        // @todo!
                         $retVal->aMsgs[] = $msg;
+                        break;
+                    default:
+//                    if ($msg->bIsSystemNachricht)
+                        var_dump($msg);
+                        //$retVal->aMsgs[] = $msg;
                         break;
                 }
             }
@@ -334,7 +338,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
         /**
          * die Daten sind Blöcke, Spielernachrichten sind an dem Petzten zu erkennen,
          * Die variablen Textinhalte werden ueber den darauffolgenden Header begrenzt (bzw. das Ende des EingabeStrings im letzten Fall)
-         * TODO: zeilenumbrueche von \n erweitern fuer IE/Opera
+         * TODO: Zeilenumbrüche von \n erweitern fuer IE/Opera
          */
 
         $reTitle = $this->getRegExpSingleLineText();
