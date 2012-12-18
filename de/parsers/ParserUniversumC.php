@@ -156,7 +156,7 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
         $this->setIdentifier('de_universum');
         $this->setName('Universum (Text)');
         //because the parser currently only can parse xml, we include the <?xml
-        $this->setStringCanParseText('Das\sUniversum\s\-\sunendliche\sWeiten.+<?xml', 's');
+        $this->setStringCanParseText('Das\sUniversum\s\-\sunendliche\sWeiten.+\<?xml', 's');
         $this->setRegExpBeginData('');
         $this->setRegExpEndData('');
     }
@@ -368,8 +368,8 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
 
         $this->setIdentifier('de_universum');
         $this->setName('Universum (XML)');
-        $this->setRegExpBeginData('/(?=<\?xml)/s');
-        $this->setRegExpEndData('/(?<=<\/planeten_data>)/');
+        $this->setRegExpBeginData('/(?=\<\?xml)/s');
+        $this->setRegExpEndData('/(?<=\<\/planeten_data\>)/');
     }
 
     /////////////////////////////////////////////////////////////////////////////

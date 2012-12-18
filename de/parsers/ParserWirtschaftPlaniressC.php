@@ -45,9 +45,9 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_wirtschaft_planiress');
-        $this->setName("KoloRess&Uuml;bersicht Teil1");
+        $this->setName("KoloRessübersicht Teil1");
         $this->setRegExpCanParseText('/Ressourcenkolo.{1,3}bersicht.*Lager\sund\sBunker\sanzeigen/s');
-        $this->setRegExpBeginData('/Kolonie\s+\w+\s+(?:Erdbeermarmelade|Stahl)\s+\w+\s+\w+\s+\w+\s+\w+\s+(Traubenzucker|Energie)/');
+        $this->setRegExpBeginData('/Kolonie\s+\w+\s+(?:Erdbeermarmelade|Stahl)\s+\w+\s+(?:chem. Elemente)\s+\w+\s+\w+\s+(Traubenzucker|Energie)/');
         $this->setRegExpEndData('/Lager\sund\sBunker\sanzeigen/');
     }
 
@@ -271,10 +271,9 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
 
         $regExp .= '[\s\t]+';
         $regExp .= '(?P<nrg_vorrat>' . $reDecimalNumber . ')';
-        $regExp .= '\n\(';
-        $regExp .= '(?P<nrg_production>' . $reFloatingDouble . ')';
-        $regExp .= '\)\n+';
-        $regExp .= '(?:((?P<nrg_lager>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '\((?P<nrg_production>' . $reFloatingDouble . ')\)';
+        $regExp .= '(?:(\n+(?P<nrg_lager>' . $reDecimalNumber . ')';
         $regExp .= '\n';
         $regExp .= '(?P<nrg_bunker>' . $reDecimalNumber . '))|)';
 
