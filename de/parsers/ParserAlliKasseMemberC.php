@@ -63,7 +63,7 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
         $retVal =& $parserResult->objResultData;
 
         $this->stripTextToData();
-
+    
         $regExp = $this->getRegularExpression();
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
@@ -119,24 +119,22 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
 
         $regExp = '/^';
         $regExp .= '((\(Wing\s(?P<strAlliance>.*)\)\s*)?';
-        $regExp .= '(^.*$\n)+';
+        $regExp .= '(^.*$)+';
         $regExp .= 'Name\sangenommen\sgesamt\spro\sTag\s*)?';
         $regExp .= '^(?P<strUser>' . $reUser . ')';
+        $regExp .= '[\s]+';
         $regExp .= '(?:';
-        $regExp .= '\s';
-        $regExp .= '(';
-        $regExp .= '(\((?P<bHasNotAccepted>\*)\))';
+        $regExp .= '\((?P<bHasNotAccepted>\*)\)';
         $regExp .= '|';
-        $regExp .= '(?:[\s\t]+(?P<iDateTime>' . $reDateTime . '))';
+        $regExp .= '(?P<iDateTime>' . $reDateTime . ')';
         $regExp .= ')';
-        $regExp .= '[\s\t]+';
+        $regExp .= '[\s]+';
         $regExp .= '(?P<fCreditsPaid>' . $reExtended . ')';
-        $regExp .= '[\s\t]+';
+        $regExp .= '[\s]+';
         $regExp .= '(?P<iCreditsPerDay>' . $reInteger . ')';
         $regExp .= '\spro\sTag';
-        $regExp .= ')';
         $regExp .= '$/m';
-
+        
         return $regExp;
     }
 
