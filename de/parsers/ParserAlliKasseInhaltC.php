@@ -45,7 +45,7 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
         $this->setIdentifier('de_alli_kasse_inhalt');
         $this->setName("Allianzkasse Kontostand");
         $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-        $this->setRegExpBeginData('/Allianzkasse\sAllianzkasse/sm');
+        $this->setRegExpBeginData('/Allianzkasse\s+Allianzkasse/sm');
         $this->setRegExpEndData('/Auszahlung/sm');
     }
 

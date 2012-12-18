@@ -48,7 +48,7 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
         $this->setIdentifier('de_alli_kasse_log_member');
         $this->setName("Allianzkasse Auszahlungen(Mitglieder)");
         $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-        $this->setRegExpBeginData('/Allianzkasse\sAllianzkasse/sm');
+        $this->setRegExpBeginData('/Allianzkasse\s+Allianzkasse/sm');
         $this->setRegExpEndData('/Auszahlungslog\san\sWings\/etc\sder\sletzten\sdrei\sWochen/smU');
     }
 

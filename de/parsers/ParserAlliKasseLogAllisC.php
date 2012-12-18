@@ -48,7 +48,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
         $this->setIdentifier('de_alli_kasse_log_allis');
         $this->setName("Allianzkasse Auszahlungen(Allianzen)");
         $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-        $this->setRegExpBeginData('/Allianzkasse\sAllianzkasse/sm');
+        $this->setRegExpBeginData('/Allianzkasse\s+Allianzkasse/sm');
 //    $this->setRegExpBeginData( '/Auszahlungslog\san\sWings\/etc\sder\sletzten\sdrei\sWochen\s/' );    //! Mac: effizienter, da Input kleiner  ?
         $this->setRegExpEndData('');
     }
