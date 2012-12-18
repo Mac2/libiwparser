@@ -284,7 +284,7 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
 
     $regExp .= '[\s\t]+';
     $regExp .= '(?P<nrg_vorrat>'.$reDecimalNumber.')';
-    $regExp .= '\n\(';
+    $regExp .= '\n+\(';
     $regExp .= '(?P<nrg_production>'.$reFloatingDouble.')';
     $regExp .= '\)\n+';
     $regExp .= '(?:((?P<nrg_lager>'.$reDecimalNumber.')';
