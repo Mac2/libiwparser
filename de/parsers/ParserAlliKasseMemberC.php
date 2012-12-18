@@ -37,7 +37,7 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
     $this->setIdentifier('de_alli_kasse_member');
     $this->setName("Allianzkasse Mitglieder");
     $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData( '/Allianzkasse\sAllianzkasse/sm' );
+    $this->setRegExpBeginData( '/Allianzkasse\s+Allianzkasse/sm' );
     $this->setRegExpEndData( '/\(\*\)\.\.\snicht angenommen\,\s\(\*\*\)\.\.\shinter\sder\sNoobbarriere/smU' );
   }
 
@@ -115,18 +115,18 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
   $regExp  = '/^';
   $regExp .= '((\(Wing\s(?P<strAlliance>.*)\)\s*)?';
   $regExp .= '(^.*$\n)+';
-  $regExp .= 'Name\sangenommen\sgesamt\spro\sTag\s)?';
+  $regExp .= 'Name\sangenommen\sgesamt\spro\sTag\s*)?';
   $regExp .= '^(?P<strUser>' . $reUser . ')';
   $regExp .= '(?:';
   $regExp .= '\s';
   $regExp .= '(';
   $regExp .= '(\((?P<bHasNotAccepted>\*)\))';
   $regExp .= '|';
-  $regExp .= '(\t(?P<iDateTime>' . $reDateTime . '))';
+  $regExp .= '(?:[\s\t]+(?P<iDateTime>' . $reDateTime . '))';
   $regExp .= ')';
-  $regExp .= '\s\t';
-  $regExp .= '\t?(?P<fCreditsPaid>' . $reExtended . ')';
-  $regExp .= '\s\t';
+  $regExp .= '?:[\s\t]+';
+  $regExp .= '(?P<fCreditsPaid>' . $reExtended . ')';
+  $regExp .= '?:[\s\t]+';
   $regExp .= '(?P<iCreditsPerDay>'. $reInteger . ')';
   $regExp .= '\spro\sTag';
   $regExp .= ')';
