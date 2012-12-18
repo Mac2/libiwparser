@@ -102,40 +102,38 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
 
   /////////////////////////////////////////////////////////////////////////////
 
-  private function getRegularExpression()
-  {
-    /**
-    */
+    private function getRegularExpression()
+    {
+        /**
+         */
 
-  $reDateTime      = $this->getRegExpDateTime();
-  $reUser           = $this->getRegExpUserName();
-  $reInteger       = $this->getRegExpDecimalNumber();
-  $reExtended           = $this->getRegExpFloatingDouble();
+        $reDateTime = $this->getRegExpDateTime();
+        $reUser = $this->getRegExpUserName();
+        $reInteger = $this->getRegExpDecimalNumber();
+        $reExtended = $this->getRegExpFloatingDouble();
 
-  $regExp  = '/^';
-  $regExp .= '((\(Wing\s(?P<strAlliance>.*)\)\s*)?';
-  $regExp .= '(^.*$\n)+';
-  $regExp .= 'Name\sangenommen\sgesamt\spro\sTag\s*)?';
-  $regExp .= '^(?P<strUser>' . $reUser . ')';
-  $regExp .= '(?:';
-  $regExp .= '\s';
-  $regExp .= '(';
-  $regExp .= '(\((?P<bHasNotAccepted>\*)\))';
-  $regExp .= '|';
-  $regExp .= '(?:[\s\t]+(?P<iDateTime>' . $reDateTime . '))';
-  $regExp .= ')';
-  $regExp .= '?:[\s\t]+';
-  $regExp .= '(?P<fCreditsPaid>' . $reExtended . ')';
-  $regExp .= '?:[\s\t]+';
-  $regExp .= '(?P<iCreditsPerDay>'. $reInteger . ')';
-  $regExp .= '\spro\sTag';
-  $regExp .= ')';
-  $regExp .= '$/m';
+        $regExp = '/^';
+        $regExp .= '((\(Wing\s(?P<strAlliance>.*)\)\s*)?';
+        $regExp .= '(^.*$)+';
+        $regExp .= 'Name\sangenommen\sgesamt\spro\sTag\s*)?';
+        $regExp .= '^(?P<strUser>' . $reUser . ')';
+        $regExp .= '[\s]+';
+        $regExp .= '(?:';
+        $regExp .= '\((?P<bHasNotAccepted>\*)\)';
+        $regExp .= '|';
+        $regExp .= '(?P<iDateTime>' . $reDateTime . ')';
+        $regExp .= ')';
+        $regExp .= '[\s]+';
+        $regExp .= '(?P<fCreditsPaid>' . $reExtended . ')';
+        $regExp .= '[\s]+';
+        $regExp .= '(?P<iCreditsPerDay>' . $reInteger . ')';
+        $regExp .= '\spro\sTag';
+        $regExp .= '$/m';
 
-    return $regExp;
-  }
+        return $regExp;
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
   /**
    * For debugging with "The Regex Coach" which doesn't support named groups
