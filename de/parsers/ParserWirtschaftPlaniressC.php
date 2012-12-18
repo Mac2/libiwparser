@@ -213,88 +213,85 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
 
   /////////////////////////////////////////////////////////////////////////////
 
-  private function getRegularExpression()
-  {
-    $reKoloTypes          = $this->getRegExpKoloTypes();
-    $reKoloCoords         = $this->getRegExpKoloCoords();
-    $reFloatingDouble     = $this->getRegExpFloatingDouble();
-    $reUnsignedDouble     = $this->getRegExpUnsignedDouble();
-    $reDecimalNumber      = $this->getRegExpDecimalNumber();
-    $reKoloNames          = $this->getRegExpSingleLineText();
+    private function getRegularExpression()
+    {
+        $reKoloTypes = $this->getRegExpKoloTypes();
+        //$reKoloCoords = $this->getRegExpKoloCoords();
+        $reFloatingDouble = $this->getRegExpFloatingDouble();
+        //$reUnsignedDouble = $this->getRegExpUnsignedDouble();
+        $reDecimalNumber = $this->getRegExpDecimalNumber();
+        $reKoloNames = $this->getRegExpSingleLineText();
 
-    $regExp  = '/';
+        $regExp = '/';
 
-    $regExp .= '(?P<planet_name>'.$reKoloNames.')';
-    $regExp .= '\s';
+        $regExp .= '(?P<planet_name>' . $reKoloNames . ')';
+        $regExp .= '\s';
 
-    $regExp .= '(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
-    $regExp .= '\n';
-    $regExp .= '\((?P<object_type>'.$reKoloTypes.')\)';
+        $regExp .= '(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
+        $regExp .= '\n+';
+        $regExp .= '\((?P<object_type>' . $reKoloTypes . ')\)';
 
-    $regExp .= '[\s\t]+';
-    $regExp .= '(?P<eisen_vorrat>'.$reDecimalNumber.')';
-    $regExp .= '\n\(';
-    $regExp .= '(?P<eisen_production>'.$reFloatingDouble.')';
-    $regExp .= '\)';
-    $regExp .= '(?:(\n+(?P<eisen_lager>\-\-\-)\n';
-    $regExp .= '(?P<eisen_bunker>'.$reDecimalNumber.'))|)';
+        $regExp .= '[\s\t]+';
+        $regExp .= '(?P<eisen_vorrat>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '\((?P<eisen_production>' . $reFloatingDouble . ')\)';
+        $regExp .= '(?:(\n+(?P<eisen_lager>\-\-\-)';
+        $regExp .= '\n+';
+        $regExp .= '(?P<eisen_bunker>' . $reDecimalNumber . '))|)';
 
-    $regExp .= '[\s\t]+';
-    $regExp .= '(?P<stahl_vorrat>'.$reDecimalNumber.')';
-    $regExp .= '\n\(';
-    $regExp .= '(?P<stahl_production>'.$reFloatingDouble.')';
-    $regExp .= '\)';
-    $regExp .= '(?:(\n+(?P<stahl_lager>\-\-\-)\n';
-    $regExp .= '(?P<stahl_bunker>'.$reDecimalNumber.'))|)';
+        $regExp .= '[\s\t]+';
+        $regExp .= '(?P<stahl_vorrat>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '\((?P<stahl_production>' . $reFloatingDouble . ')\)';
+        $regExp .= '(?:(\n+(?P<stahl_lager>\-\-\-)';
+        $regExp .= '\n+';
+        $regExp .= '(?P<stahl_bunker>' . $reDecimalNumber . '))|)';
 
-    $regExp .= '[\s\t]+';
-    $regExp .= '(?P<vv4a_vorrat>'.$reDecimalNumber.')';
-    $regExp .= '\n\(';
-    $regExp .= '(?P<vv4a_production>'.$reFloatingDouble.')';
-    $regExp .= '\)';
-    $regExp .= '(?:(\n+(?P<vv4a_lager>\-\-\-)\n';
-    $regExp .= '(?P<vv4a_bunker>'.$reDecimalNumber.'))|)';
+        $regExp .= '[\s\t]+';
+        $regExp .= '(?P<vv4a_vorrat>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '\((?P<vv4a_production>' . $reFloatingDouble . ')\)';
+        $regExp .= '(?:(\n+(?P<vv4a_lager>\-\-\-)';
+        $regExp .= '\n+';
+        $regExp .= '(?P<vv4a_bunker>' . $reDecimalNumber . '))|)';
 
-    $regExp .= '[\s\t]+';
-    $regExp .= '(?P<chemie_vorrat>'.$reDecimalNumber.')';
-    $regExp .= '\n\(';
-    $regExp .= '(?P<chemie_production>'.$reFloatingDouble.')';
-    $regExp .= '\)';
-    $regExp .= '(?:(\n+(?P<chemie_lager>'.$reDecimalNumber.')';
-    $regExp .= '\n';
-    $regExp .= '(?P<chemie_bunker>'.$reDecimalNumber.'))|)';
+        $regExp .= '[\s\t]+';
+        $regExp .= '(?P<chemie_vorrat>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '\((?P<chemie_production>' . $reFloatingDouble . ')\)';
+        $regExp .= '(?:(\n+(?P<chemie_lager>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '(?P<chemie_bunker>' . $reDecimalNumber . '))|)';
 
-    $regExp .= '[\s\t]+';
-    $regExp .= '(?P<eis_vorrat>'.$reDecimalNumber.')';
-    $regExp .= '\n\(';
-    $regExp .= '(?P<eis_production>'.$reFloatingDouble.')';
-    $regExp .= '\)';
-    $regExp .= '(?:(\n+(?P<eis_lager>'.$reDecimalNumber.')';
-    $regExp .= '\n';
-    $regExp .= '(?P<eis_bunker>'.$reDecimalNumber.'))|)';
+        $regExp .= '[\s\t]+';
+        $regExp .= '(?P<eis_vorrat>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '\((?P<eis_production>' . $reFloatingDouble . ')\)';
+        $regExp .= '(?:(\n+(?P<eis_lager>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '(?P<eis_bunker>' . $reDecimalNumber . '))|)';
 
-    $regExp .= '[\s\t]+';
-    $regExp .= '(?P<wasser_vorrat>'.$reDecimalNumber.')';
-    $regExp .= '\n\(';
-    $regExp .= '(?P<wasser_production>'.$reFloatingDouble.')';
-    $regExp .= '\)';
-    $regExp .= '(?:(\n+(?P<wasser_lager>'.$reDecimalNumber.')';
-    $regExp .= '\n';
-    $regExp .= '(?P<wasser_bunker>'.$reDecimalNumber.'))|)';
+        $regExp .= '[\s\t]+';
+        $regExp .= '(?P<wasser_vorrat>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '\((?P<wasser_production>' . $reFloatingDouble . ')\)';
+        $regExp .= '(?:(\n+(?P<wasser_lager>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '(?P<wasser_bunker>' . $reDecimalNumber . '))|)';
 
-    $regExp .= '[\s\t]+';
-    $regExp .= '(?P<nrg_vorrat>'.$reDecimalNumber.')';
-    $regExp .= '\n+\(';
-    $regExp .= '(?P<nrg_production>'.$reFloatingDouble.')';
-    $regExp .= '\)\n+';
-    $regExp .= '(?:((?P<nrg_lager>'.$reDecimalNumber.')';
-    $regExp .= '\n';
-    $regExp .= '(?P<nrg_bunker>'.$reDecimalNumber.'))|)';
+        $regExp .= '[\s\t]+';
+        $regExp .= '(?P<nrg_vorrat>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '\((?P<nrg_production>' . $reFloatingDouble . ')\)';
+        $regExp .= '(?:(\n+(?P<nrg_lager>' . $reDecimalNumber . ')';
+        $regExp .= '\n+';
+        $regExp .= '(?P<nrg_bunker>' . $reDecimalNumber . '))|)';
 
-    $regExp  .= '/mx';
+        $regExp .= '/mx';
 
-    return $regExp;
-  }
+        return $regExp;
+    }
+
 
   /////////////////////////////////////////////////////////////////////////////
 
