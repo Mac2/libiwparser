@@ -155,8 +155,8 @@ class ParserFactoryConfigC implements ParserFactoryI
     {
         //replace different line endings by \n (linux)
         $replacements = array(
-            '\r\n' => '\n', //windows
-            '\r'   => '\n', //mac
+            chr(13) . chr(10) => chr(10), //windows
+            chr(13)           => chr(10), //mac
         );
 
         $text = str_replace(

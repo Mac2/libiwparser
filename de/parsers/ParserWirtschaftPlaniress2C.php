@@ -46,8 +46,8 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $this->setIdentifier('de_wirtschaft_planiress2');
         $this->setName("KoloRess Übersicht Teil2");
         $this->setRegExpCanParseText('/Ressourcenkoloübersicht\sTeil\s2/s');
-        $this->setRegExpBeginData('/Kolonie\sFP\s\w+\sSteuersatz\s(?:Bevölkerung|blubbernde\sGallertmasse)\sZufr/');
-        $this->setRegExpEndData('');
+        $this->setRegExpBeginData('/Kolonie\s+FP\s+Credits\s+Steuersatz\s+Bevölkerung\s+Zufr/');
+        $this->setRegExpEndData('/XML\sEinstellung/');
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -61,7 +61,6 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $retVal =& $parserResult->objResultData;
 
         $this->stripTextToData();
-
         $regExp = $this->getRegularExpression();
 
         $aResult = array();
@@ -136,7 +135,7 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $reFloatingDouble = $this->getRegExpFloatingDouble();
         $reUnsignedDouble = $this->getRegExpUnsignedDouble();
         $reDecimalNumber = $this->getRegExpDecimalNumber();
-        $reKoloNames = $this->getRegExpSingleLineText(); //! Mac: nicht getRegExpSingleLineText3, da KoloNames auch kuerzer als 3 Zeichen sein koennen
+        $reKoloNames = $this->getRegExpSingleLineText(); //! Mac: nicht getRegExpSingleLineText3, da KoloNames auch kürzer als 3 Zeichen sein können
 
         $regExp = '/';
 
@@ -165,7 +164,7 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $regExp .= '(?:';
         $regExp .= '\s+';
         $regExp .= '(?P<steuersatz>\d{1,3})';
-        $regExp .= '(?:\\\%|\%)';
+        $regExp .= '\%';
         $regExp .= '\s+';
         $regExp .= '|\s+)';
 

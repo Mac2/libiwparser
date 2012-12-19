@@ -84,7 +84,7 @@ class ParserFunctionC
         $retVal .= '(?:\D\d{3})*'; //1.1) that might be followed by a repetition of one thousandSeperator and three digits multiple times
         $retVal .= '|'; //  ... OR ...
         $retVal .= '\d+)'; //2) a decimal value is either a repetition of decimals...
-        $retVal .= '(?=\s|$|\)|\%|\\\%)'; //the decimal number shall end in a whitesace or end of line or a braket or a %
+        $retVal .= '(?=\s|$|\)|\%)'; //the decimal number shall end in a whitesace or end of line or a braket or a %
         $retVal .= ')';
 
         return $retVal;
@@ -109,7 +109,7 @@ class ParserFunctionC
         $retVal .= '\d+)'; //2) a decimal value is either a repetition of decimals...
         $retVal .= '(?:\D\d{2}'; //there can be a comma seperated part of 2 digits
         $retVal .= ')?'; //but needn't to be
-        $retVal .= '(?=\s|$|\)|\*|\%|\\\%)'; //the decimal number shall end in a whitesace or end of line or a braket or a * or a %
+        $retVal .= '(?=\s|$|\)|\*|\%)'; //the decimal number shall end in a whitesace or end of line or a braket or a * or a %
         $retVal .= ')';
 
         return $retVal;

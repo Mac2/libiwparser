@@ -96,7 +96,7 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
 
                 foreach ($ress as $key => $strResourceName) {
                     $ordr = new DTOParserWirtschaftPlaniressRessResultC();
-                    $ordr->strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources' );
+                    $ordr->strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources');
                     if (isset($result[$key . '_vorrat'])) {
                         $ordr->iResourceVorrat = PropertyValueC::ensureInteger($result[$key . '_vorrat']);
                     }
@@ -203,9 +203,7 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
     private function getRegularExpression()
     {
         $reKoloTypes = $this->getRegExpKoloTypes();
-        //$reKoloCoords = $this->getRegExpKoloCoords();
         $reFloatingDouble = $this->getRegExpFloatingDouble();
-        //$reUnsignedDouble = $this->getRegExpUnsignedDouble();
         $reDecimalNumber = $this->getRegExpDecimalNumber();
         $reKoloNames = $this->getRegExpSingleLineText();
 

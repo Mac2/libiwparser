@@ -109,6 +109,8 @@ class ParserBaseC extends ParserFunctionC
                         if (isset($aEnd[0])) {
                             $text .= trim($aEnd[0]);
                         }
+                    } else {
+                        $text .= $aStart[$n];
                     }
                 }
             }
@@ -241,15 +243,16 @@ class ParserBaseC extends ParserFunctionC
      */
     public function setText($value)
     {
-        //replace different line endings by \n
         $replacements = array(
-            '\r\n'                               => '\n', //windows
-            '\r'                                 => '\n', //mac
+            //replace different line endings by \n
+            chr(13) . chr(10)                    => chr(10), //windows
+            chr(13)                              => chr(10), //mac
 
+            //replace alternative Ressnames by the normal ones
             'blubbernde Gallertmasse'            => 'Bevölkerung',
+            'Erdbeeren'                          => 'Eisen',
             'Erdbeermarmelade'                   => 'Stahl',
             'Erdbeerkonfitüre'                   => 'VV4A',
-            'Erdbeeren'                          => 'Eisen',
             'Brause'                             => 'chem. Elemente',
             'Vanilleeis'                         => 'Eis',
             'Eismatsch'                          => 'Wasser',
@@ -308,8 +311,8 @@ class ParserBaseC extends ParserFunctionC
     {
         //replace different line endings by \n (linux)
         $replacements = array(
-            '\r\n' => '\n', //windows
-            '\r'   => '\n', //mac
+            chr(13) . chr(10) => chr(10), //windows
+            chr(13)           => chr(10), //mac
         );
 
         return str_replace(array_keys($replacements), array_values($replacements), $text);
