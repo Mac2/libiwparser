@@ -188,7 +188,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
         $reUserName = $this->getRegExpUserName();
         $reKoloType = $this->getRegExpKoloTypes();
         $reAreas = $this->getRegExpAreas();
-        $reProblem = "(Bev.{1,3}lkerungsmangel|Scannerabschaltung\swegen\sChemiemangel|Werften\ssind\sruntergefallen\s\*n.{1,3}l\*|Energiemangel|Forschungsausfall\sdurch\sEnergiemangel|Wassermangel)";
+        $reProblem = "(Bevölkerungsmangel|Scannerabschaltung\swegen\sChemiemangel|Werften\ssind\sruntergefallen\s\*nöl\*|Energiemangel|Forschungsausfall\sdurch\sEnergiemangel|Wassermangel)";
 
         $regExp = '/ ';
 
@@ -198,7 +198,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
         $regExp .= '\s';
         $regExp .= '\((?P<iCoordsGal>\d+)\:(?P<iCoordsSol>\d+)\:(?P<iCoordsPla>\d+)\)';
         $regExp .= '(:?';
-        $regExp .= '\nLebensbedingungen[\s\t]+';
+        $regExp .= '\nLebensbedingungen\s+';
         $regExp .= '(?P<iLB>' . '\d+' . ')';
         $regExp .= '\s(?:\%|\\\%|\\\\\%)';
         $regExp .= '\nFlottenscannerreichweite\s+\(normal\)\s+';
@@ -231,7 +231,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
         $regExp .= ')?';
 //     $regExp  .= '(\s*.*\s){1,1}';
         $regExp .= ')|';
-        $regExp .= '((?P<deff_type>(Schiffs.{1,3}bersicht|Verteidigungs.{1,3}bersicht|Sondenverteidigungs.{1,3}bersicht)\s)';
+        $regExp .= '((?P<deff_type>(Schiffsübersicht|Verteidigungsübersicht|Sondenverteidigungsübersicht)\s)';
         $regExp .= '((?P<strSchiffeArea>' . $reAreas . ')\s)?';
         $regExp .= '(?P<strObjecte>(?:
                     \s*?' . $reObject . '\s*' . $reCount . '\s*?

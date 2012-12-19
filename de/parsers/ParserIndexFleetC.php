@@ -233,7 +233,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
         \s)
         |)
         \((?P<iCoordsGalTo>\d{1,2})\:(?P<iCoordsSolTo>\d{1,3})\:(?P<iCoordsPlaTo>\d{1,2})\)
-        [\s\t\n\r]+';
+        [\s\n]+';
 	$regExp  .= '		(?:\(\s*via\s+\d+\:\d+\:\d+\s+via\s+\d+\:\d+\:\d+\s\)|)\s*';
 	$regExp  .= '		(?:(?P<strPlanetNameFrom>'.$rePlanetName.')\s|)';
 	$regExp  .= '		\((?P<iCoordsGalFrom>\d+)\:(?P<iCoordsSolFrom>\d+)\:(?P<iCoordsPlaFrom>\d+)\)';

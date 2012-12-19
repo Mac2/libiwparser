@@ -129,9 +129,9 @@ class ParserMsgBaseC extends ParserFunctionC
         #Just even don't think to ask anything about this regexp, fu!
         $regExp = '/
           (?P<resource_name>' . $reResourceName . ')
-          [\s\t]+
+          \s+
           (?P<resource_count>' . $reResourceCount . ')
-          [\s\n\r\t]*
+          [\s\n]*
         /mx';
 
         return $regExp;
@@ -152,9 +152,9 @@ class ParserMsgBaseC extends ParserFunctionC
         #Just even don't think to ask anything about this regexp, fu!
         $regExp = '/
           (?P<schiff_name>' . $reSchiffeName . ')
-          [\s\t]+
+          \s+
           (?P<schiffe_count>' . $reSchiffeCount . ')
-          [\s\n\r\t]*
+          [\s\n]*
         /mx';
 
         return $regExp;

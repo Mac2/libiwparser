@@ -47,9 +47,9 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_wirtschaft_geb');
-        $this->setName('Geb&auml;ude&uuml;bersicht');
-        $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s+Forschungs.{1,3}bersicht\s+Werft.{1,3}bersicht\s+Defence.{1,3}bersicht.*Geb.{1,3}ude.{1,3}bersicht(?:.*Geb.{1,3}ude.{1,3}bersicht)?/sm');
-        $this->setRegExpBeginData('/Geb.+ude.+bersicht/sm');
+        $this->setName('Gebäudeübersicht');
+        $this->setRegExpCanParseText('/Gebäudeübersicht\s+Forschungsübersicht\s+Werftübersicht\s+Defenceübersicht.*Gebäudeübersicht(?:.*Gebäudeübersicht)?/sm');
+        $this->setRegExpBeginData('/Gebäudeübersicht/sm');
         $this->setRegExpEndData('');
     }
 
@@ -71,7 +71,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
         $aKolos = array();
-// print_die($aResult);
+
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
@@ -183,7 +183,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
 
         $regExpKolo = '/
                           (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-                          [\n\r]+
+                          \n+
                           \((?P<kolo_type>' . $reKoloTypes . ')\)
                        /mx';
 

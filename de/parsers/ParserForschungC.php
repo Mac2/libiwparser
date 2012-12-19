@@ -9,9 +9,9 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -48,7 +48,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_forschung');
-        $this->setName("Forschungs&uuml;bersicht");
+        $this->setName("Forschungsübersicht");
         $this->setRegExpCanParseText('/Forschung.*Alle\sForschungen\sanzeigen/s');
         $this->setRegExpBeginData('/Es\swerden\momentan\s.*\spro\sStunde\serzeugt.*Alle\sForschungen\sanzeigen/'); //! Mac: Damit verschw. FP geparsed werden
         $this->setRegExpEndData('');
@@ -65,9 +65,6 @@ class ParserForschungC extends ParserBaseC implements ParserI
         $retVal =& $parserResult->objResultData;
 
         $this->stripTextToData();
-
-        /**
-         */
 
         $regExp = $this->getRegularExpression();
         $regExpRess = $this->getRegularExpressionRess();
@@ -231,74 +228,74 @@ class ParserForschungC extends ParserBaseC implements ParserI
 
     /////////////////////////////////////////////////////////////////////////////
 
-  private function getRegularExpressionRess()
-  {
-    /**
-    */
+    private function getRegularExpressionRess()
+    {
+        /**
+         */
 
-    $reResource         = $this->getRegExpResource();
-    $recount			= $this->getRegExpDecimalNumber();
-    $regExpRess  = '/';
-	$regExpRess  .= '(?P<resource_name>'.$reResource.')\:\s(?P<resource_count>'.$recount.')';
-    $regExpRess  .= '/mx';
-    
-    return $regExpRess;
-  }
-  
-  private function getRegularExpression()
-  {
-    /**
-    */
+        $reResource = $this->getRegExpResource();
+        $recount = $this->getRegExpDecimalNumber();
+        $regExpRess = '/';
+        $regExpRess .= '(?P<resource_name>' . $reResource . ')\:\s(?P<resource_count>' . $recount . ')';
+        $regExpRess .= '/mx';
 
-    $reResearch    		= '[\wÖöäÄüÜ]+[^\n\t\r\:\+]{3,}';   //! Mac: hier evtl. konrket 'erforscht' ausschliessen ?
-    $reResearchComment  = $this->getRegExpSingleLineText3();
-    $reFP               = $this->getRegExpDecimalNumber();
-    $reDateTime 		= $this->getRegExpDateTime();
-    $reMixedTime 		= $this->getRegExpMixedTime();
-    $reAreas 			= $this->getRegExpAreas();
+        return $regExpRess;
+    }
 
-    $regExp  = '/';
+    private function getRegularExpression()
+    {
+        /**
+         */
 
-    //! allg. Infoblock (Infos ueber globale Mods, sind nicht immer vorhande!?)
-    $regExp .= '(?:';
-    $regExp .= 'Die\sForscher\shaben\sschon\s(?P<FPverschw>' . $reFP . ')\sFP\serfolgreich\svergeudet,\sindem\ssie\swas\sv.{1,3}llig\sanderes\staten\sals\sforschen\.\s';
-    $regExp .= '(?:' . $reResearchComment.'\s' . '){0,4}';
-    $regExp .= 'Forschungen\sausblenden\s\/\sAlle\sForschungen\sanzeigen\s+';
-    $regExp .= '  (?:Aktuelle\sEffekte\sauf\sForschungsboni\sund\s-mali:'.
-               '    \sReduktion\sdes\smaximalen\sMalus\sum\s(?P<globalMalusRed>\d{1,3})\sProzentpunkte,'.
-               '    \sErh.{0,3}hung\sdes\sBonus\sum\s(?P<globalBonusRed>\d{1,3})\sProzentpunkte\.';
-    $regExp .= '  )?
-                )';
-    //! eigentlicher Forschungsblock
-    $regExp .= '|
-                (?:';
-                        //! keine aufeinanderfolgenden, identischen Zeilen ausser bei Raumfahrt,
-                        //! und keine Area gefolgt von einer Zahl -> Forschungspkt
-    $regExp .= '    (?:^(?P<area>(?:'.$reAreas.'(?!\s(?:'.$reAreas.'|'.$reFP.'\sForschungspunkte\s))|Raumfahrt(?=\sRaumfahrt)))\s|';
-    $regExp .= '        (?:';
-    $regExp .= '            (?P<research>'.$reResearch .')\s';
-//     $regExp .= '(?P<comment>[+,:\\\%\.öÖüÜäÄ\w\s]*\n|)';
-    $regExp .= '            (?P<comment>.*\n|)';
-    $regExp .= '            (?P<fp>' . $reFP . ')';
-    $regExp .= '            \sForschungspunkte\s';
-    $regExp .= '            (?:\(von\s(?P<count>\d+)(?:\%|\\\%)\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\%|\\\%)\sFPKosten\)\s|)';
-    $regExp .= '            (?:Dauer\:\s(?P<dauer>'.$reMixedTime .')\s|)';
-    $regExp .= '            (?P<kosten>(?:(?:.*)\:\s'.$reFP.'\s)+|)';
-    $regExp .= '            (?:\s*(?:Ressourcen\sin\sabsehbarer\sZeit\snicht\svorhanden|Ressourcen\svorhanden\sin.*(?:\(Info\nben.{1,3}tigt\sIWSA\)|))\s|)';
+        $reResearch = '[\wÖöäÄüÜ]+[^\n\t\:\+]{3,}'; //! Mac: hier evtl. konrket 'erforscht' ausschliessen ?
+        $reResearchComment = $this->getRegExpSingleLineText3();
+        $reFP = $this->getRegExpDecimalNumber();
+        $reDateTime = $this->getRegExpDateTime();
+        $reMixedTime = $this->getRegExpMixedTime();
+        $reAreas = $this->getRegExpAreas();
 
-    $regExp .= '            (?:[\s\n]*Aufgrund\svon\sgenerellen\stechnischen\sUnverst.{1,3}ndnis\sim\sUniversum\,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s(?:\%|\\\%)\.\s\?\s|)';
-    $regExp .= '            (?:^(?:Forschung_wird\sangezeigt|Forschung_wird\snicht\sangezeigt|S|N|)\s|)'; //! evtl. nur beim FF vorhanden ?
-    $regExp .= '            \s*';
-    $regExp .= '            (?:Stufe\s\d\s|)';
-    $regExp .= '            (?P<state>---|wird\serforscht|zu\swenig\sRess|forschen|erforscht)';
-    $regExp .= '            (?:\nbis\:\s(?P<finish>'.$reDateTime.')\n\s*(?P<expire>'.$reMixedTime.')|)';
-    $regExp .= '            (?:\n(?P<duration>'.$reMixedTime.')\n\s*(?P<endtime>'.$reDateTime.')|)';
-    $regExp .= '        )';
-    $regExp .= '    )
-                )';
-    $regExp  .= '/mx';
+        $regExp = '/';
 
-    return $regExp;
-  }
-  
+        //! allg. Infoblock (Infos ueber globale Mods, sind nicht immer vorhande!?)
+        $regExp .= '(?:';
+        $regExp .= 'Die\sForscher\shaben\sschon\s(?P<FPverschw>' . $reFP . ')\sFP\serfolgreich\svergeudet,\sindem\ssie\swas\svöllig\sanderes\staten\sals\sforschen\.\s';
+        $regExp .= '(?:' . $reResearchComment . '\s' . '){0,4}';
+        $regExp .= 'Forschungen\sausblenden\s\/\sAlle\sForschungen\sanzeigen\s+';
+        $regExp .= '  (?:Aktuelle\sEffekte\sauf\sForschungsboni\sund\s-mali:';
+        $regExp .= '    \sReduktion\sdes\smaximalen\sMalus\sum\s(?P<globalMalusRed>\d{1,3})\sProzentpunkte,';
+        $regExp .= '    \sErh.{0,3}hung\sdes\sBonus\sum\s(?P<globalBonusRed>\d{1,3})\sProzentpunkte\.';
+        $regExp .= '  )?';
+        $regExp .= ' )';
+        //! eigentlicher Forschungsblock
+        $regExp .= '|';
+        $regExp .= '(?:';
+        //! keine aufeinanderfolgenden, identischen Zeilen ausser bei Raumfahrt,
+        //! und keine Area gefolgt von einer Zahl -> Forschungspkt
+        $regExp .= '    (?:^(?P<area>(?:' . $reAreas . '(?!\s(?:' . $reAreas . '|' . $reFP . '\sForschungspunkte\s))|Raumfahrt(?=\sRaumfahrt)))\s|';
+        $regExp .= '        (?:';
+        $regExp .= '            (?P<research>' . $reResearch . ')\s';
+//      $regExp .= '            (?P<comment>[+,:\\\%\.öÖüÜäÄ\w\s]*\n|)';
+        $regExp .= '            (?P<comment>.*\n|)';
+        $regExp .= '            (?P<fp>' . $reFP . ')';
+        $regExp .= '            \sForschungspunkte\s';
+        $regExp .= '            (?:\(von\s(?P<count>\d+)(?:\%|\\\%)\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\%|\\\%)\sFPKosten\)\s|)';
+        $regExp .= '            (?:Dauer\:\s(?P<dauer>' . $reMixedTime . ')\s|)';
+        $regExp .= '            (?P<kosten>(?:(?:.*)\:\s' . $reFP . '\s)+|)';
+        $regExp .= '            (?:\s*(?:Ressourcen\sin\sabsehbarer\sZeit\snicht\svorhanden|Ressourcen\svorhanden\sin.*(?:\(Info\nbenötigt\sIWSA\)|))\s|)';
+
+        $regExp .= '            (?:[\s\n]*Aufgrund\svon\sgenerellen\stechnischen\sUnverständnis\sim\sUniversum\,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s(?:\%|\\\%)\.\s\?\s|)';
+        $regExp .= '            (?:^(?:Forschung_wird\sangezeigt|Forschung_wird\snicht\sangezeigt|S|N|)\s|)'; //! evtl. nur beim FF vorhanden ?
+        $regExp .= '            \s*';
+        $regExp .= '            (?:Stufe\s\d\s|)';
+        $regExp .= '            (?P<state>---|wird\serforscht|zu\swenig\sRess|forschen|erforscht)';
+        $regExp .= '            (?:\nbis\:\s(?P<finish>' . $reDateTime . ')\n\s*(?P<expire>' . $reMixedTime . ')|)';
+        $regExp .= '            (?:\n(?P<duration>' . $reMixedTime . ')\n\s*(?P<endtime>' . $reDateTime . ')|)';
+        $regExp .= '        )';
+        $regExp .= '    )';
+        $regExp .= ')';
+        $regExp .= '/mx';
+
+        return $regExp;
+    }
+
 }

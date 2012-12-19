@@ -44,8 +44,8 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_info_geb');
-        $this->setName("Geb&auml;udeinformationen");
-        $this->setRegExpCanParseText('/Geb.{1,3}udeinfo\s+Geb.{1,3}udeinfo|Geb.{1,3}udeinfo.+Farbenlegende/s');
+        $this->setName("Gebäudeinformationen");
+        $this->setRegExpCanParseText('/Gebäudeinfo\s+Gebäudeinfo|Gebäudeinfo.+Farbenlegende/s');
         $this->setRegExpBeginData('');
         $this->setRegExpEndData('');
     }
@@ -338,21 +338,21 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         $rePlanets          = $this->getRegExpPlanetTypes();
 
         $regExp  = '/';
-        $regExp  .= 'Geb.{1,3}udeinfo\:\s';
+        $regExp  .= 'Gebäudeinfo\:\s';
         $regExp  .= '(?P<strBuildingName>'.$reResearch.')\s*?';
-        $regExp  .= '[\n\r]+';
+        $regExp  .= '\n+';
 
         //! da kommentar zu unspezifisch ist, bei Stufengebaeuden explizit kommentar und Stufeninfos verknuepfen...
         $regExp  .= '(?:';
         //! Stufengebaeude
-        $regExp  .= '(?P<commentS>(?:^[\s\S]*[\n\r])?)';
-        $regExp  .= '(?:^Stufengeb.{1,3}ude';
+        $regExp  .= '(?P<commentS>(?:^[\s\S]*\n)?)';
+        $regExp  .= '(?:^StufenGebäude';
         $regExp  .= '(?:\s*'.$reResearch.'[\n\t])*';
         $regExp  .= '^Stufe\s(?P<stufe>\d+)[\n\t]';
         $regExp  .= '\s*)';
         //! nur Kommentar
         $regExp  .= '|';
-        $regExp  .= '(?P<comment>(?:^[\s\S]*[\n\r])?)';
+        $regExp  .= '(?P<comment>(?:^[\s\S]*\n)?)';
         $regExp  .= ')';
 
         $regExp  .= 'Kosten\s+?(?P<kosten>(?:(?:(?:globale\sAnzahl|Stufe)\s(?:\d)+\:\s)?(?:'.$reResource.'\:\s'.$reDecNumber.'\s)*[\n\t]*)+)';
@@ -373,20 +373,20 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
 
         $regExp  .= '(?:Maximale\sAnzahl\s+';
         $regExp  .= '(?P<imaxAnz>'.'\d+'.'(?:\s*\(global\))?)\s*?';
-        $regExp  .= '[\n\r]*)?';
+        $regExp  .= '\n*)?';
 
-        $regExp  .= '(?:Entscheidungsgeb\sDieses\sGeb.{1,3}ude\skann\snicht\smehr\sgebaut\swerden,\swenn\seines\sder\sfolgenden\sGeb.{1,3}ude\sgebaut\swurde\:[\n\t]';
+        $regExp  .= '(?:Entscheidungsgeb\sDieses\sGebäude\skann\snicht\smehr\sgebaut\swerden,\swenn\seines\sder\sfolgenden\sGebäude\sgebaut\swurde\:[\n\t]';
         $regExp  .= '(?:'.$reResearch.'[\n\t])+';
         $regExp  .= ')?';
 
         $regExp  .= '(?:Punkte\s+?';
         $regExp  .= '(?P<iHS>'.'\d+'.')\s*?';
-        $regExp  .= '[\n\r]+)?';
+        $regExp  .= '\n+)?';
 
         $regExp  .= '\s*Voraussetzungen\sForschungen\s+?';
         $regExp  .= '(?P<strResearchsNeeded>'.$reBracketString.')?';
         $regExp  .= '\s+?';
-        $regExp  .= 'Voraussetzungen\sGeb.{1,3}ude\s+?';
+        $regExp  .= 'Voraussetzungen\sGebäude\s+?';
         $regExp  .= '(?P<strBuildingsNeeded>'.$reBracketString.'(?:\(Gruppe\))?)?';
         $regExp  .= '\s+?';
         $regExp  .= '(?:Voraussetzungen\sPlaneteneigenschaften\s+?';
@@ -401,18 +401,18 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         $regExp  .= '(?P<strObjectsNeeded>'.$reObjects.')?';
         $regExp  .= '\s+?)?';
 
-        $regExp .= '(?:\s*Dieses\sGeb.{1,3}ude\sben.{1,3}tigt\sweitere\skomplexe\sVoraussetzungen\s)?';
+        $regExp .= '(?:\s*Dieses\sGebäude\sbenötigt\sweitere\skomplexe\sVoraussetzungen\s)?';
 
         $regExp  .= '(?:';
-        $regExp  .= 'Kann\szerst.{1,3}rt\swerden\sdurch\s+?';
+        $regExp  .= 'Kann\szerstört\swerden\sdurch\s+?';
         $regExp  .= '(?P<strDestroyable>(?:.*\s'.$reBracketString.'\s*)*)?';
         $regExp  .= '\s+?)?';
 
-        $regExp  .= 'Erm.{1,3}glicht\sForschungen\s+?';
+        $regExp  .= 'Ermöglicht\sForschungen\s+?';
         $regExp  .= '(?P<strResearchsDevelop>'.$reBracketString.')?';
         $regExp  .= '\s+?';
 
-        $regExp  .= 'Erm.{1,3}glicht\sGeb.{1,3}ude\s+?';
+        $regExp  .= 'Ermöglicht\sGebäude\s+?';
         $regExp  .= '(?P<strBuildingsDevelop>'.$reBracketString.')?';
         $regExp  .= '\s+?';
 

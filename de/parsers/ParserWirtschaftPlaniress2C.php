@@ -44,9 +44,9 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_wirtschaft_planiress2');
-        $this->setName("KoloRess&Uuml;bersicht Teil2");
-        $this->setRegExpCanParseText('/Ressourcenkolo.+bersicht\sTeil\s2/s');
-        $this->setRegExpBeginData('/Kolonie\sFP\s\w+\sSteuersatz\s(?:Bev.+lkerung|blubbernde\sGallertmasse)\sZufr/');
+        $this->setName("KoloRess Übersicht Teil2");
+        $this->setRegExpCanParseText('/Ressourcenkoloübersicht\sTeil\s2/s');
+        $this->setRegExpBeginData('/Kolonie\sFP\s\w+\sSteuersatz\s(?:Bevölkerung|blubbernde\sGallertmasse)\sZufr/');
         $this->setRegExpEndData('');
     }
 
@@ -61,9 +61,6 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $retVal =& $parserResult->objResultData;
 
         $this->stripTextToData();
-
-        /**
-         */
 
         $regExp = $this->getRegularExpression();
 
@@ -149,7 +146,7 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $regExp .= '(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
         $regExp .= ')';
 
-        $regExp .= '[\s\t]+';
+        $regExp .= '\s+';
         $regExp .= '(?P<fp_amount>' . $reUnsignedDouble . ')';
         $regExp .= '\n\(';
         $regExp .= '(?P<fp_clean>' . $reFloatingDouble . ')';
@@ -160,17 +157,17 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $regExp .= '(?P<fp_mod_global>' . $reUnsignedDouble . ')';
         $regExp .= '\)\)';
 
-        $regExp .= '[\s\t]+';
+        $regExp .= '\s+';
         $regExp .= '(?:(?P<credits_amount>' . $reFloatingDouble . ')\n\(|)';
         $regExp .= '(?P<credits_production>' . $reFloatingDouble . ')';
         $regExp .= '(?:\)\nAllisteuer\:\s(?P<credits_alliance>' . $reFloatingDouble . ')|)';
 
         $regExp .= '(?:';
-        $regExp .= '[\s\t]+';
+        $regExp .= '\s+';
         $regExp .= '(?P<steuersatz>\d{1,3})';
         $regExp .= '(?:\\\%|\%)';
-        $regExp .= '[\s\t]+';
-        $regExp .= '|[\s\t]+)';
+        $regExp .= '\s+';
+        $regExp .= '|\s+)';
 
         $regExp .= '(?P<people_free>' . $reDecimalNumber . ')';
         $regExp .= '\s\/\s';
@@ -180,7 +177,7 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $regExp .= '\n';
         $regExp .= '\((?P<people_production>' . $reDecimalNumber . ')\)';
 
-        $regExp .= '(?:[\s\t]+';
+        $regExp .= '(?:\s+';
         $regExp .= '(?P<zufr>' . $reUnsignedDouble . ')';
         $regExp .= '\n\(';
         $regExp .= '(?P<zufr_production>' . $reFloatingDouble . ')';

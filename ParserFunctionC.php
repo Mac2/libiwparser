@@ -227,14 +227,10 @@ class ParserFunctionC
 
     /**
      * returns a regular expression pattern matching text (only a single line!)
-     *
-     * @todo  : check if the \r is necessary. Since r66, all \r are stripped from
-     *        the input text in ParserBaseC::setText. See commit log for more
-     *        information.
      */
     protected function getRegExpSingleLineText()
     {
-        return '(?:[^\n\r]*)';
+        return '(?:[^\n]*)';
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -244,7 +240,7 @@ class ParserFunctionC
      */
     protected function getRegExpSingleLineText3()
     {
-        return '(?:[^\n\r\t]{3,})';
+        return '(?:[^\n\t]{3,})';
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -469,7 +465,7 @@ class ParserFunctionC
         $retVal .= 'Basisaufbau\s\(Ressourcen\)|';
         $retVal .= 'Basisaufbau\s\(Kampf\)|';
         $retVal .= 'Massdriverpaket|';
-//     $retVal .= 'Rückkehr(?=(?:[\n\r]+Stationieren)|)|';
+//      $retVal .= 'Rückkehr(?=(?:\n+Stationieren)|)|';
         $retVal .= 'Rückkehr';
 
         $retVal .= ')';
@@ -600,7 +596,7 @@ class ParserFunctionC
 
         $retVal .= '(?:(?<=\s)|(?<=^))'; //shall start in a whitesace or start of line
 
-        $retVal .= '(?:Eisen|Eis|Wasser|Stahl|Energie|VV4A|FP|Forschungspunkte|Erdbeeren|Erdbeermarmelade|Brause|Vanilleeis|Traubenzucker|Eismatsch|Kekse|blubbernde\sGallertmasse|Erdbeerkonfitüre|chem\.\sElemente|Bevölkerung|Credits)';
+        $retVal .= '(?:Eisen|Eis|Wasser|Stahl|Energie|VV4A|FP|Forschungspunkte|chem\.\sElemente|Bevölkerung|Credits)';
 
         $retVal .= '(?=\:|,|\s|$)'; //shall end in a whitesace or : or , or end of line
 

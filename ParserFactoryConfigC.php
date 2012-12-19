@@ -153,11 +153,10 @@ class ParserFactoryConfigC implements ParserFactoryI
 
     protected function cleanupText(&$text)
     {
-        //replace different line endings by \n
+        //replace different line endings by \n (linux)
         $replacements = array(
-            chr(13) . chr(10) => chr(10), //windows
-            //chr(10)           => chr(10),   //linux
-            chr(13)           => chr(10), //mac
+            '\r\n' => '\n', //windows
+            '\r'   => '\n', //mac
         );
 
         $text = str_replace(

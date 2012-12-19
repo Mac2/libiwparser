@@ -243,9 +243,8 @@ class ParserBaseC extends ParserFunctionC
     {
         //replace different line endings by \n
         $replacements = array(
-            chr(13) . chr(10)                    => chr(10), //windows
-            //chr(10)           => chr(10),   //linux
-            chr(13)                              => chr(10), //mac
+            '\r\n'                               => '\n', //windows
+            '\r'                                 => '\n', //mac
 
             'blubbernde Gallertmasse'            => 'Bevölkerung',
             'Erdbeermarmelade'                   => 'Stahl',
@@ -260,10 +259,7 @@ class ParserBaseC extends ParserFunctionC
             'Systrans (Systransporter Klasse 1)' => 'Systrans (Systemtransporter Klasse 1)',
             'Lurch (Systransporter Klasse 2)'    => 'Lurch (Systemtransporter Klasse 2)',
             'Crux (Systransporter Kolonisten)'   => 'Crux (Systemtransporter Kolonisten)',
-            'Pflaumenmus (kleiner Carrier)'      => 'Pflaumenmus (Carrier)', //! Mac: noetig, da Forschung anders heißt als das Schiff
-
-            '\\\%'                               => '\%',
-
+            'Pflaumenmus (kleiner Carrier)'      => 'Pflaumenmus (Carrier)', //! Mac: nötig, da Forschung anders heißt als das Schiff
         );
 
 
@@ -310,11 +306,10 @@ class ParserBaseC extends ParserFunctionC
 
     protected function cleanupLineEndings($text)
     {
-        //replace different line endings by \n
+        //replace different line endings by \n (linux)
         $replacements = array(
-            chr(13) . chr(10) => chr(10), //windows
-            //chr(10)           => chr(10),   //linux
-            chr(13)           => chr(10), //mac
+            '\r\n' => '\n', //windows
+            '\r'   => '\n', //mac
         );
 
         return str_replace(array_keys($replacements), array_values($replacements), $text);

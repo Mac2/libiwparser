@@ -169,9 +169,9 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
 
         $regExp = '/';
         $regExp .= '(?P<resource_name>(' . $reResource . '|-\?\?\?-))
-			[\s\t]+
+			\s+
 			(?P<resource_count>(' . $reDecimalNumber . '|-\?\?\?-))
-			[\s\n\r\t]*
+			[\s\n]*
 		';
         $regExp .= '/mx';
 
@@ -186,9 +186,9 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
 
         $regExp = '/';
         $regExp .= '(?P<building_name>(' . $reBuilding . '|-\?\?\?-))
-			[\s\t]+
+			\s+
 			(?P<building_count>(' . $reDecimalNumber . '|-\?\?\?-))
-			[\s\n\r\t]*
+			[\s\n]*
 		';
         $regExp .= '/mx';
 
@@ -209,7 +209,7 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
         $reResource = $this->getRegExpResource();
 
         $regExp = '/
-                    Sondierungsbericht\s\(Geb.{1,3}ude\)\svon\s
+                    Sondierungsbericht\s\(Gebäude\)\svon\s
                     (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
         $regExp .= '\sam\s(?P<datetime>' . $reMixedTime . ')\.';
         $regExp .= '\sBesitzer\sist\s((?P<owner>' . $reUserName . ')\s(\[(?P<alliance>' . $reBasisTyp . ')\])?)?\.';
@@ -217,21 +217,21 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
                     \s*Objekttyp\s+(?P<objektname>(' . $reObjektTyp . '|-\?\?\?-))\s*
                     (\s*Basistyp\s' . $reBasisTyp . '\s*)?';
         $regExp .= '	(?:
-                            Geb.{1,3}ude
-                            [\s\n\r\t]+
+                            Gebäude
+                            [\s\n]+
                             (?P<buildings>
-                                ((' . $reBasisTyp . '|-\?\?\?-)[\s\t]+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n\r\t]*)+
+                                ((' . $reBasisTyp . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
                             )
                         |)';
         $regExp .= '	(?:
                             Ressourcen
-                            [\s\n\r\t]+
+                            [\s\n]+
                             (?P<resources>
-                            ((' . $reResource . '|-\?\?\?-)[\s\t]+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n\r\t]*)+
+                            ((' . $reResource . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
                             )
                         |)';
         $regExp .= '^Hinweise\s';
-        $regExp .= '(.*[\n]){1,5}';
+        $regExp .= '(.*\n){1,5}';
         $regExp .= '(^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';
         $regExp .= '/mx';
 

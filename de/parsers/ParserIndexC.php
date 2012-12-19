@@ -45,7 +45,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
         $this->setIdentifier('de_index');
         $this->setName("Startseite");
         $this->setRegExpCanParseText('/Notizblock.*Umwandlung.*Serverzeit/smU'); //! Mac: requires Ungreedy U Modifier because charsize could be too large!
-        $this->setRegExpBeginData('/Lade\sneue\sSpieler\sein\sund\sgewinne\seine\s.{1,3}berraschung\s*?/s');
+        $this->setRegExpBeginData('/Lade\sneue\sSpieler\sein\sund\sgewinne\seine\sÜberraschung\s*?/s');
         $this->setRegExpEndData('/__\s+X/s');
     }
 
@@ -181,10 +181,10 @@ class ParserIndexC extends ParserBaseC implements ParserI
             (?P<KoloInfos>Kolonieinformation|^Kolonie\s'.$rePlanetName.'\s\(\d+\:\d+\:\d+\)\nLebensbedingungen)|
             (?P<Research>Forschungsstatus)|
             (?P<Noob>Noobstatus)|
-            (?P<Geb>Geb.{1,3}udebau\s+?Ausbaustatus|
+            (?P<Geb>Gebäudebau\s+?Ausbaustatus|
             Ausbaustatus)|
-            (?P<Werften>^Werft.{1,3}bersicht)|
-            (?P<Schiff>^Schiffbau.{1,3}bersicht)|
+            (?P<Werften>^Werftübersicht)|
+            (?P<Schiff>^Schiffbauübersicht)|
             (?P<FleetOwn>(?:Eigene\sFlotten\s+?Eigene\sFlotten|Eigene\sFlotten)
                 (?:\s+Ziel\s+Start\s+Ankunft\s+Aktionen\s+(?:(?:\*\s)?\+))?
             )|
@@ -194,7 +194,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
                 (?:\(Durch\sSittermodus\snicht\sabrufbar\.\)\s+?)?
             )|
             (?P<FleetOpposit>(?:fremde\sFlotten\s+?Fremde\sFlotten|Fremde\sFlotten)
-                (?:\s+\(Es\ssind\sfremde\sFlotten\s.{1,3}ber\sdem\sPlaneten\sstationiert\.\))?
+                (?:\s+\(Es\ssind\sfremde\sFlotten\süber\sdem\sPlaneten\sstationiert\.\))?
                 (?:\s+Ziel\s+Start\s+Ankunft\s+Aktionen\s+(?:(?:\*\s)?\+))?
             )|
             (?P<shoutbox>Allianz\sShoutbox\s*Inhalt.+neue\sMitteilung\s+Mitteilung)

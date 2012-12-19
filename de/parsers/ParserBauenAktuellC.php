@@ -45,7 +45,7 @@ class ParserBauenAktuellC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_bauen_aktuell');
-        $this->setName('aktueller Geb&auml;udebau');
+        $this->setName('aktueller Gebäudebau');
         $this->setRegExpCanParseText('/aktuell\sim\sBau\sauf\sdiesem\sPlaneten/sm');
         $this->setRegExpBeginData($this->getRegExpCanParseText());
         $this->setRegExpEndData('/Ausbau/sm');
@@ -103,7 +103,7 @@ class ParserBauenAktuellC extends ParserBaseC implements ParserI
         $reDateToExpire = $this->getRegExpMixedTime();
 
         $regExp = '/';
-        $regExp .= '(?P<building>' . '[^\n\t\r]+' . ')\s+?';
+        $regExp .= '(?P<building>' . '[^\n\t]+' . ')\s+?';
         $regExp .= 'bis\s(?P<dateOfFinish>' . $reDateOfFinish . ')[\n\s]+?';
         $regExp .= '(?P<dateToExpire>' . $reDateToExpire . '|abgeschlossen|)';
         $regExp .= '/m';

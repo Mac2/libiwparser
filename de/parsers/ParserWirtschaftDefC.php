@@ -46,9 +46,9 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_wirtschaft_def');
-        $this->setName('Verteidigungs&uuml;bersicht');
-        $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s+Forschungs.{1,3}bersicht\s+Werft.{1,3}bersicht\s+Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht(?:.*Verteidigungs.{1,3}bersicht)?/sm');
-        $this->setRegExpBeginData('/Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht/sm');
+        $this->setName('Verteidigungsübersicht');
+        $this->setRegExpCanParseText('/Gebäudeübersicht\s+Forschungsübersicht\s+Werftübersicht\s+Defenceübersicht.*Verteidigungsübersicht(?:.*Verteidigungsübersicht)?/sm');
+        $this->setRegExpBeginData('/Defenceübersicht.*Verteidigungsübersicht/sm');
         $this->setRegExpEndData('');
     }
 
@@ -205,7 +205,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
 
         $regExpKolo = '/
                           (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-                          [\n\r]+
+                          \n+
                           \((?P<kolo_type>' . $reKoloTypes . ')\)
                        /mx';
 

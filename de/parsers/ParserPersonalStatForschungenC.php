@@ -45,8 +45,8 @@ class ParserPersonalStatForschungenC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_personal_stat_forschungen');
-        $this->setName('pers&ouml;nlicher Forschungsablauf');
-        $this->setRegExpCanParseText('/Statistiken\s\-\sForschungsablauf[\n\s]+Datum[\s\t]+Vergangene\s+Zeit[\s\t]+Forschung[\n\s]+/sm');
+        $this->setName('persönlicher Forschungsablauf');
+        $this->setRegExpCanParseText('/Statistiken\s\-\sForschungsablauf[\n\s]+Datum\s+Vergangene\s+Zeit\s+Forschung[\n\s]+/sm');
         $this->setRegExpBeginData($this->getRegExpCanParseText());
         $this->setRegExpEndData('');
     }

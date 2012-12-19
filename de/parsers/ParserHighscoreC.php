@@ -217,7 +217,7 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
     $regExp .= '(?P<userChange>(?:'        . $rePoints       . '|neu|\-|\+|o))\s+?';
 //
     $regExp .= '(?P<dateOfEntry>'     . $reDabeiSeit  . '|---)\s*?';
-    $regExp .= '[\n\r\t]+/m';
+    $regExp .= '[\n\t]+/m';
     
     return $regExp;
   }

@@ -143,7 +143,7 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
         $regExp .= '(?P<dtDateTime>' . $reDateTime . ')';
         $regExp .= '(\s(-\s)?';
         $regExp .= '(?P<mtMixedTime>' . $reMixedTime . '))?';
-        $regExp .= ')|(n.{1,3}scht))';
+        $regExp .= ')|(nÜscht))';
         $regExp .= '/mxs';
 
         return $regExp;

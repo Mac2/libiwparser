@@ -74,7 +74,7 @@ class ParserPersonalStaatsformC extends ParserBaseC implements ParserI
         $regExp = '/^';
         $regExp .= 'aktuelle\sStaatsform\s+';
         $regExp .= '(?P<staatsform_name>' . $reStaatsform . ')\s*';
-        $regExp .= '[\n\r]+';
+        $regExp .= '\n+';
         $regExp .= 'Aktuelle\sVor-\sund\sNachteile\s+?';
         $regExp .= '(?P<advantage>' . $reVorteile . ')\s*';
         $regExp .= '$/m';

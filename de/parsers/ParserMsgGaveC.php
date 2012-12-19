@@ -177,32 +177,32 @@ class ParserMsgGaveC extends ParserMsgBaseC implements ParserMsgI
                     (?:\s(?P<planet_name>.*)\s|\s)
                     (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
                     (?:
-                      \s(?:.{1,3}bergeben|angekommen)\.
+                      \s(?:übergeben|angekommen)\.
                       (?:
                          \sDer\sAbsender\sist\s
                          (?P<from_user_name>' . $reUserName . ')
                          |
                       )
                       |
-                      \saus\sdem\s(?P<from_orbit2>Orbit)\s.{1,3}bergeben\.
+                      \saus\sdem\s(?P<from_orbit2>Orbit)\sübergeben\.
                       \sDer\sAbsender\sist\s
                       (?P<from_orbit_user_name>' . $reUserName . ')
                       \.
                     )
-                    (?:\sDer\sEmpf.{1,3}nger\sist\s(?P<to_user_name>' . $reUserName . ')
+                    (?:\sDer\sEmpfänger\sist\s(?P<to_user_name>' . $reUserName . ')
                     |)
-                    [\s\n\r\t]+
-                    Es\swurden\sfolgende\sSachen\s.{1,3}bergeben
-                    [\s\n\r\t]+
+                    [\s\n]+
+                    Es\swurden\sfolgende\sSachen\sübergeben
+                    [\s\n]+
                     (?:
                     Schiffe
-                    [\s\n\r\t]+
-                    (?P<schiffe>(' . $reSchiffe . '[\s\t]+\d+[\s\n\r\t]*)+)
+                    [\s\n]+
+                    (?P<schiffe>(' . $reSchiffe . '\s+\d+[\s\n]*)+)
                     |)
                     (?:
                     Ressourcen
-                    [\s\n\r\t]+
-                    (?P<resources>(' . $reResource . '[\s\t]+\d+[\s\n\r\t]*)+)
+                    [\s\n]+
+                    (?P<resources>(' . $reResource . '\s+\d+[\s\n]*)+)
                     |)
                   /mx';
 

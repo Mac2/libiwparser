@@ -148,6 +148,7 @@ class ParserMsgTransportC extends ParserMsgBaseC implements ParserMsgI
     {
         $reUserName = $this->getRegExpUserName();
         $reSchiffe = $this->getRegExpSchiffe();
+        $reResource = $this->getRegExpResource();
 
         #Just even don't think to ask anything about this regexp, fu!
         $regExp = '/
@@ -161,25 +162,25 @@ class ParserMsgTransportC extends ParserMsgBaseC implements ParserMsgI
         \.
         |)
         (?:
-        \sDer\sEmpf.{1,3}nger\sist\s
+        \sDer\sEmpfänger\sist\s
         (?P<to_user_name>' . $reUserName . ')
         \.
         |)
-        [\s\n\r\t]+
+        [\s\n]+
         Es\swurden\sfolgende\sSachen\sangeliefert
-        [\s\n\r\t]+
+        [\s\n]+
         (?:
         Schiffe
-        [\s\n\r\t]+
+        [\s\n]+
         (?P<schiffe>
-        (' . $reSchiffe . '[\s\t]+\d+[\s\n\r\t]*)+
+        (' . $reSchiffe . '\s+\d+[\s\n]*)+
         )
         |)
         (?:
         Ressourcen
-        [\s\n\r\t]+
+        [\s\n]+
         (?P<resources>
-        ([\w+|blubbernde\sGallertmasse|Erdbeerkonfitüre|chem\.\sElemente|Bevölkerung]+[\s\t]+\d+[\s\n\r\t]*)+
+        (' . $reResource . '\s+\d+[\s\n]*)+
         )
         |)
 

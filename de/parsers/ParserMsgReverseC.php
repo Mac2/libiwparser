@@ -151,22 +151,22 @@ class ParserMsgReverseC extends ParserMsgBaseC implements ParserMsgI
         Eine\sFlotte\s(ist\szu|wurde\sauf)\sdem\sPlaneten
         (?:\s(?P<planet_name>.*)\s|\s)
         (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-        \s(zur.{1,3}ckgekehrt|stationiert)\.
-        [\s\n\r\t]+
-        (Es\skamen\sfolgende\sSachen\szur.{1,3}ck|Es\swurden\sfolgende\sSachen\sstationiert)
-        [\s\n\r\t]+
+        \s(zurückgekehrt|stationiert)\.
+        [\s\n]+
+        (Es\skamen\sfolgende\sSachen\szurück|Es\swurden\sfolgende\sSachen\sstationiert)
+        [\s\n]+
         (?:
         Schiffe
-        [\s\n\r\t]+
+        [\s\n]+
         (?P<schiffe>
-        (' . $reSchiffe . '[\s\t]+\d+[\s\n\r\t]*)+
+        (' . $reSchiffe . '\s+\d+[\s\n]*)+
         )
         |)
         (?:
         Ressourcen
-        [\s\n\r\t]+
+        [\s\n]+
         (?P<resources>
-        ([\w\süöä]+[\s\t]+\d+[\s\n\r\t]*)+
+        ([\w\süöä]+\s+\d+[\s\n]*)+
         )
         |)
 

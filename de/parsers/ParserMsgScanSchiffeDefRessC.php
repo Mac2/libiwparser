@@ -224,9 +224,9 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
 
         $regExp = '/';
         $regExp .= '(?P<resource_name>(' . $reResource . '|-\?\?\?-))
-			[\s\t]+
+			\s+
 			(?P<resource_count>(' . $reDecimalNumber . '|-\?\?\?-))
-			[\s\n\r\t]*
+			[\s\n]*
 		';
         $regExp .= '/mx';
 
@@ -240,9 +240,9 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
 
         $regExp = '/';
         $regExp .= '(?P<schiff_name>' . $reSchiffe . ')
-			[\s\t]+
+			\s+
 			(?P<schiffe_count>(' . $reDecimalNumber . '|-\?\?\?-))
-			[\s\n\r\t]*
+			[\s\n]*
 		';
         $regExp .= '/mx';
 
@@ -256,9 +256,9 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
 
         $regExp = '/';
         $regExp .= '(?P<defence_name>(' . $reDefence . '|-\?\?\?-))
-			[\s\t]+
+			\s+
 			(?P<defence_count>(' . $reDecimalNumber . '|-\?\?\?-))
-			[\s\n\r\t]*
+			[\s\n]*
 		';
         $regExp .= '/mx';
 
@@ -273,9 +273,9 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
 
         $regExp = '/';
         $regExp .= '	Stationierte\sFlotte\svon\s(?P<owner_stat>(' . $reUserName . '|-\?\?\?-))\s\((' . $reDecimalNumber . '|-\?\?\?-)\sSchiffe\)
-			[\s\n\r\t]+
+			[\s\n]+
 			(?P<stat_fleet>(
-			((' . $reSchiffe . '|-\?\?\?-)[\s\t]+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n\r\t]*)+
+			((' . $reSchiffe . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
 			))';
         $regExp .= '/mx';
 
@@ -303,33 +303,33 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
 			(?:(\s*Basistyp\s+.*\s*)|)';
         $regExp  .= '	(?:
 			Schiffe[\s\n]*Planetare\sFlotte
-			[\s\n\r\t]+
+			[\s\n]+
 			(?P<schiffe>
-			(('.$reBasisTyp.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
+			(('.$reBasisTyp.'|-\?\?\?-)\s+('.$reDecimalNumber.'|-\?\?\?-)[\s\n]*)+
 			)?
 			|)';
         $regExp  .= '	(?:(?P<stat_fleet>(
 			Stationierte\sFlotte\svon\s('.$reUserName.'|-\?\?\?-)\s\(('.$reDecimalNumber.'|-\?\?\?-)\sSchiffe\)
-			[\s\n\r\t]+
-			(('.$reBasisTyp.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
+			[\s\n]+
+			(('.$reBasisTyp.'|-\?\?\?-)\s+('.$reDecimalNumber.'|-\?\?\?-)[\s\n]*)+
 			)+)
 			|)';
         $regExp  .= '	(?:
 			Defence
-			[\s\n\r\t]+
+			[\s\n]+
 			(?P<defence>
-			(('.$reBasisTyp.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
+			(('.$reBasisTyp.'|-\?\?\?-)\s+('.$reDecimalNumber.'|-\?\?\?-)[\s\n]*)+
 			)?
 			|)';
         $regExp  .= '	(?:
 			Ressourcen
-			[\s\n\r\t]+
+			[\s\n]+
 			(?P<resources>
-			(('.$reResource.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
+			(('.$reResource.'|-\?\?\?-)\s+('.$reDecimalNumber.'|-\?\?\?-)[\s\n]*)+
 			)
 			|)';
         $regExp .=	'^Hinweise\s';
-        $regExp .=	'(.*[\n]){1,5}';
+        $regExp .=	'(.*\n){1,5}';
         $regExp .= 	'(^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';
         $regExp .= '/mx';
 

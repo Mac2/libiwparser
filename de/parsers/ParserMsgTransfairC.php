@@ -156,22 +156,22 @@ class ParserMsgTransfairC extends ParserMsgBaseC implements ParserMsgI
                         \sDer\sEmpf.nger\sist\s
                         (?P<to_user_name>' . $reUserName . ')
                     |)
-                    [\s\n\r\t]+
+                    [\s\n]+
                     Es\swurden\sfolgende\sSachen\sangeliefert
                     (?:
-                        [\s\n\r\t]+
+                        [\s\n]+
                         Ressourcen
-                        [\s\n\r\t]+
-                        (?P<carried_resources>([\w\süöä]+[\s\t]+\d+[\s\n\r\t]*)+
+                        [\s\n]+
+                        (?P<carried_resources>([\w\süöä]+\s+\d+[\s\n]*)+
                     )
                     |)
-                    [\s\n\r\t]+
+                    [\s\n]+
                     Es\swurden\sfolgende\sSachen\sabgeholt
                     (?:
-                        [\s\n\r\t]+
+                        [\s\n]+
                         Ressourcen
-                        [\s\n\r\t]+
-                        (?P<fetched_resources>([\w\süöä]+[\s\t]+\d+[\s\n\r\t]*)+)
+                        [\s\n]+
+                        (?P<fetched_resources>([\w\süöä]+\s+\d+[\s\n]*)+)
                     |)
 
                    /mx';

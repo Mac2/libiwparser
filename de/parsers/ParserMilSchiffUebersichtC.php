@@ -47,8 +47,8 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
 
         $this->setIdentifier('de_mil_schiff_uebersicht');
         $this->setName('Schiffsübersicht');
-        $this->setRegExpCanParseText('/Milit.{1,3}r[\s\S]*Schiff.{1,3}bersicht[\s\S]*Schiffs.{1,3}bersicht/');
-        $this->setRegExpBeginData('/Schiffs.{1,3}bersicht/sm');
+        $this->setRegExpCanParseText('/Militär[\s\S]*Schiffübersicht[\s\S]*Schiffsübersicht/');
+        $this->setRegExpBeginData('/Schiffsübersicht/sm');
         $this->setRegExpEndData('');
     }
 
@@ -149,14 +149,14 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
         $regExp  = '/^
                     \s?
                     (?P<kolo_line>'.$reKoloCoords.'
-                        (?:[\n\r]+\('.$reKoloTypes.'\)\s'.$reKoloCoords.')*
-                        [\n\r]+\('.$reKoloTypes.'\)
+                        (?:\n+\('.$reKoloTypes.'\)\s'.$reKoloCoords.')*
+                        \n+\('.$reKoloTypes.'\)
                         \s+
                         Im\sFlug\sStat\sGesamt
                     )
                     (?P<data_lines>
                         (?:
-                            [\n\r]+
+                            \n+
                             [^\t\n]+';
         $regExp .= '(?:\s(?:'.$reNumber.')?)+';     //! erlaubt auch andere Trennzeichen
         $regExp .= '
@@ -192,7 +192,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
 
         $regExpKolo = '/
                           (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-                          [\n\r]+
+                          \n+
                           \((?P<kolo_type>' . $reKoloTypes . ')\)
                         /mx';
 

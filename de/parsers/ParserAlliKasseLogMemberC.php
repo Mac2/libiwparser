@@ -118,8 +118,8 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
         $regExp = '/^';
         $regExp .= '((\(Wing\s(?P<strAlliance>.*)\)\s*)?';
         $regExp .= '(^.*$\n)+';
-        $regExp .= '^Auszahlungslog\san\sSpieler\sw.{1,3}hrend\sder\sletzten\sdrei\sWochen\s)?';
-        //  $regExp .= '(?:';
+        $regExp .= '^Auszahlungslog\san\sSpieler\swährend\sder\sletzten\sdrei\sWochen\s)?';
+//      $regExp .= '(?:';
         $regExp .= '(?P<reDateTime>' . $reDateTime . ')';
         $regExp .= '\svon\s';
         $regExp .= '(?P<strFromUser>' . $reFromUser . ')';
@@ -133,7 +133,7 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
         $regExp .= '(?P<strReason>' . $reReason . ')';
         $regExp .= '\.)';
         $regExp .= '|)';
-        //  $regExp .= ')*';
+//      $regExp .= ')*';
         $regExp .= '/m';
 
         return $regExp;

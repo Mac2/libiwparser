@@ -97,8 +97,8 @@ class ParserXmlC extends ParserBaseC implements ParserI
     {
         $regExp = '%';
         $regExp .= '(?:(?<=\s)|(?<=^))'; //shall start in a whitesace or start of line
-        $regExp .= '(?:https?:\/\/www2?\.icewars\.de\/portal\/kb\/de\/(?P<type>kb|sb)\.php\?id=(?P<id>\d+)\&md_hash=(?P<hash>[\w\d]+)(?:&server_id=)?';
-        $regExp .= '|(?P<unilink>https?:\/\/www2?\.icewars\.de/xml/user_univ_scan/\w+\.xml))';
+        $regExp .= '(?:https?:\/\/www.?\.icewars\.de\/portal\/kb\/de\/(?P<type>kb|sb)\.php\?id=(?P<id>\d+)\&md_hash=(?P<hash>[\w\d]+)(?:&server_id=)?';
+        $regExp .= '|(?P<unilink>https?:\/\/www.?\.icewars\.de/xml/user_univ_scan/\w+\.xml))';
         $regExp .= '(?=\s|$)'; //shall end in a whitespace or end of line
         $regExp .= '%';
 
