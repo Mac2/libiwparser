@@ -651,9 +651,9 @@ class ParserFunctionC
 
     $retVal .= '(?:(?<=\s)|(?<=^))';    //the date shall start in a whitesace or start of line
     $retVal .= '(?:';
-  $retVal .= '(?:\d+\s(?:Tag|Tage)\s+|)';
-  $retVal .= '(?:\d{1,2})\:(?:\d{1,2})(?:\:(?:\d{1,2})|)(?:\s(?:am|pm)|)';
-  $retVal .= ')';
+    $retVal .= '(?:\d+\s(?:Tag|Tage)\s+|)';
+    $retVal .= '(?:\d{1,2})\:(?:\d{1,2})(?:\:(?:\d{1,2})|)(?:\s(?:am|pm)|)';
+    $retVal .= ')';
     $retVal .= '(?=\s|$)';              //the date shall end in a whitesace or end of line
 
     return $retVal;

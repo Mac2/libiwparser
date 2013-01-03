@@ -95,13 +95,13 @@ class ParserBaseC extends ParserFunctionC
 
     $reStartData = $this->getRegExpStartData();
     $reEndData = $this->getRegExpEndData();
-    
+
     $text = '';
     if( $reStartData !== '' )
     {
       $aStart = preg_split( $reStartData, $this->getText() );
-      
-      for ($n=1; $n<count($aStart); $n++) {     //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
+
+      for ($n=0; $n<count($aStart); $n++) {     //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
         if( isset($aStart[$n]) )
         {
             if( $reEndData !== '' )
@@ -116,8 +116,8 @@ class ParserBaseC extends ParserFunctionC
         }
       }
     }
-    
-    if (!empty($text)) 
+
+    if (!empty($text))
         $this->setText( $text );
 
     return;
