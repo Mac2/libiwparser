@@ -101,7 +101,7 @@ class ParserBaseC extends ParserFunctionC
         if ($reStartData !== '') {
             $aStart = preg_split($reStartData, $this->getText());
 
-            for ($n = 1; $n < count($aStart); $n++) { //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
+            for ($n = 0; $n < count($aStart); $n++) { //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
                 if (isset($aStart[$n])) {
                     if ($reEndData !== '') {
                         $aEnd = preg_split($reEndData, $aStart[$n]); //! jeden Bericht einzeln auf ein Ende pruefen

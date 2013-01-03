@@ -46,7 +46,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
         $this->setName("Startseite");
         $this->setRegExpCanParseText('/Notizblock.*Umwandlung.*Serverzeit/smU'); //! Mac: requires Ungreedy U Modifier because charsize could be too large!
         $this->setRegExpBeginData('/Lade\sneue\sSpieler\sein\sund\sgewinne\seine\sÜberraschung\s*?/s');
-        $this->setRegExpEndData('/__\s+X/s');
+        $this->setRegExpEndData('/__\s?X/s');
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -81,38 +81,38 @@ class ParserIndexC extends ParserBaseC implements ParserI
 
                     $parser = "";
 
-                    if (isset($treffer['FleetOwn']) && !empty($treffer['FleetOwn'])) {
+                    if (empty($treffer['FleetOwn'])) {
                         $fleetType = 'own';
                         $parser = 'Fleet';
                     }
-                    if (isset($treffer['FleetOpposit']) && !empty($treffer['FleetOpposit'])) {
+                    if (!empty($treffer['FleetOpposit'])) {
                         $fleetType = 'opposit';
                         $parser = 'Fleet';
                     }
-                    if (isset($treffer['Research']) && !empty($treffer['Research'])) {
+                    if (!empty($treffer['Research'])) {
                         $parser = 'Research';
                     }
-                    if (isset($treffer['KoloInfos']) && !empty($treffer['KoloInfos'])) {
+                    if (!empty($treffer['KoloInfos'])) {
                         $parser = 'KoloInfos';
                         $temp = $treffer['KoloInfos'];
                     }
-                    if (isset($treffer['Geb']) && !empty($treffer['Geb'])) {
+                    if (!empty($treffer['Geb'])) {
                         $parser = 'Geb';
                     }
-                    if (isset($treffer['Schiff']) && !empty($treffer['Schiff'])) {
+                    if (!empty($treffer['Schiff'])) {
                         $parser = 'Schiff';
                     }
-                    if (isset($treffer['Ressen']) && !empty($treffer['Ressen'])) {
+                    if (!empty($treffer['Ressen'])) {
                         $parser = 'Ressen';
                     }
-                    if (isset($treffer['shoutbox']) && !empty($treffer['shoutbox'])) {
+                    if (!empty($treffer['shoutbox'])) {
                         $parser = ''; //! erstmal skippen, da zuviele falsch positiven Ergebnisse
                     }
-                    if (isset($treffer['MessagePostit']) && !empty($treffer['MessagePostit'])) {
-                        if (isset($treffer['unreadMsg']) && !empty($treffer['unreadMsg'])) {
+                    if (!empty($treffer['Message'])) {
+                        if (!empty($treffer['unreadMsg'])) {
                             $retVal->iUnreadMsg = $treffer['unreadMsg'];
                         }
-                        if (isset($treffer['unreadAMsg']) && !empty($treffer['unreadAMsg'])) {
+                        if (!empty($treffer['unreadAMsg'])) {
                             $retVal->iUnreadAllyMsg = $treffer['unreadAMsg'];
                         }
                     }
@@ -188,7 +188,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
             (?P<FleetOwn>(?:Eigene\sFlotten\s+?Eigene\sFlotten|Eigene\sFlotten)
                 (?:\s+Ziel\s+Start\s+Ankunft\s+Aktionen\s+(?:(?:\*\s)?\+))?
             )|
-            (?P<MessagePostit>Nachrichten\s+?
+            (?P<Message>Nachrichten\s+?
                 (?:(?P<unreadMsg>\d+)\sneue\sNachrichten\s+?)?
                 (?:(?P<unreadAMsg>\d+)\s+neue\sAllimsg(?:s)?\s+?)?
                 (?:\(Durch\sSittermodus\snicht\sabrufbar\.\)\s+?)?
