@@ -234,37 +234,31 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
     $regExpOpera  = '(?:\s+(?:(?:'.$reCount.'\s+?'.$reObject.'\s*)+)\s*)?';        //! Opera kopiert die Objects nochmal ... warum auch immer oO
     
     $regExp  = '/';
-	$regExp  .= '(?:
-        (?:(?P<strPlanetNameTo>'.$rePlanetName.')
-        \s)
-        |)
-        \((?P<iCoordsGalTo>\d{1,2})\:(?P<iCoordsSolTo>\d{1,3})\:(?P<iCoordsPlaTo>\d{1,2})\)
-        [\s\t\n\r]+';
-	$regExp  .= '		(?:\(\s*via\s+\d+\:\d+\:\d+\s+via\s+\d+\:\d+\:\d+\s\)|)
-				\s*';
-	$regExp  .= '		(?:(?P<strPlanetNameFrom>'.$rePlanetName.')\s|)';
-	$regExp  .= '		\((?P<iCoordsGalFrom>\d+)\:(?P<iCoordsSolFrom>\d+)\:(?P<iCoordsPlaFrom>\d+)\)';
-	$regExp  .= '		\s+';
-//	$regExp  .= '		(?:(?P<strUserNameFrom>^'.$reObject.')\s|)';
-    $regExp  .= '		(?:(?P<strUserNameFrom>^'.$reUserName.')|)';
-	$regExp  .= '		\s*';	
-	$regExp  .= '		(?:'
-			 .  '          (?P<dtDateTime>'
-             .                    $reDateTime.'\s+ - \s*'.$reMixedTime
-             .  '               |'
-             .                    $reDateTime.'\s+ - \s*
-                                |'
-             .                    $reDateTime.'\s+\s*'
-//             .                    $reDateTime.'\s+(-?)\s*'.$reMixedTime.'?'
-             .  '           )(?:\s*(?:\(?angekommen\)?|'.$reMixedTime.')\s*)?'.$regExpOpera.'(?=\s+'.$reShipActions.')'.
-				'           |'.$reObject.'\s*-?\s\(?angekommen\)?'.$regExpOpera.'(?=\s+'.$reShipActions.')'.             //! bei Angriff: beliebiger Text + angekommen
-                '           |'.$reObject.'\s*'.$regExpOpera.'(?=\s+'.$reShipActions.')'.                        //! nach Ankunft: beliebiger Text
-                '       )';
-	$regExp  .= '		\s+(?P<eTransfairType>'.$reShipActions.')';
-	$regExp  .= '(\s+(?<!Rückkehr\s)
-                       (?P<strObjecte>(?:'.$reCount.'\s+?'.$reObject.'\s*?)+)\s*(?:\*\s\+|\+)
-                       |(?:\*\s\+|\+)
-                    )?';
+	$regExp .= '(?:';
+    $regExp .= '    (?:(?P<strPlanetNameTo>'.$rePlanetName.')\s)';
+    $regExp .= '|)';
+    $regExp .= '\((?P<iCoordsGalTo>\d{1,2})\:(?P<iCoordsSolTo>\d{1,3})\:(?P<iCoordsPlaTo>\d{1,2})\)';
+    $regExp .= '[\s\n]+';
+	$regExp .= '(?:\(\s*via\s+\d+\:\d+\:\d+\s+via\s+\d+\:\d+\:\d+\s\)|)';
+	$regExp .= '\s*';
+	$regExp .= '(?:(?P<strPlanetNameFrom>'.$rePlanetName.')\s|)';
+	$regExp .= '\((?P<iCoordsGalFrom>\d+)\:(?P<iCoordsSolFrom>\d+)\:(?P<iCoordsPlaFrom>\d+)\)';
+	$regExp .= '[\s\n]+';
+//	$regExp .= '(?:(?P<strUserNameFrom>^'.$reObject.')\s|)';
+    $regExp .= '(?:(?P<strUserNameFrom>^'.$reUserName.')|)';
+	$regExp .= '\s*';
+	$regExp .= '(?:';
+    $regExp .= '    (?P<dtDateTime>'.$reDateTime.'\s*(?: - (?:\s*'.$reMixedTime.')?)?)';
+    $regExp .= '    (?:\s*(?:\(?angekommen\)?|'.$reMixedTime.')\s*)?'.$regExpOpera.'(?=[\s\n]+'.$reShipActions.')'
+			.  '   |'.$reObject.'\s*-?\s\(?angekommen\)?'.$regExpOpera.'(?=[\s\n]+'.$reShipActions.')'             //! bei Angriff: beliebiger Text + angekommen
+            .  '   |'.$reObject.'\s*'.$regExpOpera.'(?=[\s\n]+'.$reShipActions.')'                        //! nach Ankunft: beliebiger Text
+            .  ')';
+	$regExp .= '[\s\n]+';
+	$regExp .= '(?P<eTransfairType>'.$reShipActions.')';
+	$regExp .= '(\s+(?<!Rückkehr\s)';
+    $regExp .= '    (?P<strObjecte>(?:'.$reCount.'\s+?'.$reObject.'\s*?)+)\s*(?:\*\s\+|\+)';
+    $regExp .= '    |(?:\*\s\+|\+)';
+    $regExp .= ')?';
     $regExp .= '/mxs';
 
     return $regExp;
