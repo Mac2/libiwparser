@@ -97,7 +97,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
             $retVal->strAreaName = PropertyValueC::ensureString($aResult['strAreaName']);
             $retVal->strStatus = PropertyValueC::ensureString($aResult['strStatus']);
 
-            if (isset($aResult['first']) && !empty($aResult['first'])) {
+            if (!empty($aResult['first'])) {
                 $retVal->strResearchComment = PropertyValueC::ensureString($aResult['comment']);
                 $retVal->strResearchFirst = PropertyValueC::ensureString($aResult['first']);
             } else {
@@ -118,7 +118,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
 
             $retVal->iResearchCosts = PropertyValueC::ensureInteger($aResult['faktor']);
 
-            if (isset($aResult['strPrototypName']) && !empty($aResult['strPrototypName'])) {
+            if (!empty($aResult['strPrototypName'])) {
                 $retVal->bIsPrototypResearch = true;
                 $retVal->strPrototypName = PropertyValueC::ensureString($aResult['strPrototypName']);
             }
@@ -126,7 +126,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
             $treffer = array();
             preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER);
             foreach ($treffer as $teff) {
-                $retVal->aCosts[] = array('strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
+                $retVal->aCosts[] = array('strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;

@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -163,22 +163,22 @@ class ParserIndexC extends ParserBaseC implements ParserI
 
     /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   */
-  private function getRegularExpression()
-  {
     /**
-     * die Daten sind Blöcke, Wobei die Reihenfolge ungewiss ist
      */
-    $rePlanetName       = $this->getRegExpSingleLineText();
+    private function getRegularExpression()
+    {
+        /**
+         * die Daten sind Blöcke, Wobei die Reihenfolge ungewiss ist
+         */
+        $rePlanetName = $this->getRegExpSingleLineText();
 
-    #Just even don't think to ask anything about this regexp, fu!
-    $regExp  = '/
+        #Just even don't think to ask anything about this regexp, fu!
+        $regExp = '/
         \s*?(?:
             (?P<Ressen>\sRessourcen\s(?!abholen))|
             Globale\sNachricht\s+?Votings|
             Votings|
-            (?P<KoloInfos>Kolonieinformation|^Kolonie\s'.$rePlanetName.'\s\(\d+\:\d+\:\d+\)\nLebensbedingungen)|
+            (?P<KoloInfos>Kolonieinformation|^Kolonie\s' . $rePlanetName . '\s\(\d+\:\d+\:\d+\)\nLebensbedingungen)|
             (?P<Research>Forschungsstatus)|
             (?P<Noob>Noobstatus)|
             (?P<Geb>Gebäudebau\s+?Ausbaustatus|
@@ -200,9 +200,9 @@ class ParserIndexC extends ParserBaseC implements ParserI
             (?P<shoutbox>Allianz\sShoutbox\s*Inhalt.+neue\sMitteilung\s+Mitteilung)
             )\s*?
         ';
-    $regExp .= '/mxs';
+        $regExp .= '/mxs';
 
-    return $regExp;
-  }
+        return $regExp;
+    }
 
 }

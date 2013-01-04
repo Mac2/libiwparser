@@ -66,7 +66,7 @@ class ParserXmlC extends ParserBaseC implements ParserI
         if ($fRetVal !== false && $fRetVal > 0) {
             foreach ($aResult as $xmlinfo) {
                 $link = new DTOParserXmlResultLinkC();
-                if (isset($xmlinfo['unilink']) && !empty($xmlinfo['unilink'])) {
+                if (!empty($xmlinfo['unilink'])) {
                     $link->strUrl = $xmlinfo['unilink'];
                     $link->strType = "universe";
                     $retVal->aUniversumLinks[] = $link;

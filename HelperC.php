@@ -129,8 +129,7 @@ class HelperC
             $mktime['i'] = (int)$aResult[5];
             if (isset($aResult[7])) {
                 $mktime['s'] = (int)$aResult[7];
-            }
-            else {
+            } else {
                 $mktime['s'] = 0;
             }
         } elseif (preg_match('@((\d+)\s(Tag|Tage)\s+|)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)(\s(am|pm)|)@i', $value, $aResult) != false) {
@@ -139,8 +138,7 @@ class HelperC
             $mktime['i'] = (int)$aResult[5];
             if (isset($aResult[7])) {
                 $mktime['s'] = (int)$aResult[7];
-            }
-            else {
+            } else {
                 $mktime['s'] = 0;
             }
             if (isset($aResult[9]) && $aResult[9] == 'pm') {
@@ -210,6 +208,7 @@ class HelperC
      * Converts the given string into an coordinates result DTO.
      *
      * @param $strCoordinates string a string of the format gal:sys:pla
+     *
      * @uses DTOCoordinatesC
      *
      * @return DTOCoordinatesC

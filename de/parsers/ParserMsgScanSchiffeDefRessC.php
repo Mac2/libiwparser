@@ -180,7 +180,7 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
                     foreach ($aResultResources as $result) {
                         $strResourceName = $result['resource_name'];
                         $iResourceCount = $result['resource_count'];
-                        $strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources' );
+                        $strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources');
                         $iResourceCount = PropertyValueC::ensureInteger($iResourceCount);
                         if ($strResourceName == "-???-") {
                             continue;
@@ -293,44 +293,44 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
         $reDecimalNumber = $this->getRegExpDecimalNumber();
         $reResource = $this->getRegExpResource();
 
-        $regExp  = '/
+        $regExp = '/
 			Sondierungsbericht\s\(Schiffe\)\svon\s
 			(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
-        $regExp .= 	'\sam\s(?P<datetime>'.$reMixedTime.')\.';
-        $regExp .=	'\sBesitzer\sist\s((?P<owner>'.$reUserName.')\s(\[(?P<alliance>'.$reBasisTyp.')\])?)?\.';
-        $regExp  .= '	\s*Planetentyp\s+(?P<planetname>('.$rePlanetTyp.'|-\?\?\?-))\s*
-			\s*Objekttyp\s+(?P<objektname>('.$reObjektTyp.'|-\?\?\?-))\s*
+        $regExp .= '\sam\s(?P<datetime>' . $reMixedTime . ')\.';
+        $regExp .= '\sBesitzer\sist\s((?P<owner>' . $reUserName . ')\s(\[(?P<alliance>' . $reBasisTyp . ')\])?)?\.';
+        $regExp .= '	\s*Planetentyp\s+(?P<planetname>(' . $rePlanetTyp . '|-\?\?\?-))\s*
+			\s*Objekttyp\s+(?P<objektname>(' . $reObjektTyp . '|-\?\?\?-))\s*
 			(?:(\s*Basistyp\s+.*\s*)|)';
-        $regExp  .= '	(?:
+        $regExp .= '	(?:
 			Schiffe[\s\n]*Planetare\sFlotte
 			[\s\n]+
 			(?P<schiffe>
-			(('.$reBasisTyp.'|-\?\?\?-)\s+('.$reDecimalNumber.'|-\?\?\?-)[\s\n]*)+
+			((' . $reBasisTyp . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
 			)?
 			|)';
-        $regExp  .= '	(?:(?P<stat_fleet>(
-			Stationierte\sFlotte\svon\s('.$reUserName.'|-\?\?\?-)\s\(('.$reDecimalNumber.'|-\?\?\?-)\sSchiffe\)
+        $regExp .= '	(?:(?P<stat_fleet>(
+			Stationierte\sFlotte\svon\s(' . $reUserName . '|-\?\?\?-)\s\((' . $reDecimalNumber . '|-\?\?\?-)\sSchiffe\)
 			[\s\n]+
-			(('.$reBasisTyp.'|-\?\?\?-)\s+('.$reDecimalNumber.'|-\?\?\?-)[\s\n]*)+
+			((' . $reBasisTyp . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
 			)+)
 			|)';
-        $regExp  .= '	(?:
+        $regExp .= '	(?:
 			Defence
 			[\s\n]+
 			(?P<defence>
-			(('.$reBasisTyp.'|-\?\?\?-)\s+('.$reDecimalNumber.'|-\?\?\?-)[\s\n]*)+
+			((' . $reBasisTyp . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
 			)?
 			|)';
-        $regExp  .= '	(?:
+        $regExp .= '	(?:
 			Ressourcen
 			[\s\n]+
 			(?P<resources>
-			(('.$reResource.'|-\?\?\?-)\s+('.$reDecimalNumber.'|-\?\?\?-)[\s\n]*)+
+			((' . $reResource . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
 			)
 			|)';
-        $regExp .=	'^Hinweise\s';
-        $regExp .=	'(.*\n){1,5}';
-        $regExp .= 	'(^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';
+        $regExp .= '^Hinweise\s';
+        $regExp .= '(.*\n){1,5}';
+        $regExp .= '(^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';
         $regExp .= '/mx';
 
         return $regExp;

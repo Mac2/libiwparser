@@ -73,7 +73,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
 
             foreach ($aResult as $result) {
 
-                if (isset($result['strPlanetName']) && !empty($result['strPlanetName'])) {
+                if (!empty($result['strPlanetName'])) {
                     $retObj->strPlanetName = PropertyValueC::ensureString($result['strPlanetName']);
                     $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPla']);
                     $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGal']);
@@ -125,7 +125,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
                         $retObj->aSB = $obj;
                     }
 
-                } else if (isset($result['strObjecte']) && !empty($result['strObjecte'])) {
+                } else if (!empty($result['strObjecte'])) {
                     if (isset($result['deff_type']) && strpos($result['deff_type'], "Schiffs") !== false) {
                         $deff_type = "ship";
                     } else if (isset($result['deff_type']) && (strpos($result['deff_type'], "Verteidigungs") !== false || strpos($result['deff_type'], "Sondenverteidigungs") !== false)) {
@@ -145,7 +145,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
                         }
                     }
 //              $retVal->aFleets[] = $retObj;
-                } else if (isset($result['problems']) && !empty($result['problems'])) {
+                } else if (!empty($result['problems'])) {
                     $retObj->strProblems = $result['problems'];
                 }
             }

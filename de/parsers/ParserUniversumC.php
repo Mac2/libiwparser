@@ -409,8 +409,8 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
         if ($reStartData !== '') {
             $aStart = preg_split($reStartData, $xmlStrings);
 
-            for ($n = 1; $n < count($aStart); $n++) { //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
-                if (isset($aStart[$n]) && !empty($aStart[$n])) {
+            for ($n = 0; $n < count($aStart); $n++) { //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
+                if (!empty($aStart[$n])) {
                     //supress errors, otherwise this parser may crash the
                     //application if it is provided non-xml data!
                     $fRetVal = @$dom->loadXml($aStart[$n], LIBXML_NOERROR);
@@ -446,8 +446,8 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
         if ($reStartData !== '') {
             $aStart = preg_split($reStartData, $this->getText());
 
-            for ($n = 1; $n < count($aStart); $n++) { //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
-                if (isset($aStart[$n]) && !empty($aStart[$n])) {
+            for ($n = 0; $n < count($aStart); $n++) { //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
+                if (!empty($aStart[$n])) {
                     $xmlStrings[] = $aStart[$n];
                 }
             }

@@ -170,11 +170,11 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
         $regExp .= '(?:(?P<strTitel>' . $reText . ')\s*)?';
         $regExp .= '\n+';
         $regExp .= 'Beschreibung\s+';
-    //  $regExp  .= '(?:(?P<strDescr>'.$reDescr.'{1,}))?';
-    //  $regExp  .= '\n+';
-    //  $regExp  .= 'Diverses\s+';
-    //  $regExp  .= '(?:(?P<strMisc>'.$reText.')\s*)?';
-    //  $regExp  .= '\n+';
+        //  $regExp  .= '(?:(?P<strDescr>'.$reDescr.'{1,}))?';
+        //  $regExp  .= '\n+';
+        //  $regExp  .= 'Diverses\s+';
+        //  $regExp  .= '(?:(?P<strMisc>'.$reText.')\s*)?';
+        //  $regExp  .= '\n+';
         $regExp .= '/mx';
 
         return $regExp;

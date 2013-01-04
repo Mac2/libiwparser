@@ -93,7 +93,7 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
             $treffer = array();
             preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER);
             foreach ($treffer as $teff) {
-                $retVal->aCosts[] = array('strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
+                $retVal->aCosts[] = array('strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
             }
 
             //! Mac: effektivitat der Deffanlagen gegen alle Schiffstypen beträgt 100%!! (abweichend von den Datenblättern)

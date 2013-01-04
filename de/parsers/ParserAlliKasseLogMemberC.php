@@ -80,13 +80,13 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
 
                 $log->strFromUser = PropertyValueC::ensureString($result['strFromUser']);
                 $log->strToUser = PropertyValueC::ensureString($result['strToUser']);
-                if (isset($result['strReason'])) {
+                if (!empty($result['strReason'])) {
                     $log->strReason = PropertyValueC::ensureString($result['strReason']);
                 }
                 $log->iDateTime = PropertyValueC::ensureInteger($iDateTime);
                 $log->iCredits = PropertyValueC::ensureInteger($iCredits);
                 $retVal->aLogs[] = $log;
-                if (isset($result['strAlliance']) && !empty($result['strAlliance'])) {
+                if (!empty($result['strAlliance'])) {
                     $strAlliance = PropertyValueC::ensureString($result['strAlliance']);
                 }
             }

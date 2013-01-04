@@ -86,11 +86,9 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
                 if (isset($bla[0])) {
                     if ($bla[0] == "Korvette") {
                         $bla[0] = "Korvetten";
-                    }
-                    else if ($bla[0] == "Schlachtschiff") {
+                    } else if ($bla[0] == "Schlachtschiff") {
                         $bla[0] = "Schlachtschiffe";
-                    }
-                    else if ($bla[0] == "Dreadnought") {
+                    } else if ($bla[0] == "Dreadnought") {
                         $bla[0] = "Dreadnoughts";
                     }
 
@@ -114,15 +112,15 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
 
             $retVal->iVerbrauchBrause = $aResult['iVerbrauchBrause'];
             $retVal->iVerbrauchEnergie = $aResult['iVerbrauchEnergie'];
-            if (isset($aResult['iKapa1']) && !empty($aResult['iKapa1'])) {
+            if (!empty($aResult['iKapa1'])) {
                 $retVal->bIsTransporter = true;
                 $retVal->iKapa1 = PropertyValueC::ensureInteger($aResult['iKapa1']);
             }
-            if (isset($aResult['iKapa2']) && !empty($aResult['iKapa2'])) {
+            if (!empty($aResult['iKapa2'])) {
                 $retVal->bIsTransporter = true;
                 $retVal->iKapa2 = PropertyValueC::ensureInteger($aResult['iKapa2']);
             }
-            if (isset($aResult['iKapaBev']) && !empty($aResult['iKapaBev'])) {
+            if (!empty($aResult['iKapaBev'])) {
                 $retVal->bIsTransporter = true;
                 $retVal->iKapaBev = PropertyValueC::ensureInteger($aResult['iKapaBev']);
             }
@@ -131,17 +129,17 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
                 $retVal->bCanBeTransported = true;
             }
 
-            if (isset($aResult['iSchiffKapa1']) && !empty($aResult['iSchiffKapa1'])) {
+            if (!empty($aResult['iSchiffKapa1'])) {
                 $retVal->bIsCarrier = true;
                 $retVal->iShipKapa1 = PropertyValueC::ensureInteger($aResult['iSchiffKapa1']);
             }
 
-            if (isset($aResult['iSchiffKapa2']) && !empty($aResult['iSchiffKapa2'])) {
+            if (!empty($aResult['iSchiffKapa2'])) {
                 $retVal->bIsCarrier = true;
                 $retVal->iShipKapa2 = PropertyValueC::ensureInteger($aResult['iSchiffKapa2']);
             }
 
-            if (isset($aResult['iSchiffKapa3']) && !empty($aResult['iSchiffKapa3'])) {
+            if (!empty($aResult['iSchiffKapa3'])) {
                 $retVal->bIsCarrier = true;
                 $retVal->iShipKapa3 = PropertyValueC::ensureInteger($aResult['iSchiffKapa3']);
             }
@@ -169,7 +167,7 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
             $treffer = array();
             preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER);
             foreach ($treffer as $teff) {
-                $retVal->aCosts[] = array('strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
+                $retVal->aCosts[] = array('strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
             }
 
             $treffer = array();

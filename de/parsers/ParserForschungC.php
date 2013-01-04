@@ -111,7 +111,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                     continue;
                 }
 
-                if (!isset($result['state']) || empty($result['state']) || !in_array($result['state'], array('erforscht', 'zu wenig Ress', 'forschen', '---', 'wird erforscht'))) {
+                if (empty($result['state']) || !in_array($result['state'], array('erforscht', 'zu wenig Ress', 'forschen', '---', 'wird erforscht'))) {
                     $parserResult->bSuccessfullyParsed = false;
                     $parserResult->aErrors[] = 'Unable to determine valid research status (' . $result["research"] . ')';
                     continue;
@@ -140,7 +140,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                     $ret->iResearchCosts = PropertyValueC::ensureInteger($result['faktor']);
                     $ret->iUserResearchTime = HelperC::convertMixedTimeToTimestamp($result['dauer']);
 
-                    if (isset($result['kosten']) && !empty($result['kosten'])) {
+                    if (!empty($result['kosten'])) {
                         $treffer = array();
                         $kRetVal = preg_match_all($regExpRess, $result['kosten'], $treffer, PREG_SET_ORDER);
                         if ($kRetVal !== false && $kRetVal > 0) {
@@ -163,7 +163,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                     $ret->iResearchCosts = PropertyValueC::ensureInteger($result['faktor']);
                     $ret->iUserResearchTime = HelperC::convertMixedTimeToTimestamp($result['dauer']);
 
-                    if (isset($result['kosten']) && !empty($result['kosten'])) {
+                    if (!empty($result['kosten'])) {
                         $treffer = array();
                         $kRetVal = preg_match_all($regExpRess, $result['kosten'], $treffer, PREG_SET_ORDER);
                         if ($kRetVal !== false && $kRetVal > 0) {
@@ -187,7 +187,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                     $ret->iResearchCosts = PropertyValueC::ensureInteger($result['faktor']);
                     $ret->iUserResearchTime = HelperC::convertDateTimeToTimestamp($result['endtime']);
 
-                    if (isset($result['kosten']) && !empty($result['kosten'])) {
+                    if (!empty($result['kosten'])) {
                         $treffer = array();
                         $kRetVal = preg_match_all($regExpRess, $result['kosten'], $treffer, PREG_SET_ORDER);
                         if ($kRetVal !== false && $kRetVal > 0) {

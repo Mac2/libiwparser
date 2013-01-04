@@ -103,7 +103,7 @@ class ClassLoader
     public function addPrefix($prefix, $paths)
     {
         if (!$prefix) {
-            foreach ((array) $paths as $path) {
+            foreach ((array)$paths as $path) {
                 $this->fallbackDirs[] = $path;
             }
 
@@ -112,10 +112,10 @@ class ClassLoader
         if (isset($this->prefixes[$prefix])) {
             $this->prefixes[$prefix] = array_merge(
                 $this->prefixes[$prefix],
-                (array) $paths
+                (array)$paths
             );
         } else {
-            $this->prefixes[$prefix] = (array) $paths;
+            $this->prefixes[$prefix] = (array)$paths;
         }
     }
 

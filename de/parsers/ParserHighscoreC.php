@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -192,34 +192,34 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
     */
     /////////////////////////////////////////////////////////////////////////////
 
-  private function getRegularExpression()
-  {
-    /**
-    * die Daten sind Zeilen, von denen jede folgendermaßen aussieht:
-    * Pos | Name | Allianz | Gebpkt | FP | Gesamtpkt | Pkt/Tag | Pos Aenderung| dabei seit
-    */
+    private function getRegularExpression()
+    {
+        /**
+         * die Daten sind Zeilen, von denen jede folgendermaßen aussieht:
+         * Pos | Name | Allianz | Gebpkt | FP | Gesamtpkt | Pkt/Tag | Pos Aenderung| dabei seit
+         */
 
-    $reName       = $this->getRegExpUserName();
-    $reAllianz    = $this->getRegExpSingleLineText();
-    $reDabeiSeit  = $this->getRegExpDate();
-    $rePoints     = $this->getRegExpDecimalNumber();
-    $rePoints2     = $this->getRegExpFloatingDouble();
+        $reName = $this->getRegExpUserName();
+        $reAllianz = $this->getRegExpSingleLineText();
+        $reDabeiSeit = $this->getRegExpDate();
+        $rePoints = $this->getRegExpDecimalNumber();
+        $rePoints2 = $this->getRegExpFloatingDouble();
 
-    $regExp  = '/^';
-    $regExp .= '(?P<userPos>'        . '\d+'       . ')\s+?';
-    $regExp .= '(?P<userName>'        . $reName       . ')\s+?';
-    $regExp .= '(?:\[(?P<userAllianz>'        . $reAllianz       . ')\]\s+?)?';
+        $regExp = '/^';
+        $regExp .= '(?P<userPos>' . '\d+' . ')\s+?';
+        $regExp .= '(?P<userName>' . $reName . ')\s+?';
+        $regExp .= '(?:\[(?P<userAllianz>' . $reAllianz . ')\]\s+?)?';
 
-    $regExp .= '(?P<userGebP>'        . $rePoints       . ')\s+?';
-    $regExp .= '(?P<userFP>'        . $rePoints       . ')\s+?';
-    $regExp .= '(?P<userGesP>'        . $rePoints2       . ')\s+?';
-    $regExp .= '(?P<userPerDay>'        . $rePoints2       . ')\s+?';
-    $regExp .= '(?P<userChange>(?:'        . $rePoints       . '|neu|\-|\+|o))\s+?';
+        $regExp .= '(?P<userGebP>' . $rePoints . ')\s+?';
+        $regExp .= '(?P<userFP>' . $rePoints . ')\s+?';
+        $regExp .= '(?P<userGesP>' . $rePoints2 . ')\s+?';
+        $regExp .= '(?P<userPerDay>' . $rePoints2 . ')\s+?';
+        $regExp .= '(?P<userChange>(?:' . $rePoints . '|neu|\-|\+|o))\s+?';
 //
-    $regExp .= '(?P<dateOfEntry>'     . $reDabeiSeit  . '|---)\s*?';
-    $regExp .= '[\n\t]+/m';
-    
-    return $regExp;
-  }
+        $regExp .= '(?P<dateOfEntry>' . $reDabeiSeit . '|---)\s*?';
+        $regExp .= '[\n\t]+/m';
+
+        return $regExp;
+    }
 
 }

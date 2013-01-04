@@ -22,7 +22,7 @@ namespace libIwParsers;
 
 return array(
     'lib'  => array(
-        'aRegisteredParsers'  => array(
+        'aRegisteredParsers' => array(
             array(
                 'class' => '\libIwParsers\de\parsers\ParserInfoGebC',
             ),
@@ -108,10 +108,10 @@ return array(
     ),
     'test' => array(),
     'path' => array(
-        'rng'      => dirname(__FILE__) . DIRECTORY_SEPARATOR .
+        'rng'  => dirname(__FILE__) . DIRECTORY_SEPARATOR .
             'xml' . DIRECTORY_SEPARATOR .
             'relaxng',
-        'xslt'     => dirname(__FILE__) . DIRECTORY_SEPARATOR .
+        'xslt' => dirname(__FILE__) . DIRECTORY_SEPARATOR .
             'xml' . DIRECTORY_SEPARATOR .
             'xslt',
     ),

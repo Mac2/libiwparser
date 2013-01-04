@@ -63,7 +63,7 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
         $retVal =& $parserResult->objResultData;
 
         $this->stripTextToData();
-    
+
         $regExp = $this->getRegularExpression();
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
@@ -93,7 +93,7 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
                 }
 
                 $retVal->aMember[] = $member;
-                if (isset($result['strAlliance']) && !empty($result['strAlliance'])) {
+                if (!empty($result['strAlliance'])) {
                     $strAlliance = PropertyValueC::ensureString($result['strAlliance']);
                 }
             }
@@ -134,7 +134,7 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
         $regExp .= '(?P<iCreditsPerDay>' . $reInteger . ')';
         $regExp .= '\spro\sTag';
         $regExp .= '$/m';
-        
+
         return $regExp;
     }
 

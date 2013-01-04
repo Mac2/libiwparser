@@ -99,7 +99,7 @@ class ParserAccountHighscoreC extends ParserBaseC implements ParserI
 
             foreach ($aResult as $result) {
                 $strArea = "";
-                if (isset($result['strMainCat']) && !empty($result['strMainCat'])) {
+                if (!empty($result['strMainCat'])) {
                     $strMainCat = PropertyValueC::ensureString($result['strMainCat']);
 
                     //! @todo Aktueller Besitz, Aktuelle maximale Produktion, Verschickt per Schiff, Verschwendet / Abbruch
@@ -111,18 +111,18 @@ class ParserAccountHighscoreC extends ParserBaseC implements ParserI
                     continue;
                 }
 
-                if (isset($result['strSubCat']) && !empty($result['strSubCat'])) {
+                if (!empty($result['strSubCat'])) {
                     $strSubCat = PropertyValueC::ensureString($result['strSubCat']);
                     if (in_array($strSubCat, array_keys($atranslate))) {
                         $strSubCat = $atranslate[$strSubCat];
                     }
                 }
 
-                if (isset($result['strContent']) && !empty($result['strContent'])) {
+                if (!empty($result['strContent'])) {
                     $strContent = PropertyValueC::ensureString($result['strContent']);
                 }
 
-                if (isset($result['strAreas']) && !empty($result['strAreas'])) {
+                if (!empty($result['strAreas'])) {
                     $strArea = PropertyValueC::ensureString($result['strAreas']);
                     if (in_array($strArea, array_keys($atranslate))) {
                         $strArea = $atranslate[$strArea];
@@ -184,36 +184,36 @@ class ParserAccountHighscoreC extends ParserBaseC implements ParserI
 
         $reInteger = $this->getRegExpDecimalNumber();
         $reAreas = '(?:' . $this->getRegExpAreas() . '|(?:Ressourcen))';
-    // 	$reAreas	   = $this->getRegExpAreas();
+        // 	$reAreas	   = $this->getRegExpAreas();
         $reMainCat = "(?:Aktuelle\smaximale\sProduktion|Produziert\s\/\sGebaut|Aktueller\sBesitz|von\sanderen\sgeklaut|Verluste\s\(im\seigenen\sAccount\)|Zerstört\s\(bei\sanderen\sAccounts\)|Verschickt\sper\sSchiff|(?<=^)Handel(?=\s*Gekauft)|Verbaut\s\/\sVerbraucht|Verschwendet\s\/\sAbbruch)";
 
         //! direkt die daten abgreifen
-    //	$reSubCat = "(?:Ressourcenproduktion\s\(pro\sStunde\)|gesamte\sRessourcenproduktion|Werften|(?<=^)Verteidigung|Gebäude|Ressourcen|nach\sFlottentyp)";
+        //	$reSubCat = "(?:Ressourcenproduktion\s\(pro\sStunde\)|gesamte\sRessourcenproduktion|Werften|(?<=^)Verteidigung|Gebäude|Ressourcen|nach\sFlottentyp)";
 
         //! zus. sortierung nach Areas
-    //	$reSubCat_ext = "(?:Schiffe|Verteidigung|Gebäude|Gekauft|Verkauft|Eingenommen|Ausgegeben|Credits\sEmpfangen|Credits\sVersendet|Schiffbau)";
-    //	$reSubCatUsed = "(?:Verteidigungsbau|Gebäudebau|<?=^)Forschung|Umwandlung\s\/\sLaufende\sRessourcenkosten)";
+        //	$reSubCat_ext = "(?:Schiffe|Verteidigung|Gebäude|Gekauft|Verkauft|Eingenommen|Ausgegeben|Credits\sEmpfangen|Credits\sVersendet|Schiffbau)";
+        //	$reSubCatUsed = "(?:Verteidigungsbau|Gebäudebau|<?=^)Forschung|Umwandlung\s\/\sLaufende\sRessourcenkosten)";
 
-    //	$reContent 	= '(?!'.$reSubCat.'|'.$reSubCat_ext.'|'.$reAreas.')(?:[^\n]*)';		//! alles außer Subkategorien
+        //	$reContent 	= '(?!'.$reSubCat.'|'.$reSubCat_ext.'|'.$reAreas.')(?:[^\n]*)';		//! alles außer Subkategorien
 
 //! funzt, aber besser wenn nur ein Subcat und ein Content ...
         $regExp = '/^(?:';
-    // 	$regExp .= '(?P<strMainCat>'     . $reMainCat     . ')[\n\s]+|';				//! einzelne MainKategorie
-    // 	$regExp .= '(?:';										//! Subkategorie, mit Untergruppierung (Areas)
-    // 	$regExp .= '(?:(?P<strSubCatExt>'. $reSubCat_ext  . ')\s(?:' . $reInteger . ')?[\n\s]+)?';
-    // 	$regExp .= '(?P<strAreas>'        . $reAreas      . ')\s' . $reInteger . '[\n\s]+';
-    // 	$regExp .= '(?P<strContentExt>(?:'  . $reContent . '\s' . $reInteger . '[\n\s]+)+)';
-    // 	$regExp .= ')';
-    // 	$regExp .= '|(?:';										//! einfache Subkategorie mit Daten
-    // 	$regExp .= '(?P<strSubCat>'      . $reSubCat      . ')\s' . $reInteger . '[\n\s]+';
-    // 	$regExp .= '(?P<strContent>(?:' . $reContent     . '\s' . $reInteger       . '[\n\s]+)+)';
-    // 	$regExp .= ')';
-    // 	$regExp .= '|(?:';										//! einfache Subkategorie mit Daten
-    // 	$regExp .= '(?P<strSubCatUsed>'      . $reSubCatUsed      . ')\s(?:' . $reInteger . ')?[\n\s]+';
-    // 	$regExp .= '(?P<strAreasUsed>'        . 'Ressourcen'      . ')\s' . $reInteger . '[\n\s]+';
-    // 	$regExp .= '(?P<strContentUsed>(?:' . $reContent     . '\s' . $reInteger       . '[\n\s]+)+)';
-    // 	$regExp .= ')';
-    // 	$regExp .= ')';
+        // 	$regExp .= '(?P<strMainCat>'     . $reMainCat     . ')[\n\s]+|';				//! einzelne MainKategorie
+        // 	$regExp .= '(?:';										//! Subkategorie, mit Untergruppierung (Areas)
+        // 	$regExp .= '(?:(?P<strSubCatExt>'. $reSubCat_ext  . ')\s(?:' . $reInteger . ')?[\n\s]+)?';
+        // 	$regExp .= '(?P<strAreas>'        . $reAreas      . ')\s' . $reInteger . '[\n\s]+';
+        // 	$regExp .= '(?P<strContentExt>(?:'  . $reContent . '\s' . $reInteger . '[\n\s]+)+)';
+        // 	$regExp .= ')';
+        // 	$regExp .= '|(?:';										//! einfache Subkategorie mit Daten
+        // 	$regExp .= '(?P<strSubCat>'      . $reSubCat      . ')\s' . $reInteger . '[\n\s]+';
+        // 	$regExp .= '(?P<strContent>(?:' . $reContent     . '\s' . $reInteger       . '[\n\s]+)+)';
+        // 	$regExp .= ')';
+        // 	$regExp .= '|(?:';										//! einfache Subkategorie mit Daten
+        // 	$regExp .= '(?P<strSubCatUsed>'      . $reSubCatUsed      . ')\s(?:' . $reInteger . ')?[\n\s]+';
+        // 	$regExp .= '(?P<strAreasUsed>'        . 'Ressourcen'      . ')\s' . $reInteger . '[\n\s]+';
+        // 	$regExp .= '(?P<strContentUsed>(?:' . $reContent     . '\s' . $reInteger       . '[\n\s]+)+)';
+        // 	$regExp .= ')';
+        // 	$regExp .= ')';
 
         $reSubCat = "(?:Ressourcenproduktion\s\(pro\sStunde\)|gesamte\sRessourcenproduktion|Werften|Verteidigungsbau|(?<=^)Verteidigung|Gebäude|Ressourcen|nach\sFlottentyp|Schiffe|Gebäude|Gekauft|Verkauft|Eingenommen|Ausgegeben|Credits\sEmpfangen|Credits\sVersendet|Schiffbau|Gebäudebau|(?<=^)Forschung(?=\s*Ressourcen)|Umwandlung\s\/\sLaufende\sRessourcenkosten)";
 
@@ -226,15 +226,15 @@ class ParserAccountHighscoreC extends ParserBaseC implements ParserI
         $regExp .= '(?P<strContent>(?:' . $reContent . '\s+' . $reInteger . '[\n\s]+)+)';
         $regExp .= ')';
 
-      //$regExp .= '|(?:';										//! einfache Subkategorie mit Daten
-    // 	$regExp .= '(?P<strSubCat>'      . $reSubCat      . ')\s' . $reInteger . '[\n\s]+';
-    // 	$regExp .= '(?P<strContent>(?:' . $reContent     . '\s' . $reInteger       . '[\n\s]+)+)';
-    // 	$regExp .= ')';
-    //	$regExp .= '|(?:';										//! einfache Subkategorie mit Daten
-    // 	$regExp .= '(?P<strSubCatUsed>'      . $reSubCatUsed      . ')\s(?:' . $reInteger . ')?[\n\s]+';
-    // 	$regExp .= '(?P<strAreasUsed>'        . 'Ressourcen'      . ')\s' . $reInteger . '[\n\s]+';
-    // 	$regExp .= '(?P<strContentUsed>(?:' . $reContent     . '\s' . $reInteger       . '[\n\s]+)+)';
-    // 	$regExp .= ')';
+        //$regExp .= '|(?:';										//! einfache Subkategorie mit Daten
+        // 	$regExp .= '(?P<strSubCat>'      . $reSubCat      . ')\s' . $reInteger . '[\n\s]+';
+        // 	$regExp .= '(?P<strContent>(?:' . $reContent     . '\s' . $reInteger       . '[\n\s]+)+)';
+        // 	$regExp .= ')';
+        //	$regExp .= '|(?:';										//! einfache Subkategorie mit Daten
+        // 	$regExp .= '(?P<strSubCatUsed>'      . $reSubCatUsed      . ')\s(?:' . $reInteger . ')?[\n\s]+';
+        // 	$regExp .= '(?P<strAreasUsed>'        . 'Ressourcen'      . ')\s' . $reInteger . '[\n\s]+';
+        // 	$regExp .= '(?P<strContentUsed>(?:' . $reContent     . '\s' . $reInteger       . '[\n\s]+)+)';
+        // 	$regExp .= ')';
         $regExp .= ')';
 
         $regExp .= '/m';

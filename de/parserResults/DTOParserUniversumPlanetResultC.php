@@ -49,7 +49,7 @@ class DTOParserUniversumPlanetResultC
      * @var DTOCoordinatesC $objCoordinates an object describing
      *      the coordinates of the planet.
      */
-     public $objCoordinates;
+    public $objCoordinates;
 
     /**
      * @soap

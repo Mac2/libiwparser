@@ -113,7 +113,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
             $retVal->iHS = PropertyValueC::ensureInteger($aResult['iHS']);
             $retVal->imaxAnz = PropertyValueC::ensureInteger($aResult['imaxAnz']);
 
-            if (isset($aResult['stufe']) && !empty($aResult['stufe'])) {
+            if (!empty($aResult['stufe'])) {
                 $retVal->bIsStufenGeb = true;
                 $retVal->iStufe = PropertyValueC::ensureInteger($aResult['stufe']);
             }
@@ -136,7 +136,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
                 if (!empty($stufe) && !empty($teff['resource_name'])) {
                     if (count($retVal->aCosts) == 0) {
                         $retVal->aCosts[] = array(
-                            'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ),
+                            'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
                             'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count']),
                             'stufe'           => $stufe
                         );
@@ -144,14 +144,14 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
                         $exist = false;
                         foreach ($retVal->aCosts as $dat) {
 
-                            if ($dat['iResourceCount'] == PropertyValueC::ensureInteger($teff['resource_count']) && $dat["strResourceName"] == PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ) && $stufe > $dat["stufe"]) {
+                            if ($dat['iResourceCount'] == PropertyValueC::ensureInteger($teff['resource_count']) && $dat["strResourceName"] == PropertyValueC::ensureEnum($teff['resource_name'], 'eResources') && $stufe > $dat["stufe"]) {
                                 $exist = true;
                                 break;
                             }
                         }
                         if (!$exist) {
                             $retVal->aCosts[] = array(
-                                'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ),
+                                'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
                                 'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count']),
                                 'stufe'           => $stufe
                             );
@@ -159,7 +159,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
                     }
                 } else {
                     $retVal->aCosts[] = array(
-                        'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ),
+                        'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
                         'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count']),
                         'stufe'           => 0
                     );
@@ -170,7 +170,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
             $treffer = array();
             preg_match_all($regExpMain, $aResult['unterhalt'], $treffer, PREG_SET_ORDER);
             foreach ($treffer as $teff) {
-                $retVal->aMaintenance[] = array('strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
+                $retVal->aMaintenance[] = array('strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
             }
 
             //! Bauzeit
@@ -224,7 +224,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
                 if (!empty($stufe) && !empty($teff['resource_name'])) {
                     if (count($retVal->aEffect) == 0) {
                         $retVal->aEffect[] = array(
-                            'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ),
+                            'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
                             'iResourceCount'  => PropertyValueC::ensureFloat($teff['resource_count']),
                             'stufe'           => $stufe
                         );
@@ -232,7 +232,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
                         $last = $retVal->aEffect[count($retVal->aEffect) - 1];
                         if (!empty($last) && $last['iResourceCount'] != PropertyValueC::ensureFloat($teff['resource_count'])) {
                             $retVal->aEffect[] = array(
-                                'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ),
+                                'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
                                 'iResourceCount'  => PropertyValueC::ensureFloat($teff['resource_count']),
                                 'stufe'           => $stufe
                             );
@@ -240,7 +240,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
                     }
                 } else {
                     $retVal->aEffect[] = array(
-                        'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources' ),
+                        'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
                         'iResourceCount'  => PropertyValueC::ensureFloat($teff['resource_count']),
                         'stufe'           => 0
                     );
@@ -329,94 +329,94 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         /**
          */
 
-        $reResearch         = $this->getRegExpSingleLineText3();        //! accepted also numbers in ResearchName
-        $reBracketString    = $this->getRegExpBracketString();
-        $reDecNumber        = $this->getRegExpDecimalNumber();
-        $reResource         = $this->getRegExpResource();
-        $reMixedTime        = $this->getRegExpMixedTime();
-        $reObjects          = $this->getRegExpObjectTypes();
-        $rePlanets          = $this->getRegExpPlanetTypes();
+        $reResearch = $this->getRegExpSingleLineText3(); //! accepted also numbers in ResearchName
+        $reBracketString = $this->getRegExpBracketString();
+        $reDecNumber = $this->getRegExpDecimalNumber();
+        $reResource = $this->getRegExpResource();
+        $reMixedTime = $this->getRegExpMixedTime();
+        $reObjects = $this->getRegExpObjectTypes();
+        $rePlanets = $this->getRegExpPlanetTypes();
 
-        $regExp  = '/';
-        $regExp  .= 'Gebäudeinfo\:\s';
-        $regExp  .= '(?P<strBuildingName>'.$reResearch.')\s*?';
-        $regExp  .= '\n+';
+        $regExp = '/';
+        $regExp .= 'Gebäudeinfo\:\s';
+        $regExp .= '(?P<strBuildingName>' . $reResearch . ')\s*?';
+        $regExp .= '\n+';
 
         //! da kommentar zu unspezifisch ist, bei Stufengebaeuden explizit kommentar und Stufeninfos verknuepfen...
-        $regExp  .= '(?:';
+        $regExp .= '(?:';
         //! Stufengebaeude
-        $regExp  .= '(?P<commentS>(?:^[\s\S]*\n)?)';
-        $regExp  .= '(?:^StufenGebäude';
-        $regExp  .= '(?:\s*'.$reResearch.'[\n\t])*';
-        $regExp  .= '^Stufe\s(?P<stufe>\d+)[\n\t]';
-        $regExp  .= '\s*)';
+        $regExp .= '(?P<commentS>(?:^[\s\S]*\n)?)';
+        $regExp .= '(?:^StufenGebäude';
+        $regExp .= '(?:\s*' . $reResearch . '[\n\t])*';
+        $regExp .= '^Stufe\s(?P<stufe>\d+)[\n\t]';
+        $regExp .= '\s*)';
         //! nur Kommentar
-        $regExp  .= '|';
-        $regExp  .= '(?P<comment>(?:^[\s\S]*\n)?)';
-        $regExp  .= ')';
+        $regExp .= '|';
+        $regExp .= '(?P<comment>(?:^[\s\S]*\n)?)';
+        $regExp .= ')';
 
-        $regExp  .= 'Kosten\s+?(?P<kosten>(?:(?:(?:globale\sAnzahl|Stufe)\s(?:\d)+\:\s)?(?:'.$reResource.'\:\s'.$reDecNumber.'\s)*[\n\t]*)+)';
-        $regExp  .= 'Dauer\s+?(?P<dauer>(?:(?:globale\sAnzahl\s(?:\d)+\:\s)?'.$reMixedTime.'[\n\t]*)+)\s*';
+        $regExp .= 'Kosten\s+?(?P<kosten>(?:(?:(?:globale\sAnzahl|Stufe)\s(?:\d)+\:\s)?(?:' . $reResource . '\:\s' . $reDecNumber . '\s)*[\n\t]*)+)';
+        $regExp .= 'Dauer\s+?(?P<dauer>(?:(?:globale\sAnzahl\s(?:\d)+\:\s)?' . $reMixedTime . '[\n\t]*)+)\s*';
 
         //! ausnahme fuer Forschungsgebaeude da sonst zu fuzzy
-        $regExp  .= '(?:';
+        $regExp .= '(?:';
         //! mehrzeilig -> Flabs
-        $regExp  .=   'bringt\s+?(?P<bringt>(?:';
-        $regExp  .=     '(?:(?:(?:globale\sAnzahl|Stufe)\s(?:\d)+\:\s)'.$reResearch.'[\n\t])+';
-        $regExp  .=     '|';
+        $regExp .= 'bringt\s+?(?P<bringt>(?:';
+        $regExp .= '(?:(?:(?:globale\sAnzahl|Stufe)\s(?:\d)+\:\s)' . $reResearch . '[\n\t])+';
+        $regExp .= '|';
         //! nur eine zeile -> rest
-        $regExp  .=     '(?:'.$reResearch.'[\n\t]){1,2}';
-        $regExp  .=   '))';
-        $regExp  .= ')';
+        $regExp .= '(?:' . $reResearch . '[\n\t]){1,2}';
+        $regExp .= '))';
+        $regExp .= ')';
 
-        $regExp  .= '(?:^Kosten\s+(?P<unterhalt>(?:'.$reDecNumber.'\s'.$reResource.',?\s*)+))?';
+        $regExp .= '(?:^Kosten\s+(?P<unterhalt>(?:' . $reDecNumber . '\s' . $reResource . ',?\s*)+))?';
 
-        $regExp  .= '(?:Maximale\sAnzahl\s+';
-        $regExp  .= '(?P<imaxAnz>'.'\d+'.'(?:\s*\(global\))?)\s*?';
-        $regExp  .= '\n*)?';
+        $regExp .= '(?:Maximale\sAnzahl\s+';
+        $regExp .= '(?P<imaxAnz>' . '\d+' . '(?:\s*\(global\))?)\s*?';
+        $regExp .= '\n*)?';
 
-        $regExp  .= '(?:Entscheidungsgeb\sDieses\sGebäude\skann\snicht\smehr\sgebaut\swerden,\swenn\seines\sder\sfolgenden\sGebäude\sgebaut\swurde\:[\n\t]';
-        $regExp  .= '(?:'.$reResearch.'[\n\t])+';
-        $regExp  .= ')?';
+        $regExp .= '(?:Entscheidungsgeb\sDieses\sGebäude\skann\snicht\smehr\sgebaut\swerden,\swenn\seines\sder\sfolgenden\sGebäude\sgebaut\swurde\:[\n\t]';
+        $regExp .= '(?:' . $reResearch . '[\n\t])+';
+        $regExp .= ')?';
 
-        $regExp  .= '(?:Punkte\s+?';
-        $regExp  .= '(?P<iHS>'.'\d+'.')\s*?';
-        $regExp  .= '\n+)?';
+        $regExp .= '(?:Punkte\s+?';
+        $regExp .= '(?P<iHS>' . '\d+' . ')\s*?';
+        $regExp .= '\n+)?';
 
-        $regExp  .= '\s*Voraussetzungen\sForschungen\s+?';
-        $regExp  .= '(?P<strResearchsNeeded>'.$reBracketString.')?';
-        $regExp  .= '\s+?';
-        $regExp  .= 'Voraussetzungen\sGebäude\s+?';
-        $regExp  .= '(?P<strBuildingsNeeded>'.$reBracketString.'(?:\(Gruppe\))?)?';
-        $regExp  .= '\s+?';
-        $regExp  .= '(?:Voraussetzungen\sPlaneteneigenschaften\s+?';
-        $regExp  .= '(?P<strPlanetPropertiesNeeded>'.$reResearch.')?';
-        $regExp  .= '\s+?)?';
+        $regExp .= '\s*Voraussetzungen\sForschungen\s+?';
+        $regExp .= '(?P<strResearchsNeeded>' . $reBracketString . ')?';
+        $regExp .= '\s+?';
+        $regExp .= 'Voraussetzungen\sGebäude\s+?';
+        $regExp .= '(?P<strBuildingsNeeded>' . $reBracketString . '(?:\(Gruppe\))?)?';
+        $regExp .= '\s+?';
+        $regExp .= '(?:Voraussetzungen\sPlaneteneigenschaften\s+?';
+        $regExp .= '(?P<strPlanetPropertiesNeeded>' . $reResearch . ')?';
+        $regExp .= '\s+?)?';
 
-        $regExp  .= '(?:Voraussetzungen\sPlanetentyp\s+?';
-        $regExp  .= '(?P<strPlanetNeeded>'.$rePlanets.')?';
-        $regExp  .= '\s+?)?';
+        $regExp .= '(?:Voraussetzungen\sPlanetentyp\s+?';
+        $regExp .= '(?P<strPlanetNeeded>' . $rePlanets . ')?';
+        $regExp .= '\s+?)?';
 
-        $regExp  .= '(?:Voraussetzungen\sKolonietyp\s+?';
-        $regExp  .= '(?P<strObjectsNeeded>'.$reObjects.')?';
-        $regExp  .= '\s+?)?';
+        $regExp .= '(?:Voraussetzungen\sKolonietyp\s+?';
+        $regExp .= '(?P<strObjectsNeeded>' . $reObjects . ')?';
+        $regExp .= '\s+?)?';
 
         $regExp .= '(?:\s*Dieses\sGebäude\sbenötigt\sweitere\skomplexe\sVoraussetzungen\s)?';
 
-        $regExp  .= '(?:';
-        $regExp  .= 'Kann\szerstört\swerden\sdurch\s+?';
-        $regExp  .= '(?P<strDestroyable>(?:.*\s'.$reBracketString.'\s*)*)?';
-        $regExp  .= '\s+?)?';
+        $regExp .= '(?:';
+        $regExp .= 'Kann\szerstört\swerden\sdurch\s+?';
+        $regExp .= '(?P<strDestroyable>(?:.*\s' . $reBracketString . '\s*)*)?';
+        $regExp .= '\s+?)?';
 
-        $regExp  .= 'Ermöglicht\sForschungen\s+?';
-        $regExp  .= '(?P<strResearchsDevelop>'.$reBracketString.')?';
-        $regExp  .= '\s+?';
+        $regExp .= 'Ermöglicht\sForschungen\s+?';
+        $regExp .= '(?P<strResearchsDevelop>' . $reBracketString . ')?';
+        $regExp .= '\s+?';
 
-        $regExp  .= 'Ermöglicht\sGebäude\s+?';
-        $regExp  .= '(?P<strBuildingsDevelop>'.$reBracketString.')?';
-        $regExp  .= '\s+?';
+        $regExp .= 'Ermöglicht\sGebäude\s+?';
+        $regExp .= '(?P<strBuildingsDevelop>' . $reBracketString . ')?';
+        $regExp .= '\s+?';
 
-        $regExp  .= '/mx';
+        $regExp .= '/mx';
 
         return $regExp;
     }

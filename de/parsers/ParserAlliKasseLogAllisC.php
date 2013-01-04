@@ -86,7 +86,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
                 $log->iCredits = PropertyValueC::ensureInteger($iCredits);
 
                 $retVal->aLogs[] = $log;
-                if (isset($result['strAlliance']) && !empty($result['strAlliance'])) {
+                if (!empty($result['strAlliance'])) {
                     $strAlliance = PropertyValueC::ensureString($result['strAlliance']);
                 }
             }
@@ -117,7 +117,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
         $regExp .= '((\(Wing (?P<strAlliance>.*)\)\s*)?';
         $regExp .= '(^.*$\n)+';
         $regExp .= '^Auszahlungslog\san\sWings\/etc\sder\sletzten\sdrei\sWochen\s)?';
-    //  $regExp .= '(?:';
+        //  $regExp .= '(?:';
         $regExp .= '(?P<reDateTime>' . $reDateTime . ')';
         $regExp .= '\svon\s';
         $regExp .= '(?P<strFromUser>' . $reFromUser . ')';
@@ -129,7 +129,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
         $regExp .= '\s';
         $regExp .= '(?P<iCredits>' . $reInteger . ')';
         $regExp .= '\s(Credits|Kekse)\sausgezahlt';
-    //  $regExp .= ')*';
+        //  $regExp .= ')*';
         $regExp .= '/m';
 
         return $regExp;

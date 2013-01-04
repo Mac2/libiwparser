@@ -146,11 +146,11 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
         $reKoloCoords = $this->getRegExpKoloCoords();
         $reNumber = $this->getRegExpDecimalNumber();
 
-        $regExp  = '/^
+        $regExp = '/^
                     \s?
-                    (?P<kolo_line>'.$reKoloCoords.'
-                        (?:\n+\('.$reKoloTypes.'\)\s'.$reKoloCoords.')*
-                        \n+\('.$reKoloTypes.'\)
+                    (?P<kolo_line>' . $reKoloCoords . '
+                        (?:\n+\(' . $reKoloTypes . '\)\s' . $reKoloCoords . ')*
+                        \n+\(' . $reKoloTypes . '\)
                         \s+
                         Im\sFlug\sStat\sGesamt
                     )
@@ -158,7 +158,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
                         (?:
                             \n+
                             [^\t\n]+';
-        $regExp .= '(?:\s(?:'.$reNumber.')?)+';     //! erlaubt auch andere Trennzeichen
+        $regExp .= '(?:\s(?:' . $reNumber . ')?)+'; //! erlaubt auch andere Trennzeichen
         $regExp .= '
                         )*
                     )

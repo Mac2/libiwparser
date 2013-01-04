@@ -72,7 +72,7 @@ class ParserIndexRessourcenC extends ParserMsgBaseC implements ParserMsgI
 
             foreach ($aResult as $result) {
 
-                $ress_name = PropertyValueC::ensureEnum($result['strRessName'], 'eResources' );
+                $ress_name = PropertyValueC::ensureEnum($result['strRessName'], 'eResources');
                 if ($ress_name == "Bevölkerung") {
                     $retObj = new DTOParserIndexRessourcenBevResultC();
                     $retObj->strResourceName = $ress_name;

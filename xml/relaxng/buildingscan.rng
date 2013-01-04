@@ -33,7 +33,7 @@
 			<element name="basis_typ">
 				<ref name="name"/>
 			</element>
-		</optional>        
+		</optional>
       </element>
       <element name="timestamp">
         <data type="integer"/>
@@ -64,7 +64,7 @@
         </element>
 		<element name="bericht">
         	<text/>
-        </element>        
+        </element>
       </element>
     </element>
   </start>

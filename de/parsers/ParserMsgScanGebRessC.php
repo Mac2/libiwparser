@@ -124,7 +124,7 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
                     foreach ($aResultResources as $result) {
                         $strResourceName = $result['resource_name'];
                         $iResourceCount = $result['resource_count'];
-                        $strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources' );
+                        $strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources');
                         $iResourceCount = PropertyValueC::ensureInteger($iResourceCount);
                         if (!$strResourceName || $strResourceName == "-???-") {
                             continue;

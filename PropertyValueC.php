@@ -37,7 +37,8 @@ class PropertyValueC
      * filtert beliebige Zahlen mit Tausendertrennzeichen und maximal 2 Nachkommastellen
      *
      * @param string|int|float   $value  Zahl zum Filtern
-     * @uses PropertyValueC::ensureFloat
+     *
+     * @uses   PropertyValueC::ensureFloat
      * @return int gefilterte Zahl
      *
      * @author masel <masel789@googlemail.com>
@@ -69,15 +70,15 @@ class PropertyValueC
 
             $filtered_number = preg_replace('~\D~', '', $numberpart['digit']);
 
-            if (isset($numberpart['part'])) {                        //Nachkommastellen vorhanden?
-                if (strlen($numberpart['part']) === 2) {             //zwei Nachkommastellen
-                    $filtered_number += $numberpart['part']/100;
-                } else {                                             //eine Nachkommastelle
-                    $filtered_number += $numberpart['part']/10;
+            if (isset($numberpart['part'])) { //Nachkommastellen vorhanden?
+                if (strlen($numberpart['part']) === 2) { //zwei Nachkommastellen
+                    $filtered_number += $numberpart['part'] / 100;
+                } else { //eine Nachkommastelle
+                    $filtered_number += $numberpart['part'] / 10;
                 }
             }
 
-            if ($numberpart['sign'] === '-') {                       //evl. negatives Vorzeichen wieder dazu
+            if ($numberpart['sign'] === '-') { //evl. negatives Vorzeichen wieder dazu
                 $filtered_number = -$filtered_number;
             }
 
@@ -139,7 +140,7 @@ class PropertyValueC
      */
     public static function ensureEnum($value, $enumName)
     {
-        $reflectionClass = new \ReflectionClass('libIwParsers\enums\\'.$enumName);
+        $reflectionClass = new \ReflectionClass('libIwParsers\enums\\' . $enumName);
 
         //TODO: Find better solution
         //dirty hack for ePlanetObjects:

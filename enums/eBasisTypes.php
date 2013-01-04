@@ -26,6 +26,6 @@ namespace libIwParsers\enums;
 class eBasisTypes
 {
     const Alpha = 'alpha';
-    const Beta  = 'beta';
+    const Beta = 'beta';
     const Gamma = 'gamma';
 }
