@@ -324,7 +324,7 @@ class ParserBaseC extends ParserFunctionC
      * Strips whitespace from lines.
      *
      * @param string $text   the text whos lines shall be striped
-     * @param        $option string one of ParserBaseC::XYZ_WHITESPACE constants
+     * @param string $option string one of ParserBaseC::XYZ_WHITESPACE constants
      *
      * @return string the striped text
      */
