@@ -32,11 +32,10 @@ class HelperC
      * Tries to convert the given parameter into a unix timestamp.
      *
      *
-     * @param $value string timestring
+     * @param string $value timestring
      *
-     * @return int|bool - integer if conversion was successfull
-     *                 boolean false if the provided parameter couldn't be
-     *                 recognized as a date
+     * @return int|bool integer if conversion was successfull,
+     *                  boolean false if the provided parameter couldn't be recognized as a date
      */
     static public function convertDateToTimestamp($value)
     {
@@ -110,47 +109,28 @@ class HelperC
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Tries to convert the given parameter into a unix timestamp.
+     * Tries to convert the given duration into seconds.
      *
      *
-     * @param $value String timestring
+     * @param string $value durationstring
      *
-     * @return int|bool - integer if conversion was successfull
-     *                 boolean false if the provided parameter couldn't be
-     *                 recognized as a date
+     * @return int|bool integer if conversion was successfull,
+     *                  boolean false if the provided parameter couldn't be recognized as a duration
      */
     static public function convertMixedTimeToTimestamp($value)
     {
         $aResult = array();
-        $mktime = array();
-        if (preg_match('@((\d+)\s(Tag|Tage)\s+|)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)@i', $value, $aResult) != false) {
-            $mktime['d'] = (int)$aResult[2];
-            $mktime['h'] = (int)$aResult[4];
-            $mktime['i'] = (int)$aResult[5];
-            if (isset($aResult[7])) {
-                $mktime['s'] = (int)$aResult[7];
-            } else {
-                $mktime['s'] = 0;
+        if (preg_match('@(?:(?P<days>\d+)\s(?:Tag|Tage)\s+|)(?P<hours>\d{1,2})\:(?P<minutes>\d{1,2})(?:\:(?P<seconds>\d{1,2}))?@', $value, $aResult) != false) {
+
+            if (!isset($aResult['seconds'])) {
+                $aResult['seconds'] = 0;
             }
-        } elseif (preg_match('@((\d+)\s(Tag|Tage)\s+|)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)(\s(am|pm)|)@i', $value, $aResult) != false) {
-            $mktime['d'] = (int)$aResult[2];
-            $mktime['h'] = (int)$aResult[4];
-            $mktime['i'] = (int)$aResult[5];
-            if (isset($aResult[7])) {
-                $mktime['s'] = (int)$aResult[7];
-            } else {
-                $mktime['s'] = 0;
-            }
-            if (isset($aResult[9]) && $aResult[9] == 'pm') {
-                $mktime['h'] += 12;
-            }
+
+            return ((int)$aResult['days'] * 24 * 60 * 60 + (int)$aResult['hours'] * 60 * 60 + (int)$aResult['minutes'] * 60 + (int)$aResult['seconds']);
+
         } else {
             return false;
         }
-
-        $mktime['unix'] = $mktime['d'] * 24 * 60 * 60 + $mktime['h'] * 60 * 60 + $mktime['i'] * 60 + $mktime['s'];
-
-        return $mktime['unix'];
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -159,34 +139,28 @@ class HelperC
      * Tries to convert the given parameter into a unix timestamp.
      *
      *
-     * @param $value string timestring
+     * @param string $value timestring
      *
-     * @return Int|bool integer if conversion was successfull
-     *                 boolean false if the provided parameter couldn't be
-     *                 recognized as a date
+     * @return Int|bool integer (a unix timestamp) if conversion was successfull,
+     *                  boolean false if the provided parameter couldn't be recognized as a date
      */
     static public function convertTimeToTimestamp($value)
     {
         $aResult = array();
-        $mktime = array();
-        if (preg_match('@(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)@i', $value, $aResult) != false) {
-            $mktime['h'] = (int)$aResult[1];
-            $mktime['i'] = (int)$aResult[2];
-            $mktime['s'] = (int)$aResult[4];
-        } elseif (preg_match('@(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)(\s(am|pm)|)@i', $value, $aResult) != false) {
-            $mktime['h'] = (int)$aResult[1];
-            $mktime['i'] = (int)$aResult[2];
-            $mktime['s'] = (int)$aResult[4];
-            if (isset($aResult[6]) && $aResult[6] == 'pm') {
-                $mktime['h'] += 12;
+        if (preg_match('@(?P<hour>\d{1,2})\:(?P<minute>\d{1,2})(?:\:(?P<second>\d{1,2}))?\s?(?P<pm>pm)?@i', $value, $aResult) != false) {
+
+            if (!isset($aResult['second'])) {
+                $aResult['second'] = 0;
             }
+            if (isset($aResult['pm'])) {
+                $aResult['hour'] += 12;
+            }
+
+            return mktime((int)$aResult['hour'], (int)$aResult['minute'], (int)$aResult['second']);
+
         } else {
             return false;
         }
-
-        $mktime['unix'] = mktime($mktime['h'], $mktime['i'], $mktime['s']);
-
-        return $mktime['unix'];
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -207,7 +181,7 @@ class HelperC
     /**
      * Converts the given string into an coordinates result DTO.
      *
-     * @param $strCoordinates string a string of the format gal:sys:pla
+     * @param string $strCoordinates a string of the format gal:sys:pla
      *
      * @uses DTOCoordinatesC
      *
@@ -233,11 +207,10 @@ class HelperC
      * Tries to convert the given parameter into a unix timestamp.
      *
      *
-     * @param $value string timestring
+     * @param string $value timestring
      *
-     * @return int|bool - integer if conversion was successfull
-     *                 boolean false if the provided parameter couldn't be
-     *                 recognized as a date
+     * @return int|bool integer if conversion was successfull,
+     *                  boolean false if the provided parameter couldn't be recognized as a date
      */
     static public function convertDateTimeToTimestamp($value)
     {
