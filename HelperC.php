@@ -120,7 +120,7 @@ class HelperC
     static public function convertMixedDurationToSeconds($value)
     {
         $aResult = array();
-        if (preg_match('@(?:(?P<days>\d+)\s(?:Tag|Tage)\s+|)(?P<hours>\d{1,2})\:(?P<minutes>\d{1,2})(?:\:(?P<seconds>\d{1,2}))?@', $value, $aResult) != false) {
+        if (preg_match('/^(?:(?P<days>\d+)\s(?:Tag|Tage|day|days)\s+|)(?P<hours>\d{1,2})\:(?P<minutes>\d|[0-5]\d)(?:\:(?P<seconds>\d|[0-5]\d))?$/', $value, $aResult) != false) {
 
             if (!isset($aResult['seconds'])) {
                 $aResult['seconds'] = 0;
@@ -147,7 +147,7 @@ class HelperC
     static public function convertTimeToTimestamp($value)
     {
         $aResult = array();
-        if (preg_match('@(?P<hour>\d{1,2})\:(?P<minute>\d{1,2})(?:\:(?P<second>\d{1,2}))?\s?(?P<pm>pm)?@i', $value, $aResult) != false) {
+        if (preg_match('^/(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minute>[0-5]\d)(?:\:(?P<second>[0-5]\d))?\s?(?P<pm>pm)?/i', $value, $aResult) != false) {
 
             if (!isset($aResult['second'])) {
                 $aResult['second'] = 0;
@@ -249,7 +249,6 @@ class HelperC
 
         $aResult = array();
         $mktime = array(
-            'unix'    => 0,
             'hours'   => 0,
             'minutes' => 0,
             'seconds' => 0,
@@ -266,81 +265,96 @@ class HelperC
          * I define that the parts only are in a certain range, to make it
          * less likely the expression matches other formats (english ones?).
          *
-         * TT   :=   00 -   39 [0-3]\d
-         * MM   :=   00 -   19 [0-1]\d
-         * JJJJ := 2000 - 2099 20\d\d
-         * HH   :=   00 -   29 [0-2]\d
-         * MM   :=   00 -   69 [0-6]\d
-         * SS   :=   00 -   69 [0-6]\d
+         * TT   :=   0 - 00 - 31    30|31|[0-2]\d|\d
+         * MM   :=   0 - 00 - 12    10|11|12|0\d|\d
+         * JJJJ :=   2000 - 2099    20\d\d
+         * HH   :=   0 - 00 - 24    2[0-4]|[01]\d|\d
+         * MM   :=   00 -   59      [0-5]\d
+         * SS   :=   00 -   59      [0-5]\d
          */
-        if (preg_match('/^(?P<day>[0-3]\d)\.(?P<month>[0-1]\d)\.(?P<year>20\d\d) (?P<hours>[0-2]\d):(?P<minutes>[0-6]\d):(?P<seconds>[0-6]\d)$/', $value, $aResult) != false) {
+        if (preg_match('/^(?P<day>30|31|[0-2]\d|\d)\.(?P<month>10|11|12|0\d|\d)\.(?P<year>20\d\d)\s(?P<hours>2[0-4]|[01]\d|\d):(?P<minutes>[0-5]\d):(?P<seconds>[0-5]\d)$/', $value, $aResult) != false) {
             $mktime['day'] = (int)$aResult['day'];
             $mktime['month'] = (int)$aResult['month'];
             $mktime['year'] = (int)$aResult['year'];
             $mktime['hours'] = (int)$aResult['hours'];
             $mktime['minutes'] = (int)$aResult['minutes'];
             $mktime['seconds'] = (int)$aResult['seconds'];
-        } else if (preg_match('@(\d{1,2})\w{0,2}(\s|\.)(\d{1,2}|\w+)(\s|\.)(\d{4})(\s)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)@i', $value, $aResult) != false) {
-            $mktime['day'] = (int)$aResult[1];
-            $aResult3 = (int)$aResult[3];
-            if (!empty($aResult3)) {
-                $mktime['month'] = (int)$aResult[3];
-            } else {
-                $mktime['month'] = (int)$month2int[$aResult3];
-                if (!isset($month2int[$aResult3])) {
-                    error(E_NOTICE, __FILE__, __LINE__, 1, $value, $aResult);
+        } else if (preg_match('/^(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\.)(?P<month>10|11|12|\d|\w)(?:\s|\.)(?P<year>20\d\d)\s(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-5]\d)(?:\:(?P<seconds>[0-5]\d))?$/', $value, $aResult) != false) {
+            $mktime['day'] = (int)$aResult['day'];
+            $aResultMonth = (int)$aResult['month'];
+            if (!empty($aResultMonth)) { //a month number
+                $mktime['month'] = $aResultMonth;
+            } else { //a month string
+                if (isset($month2int[$aResult['month']])) {
+                    $mktime['month'] = (int)$month2int[$aResult['month']];
+                } else {
+                    trigger_error('Invalid month conversation in HelperC::convertDateTimeToTimestamp Value:' . $aResult['month'], E_USER_NOTICE);
+
+                    return false;
                 }
             }
-            $mktime['year'] = (int)$aResult[5];
-            $mktime['hours'] = (int)$aResult[7];
-            $mktime['minutes'] = (int)$aResult[8];
-            if (isset($aResult[10])) {
-                $mktime["seconds"] = (int)$aResult[10];
+            $mktime['year'] = (int)$aResult['year'];
+            $mktime['hours'] = (int)$aResult['hours'];
+            $mktime['minutes'] = (int)$aResult['minutes'];
+            if (isset($aResult['seconds'])) {
+                $mktime["seconds"] = (int)$aResult['seconds'];
             }
-        } elseif (preg_match('@(\d{4})(\-|\.)(\d{1,2})(\-|\.)(\d{1,2})(\s)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)@i', $value, $aResult) != false) {
-            $mktime['day'] = (int)$aResult[5];
-            $mktime['month'] = (int)$aResult[3];
-            $mktime['year'] = (int)$aResult[1];
-            $mktime['hours'] = (int)$aResult[7];
-            $mktime['minutes'] = (int)$aResult[8];
-            if (isset($aResult[10])) {
-                $mktime["seconds"] = (int)$aResult[10];
+        } elseif (preg_match('/^(?P<year>20\d\d)(?:\-|\.)(?P<month>10|11|12|0\d|\d)(?:\-|\.)(?P<day>30|31|[0-2]\d|\d)\s(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-5]\d)(?:\:(?P<seconds>[0-5]\d))?$/', $value, $aResult) != false) {
+            $mktime['day'] = (int)$aResult['day'];
+            $mktime['month'] = (int)$aResult['month'];
+            $mktime['year'] = (int)$aResult['year'];
+            $mktime['hours'] = (int)$aResult['hours'];
+            $mktime['minutes'] = (int)$aResult['minutes'];
+            if (isset($aResult['seconds'])) {
+                $mktime["seconds"] = (int)$aResult['seconds'];
             }
-        } elseif (preg_match('@(\w+)(\s)(\d{1,2})\w{0,2}(\s|\,\s)(\d{4})(\s|\,\s)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)(\s(am|pm)|)@i', $value, $aResult) != false) {
-            $mktime['day'] = (int)$aResult[3];
-            $mktime['month'] = (int)$month2int[$aResult[1]];
-            $mktime['year'] = (int)$aResult[5];
-            $mktime['hours'] = (int)$aResult[7];
-            $mktime['minutes'] = (int)$aResult[8];
-            if (isset($aResult[10])) {
-                $mktime["seconds"] = (int)$aResult[10];
+        } elseif (preg_match('/^(?P<month>\w)\s(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\,\s)(?P<year>20\d\d)(?:\s|\,\s)(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-6]\d)(?:\:(?P<seconds>[0-6]\d))?\s?(?P<pm>pm)?/i', $value, $aResult) != false) {
+            $mktime['day'] = (int)$aResult['day'];
+            $mktime['month'] = (int)$month2int[$aResult['month']];
+            $mktime['year'] = (int)$aResult['year'];
+            $mktime['hours'] = (int)$aResult['hours'];
+            $mktime['minutes'] = (int)$aResult['minutes'];
+            if (isset($aResult['seconds'])) {
+                $mktime["seconds"] = (int)$aResult['seconds'];
             }
-            if (isset($aResult[13]) && $aResult[13] == 'pm') {
+            if (!empty($aResult['pm'])) {
                 $mktime['hours'] += 12;
             }
-        } elseif (preg_match('@(\d{1,2})\w{0,2}(\s|\.)(\d{1,2}|\w+)(\s|\.)(\d{4})@i', $value, $aResult) != false) {
-            $mktime['day'] = (int)$aResult[1];
-            $aResult3 = (int)$aResult[3];
-            if (!empty($aResult3)) {
-                $mktime['month'] = (int)$aResult[3];
-            } else {
-                $mktime['month'] = (int)$month2int[$aResult3];
+        } elseif (preg_match('/^(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\.)(?P<month>10|11|12|0\d|\d|\w)(?:\s|\.)(?P<year>20\d\d)$/', $value, $aResult) != false) {
+            $mktime['day'] = (int)$aResult['day'];
+            $aResult3 = (int)$aResult['month'];
+            if (!empty($aResult3)) { //a month number
+                $mktime['month'] = (int)$aResult['month'];
+            } else { //a month string
+                if (isset($month2int[$aResult['month']])) {
+                    $mktime['month'] = (int)$month2int[$aResult['month']];
+                } else {
+                    trigger_error('Invalid month conversation in HelperC::convertDateTimeToTimestamp Value:' . $aResult['month'], E_USER_NOTICE);
+
+                    return false;
+                }
             }
-            $mktime['year'] = (int)$aResult[5];
+            $mktime['year'] = (int)$aResult['year'];
             $mktime['hours'] = 0;
             $mktime['minutes'] = 0;
             $mktime['seconds'] = 0;
-        } elseif (preg_match('@(\d{4})(\-|\.)(\d{1,2})(\-|\.)(\d{1,2})@i', $value, $aResult) != false) {
-            $mktime['day'] = (int)$aResult[5];
-            $mktime['month'] = (int)$aResult[3];
-            $mktime['year'] = (int)$aResult[1];
+        } elseif (preg_match('/^(?P<year>20\d\d)(?:\-|\.)(?P<month>10|11|12|0\d|\d)(?:\-|\.)(?P<day>30|31|[0-2]\d|\d)$/', $value, $aResult) != false) {
+            $mktime['day'] = (int)$aResult['day'];
+            $mktime['month'] = (int)$aResult['month'];
+            $mktime['year'] = (int)$aResult['year'];
             $mktime['hours'] = 0;
             $mktime['minutes'] = 0;
             $mktime['seconds'] = 0;
-        } elseif (preg_match('@(\w+)(\s)(\d{1,2})\w{0,2}(\s|\,\s)(\d{4})@i', $value, $aResult) != false) {
-            $mktime['day'] = (int)$aResult[3];
-            $mktime['month'] = (int)$month2int[$aResult[1]];
-            $mktime['year'] = (int)$aResult[5];
+        } elseif (preg_match('/^(?P<month>\w)\s(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\,\s)(?P<year>20\d\d)$/', $value, $aResult) != false) {
+            $mktime['day'] = (int)$aResult['day'];
+            if (isset($month2int[$aResult['month']])) {
+                $mktime['month'] = (int)$month2int[$aResult['month']];
+            } else {
+                trigger_error('Invalid month conversation in HelperC::convertDateTimeToTimestamp Value:' . $aResult['month'], E_USER_NOTICE);
+
+                return false;
+            }
+            $mktime['year'] = (int)$aResult['year'];
             $mktime['hours'] = 0;
             $mktime['minutes'] = 0;
             $mktime['seconds'] = 0;
@@ -348,9 +362,7 @@ class HelperC
             return false;
         }
 
-        $mktime['unix'] = mktime($mktime['hours'], $mktime['minutes'], $mktime['seconds'], $mktime['month'], $mktime['day'], $mktime['year']);
-
-        return $mktime['unix'];
+        return mktime($mktime['hours'], $mktime['minutes'], $mktime['seconds'], $mktime['month'], $mktime['day'], $mktime['year']);
     }
 
     /////////////////////////////////////////////////////////////////////////////
