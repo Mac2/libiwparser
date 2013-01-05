@@ -63,13 +63,14 @@ class ParserIndexC extends ParserBaseC implements ParserI
 
         $regExp = $this->getRegularExpression();
 
-        $aResult = array();
         $aResult = preg_split($regExp, $this->getText(), -1, PREG_SPLIT_DELIM_CAPTURE);
 
         if (!empty($aResult)) {
             $parserResult->bSuccessfullyParsed = true;
 
             $parser = "";
+            $temp = "";
+            $fleetType = "";
 
             foreach ($aResult as $result) {
                 if (empty($result)) {

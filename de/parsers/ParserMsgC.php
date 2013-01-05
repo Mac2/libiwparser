@@ -78,12 +78,6 @@ class ParserMsgC extends ParserBaseC implements ParserI
 
             foreach ($aResult as $result) {
                 $retVal->iMessageCount++;
-                $bIsSystemNachricht = false;
-                $strMsgTitle = '';
-                $strMsgAuthor = '';
-                $eParserType = '';
-                $strParserText = '';
-                $iMsgDateTime = -1;
 
                 if ($result['msgIsSystem'] == 'Systemnachricht' || $result['msgIsSystem'] == 'von:Systemnachricht') {
                     $bIsSystemNachricht = true;

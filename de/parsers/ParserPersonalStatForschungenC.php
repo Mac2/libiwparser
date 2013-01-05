@@ -72,10 +72,6 @@ class ParserPersonalStatForschungenC extends ParserBaseC implements ParserI
             $parserResult->bSuccessfullyParsed = true;
 
             foreach ($aResult as $result) {
-                $iDateExpired = -1;
-                $iDateOfResearch = -1;
-                $strResearch = '';
-
                 $iDateOfResearch = HelperC::convertDateTimeToTimestamp($result['dateOfResearch']);
                 $iDateExpired = HelperC::convertMixedDurationToSeconds($result['dateExpired']);
                 $strResearch = $result['research'];

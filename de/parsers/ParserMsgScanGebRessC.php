@@ -70,15 +70,6 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
         if ($fRetValText !== false && $fRetValText > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $strCoords = '';
-            $strOwner = "";
-            $strOwnerAlly = "";
-            $strPlanetTyp = "";
-            $strObjektTyp = "";
-            $aCoords = array();
-            $iCoordsGal = -1;
-            $iCoordsSol = -1;
-            $iCoordsPla = -1;
             $aBuildings = array();
             $aResources = array();
 

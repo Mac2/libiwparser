@@ -68,26 +68,18 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
         $fRetValText = preg_match($regExpText, $msg->strParserText, $aResultText);
 
         //@todo!
-//   $parserResult->bSuccessfullyParsed = true;
-//   $parserResult->aErrors[] = 'Parser not yet implemented.';    
-//   return;
+        //   $parserResult->bSuccessfullyParsed = true;
+        //   $parserResult->aErrors[] = 'Parser not yet implemented.';
+        //   return;
 
-// 	return;
-//     if (strpos($parserResult->objResultData->strMsgTitle,"Eigener Planet wurde sondiert") !== false)
-// 	return;
+        // 	return;
+        //     if (strpos($parserResult->objResultData->strMsgTitle,"Eigener Planet wurde sondiert") !== false)
+        // 	return;
         if ($fRetValText !== false && $fRetValText > 0) {
-// 	$parserResult->bSuccessfullyParsed = true;
+        // 	$parserResult->bSuccessfullyParsed = true;
             $retVal->bSuccessfullyParsed = true;
-            $strCoords = "";
-// 	$strPlanetName = "";
-            $strOwner = "";
-            $strOwnerAlly = "";
-            $strPlanetTyp = "";
-            $strObjektTyp = "";
-            $aCoords = array();
-            $iCoordsGal = -1;
-            $iCoordsSol = -1;
-            $iCoordsPla = -1;
+        // 	$strPlanetName = "";
+
             $aSchiffe = array();
             $astatSchiffe = array();
             $aResources = array();
@@ -98,8 +90,7 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
             $strOwnerAlly = $aResultText['alliance'];
             $strPlanetTyp = $aResultText['planetname'];
             $strObjektTyp = $aResultText['objektname'];
-// 	$time = ;
-// print_pre($time);
+
             $iCoordsGal = PropertyValueC::ensureInteger($aResultText['coords_gal']);
             $iCoordsSol = PropertyValueC::ensureInteger($aResultText['coords_sol']);
             $iCoordsPla = PropertyValueC::ensureInteger($aResultText['coords_pla']);

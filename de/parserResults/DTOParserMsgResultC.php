@@ -306,6 +306,12 @@ class DTOParserMsgResultMsgSondierungC extends DTOParserMsgResultMsgC
 
     /**
      * @soap
+     * @var string $strNameFrom
+     */
+    public $strNameFrom = '';
+
+    /**
+     * @soap
      * @var string $strCoordsTo the coords
      */
     public $strCoordsTo = '';

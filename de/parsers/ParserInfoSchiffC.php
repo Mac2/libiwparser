@@ -209,8 +209,6 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
 
     private function getRegularExpressionYards()
     {
-
-        //$reResource                = $this->getRegExpResource();
         $reWerfttyp = "(kleine|mittlere|große|Dreadnought)";
 
         $regExpRess = '/';
@@ -222,8 +220,6 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
 
     private function getRegularExpressionActions()
     {
-
-        //$reResource                = $this->getRegExpResource();
         $reActions = '(?:übergebbar|Stationierbar|Transport|Angreifen\s\/\sVerteidigen|Plündern|Sondieren|Kolonisieren|Kampfbasis\saufbauen|Ressbasis\saufbauen|Bombardieren|Tarnbar)';
         $regExpRess = '/';
         $regExpRess .= '(?P<action>' . $reActions . ')';

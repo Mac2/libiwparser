@@ -76,14 +76,6 @@ class ParserMsgTransportC extends ParserMsgBaseC implements ParserMsgI
         if ($fRetValText !== false && $fRetValText > 0) {
             $retVal->bSuccessfullyParsed = true;
 
-            $strPlanetName = '';
-            $strFromUserName = '';
-            $strToUserName = '';
-            $strCoords = '';
-            $aCoords = array();
-            $iCoordsGal = -1;
-            $iCoordsSol = -1;
-            $iCoordsPla = -1;
             $aSchiffe = array();
             $aResources = array();
 

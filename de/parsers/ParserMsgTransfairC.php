@@ -69,14 +69,6 @@ class ParserMsgTransfairC extends ParserMsgBaseC implements ParserMsgI
         if ($fRetValText !== false && $fRetValText > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $strPlanetName = '';
-            $strFromUserName = '';
-            $strToUserName = '';
-            $strCoords = '';
-            $aCoords = array();
-            $iCoordsGal = -1;
-            $iCoordsSol = -1;
-            $iCoordsPla = -1;
             $aCarriedResources = array();
             $aFetchedResources = array();
 
