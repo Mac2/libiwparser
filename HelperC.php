@@ -29,12 +29,38 @@ class HelperC
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Tries to convert the given parameter into a unix timestamp.
+     * Tries to convert the given duration into seconds.
      *
      *
-     * @param string $value timestring
+     * @param string $value durationstring
      *
      * @return int|bool integer if conversion was successfull,
+     *                  boolean false if the provided parameter couldn't be recognized as a duration
+     */
+    static public function convertMixedDurationToSeconds($value)
+    {
+        $aResult = array();
+        if (preg_match('/^(?:(?P<days>\d+)\s(?:Tag|Tage|day|days)\s+|)(?P<hours>\d{1,2})\:(?P<minutes>\d|[0-5]\d)(?:\:(?P<seconds>\d|[0-5]\d))?$/', $value, $aResult) != false) {
+
+            if (!isset($aResult['seconds'])) {
+                $aResult['seconds'] = 0;
+            }
+
+            return ((int)$aResult['days'] * 24 * 60 * 60 + (int)$aResult['hours'] * 60 * 60 + (int)$aResult['minutes'] * 60 + (int)$aResult['seconds']);
+
+        } else {
+            return false;
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Tries to convert the given date into a unix timestamp.
+     *
+     * @param string $value date string
+     *
+     * @return int|bool integer (unix timestamp) if conversion was successfull,
      *                  boolean false if the provided parameter couldn't be recognized as a date
      */
     static public function convertDateToTimestamp($value)
@@ -74,72 +100,56 @@ class HelperC
 
         $aResult = array();
         $mktime = array();
-        if (preg_match('@(\d{1,2})\w{0,2}(\s|\.)(\d{1,2}|\w+)(\s|\.)(\d{4})@i', $value, $aResult) != false) {
-            $mktime['d'] = (int)$aResult[1];
-            $aResult3 = (int)$aResult[3];
-            if (!empty($aResult3)) {
-                $mktime['m'] = (int)$aResult[3];
+
+        /*
+         * match date
+         *
+         * regex ranges used:
+         * TT   :=   0 - 00 - 31    30|31|[0-2]\d|\d
+         * MM   :=   0 - 00 - 12    10|11|12|0\d|\d
+         * JJJJ :=   2000 - 2099    20\d\d
+         */
+        if (preg_match('/^(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\.)(?:(?P<month_num>10|11|12|0?[1-9])|(?P<month_str>\w))(?:\s|\.)(?P<year>20\d\d)$/', $value, $aResult) != false) {
+            $mktime['day'] = (int)$aResult['day'];
+            if (!empty($aResult['month_num'])) { //a month number
+                $mktime['month'] = (int)$aResult['month_num'];
+            } elseif (isset($month2int[$aResult['month_str']])) { //a valid month string
+                $mktime['month'] = (int)$month2int[$aResult['month_str']];
             } else {
-                $mktime['m'] = (int)$month2int[$aResult3];
+                trigger_error('Invalid month conversation in HelperC::convertDateToTimestamp Value:' . $aResult['month_str'], E_USER_NOTICE);
+
+                return false;
             }
-            $mktime['y'] = (int)$aResult[5];
-            $mktime['h'] = 0;
-            $mktime['i'] = 0;
-        } elseif (preg_match('@(\d{4})(\-|\.)(\d{1,2})(\-|\.)(\d{1,2})@i', $value, $aResult) != false) {
-            $mktime['d'] = (int)$aResult[5];
-            $mktime['m'] = (int)$aResult[3];
-            $mktime['y'] = (int)$aResult[1];
-            $mktime['h'] = 0;
-            $mktime['i'] = 0;
-        } elseif (preg_match('@(\w+)(\s)(\d{1,2})\w{0,2}(\s|\,\s)(\d{4})@i', $value, $aResult) != false) {
-            $mktime['d'] = (int)$aResult[3];
-            $mktime['m'] = (int)$month2int[$aResult[1]];
-            $mktime['y'] = (int)$aResult[5];
-            $mktime['h'] = 0;
-            $mktime['i'] = 0;
+            $mktime['year'] = (int)$aResult['year'];
+        } elseif (preg_match('/^(?P<year>20\d\d)(?:\-|\.)(?P<month>10|11|12|0\d|\d)(?:\-|\.)(?P<day>30|31|[0-2]\d|\d)$/', $value, $aResult) != false) {
+            $mktime['day'] = (int)$aResult['day'];
+            $mktime['month'] = (int)$aResult['month'];
+            $mktime['year'] = (int)$aResult['year'];
+        } elseif (preg_match('/^(?P<month_str>\w)\s(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\,\s)(?P<year>20\d\d)$/', $value, $aResult) != false) {
+            $mktime['day'] = (int)$aResult['day'];
+            if (isset($month2int[$aResult['month_str']])) { //a valid month string
+                $mktime['month'] = (int)$month2int[$aResult['month_str']];
+            } else {
+                trigger_error('Invalid month conversation in HelperC::convertDateToTimestamp Value:' . $aResult['month_str'], E_USER_NOTICE);
+
+                return false;
+            }
+            $mktime['year'] = (int)$aResult['year'];
         } else {
             return false;
         }
 
-        $mktime['unix'] = mktime($mktime['h'], $mktime['i'], 0, $mktime['m'], $mktime['d'], $mktime['y']);
+        return mktime(0, 0, 0, $mktime['month'], $mktime['day'], $mktime['year']);
 
-        return $mktime['unix'];
     }
 
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Tries to convert the given duration into seconds.
+     * Tries to convert the given time into a unix timestamp.
      *
      *
-     * @param string $value durationstring
-     *
-     * @return int|bool integer if conversion was successfull,
-     *                  boolean false if the provided parameter couldn't be recognized as a duration
-     */
-    static public function convertMixedDurationToSeconds($value)
-    {
-        $aResult = array();
-        if (preg_match('/^(?:(?P<days>\d+)\s(?:Tag|Tage|day|days)\s+|)(?P<hours>\d{1,2})\:(?P<minutes>\d|[0-5]\d)(?:\:(?P<seconds>\d|[0-5]\d))?$/', $value, $aResult) != false) {
-
-            if (!isset($aResult['seconds'])) {
-                $aResult['seconds'] = 0;
-            }
-
-            return ((int)$aResult['days'] * 24 * 60 * 60 + (int)$aResult['hours'] * 60 * 60 + (int)$aResult['minutes'] * 60 + (int)$aResult['seconds']);
-
-        } else {
-            return false;
-        }
-    }
-
-    /////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Tries to convert the given parameter into a unix timestamp.
-     *
-     *
-     * @param string $value timestring
+     * @param string $value time string
      *
      * @return Int|bool integer (a unix timestamp) if conversion was successfull,
      *                  boolean false if the provided parameter couldn't be recognized as a date
@@ -165,49 +175,12 @@ class HelperC
 
     /////////////////////////////////////////////////////////////////////////////
 
-    static public function convertBracketStringToArray($string)
-    {
-        $return = array();
-        $treffer = array();
-        if (preg_match_all('%(?:\(((?:[^\n\(\)]+)(?:\((?:[^\n\(\)]*)\)(?:[^\n\(\)]*))*)\))%', $string, $treffer)) {
-            $return = $treffer[1];
-        }
-
-        return $return;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////
-
     /**
-     * Converts the given string into an coordinates result DTO.
+     * Tries to convert the given datetime into a unix timestamp.
      *
-     * @param string $strCoordinates a string of the format gal:sys:pla
+     * @uses            HelperC::convertDateToTimestamp to test for date patterns
      *
-     * @uses DTOCoordinatesC
-     *
-     * @return DTOCoordinatesC
-     */
-    static public function convertCoordinates($strCoordinates)
-    {
-        $retVal = new DTOCoordinatesC();
-        $aPieces = explode(':', $strCoordinates);
-
-        if (count($aPieces) === 3) {
-            $retVal->iGalaxy = PropertyValueC::ensureInteger($aPieces[0]);
-            $retVal->iSystem = PropertyValueC::ensureInteger($aPieces[1]);
-            $retVal->iPlanet = PropertyValueC::ensureInteger($aPieces[2]);
-        }
-
-        return $retVal;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Tries to convert the given parameter into a unix timestamp.
-     *
-     *
-     * @param string $value timestring
+     * @param string $value datetime string
      *
      * @return int|bool integer if conversion was successfull,
      *                  boolean false if the provided parameter couldn't be recognized as a date
@@ -258,7 +231,7 @@ class HelperC
         );
 
         /*
-         * match standard date.
+         * match standard datetime.
          * See IW Account => Settings => Administration => Time
          * Format TT.MM.JJJJ HH:MM:SS (german)
          *
@@ -279,19 +252,16 @@ class HelperC
             $mktime['hours'] = (int)$aResult['hours'];
             $mktime['minutes'] = (int)$aResult['minutes'];
             $mktime['seconds'] = (int)$aResult['seconds'];
-        } else if (preg_match('/^(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\.)(?P<month>10|11|12|\d|\w)(?:\s|\.)(?P<year>20\d\d)\s(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-5]\d)(?:\:(?P<seconds>[0-5]\d))?$/', $value, $aResult) != false) {
+        } else if (preg_match('/^(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\.)(?:(?P<month_num>10|11|12|0?[1-9])|(?P<month_str>\w))(?P<month>10|11|12|\d|\w)(?:\s|\.)(?P<year>20\d\d)\s(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-5]\d)(?:\:(?P<seconds>[0-5]\d))?$/', $value, $aResult) != false) {
             $mktime['day'] = (int)$aResult['day'];
-            $aResultMonth = (int)$aResult['month'];
-            if (!empty($aResultMonth)) { //a month number
-                $mktime['month'] = $aResultMonth;
-            } else { //a month string
-                if (isset($month2int[$aResult['month']])) {
-                    $mktime['month'] = (int)$month2int[$aResult['month']];
-                } else {
-                    trigger_error('Invalid month conversation in HelperC::convertDateTimeToTimestamp Value:' . $aResult['month'], E_USER_NOTICE);
+            if (!empty($aResult['month_num'])) { //a month number
+                $mktime['month'] = (int)$aResult['month_num'];
+            } elseif (isset($month2int[$aResult['month_str']])) { //a valid month string
+                $mktime['month'] = (int)$month2int[$aResult['month_str']];
+            } else {
+                trigger_error('Invalid month conversation in HelperC::convertDateTimeToTimestamp Value:' . $aResult['month_str'], E_USER_NOTICE);
 
-                    return false;
-                }
+                return false;
             }
             $mktime['year'] = (int)$aResult['year'];
             $mktime['hours'] = (int)$aResult['hours'];
@@ -299,7 +269,7 @@ class HelperC
             if (isset($aResult['seconds'])) {
                 $mktime["seconds"] = (int)$aResult['seconds'];
             }
-        } elseif (preg_match('/^(?P<year>20\d\d)(?:\-|\.)(?P<month>10|11|12|0\d|\d)(?:\-|\.)(?P<day>30|31|[0-2]\d|\d)\s(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-5]\d)(?:\:(?P<seconds>[0-5]\d))?$/', $value, $aResult) != false) {
+        } elseif (preg_match('/^(?P<year>20\d\d)(?:\-|\.)(?P<month>10|11|12|0?[1-9])(?:\-|\.)(?P<day>30|31|[0-2]\d|\d)\s(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-5]\d)(?:\:(?P<seconds>[0-5]\d))?$/', $value, $aResult) != false) {
             $mktime['day'] = (int)$aResult['day'];
             $mktime['month'] = (int)$aResult['month'];
             $mktime['year'] = (int)$aResult['year'];
@@ -308,9 +278,15 @@ class HelperC
             if (isset($aResult['seconds'])) {
                 $mktime["seconds"] = (int)$aResult['seconds'];
             }
-        } elseif (preg_match('/^(?P<month>\w)\s(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\,\s)(?P<year>20\d\d)(?:\s|\,\s)(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-6]\d)(?:\:(?P<seconds>[0-6]\d))?\s?(?P<pm>pm)?/i', $value, $aResult) != false) {
+        } elseif (preg_match('/^(?P<month_str>\w)\s(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\,\s)(?P<year>20\d\d)(?:\s|\,\s)(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-6]\d)(?:\:(?P<seconds>[0-6]\d))?\s?(?P<pm>pm)?/i', $value, $aResult) != false) {
             $mktime['day'] = (int)$aResult['day'];
-            $mktime['month'] = (int)$month2int[$aResult['month']];
+            if (isset($month2int[$aResult['month_str']])) { //a valid month string
+                $mktime['month'] = (int)$month2int[$aResult['month_str']];
+            } else {
+                trigger_error('Invalid month conversation in HelperC::convertDateTimeToTimestamp Value:' . $aResult['month_str'], E_USER_NOTICE);
+
+                return false;
+            }
             $mktime['year'] = (int)$aResult['year'];
             $mktime['hours'] = (int)$aResult['hours'];
             $mktime['minutes'] = (int)$aResult['minutes'];
@@ -320,49 +296,50 @@ class HelperC
             if (!empty($aResult['pm'])) {
                 $mktime['hours'] += 12;
             }
-        } elseif (preg_match('/^(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\.)(?P<month>10|11|12|0\d|\d|\w)(?:\s|\.)(?P<year>20\d\d)$/', $value, $aResult) != false) {
-            $mktime['day'] = (int)$aResult['day'];
-            $aResult3 = (int)$aResult['month'];
-            if (!empty($aResult3)) { //a month number
-                $mktime['month'] = (int)$aResult['month'];
-            } else { //a month string
-                if (isset($month2int[$aResult['month']])) {
-                    $mktime['month'] = (int)$month2int[$aResult['month']];
-                } else {
-                    trigger_error('Invalid month conversation in HelperC::convertDateTimeToTimestamp Value:' . $aResult['month'], E_USER_NOTICE);
-
-                    return false;
-                }
-            }
-            $mktime['year'] = (int)$aResult['year'];
-            $mktime['hours'] = 0;
-            $mktime['minutes'] = 0;
-            $mktime['seconds'] = 0;
-        } elseif (preg_match('/^(?P<year>20\d\d)(?:\-|\.)(?P<month>10|11|12|0\d|\d)(?:\-|\.)(?P<day>30|31|[0-2]\d|\d)$/', $value, $aResult) != false) {
-            $mktime['day'] = (int)$aResult['day'];
-            $mktime['month'] = (int)$aResult['month'];
-            $mktime['year'] = (int)$aResult['year'];
-            $mktime['hours'] = 0;
-            $mktime['minutes'] = 0;
-            $mktime['seconds'] = 0;
-        } elseif (preg_match('/^(?P<month>\w)\s(?P<day>30|31|[0-2]\d|\d)\w{0,2}(?:\s|\,\s)(?P<year>20\d\d)$/', $value, $aResult) != false) {
-            $mktime['day'] = (int)$aResult['day'];
-            if (isset($month2int[$aResult['month']])) {
-                $mktime['month'] = (int)$month2int[$aResult['month']];
-            } else {
-                trigger_error('Invalid month conversation in HelperC::convertDateTimeToTimestamp Value:' . $aResult['month'], E_USER_NOTICE);
-
-                return false;
-            }
-            $mktime['year'] = (int)$aResult['year'];
-            $mktime['hours'] = 0;
-            $mktime['minutes'] = 0;
-            $mktime['seconds'] = 0;
         } else {
-            return false;
+            //all datetime patterns checked, try date patterns
+            return HelperC::convertDateToTimestamp($value);
         }
 
         return mktime($mktime['hours'], $mktime['minutes'], $mktime['seconds'], $mktime['month'], $mktime['day'], $mktime['year']);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    static public function convertBracketStringToArray($string)
+    {
+        $return = array();
+        $treffer = array();
+        if (preg_match_all('%(?:\(((?:[^\n\(\)]+)(?:\((?:[^\n\(\)]*)\)(?:[^\n\(\)]*))*)\))%', $string, $treffer)) {
+            $return = $treffer[1];
+        }
+
+        return $return;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Converts the given string into an coordinates result DTO.
+     *
+     * @param string $strCoordinates a string of the format gal:sys:pla
+     *
+     * @uses DTOCoordinatesC
+     *
+     * @return DTOCoordinatesC
+     */
+    static public function convertCoordinates($strCoordinates)
+    {
+        $retVal = new DTOCoordinatesC();
+        $aPieces = explode(':', $strCoordinates);
+
+        if (count($aPieces) === 3) {
+            $retVal->iGalaxy = PropertyValueC::ensureInteger($aPieces[0]);
+            $retVal->iSystem = PropertyValueC::ensureInteger($aPieces[1]);
+            $retVal->iPlanet = PropertyValueC::ensureInteger($aPieces[2]);
+        }
+
+        return $retVal;
     }
 
     /////////////////////////////////////////////////////////////////////////////
