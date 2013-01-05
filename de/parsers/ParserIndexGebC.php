@@ -106,7 +106,7 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
                     $retObj->iGebEnd2 = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
                     $retObj->iGebEnd3 = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
                     if (isset($result['mtMixedTime'])) {
-                        $retObj->iGebEndIn = HelperC::convertMixedTimeToTimestamp($result['mtMixedTime']);
+                        $retObj->iGebEndIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
                     }
                     $retObj->strCoords = $strCoords;
                     if (!empty($retObj->strGebName[0])) {

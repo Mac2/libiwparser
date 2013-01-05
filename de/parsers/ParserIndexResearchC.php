@@ -75,7 +75,7 @@ class ParserIndexResearchC extends ParserMsgBaseC implements ParserMsgI
 
                 $retObj->iResearchEnd = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
                 if (isset($result['mtMixedTime'])) {
-                    $retObj->iResearchEndIn = HelperC::convertMixedTimeToTimestamp($result['mtMixedTime']);
+                    $retObj->iResearchEndIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
                 }
 
                 $retVal->aResearch[] = $retObj;

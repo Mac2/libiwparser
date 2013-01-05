@@ -117,7 +117,7 @@ class HelperC
      * @return int|bool integer if conversion was successfull,
      *                  boolean false if the provided parameter couldn't be recognized as a duration
      */
-    static public function convertMixedTimeToTimestamp($value)
+    static public function convertMixedDurationToSeconds($value)
     {
         $aResult = array();
         if (preg_match('@(?:(?P<days>\d+)\s(?:Tag|Tage)\s+|)(?P<hours>\d{1,2})\:(?P<minutes>\d{1,2})(?:\:(?P<seconds>\d{1,2}))?@', $value, $aResult) != false) {

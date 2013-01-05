@@ -125,7 +125,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 //        }
 
                 if (!empty($result['mtMixedTime'])) {
-                    $retObj->iAnkunftIn = HelperC::convertMixedTimeToTimestamp($result['mtMixedTime']);
+                    $retObj->iAnkunftIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
                 } else {
                     $retObj->iAnkunftIn = 0;
                 }

@@ -185,28 +185,28 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
                 if (!empty($stufe) && !empty($teff['build_time'])) {
                     if (count($retVal->aBuildTime) == 0) {
                         $retVal->aBuildTime[] = array(
-                            'iBuildTime' => HelperC::convertMixedTimeToTimestamp($teff["build_time"]),
+                            'iBuildTime' => HelperC::convertMixedDurationToSeconds($teff["build_time"]),
                             'stufe'      => $stufe
                         );
                     } else {
                         $exist = false;
                         foreach ($retVal->aBuildTime as $dat) {
 
-                            if ($dat['iBuildTime'] == HelperC::convertMixedTimeToTimestamp($teff["build_time"]) && $stufe > $dat["stufe"]) {
+                            if ($dat['iBuildTime'] == HelperC::convertMixedDurationToSeconds($teff["build_time"]) && $stufe > $dat["stufe"]) {
                                 $exist = true;
                                 break;
                             }
                         }
                         if (!$exist) {
                             $retVal->aBuildTime[] = array(
-                                'iBuildTime' => HelperC::convertMixedTimeToTimestamp($teff["build_time"]),
+                                'iBuildTime' => HelperC::convertMixedDurationToSeconds($teff["build_time"]),
                                 'stufe'      => $stufe
                             );
                         }
                     }
                 } else { //! keine Verteuerung
                     $retVal->aBuildTime[] = array(
-                        'iBuildTime' => HelperC::convertMixedTimeToTimestamp($teff["build_time"]),
+                        'iBuildTime' => HelperC::convertMixedDurationToSeconds($teff["build_time"]),
                         'stufe'      => 0
                     );
                 }

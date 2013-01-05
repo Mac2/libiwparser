@@ -99,7 +99,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
 
                     $retObj->aLastScan = $lastScan;
                     if (isset($result['mtScanRange'])) {
-                        $retObj->aScanRange = HelperC::convertMixedTimeToTimestamp($result['mtScanRange']);
+                        $retObj->aScanRange = HelperC::convertMixedDurationToSeconds($result['mtScanRange']);
                     }
                     if (isset($result['iLB'])) {
                         $retObj->iLB = PropertyValueC::ensureInteger($result['iLB']);
