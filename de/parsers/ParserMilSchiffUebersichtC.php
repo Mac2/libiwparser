@@ -190,7 +190,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
 
     $regExpKolo  = '/
           (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-          [\\n\\r]+
+          [\n\r]+
           \((?P<kolo_type>'.$reKoloTypes.')\)
     /mx';
 

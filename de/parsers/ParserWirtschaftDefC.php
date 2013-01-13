@@ -155,12 +155,12 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
     $regExp .= '(?P<kolo_line>';
     $regExp .=     $reKoloCoords;
     $regExp .= '   (?:';
-    $regExp .= '     [\\n\\r]+';
+    $regExp .= '     [\n\r]+';
     $regExp .= '     \('.$reKoloTypes.'\)';
-    $regExp .= '     \\t';
+    $regExp .= '     \t';
     $regExp .= '     '.$reKoloCoords.'';
     $regExp .= '   )*';
-    $regExp .= '   [\\n\\r]+';
+    $regExp .= '   [\n\r]+';
     $regExp .= '   \('.$reKoloTypes.'\)';
     $regExp .= ')';
     $regExp .= '\s+';
@@ -171,8 +171,8 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
     $regExp .= ')';
     $regExp .= '^Verteidigungsanlagen\s\(Anzahl/Baubar\)';
     $regExp .='(?P<data_lines>(?:';
-    $regExp .='      [\\n\\r]+';    //! Zeilenumbruch
-    $regExp .='      [^\\t\\n]+';   //! ein Wort
+    $regExp .='      [\n\r]+';    //! Zeilenumbruch
+    $regExp .='      [^\t\n]+';   //! ein Wort
     $regExp .='      (?:\t\d*\s/\s\d*)+';   //! Bundle von (Nr / Nr)
     $regExp .='      )+';
     $regExp .= ')\s+';
@@ -193,7 +193,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
 
     $regExpKolo  = '/
           (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-          [\\n\\r]+
+          [\n\r]+
           \((?P<kolo_type>'.$reKoloTypes.')\)
     /mx';
 

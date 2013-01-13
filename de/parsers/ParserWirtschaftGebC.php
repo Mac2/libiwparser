@@ -61,7 +61,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
     $fRetVal = preg_match_all( $regExp, $this->getText(), $aResult, PREG_SET_ORDER );
 
   $aKolos = array();
-// print_die($aResult);
+
     if( $fRetVal !== false && $fRetVal > 0 )
     {
       $parserResult->bSuccessfullyParsed = true;
@@ -143,22 +143,22 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
     $reKoloCoords        = $this->getRegExpKoloCoords();
 
     $regExp  = '/^
-          (?P<area_name>[\&\w\süÜäÄöÖ]+)[\\n\\r]+
-          \\t?
+          (?P<area_name>[\&\w\süÜäÄöÖ]+)[\n\r]+
+          \t?
           (?P<kolo_line>
           '.$reKoloCoords.'
             (
-              [\\n\\r]+
+              [\n\r]+
               \('.$reKoloTypes.'\)
-              \\t
+              \t
               '.$reKoloCoords.'
             )*
-            [\\n\\r]+
+            [\n\r]+
             \('.$reKoloTypes.'\)\sSumme
           )
           (?P<data_lines>(?:
-            [\\n\\r]+
-            [^\\t\\n]+
+            [\n\r]+
+            [^\t\n]+
             (?:\t\d*)+
           )+)
     $/mx';
@@ -178,7 +178,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
 
     $regExpKolo  = '/
           (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-          [\\n\\r]+
+          [\n\r]+
           \((?P<kolo_type>'.$reKoloTypes.')\)
     /mx';
 
