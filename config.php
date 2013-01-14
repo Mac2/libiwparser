@@ -133,6 +133,13 @@ return array(
         'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
                         'de'              . DIRECTORY_SEPARATOR .
                         'parsers'         . DIRECTORY_SEPARATOR .
+                        'ParserWirtschaftUniverseC.php',
+        'classname' => 'ParserWirtschaftUniverseC',
+      ),
+      array(
+        'filename'  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR .
+                        'de'              . DIRECTORY_SEPARATOR .
+                        'parsers'         . DIRECTORY_SEPARATOR .
                         'ParserMsgTransfairC.php',
         'classname' => 'ParserMsgTransfairC',
       ),
