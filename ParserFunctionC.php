@@ -472,8 +472,7 @@ class ParserFunctionC
   /**
    * returns a regular expression pattern matching a date
    *
-   * @TODO support the other date formats availible in IW (Settings ->
-   *       Administration -> Time formats)
+   * @TODO support the other date formats availible in IW (Settings -> Administration -> Time formats)
    * @TODO don't match wrong dates like 51.45.2208 or 30.02.2009
    */
   protected function getRegExpDate()
