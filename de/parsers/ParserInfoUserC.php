@@ -68,16 +68,18 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
         $retVal->strUserAllianceTag = PropertyValueC::ensureString( $aResult['strUserAllianceTag'] );
         $retVal->strUserAllianceJob = PropertyValueC::ensureString( $aResult['strUserAllianceJob'] );
 
-        $iCoordsGal = PropertyValueC::ensureInteger($aResult['iCoordsGal']);
-        $iCoordsSol = PropertyValueC::ensureInteger($aResult['iCoordsSol']);
-        $iCoordsPla = PropertyValueC::ensureInteger($aResult['iCoordsPla']);
-        $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-        $retVal->aCoords = $aCoords;
-        $retVal->strCoords = $iCoordsGal.':'.$iCoordsSol.':'.$iCoordsPla;
+        if (!empty($aResult['strPlanetName'])) {          //Informationen über den Hauptplanet vorhanden
 
-        if (!empty($aResult['strPlanetName'])) {
+            $iCoordsGal = PropertyValueC::ensureInteger($aResult['iCoordsGal']);
+            $iCoordsSol = PropertyValueC::ensureInteger($aResult['iCoordsSol']);
+            $iCoordsPla = PropertyValueC::ensureInteger($aResult['iCoordsPla']);
+            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+            $retVal->aCoords = $aCoords;
+            $retVal->strCoords = $iCoordsGal.':'.$iCoordsSol.':'.$iCoordsPla;
+
             $planetname = HelperC::convertBracketStringToArray($aResult['strPlanetName']);
             $retVal->strPlanetName = PropertyValueC::ensureString( $planetname[0] );
+
         }
         
         $retVal->iEntryDate = HelperC::convertDateTimeToTimestamp($aResult['iEntryDate']);

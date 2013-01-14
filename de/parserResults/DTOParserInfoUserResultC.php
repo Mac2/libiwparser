@@ -27,31 +27,31 @@ class DTOParserInfoUserResultC
    * @soap
    * @var string $strUserName the user of the object
    */
-  public $strUserName = '';
+  public $strUserName;
 
   /**
    * @soap
    * @var string $strUserAlliance the alliance of the user
    */
-  public $strUserAlliance = '';
+  public $strUserAlliance;
 
   /**
    * @soap
    * @var string $strUserAllianceTag
    */
-  public $strUserAllianceTag = '';
+  public $strUserAllianceTag;
 
   /**
    * @soap
    * @var string $strUserAllianceJob
    */
-  public $strUserAllianceJob = '';
+  public $strUserAllianceJob;
 
   /**
    * @soap
    * @var string $strPlanetName name of the object
    */
-  public $strPlanetName = '';  
+  public $strPlanetName;
 
   /**
    * @soap
@@ -63,67 +63,67 @@ class DTOParserInfoUserResultC
    * @soap
    * @var array $strCoords
    */
-  public $strCoords = '';
+  public $strCoords;
 
   /**
    * @soap
    * @var int $iEntryDate
    */
-  public $iEntryDate = 0;
+  public $iEntryDate;
 
   /**
    * @soap
    * @var int $iGebPkt
    */
-  public $iGebPkt = 0;
+  public $iGebPkt;
 
   /**
    * @soap
    * @var int $iFP
    */
-  public $iFP = 0;
+  public $iFP;
 
   /**
    * @soap
    * @var int $iHSPos
    */
-  public $iHSPos = 0;
+  public $iHSPos;
 
     /**
    * @soap
    * @var int $iHSChange
    */
-  public $iHSChange = 0;
+  public $iHSChange;
 
     /**
    * @soap
    * @var int $iEvo
    */
-  public $iEvo = 0;
+  public $iEvo;
 
     /**
    * @soap
    * @var string $strStaatform
    */
-  public $strStaatsform = '';
+  public $strStaatsform;
 
     /**
    * @soap
    * @var string $strTitel
    */
-  public $strTitel = '';
+  public $strTitel;
 
     /**
    * @soap
    * @var string $strDescr
    */
-  public $strDescr = '';
+  public $strDescr;
 
   /**
    * @soap
    * @var string $strMisc
    */
-  public $strMisc = '';
+  public $strMisc;
   
 }
 
