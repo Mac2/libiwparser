@@ -107,6 +107,12 @@ class DTOParserWirtschaftPlaniress2KoloResultC
 
   /**
    * @soap
+   * @var string $strObjectType the type of this kolo
+   */
+  public $strObjectType = 'Kolonie';
+
+  /**
+   * @soap
    * @var string $strPlanetName the Koloname
    */
 
