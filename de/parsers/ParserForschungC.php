@@ -96,12 +96,12 @@ class ParserForschungC extends ParserBaseC implements ParserI
             else 
                 $result["research"] = "";
             
-            if ($result["research"] == "erforscht") {
+            if ($result["research"] == "erforscht") {       //sollte nicht mehr der Fall sein?
                 $parserResult->bSuccessfullyParsed = false;
                 $parserResult->aErrors[] = 'Unable to determine researchname (<pre>'.$result[0].'</pre>)';
                 continue;
             }
-            
+
             if (!isset($result['state']) || empty($result['state']) || !in_array($result['state'],array('erforscht','zu wenig Ress','forschen','---','wird erforscht')))
             {
                 $parserResult->bSuccessfullyParsed = false;
@@ -138,7 +138,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                         }
                     }
                     else {
-                        $parserResult->aErrors[] = 'Unable to match the costs pattern (' .$ret->strResearchName. ').';
+                        //$parserResult->aErrors[] = 'Unable to match the costs pattern (' .$ret->strResearchName. ').';
                     }
                 }
                 $retVal->aResearchsResearched[] = $ret;
@@ -165,7 +165,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                         }
                     }
                     else {
-                        $parserResult->aErrors[] = 'Unable to match the costs pattern (' .$ret->strResearchName. ').';
+                        //$parserResult->aErrors[] = 'Unable to match the costs pattern (' .$ret->strResearchName. ').';
                     }
                 }
                 
@@ -193,7 +193,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                         }
                     }
                     else {
-                        $parserResult->aErrors[] = 'Unable to match the costs pattern for (' .$ret->strResearchName. ').';
+                        //$parserResult->aErrors[] = 'Unable to match the costs pattern for (' .$ret->strResearchName. ').';
                     }
                 }
                 
@@ -247,7 +247,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
     /**
     */
 
-    $reResearch    		= '[\wÖöäÄüÜ]+[^\n\t\r\:\+]{3,}';   //! Mac: hier evtl. konrket 'erforscht' ausschliessen ?
+    $reResearch    		= '[\wÖöäÄüÜ]+[^\n\t\r\:\+]{3,}(?<!erforscht)';   //! Mac: hier evtl. konrket 'erforscht' ausschliessen ?
     $reResearchComment  = $this->getRegExpSingleLineText3();
     $reFP               = $this->getRegExpDecimalNumber();
     $reDateTime 		= $this->getRegExpDateTime();
