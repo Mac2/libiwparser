@@ -204,11 +204,13 @@ class ParserIndexC extends ParserBaseC implements ParserI
      * die Daten sind Blöcke, Wobei die Reihenfolge ungewiss ist
      */
     $rePlanetName       = $this->getRegExpSingleLineText();
+    $reRessProd         = $this->getRegExpFloatingDouble();
+    $reRessVorrat       = $this->getRegExpDecimalNumber();
 
     #Just even don't think to ask anything about this regexp, fu!
     $regExp  = '/
         \s*?(?:
-            (?P<Ressen>\sRessourcen\s(?!abholen))|
+            (?P<Ressen>Eisen(?:\sEisen)?\s+\('.$reRessProd.'\)\s+'.$reRessVorrat.'\s+Eis(?:\sEis)?\s+\('.$reRessProd.'\))|
             Globale\sNachricht\s+?Votings|
             Votings|
             (?P<KoloInfos>Kolonieinformation|^Kolonie\s'.$rePlanetName.'\s\(\d+\:\d+\:\d+\)\nLebensbedingungen)|
