@@ -124,9 +124,9 @@ class ParserIndexRessourcenC extends ParserMsgBaseC implements ParserMsgI
   private function getRegularExpression()
   {
 
-    $reRessNames        = $this->getRegExpResource();
-    $reRessProd        = $this->getRegExpFloatingDouble();
-    $reRessVorrat        = $this->getRegExpDecimalNumber();
+    $reRessNames  = $this->getRegExpResource();
+    $reRessProd   = $this->getRegExpFloatingDouble();
+    $reRessVorrat = $this->getRegExpDecimalNumber();
 
     $regExp = '/';
     $regExp .= '(?P<strRessName>'.$reRessNames.')';
