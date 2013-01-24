@@ -39,9 +39,9 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_info_forschung');
     $this->setName("Forschungsinfo");
-    $this->setRegExpCanParseText('/Forschungsinfo\s*Forschungsinfo|Forschungsinfo:.+Status.+Farbenlegende:/sm');
-    $this->setRegExpBeginData( '' );
-    $this->setRegExpEndData( '' );
+    $this->setRegExpCanParseText('/Forschungsinfo:.+Status.+Farbenlegende:/sm');
+    $this->setRegExpBeginData( '/Forschungsinfo\:/' );
+    $this->setRegExpEndData( '/Farbenlegende/' );
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -62,8 +62,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
 
     $aResult = array();
     $fRetVal = preg_match( $regExp, $this->getText(), $aResult );
-//     print_r($aResult);
-//     die();
+
     if( $fRetVal !== false && $fRetVal > 0 )
     {
         $parserResult->bSuccessfullyParsed = true;
@@ -95,7 +94,6 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
             $retVal->strResearchComment = PropertyValueC::ensureString( $aResult['commentonly'] );
         
         $retVal->iFP = PropertyValueC::ensureInteger( $aResult['fp'] );
-        // $retVal->iHS = PropertyValueC::ensureInteger( $aResult['iPoints'] );
         $retVal->iPeopleResearched = PropertyValueC::ensureInteger( $aResult['count'] );
 
         if (empty($aResult['prozent'])) $aResult['prozent'] = 100;
@@ -159,7 +157,6 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
 
     
     $regExp  = '/';
-    $regExp  .= 'Forschungsinfo\:\s';
     $regExp  .= '(?P<strResearchName>'.$reResearch.')\s*?';
     $regExp  .= '[\n\r]+';
     $regExp  .= 'Status\s+?';
@@ -191,51 +188,55 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
 
     $regExp .= '(?:\s*?\(von\s(?P<count>\d+)(?:\%|\\\%)\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\%|\\\%)\sFPKosten\)';
     $regExp  .= '[\n\r]+';
-    $regExp  .= '|)';
+    $regExp  .= ')?';
 
-    $regExp .= '(?:[\s\t\n\r]+?Aufgrund\svon\sgenerellen\stechnischen\sUnverst.{1,3}ndnis\sim\sUniversum,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s(?:\%|\\\%)\.';
+    $regExp .= '(?:[\s\t\n\r]*?Aufgrund\svon\sgenerellen\stechnischen\sUnverst.{1,3}ndnis\sim\sUniversum,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s(?:\%|\\\%)\.';
     $regExp  .= '[\n\r]+';
-    $regExp  .= '|)';
-  
-    // $regExp  .= 'Highscorepunkte\s+?';
-    // $regExp  .= '(?P<iPoints>'.$rePoints.')\s*?';
-    // $regExp  .= '[\n\r]+';
+    $regExp  .= ')?';
+
     $regExp  .= '(?:';
     $regExp  .= '\s*Prototyp\s+?';
     $regExp  .= 'Die\sForschung\sbringt\seinen\sPrototyp\svon\s(?P<strPrototypName>'        . $reSchiffeName       . ')\s*?';
     $regExp  .= '[\n\r]+';
-    $regExp  .= '|)';
+    $regExp  .= ')?';
 
     $regExp  .= '\s*Voraussetzungen\sForschungen\s+?';
-    $regExp  .= '(?P<strResearchsNeeded>'.$reBracketString.'){0,1}';
+    $regExp  .= '(?P<strResearchsNeeded>'.$reBracketString.')?';
     $regExp  .= '\s+?';
+
     $regExp  .= 'Voraussetzungen\sGeb.{1,3}ude\s+?';
-    $regExp  .= '(?P<strBuildingsNeeded>'.$reBracketString.'){0,1}';
+    $regExp  .= '(?P<strBuildingsNeeded>'.$reBracketString.')?';
     $regExp  .= '\s+?';
+
     $regExp  .= 'Voraussetzungen\sObjekte\s+?';
-    $regExp  .= '(?P<strObjectsNeeded>'.$reBracketString.'){0,1}';
+    $regExp  .= '(?P<strObjectsNeeded>'.$reBracketString.')?';
     $regExp  .= '\s+?';
+
     $regExp  .= '(?:\s+?';
-    $regExp  .= '(?P<strMiscNeeded>'.'Es\ssind\sweitere\sVoraussetzungen\szu\serf.{1,3}llen,\sum\sdiese\sForschung\serforschen\szu\skönnen\.'.'){0,1}';
+    $regExp  .= '(?P<strMiscNeeded>'.'Es\ssind\sweitere\sVoraussetzungen\szu\serf.{1,3}llen,\sum\sdiese\sForschung\serforschen\szu\skönnen\.'.')?';
     $regExp  .= '\s+?)?';
 
     $regExp  .= 'Erm.{1,3}glicht\sForschungen\s+?';
-    $regExp  .= '(?P<strResearchsDevelop>('.$reBracketString.'){0,1})';
+    $regExp  .= '(?P<strResearchsDevelop>('.$reBracketString.'))?';
     $regExp  .= '\s+?';
+
     $regExp  .= 'Erm.{1,3}glicht\sGeb.{1,3}ude\s+?';
-    $regExp  .= '(?P<strBuildingsDevelop>'.$reBracketString.'){0,1}';
+    $regExp  .= '(?P<strBuildingsDevelop>'.$reBracketString.')?';
     $regExp  .= '\s+?';
+
     $regExp  .= 'Erm.{1,3}glicht\sGeb.{1,3}udestufen\s+?';
-    $regExp  .= '(?P<strBuildingLevelsDevelop>'.$reBracketString.'){0,1}';
+    $regExp  .= '(?P<strBuildingLevelsDevelop>'.$reBracketString.')?';
     $regExp  .= '\s+?';
+
     $regExp  .= 'Erm.{1,3}glicht\sVerteidigungsanlagen\s+?';
-    $regExp  .= '(?P<strDefencesDevelop>'.$reBracketString.'){0,1}';
+    $regExp  .= '(?P<strDefencesDevelop>'.$reBracketString.')?';
     $regExp  .= '\s+?';
-    $regExp  .= 'Erm.{1,3}glicht\sGenetikoptionen\s+?';
-    $regExp  .= '(?P<strGeneticsDevelop>'.$reBracketString.'){0,1}';
+
+    $regExp  .= 'Erm.{1,3}glicht\sGenetikoptionen\s*?';
+    $regExp  .= '(?P<strGeneticsDevelop>'.$reBracketString.')?';
 
     $regExp  .= '/mx';
-    
+
     return $regExp;
   }
   
