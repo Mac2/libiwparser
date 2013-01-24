@@ -103,7 +103,6 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
 
     foreach ($aDataLines as $strDataLine)
     {
-      $strDataLine["anz"] = trim($strDataLine["anz"]);
       $aDataLine = explode ("\t", $strDataLine["anz"]);
 
       $schiff = new DTOParserMilSchiffUebersichtSchiffResultC;
@@ -112,7 +111,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
       $schiff->iCountGesamt = PropertyValueC::ensureInteger( array_pop ($aDataLine) );
       $schiff->iCountStat = PropertyValueC::ensureInteger( array_pop ($aDataLine) );
       $schiff->iCountFlug = PropertyValueC::ensureInteger( array_pop ($aDataLine) );
-
+        
       if (empty($schiff->iCountGesamt) || $schiff->iCountGesamt == 0) continue;
       foreach ($aDataLine as $i => $strData)
       {
@@ -173,12 +172,12 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
     $reAnz        = $this->getRegExpDecimalNumber();
 
     $regExpSchiffe   = '/';
-    $regExpSchiffe  .= '(?:^(?P<schiff>'.$reSchiff.')\s+(?P<anz>(?:'.$reAnz.'\s*)+)'.'\s*$)+';
+    $regExpSchiffe  .= '(?:^(?P<schiff>'.$reSchiff.')\t(?P<anz>(?:[^\s]*\t?)+)'.'\s*$)+';
     $regExpSchiffe  .= '/mx';
 
     return $regExpSchiffe;
   }
-
+  
   /////////////////////////////////////////////////////////////////////////////
 
   private function getRegularExpressionKolo()
