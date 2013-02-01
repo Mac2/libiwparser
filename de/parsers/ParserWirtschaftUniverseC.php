@@ -82,7 +82,7 @@ class ParserWirtschaftUniverseC extends ParserBaseC implements ParserI
         $regExp = '~';
         $regExp .= '(?:Kein\sErgebnis)|(?:Dateiname:)'; //xml-Link is parsed by ParserXmlC
         $regExp .= '.*Scannen.*';
-        $regExp .= '(?:Der\snächste\sScan\sist\serst\sab\s(?P<NewUniXmlTime>' . $reDateTime . ')\smöglich)';
+        $regExp .= '(?:Der\snächste\sScan\sist\serst\sab\s(?P<NewUniXmlTime>' . $reDateTime . ')\smöglich)?';
         $regExp .= '~sx';
 
         return $regExp;
