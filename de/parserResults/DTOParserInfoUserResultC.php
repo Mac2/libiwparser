@@ -49,6 +49,12 @@ class DTOParserInfoUserResultC
 
   /**
    * @soap
+   * @var string $bAccType
+   */
+  public $strAccType;
+
+  /**
+   * @soap
    * @var string $strPlanetName name of the object
    */
   public $strPlanetName;
@@ -63,7 +69,7 @@ class DTOParserInfoUserResultC
    * @soap
    * @var array $strCoords
    */
-  public $strCoords;
+  public $strCoords = null;
 
   /**
    * @soap
