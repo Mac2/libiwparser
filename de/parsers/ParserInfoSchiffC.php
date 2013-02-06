@@ -38,8 +38,8 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
     $this->setIdentifier('de_info_schiff');
     $this->setName('Schiffsinformation');
     $this->setRegExpCanParseText('/Schiffinfo\s+Schiffinfo|Schiffinfo.+Daten.+Kampfdaten.+Besonderheiten/s');
-    $this->setRegExpBeginData( '' );
-    $this->setRegExpEndData( '' );
+    $this->setRegExpBeginData( '/Schiffinfo:/' );
+    $this->setRegExpEndData( '/Besonderheiten/' );
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -73,63 +73,78 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
 	$retVal->aResearchs = HelperC::convertBracketStringToArray($aResult['strResearchs']);
 
  	$treffer = array();
-	preg_match_all ($regExpAreaName, $retVal->aResearchs[0], $treffer, PREG_SET_ORDER );
-	foreach ($treffer as $teff) {
-		$bla = HelperC::convertBracketStringToArray( $teff['AreaName'] );
-		if (isset($bla[0])) {
-                    if ($bla[0] == "Korvette")              $bla[0] = "Korvetten";
-                    else if ($bla[0] == "Schlachtschiff")   $bla[0] = "Schlachtschiffe";
-                    else if ($bla[0] == "Dreadnought")      $bla[0] = "Dreadnoughts";
-
-                    $retVal->strAreaName[] = $bla[0];
+    if (!empty($retVal->aResearchs)) {
+        preg_match_all($regExpAreaName, $retVal->aResearchs[0], $treffer, PREG_SET_ORDER);
+        foreach ($treffer as $teff) {
+            $AreaName = HelperC::convertBracketStringToArray($teff['AreaName']);
+            if (isset($AreaName[0])) {
+                if ($AreaName[0] == "Korvette") {
+                    $AreaName[0] = "Korvetten";
+                } else if ($AreaName[0] == "Schlachtschiff") {
+                    $AreaName[0] = "Schlachtschiffe";
+                } else if ($AreaName[0] == "Dreadnought") {
+                    $AreaName[0] = "Dreadnoughts";
                 }
-	}
-
+                $retVal->strAreaName[] = $AreaName[0];
+            }
+        }
+    }
 	$treffer = array();
 	preg_match_all ($regExpYards, $aResult['strYards'], $treffer, PREG_SET_ORDER );
 	foreach ($treffer as $teff) {
-		if (isset($teff['werft_typ'])) $retVal->strWerftTyp = $teff['werft_typ'];
+		if (isset($teff['werft_typ'])) {
+            $retVal->strWerftTyp = $teff['werft_typ'];
+        }
 	}
-	
+
+    if (!empty($aResult['strActions']))
+    {
+        $retVal->aActions = preg_split('/\n+/', $aResult['strActions']);
+    }
+
 	$retVal->iGschwdSol = $aResult['iGschwdSol'];
 	$retVal->iGschwdGal = $aResult['iGschwdGal'];
 	if (!empty($aResult['bGalFlucht']))
-		$retVal->bCanLeaveGalaxy = true;
+    {
+        $retVal->bCanLeaveGalaxy = true;
+    }
 
 	$retVal->iVerbrauchBrause = $aResult['iVerbrauchBrause'];
 	$retVal->iVerbrauchEnergie = $aResult['iVerbrauchEnergie'];
-	if (isset($aResult['iKapa1']) && !empty($aResult['iKapa1']))
+	if (!empty($aResult['iKapa1']))
 	{
 		$retVal->bIsTransporter = true;
 		$retVal->iKapa1 = PropertyValueC::ensureInteger($aResult['iKapa1']);
 	}
-	if (isset($aResult['iKapa2']) && !empty($aResult['iKapa2']))
+	if (!empty($aResult['iKapa2']))
 	{
 		$retVal->bIsTransporter = true;
 		$retVal->iKapa2 = PropertyValueC::ensureInteger($aResult['iKapa2']);
 	}
-	if (isset($aResult['iKapaBev']) && !empty($aResult['iKapaBev']))
+	if (!empty($aResult['iKapaBev']))
 	{
 		$retVal->bIsTransporter = true;
 		$retVal->iKapaBev = PropertyValueC::ensureInteger($aResult['iKapaBev']);
 	}
 
 	if (!empty($aResult['bBeTransported']))
-		$retVal->bCanBeTransported = true;
+    {
+        $retVal->bCanBeTransported = true;
+    }
 
-	if (isset($aResult['iSchiffKapa1']) && !empty($aResult['iSchiffKapa1']))
+	if (!empty($aResult['iSchiffKapa1']))
 	{
 		$retVal->bIsCarrier = true;
 		$retVal->iShipKapa1 = PropertyValueC::ensureInteger($aResult['iSchiffKapa1']);
 	}
 
-	if (isset($aResult['iSchiffKapa2']) && !empty($aResult['iSchiffKapa2']))
+	if (!empty($aResult['iSchiffKapa2']))
 	{
 		$retVal->bIsCarrier = true;
 		$retVal->iShipKapa2 = PropertyValueC::ensureInteger($aResult['iSchiffKapa2']);
 	}
 
-    if (isset($aResult['iSchiffKapa3']) && !empty($aResult['iSchiffKapa3']))
+    if (!empty($aResult['iSchiffKapa3']))
 	{
 		$retVal->bIsCarrier = true;
 		$retVal->iShipKapa3 = PropertyValueC::ensureInteger($aResult['iSchiffKapa3']);
@@ -177,7 +192,7 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
 
     $reResource                = $this->getRegExpResource();
 
-    $regExpRess  = '/';
+    $regExpRess   = '/';
     $regExpRess  .= '(?P<resource_name>'.$reResource.')\:\s(?P<resource_count>'.$this->getRegExpDecimalNumber().')';
     $regExpRess  .= '/mx';
 
@@ -187,10 +202,10 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
   private function getRegularExpressionEffective()
   {
  
-    $reResource                = $this->getRegExpAreas();
+    $reResource = $this->getRegExpAreas();
 
-    $regExpRess  = '/';
-    $regExpRess  .= '(?P<area_name>'.$reResource.')\s+(?P<effective_count>'.'\d+(?:\%|\\\%)'.')';
+    $regExpRess   = '/';
+    $regExpRess  .= '(?P<area_name>'.$reResource.')\s+(?P<effective_count>\d+)(?:\%|\\\%)';
     $regExpRess  .= '/mx';
     
     return $regExpRess;
@@ -240,10 +255,10 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
 
    //! @todo Mac: Area aus dem Forschungsnamen auslesen ?
 
-  $reSchiffName       = $this->getRegExpSingleLineText3();
-  $reResearchName       = $this->getRegExpBracketString();
-  $reMixedTime     = $this->getRegExpMixedTime();
-  $reResource         = $this->getRegExpResource();
+  $reSchiffName   = $this->getRegExpSingleLineText3();
+  $reResearchName = $this->getRegExpBracketString();
+  $reMixedTime    = $this->getRegExpMixedTime();
+  $reResource     = $this->getRegExpResource();
   $reCosts        = $this->getRegExpDecimalNumber();
   $reBonus        = $this->getRegExpFloatingDouble();
   $reWerftName    = "(?:(?:kleine|mittlere|gro.{1,3}e|Dreadnought)\s(?:(?:orbitale|planetare)\s)?Werft)";
@@ -252,24 +267,23 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
   $reActions     .= '|Bombardieren|Tarnbar|Terraformer|.{1,3}bergebbar\san\seigene\sPlaneten)';
 
   $regExp  = '/';
-  $regExp  .= 'Schiffinfo\:\s';
   $regExp  .= '(?P<strSchiffName>'.$reSchiffName.')\s*?';
   $regExp  .= '[\n\r]+';
   $regExp  .= '[\s\S]+?';
-  $regExp  .= 'Kosten\s+?(?P<kosten>(\s?'.$reResource.'\:\s'.$reCosts.')*)';
+  $regExp  .= 'Kosten\s+?(?P<kosten>(\s?'.$reResource.'\:\s'.$reCosts.')*|.*?)';
   $regExp  .= '[\n\r]+';
   $regExp  .= 'Dauer\s+?';
   $regExp  .= '(?P<strTime>'.$reMixedTime.')\s*?';
   $regExp  .= '[\n\r]+';
   $regExp  .= 'Voraussetzungen\sForschungen\s+?';
-  $regExp  .= '(?P<strResearchs>'.$reResearchName.'){0,1}\s*';
+  $regExp  .= '(?P<strResearchs>'.$reResearchName.')?\s*';
   $regExp  .= '[\n\r]+';
   $regExp  .= '(?:aufr.{1,3}stbar\szu\s+?';
   $regExp  .= '(?P<strUpgrade>'.$reSchiffName.')';
   $regExp  .= '[\n\r]+)?';
 
   $regExp  .= 'ben.{1,3}tigt\sWerften\s+?';
-  $regExp  .= '(?P<strYards>(?:'.$reWerftName.'\s*)+)';
+  $regExp  .= '(?P<strYards>(?:'.$reWerftName.'\s*)*)';
   $regExp  .= '[\n\r]+';
   $regExp  .= 'm.{1,3}gliche\sAktionen\s+?';
   $regExp  .= '(?P<strActions>(?:'.$reActions.'\s*)+)';
@@ -328,7 +342,7 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
   $regExp  .= '(?P<iAngriff>'.'\d+'.')\s*?';
   $regExp  .= '[\n\r]+';
   $regExp  .= 'Waffenklasse\s+?';
-  $regExp  .= '(?P<strWeaponClass>'.'(?:keine|elektrisch|gravimetrisch|kinetisch)'.')\s*?';
+  $regExp  .= '(?P<strWeaponClass>'.'(?:keine|elektrisch|gravimetrisch|kinetisch|unbekannt)'.')\s*?';
   $regExp  .= '[\n\r]+';
   $regExp  .= 'Verteidigung\s+?';
   $regExp  .= '(?P<iDefence>'.'\d+'.')\s*?';
@@ -336,6 +350,7 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
   $regExp  .= 'Panzerung\s\(kinetisch\)\s+?';
   $regExp  .= '(?P<iPanzkin>'.'\d+'.')\s*?';
   $regExp  .= '[\n\r]+';
+
   $regExp  .= 'Panzerung\s\(elektrisch\)\s+?';
   $regExp  .= '(?P<iPanzelektr>'.'\d+'.')\s*?';
   $regExp  .= '[\n\r]+';
@@ -351,30 +366,28 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
   $regExp  .= 'Zielgenauigkeit\s+?';
   $regExp  .= '(?P<iZielgenauigkeit>'.'\d+'.')\s*?';
   $regExp  .= '[\n\r]+';
-  $regExp  .= 'Effektivit.t\sgegen\s*[\n\r](?P<effective>(?:^'.$reSchiffName.'\s*\d+(?:\%|\\\%)[\n\r])+)';
+  $regExp  .= 'Effektivit.{1,3}t\sgegen\s*[\n\r](?P<effective>(?:^'.$reSchiffName.'\s*\d+(?:\%|\\\%)[\n\r])+)';
 
   $regExp  .= '(?:Geleitschutz';
-  $regExp  .= '[\n\r]+';
-  $regExp  .= 'Ben.tigte\sJ.geranzahl\sf.r\sBonus\s+?';
-  $regExp  .= '(?P<iJaeger>'.'\d+'.')\s*?';
-  $regExp  .= '[\n\r]+';
-  $regExp  .= 'Geleitschutzbonus\sAngriff\s*?';
-  $regExp  .= '(?P<fBonusAtt>'.$reBonus.')';
-  $regExp  .= '[\n\r]+';
-  $regExp  .= 'Geleitschutzbonus\sVerteidigung\s+?';
-  $regExp  .= '(?P<fBonusDef>'.$reBonus.')\s*?';
+  $regExp  .= ' [\n\r]+';
+  $regExp  .= ' Ben.{1,3}tigte\sJ.{1,3}geranzahl\sf.{1,3}r\sBonus\s+?';
+  $regExp  .= ' (?P<iJaeger>'.'\d+'.')\s*?';
+  $regExp  .= ' [\n\r]+';
+  $regExp  .= ' Geleitschutzbonus\sAngriff\s*?';
+  $regExp  .= ' (?P<fBonusAtt>'.$reBonus.')';
+  $regExp  .= ' [\n\r]+';
+  $regExp  .= ' Geleitschutzbonus\sVerteidigung\s+?';
+  $regExp  .= ' (?P<fBonusDef>'.$reBonus.')\s*?';
   $regExp  .= ')?';
 
-  $regExp  .= '(?:Spionagef.higkeiten';
-  $regExp  .= '[\n\r]+';
+  $regExp  .= '(?:Spionagef.{1,3}higkeiten';
+  $regExp  .= ' [\n\r]+';
   $regExp  .= ')?';
 
   $regExp  .= '(?:Bombenschaden\s+?';
-  $regExp  .= '(?P<iBombenschaden>'.'\d+'.')\s*?';
+  $regExp  .= ' (?P<iBombenschaden>'.'\d+'.')\s*?';
   $regExp  .= '[\n\r]+)?';
 
-  $regExp  .= '(?:Besonderheiten';
-  $regExp  .= '[\n\r]+)?';
   $regExp  .= '/mxu';
 
     return $regExp;

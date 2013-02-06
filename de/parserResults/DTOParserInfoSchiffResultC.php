@@ -44,6 +44,12 @@ class DTOParserInfoSchiffResultC
 
   /**
    * @soap
+   * @var array $aActions array of actions the ship can do
+   */
+  public $aActions = array();
+
+  /**
+   * @soap
    * @var integer $iGschwdSol the sol speed (between planets in the same sol)
    */
   public $iGschwdSol = 0;
