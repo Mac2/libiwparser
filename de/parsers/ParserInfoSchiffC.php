@@ -205,7 +205,7 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
     $reResource = $this->getRegExpAreas();
 
     $regExpRess   = '/';
-    $regExpRess  .= '(?P<area_name>'.$reResource.')\s+(?P<effective_count>\d+)(?:\%|\\\%)';
+    $regExpRess  .= '(?P<area_name>'.$reResource.')\s+(?P<effective_count>'.'\d+'.')(?:\%|\\\%)';
     $regExpRess  .= '/mx';
     
     return $regExpRess;

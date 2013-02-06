@@ -90,7 +90,7 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
             $retVal->aCosts[] = array('strResourceName' => PropertyValueC::ensureResource( $teff['resource_name'] ), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
         }
 
-        //! Mac: effektivitat der Deffanlagen gegen alle Schiffstypen betraegt 100%!! (abweichend von den Datenblaettern)
+        //! Mac: effektivitat der Deffanlagen gegen alle Schiffstypen beträgt 100%!! (abweichend von den Datenblättern)
 //        $treffer = array();
 //        preg_match_all ($regExpEffective, $aResult['effective'], $treffer, PREG_SET_ORDER );
 //        foreach ($treffer as $teff)
@@ -110,7 +110,7 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
   private function getRegularExpressionRess()
   {
 
-    $reResource                = $this->getRegExpResource();
+    $reResource  = $this->getRegExpResource();
 
     $regExpRess  = '/';
     $regExpRess  .= '(?P<resource_name>'.$reResource.')\:\s(?P<resource_count>'.$this->getRegExpDecimalNumber().')';
@@ -122,10 +122,10 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
   private function getRegularExpressionEffective()
   {
  
-    $reResource                = $this->getRegExpAreas();
+    $reResource  = $this->getRegExpAreas();
 
     $regExpRess  = '/';
-    $regExpRess  .= '(?P<area_name>'.$reResource.')\s+(?P<effective_count>'.'\d+(?:\%|\\\%)'.')';
+    $regExpRess  .= '(?P<area_name>'.$reResource.')\s+(?P<effective_count>'.'\d+'.')(?:\%|\\\%)';
     $regExpRess  .= '/mx';
     
     return $regExpRess;

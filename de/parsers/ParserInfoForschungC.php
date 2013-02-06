@@ -146,7 +146,6 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     /**
     */
 
-//     $reResearch                = '[a-zA-Z][^\n\t\r\:\+\%\.]{3,}';
     $reResearch         = $this->getRegExpSingleLineText3();        //! accepted also numbers in ResearchName
     $reSchiffeName      = $this->getRegExpSingleLineText3();
     $reBracketString    = $this->getRegExpBracketString();

@@ -274,7 +274,6 @@ class ParserForschungC extends ParserBaseC implements ParserI
     $regExp .= '    (?:^(?P<area>(?:'.$reAreas.'(?!\s(?:'.$reAreas.'|'.$reFP.'\sForschungspunkte\s))|Raumfahrt(?=\sRaumfahrt)))\s|';
     $regExp .= '        (?:';
     $regExp .= '            (?P<research>'.$reResearch .')\s';
-//     $regExp .= '(?P<comment>[+,:\\\%\.öÖüÜäÄ\w\s]*\n|)';
     $regExp .= '            (?P<comment>.*\n|)';
     $regExp .= '            (?P<fp>' . $reFP . ')';
     $regExp .= '            \sForschungspunkte\s';
