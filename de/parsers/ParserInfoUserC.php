@@ -119,17 +119,17 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
 
 //    $rePlanetType       = $this->getRegExpPlanetTypes();
 //    $reObjectType       = $this->getRegExpKoloTypes();
-  $reText         = $this->getRegExpSingleLineText3();
-  $reName           = $this->getRegExpUserName();
-  $reAlliance         = $this->getRegExpSingleLineText();
-  $rePlanetName       = $this->getRegExpBracketString();
-  $reCoordsGal         = '\d+';
-  $reCoordsSol         = '\d+';
-  $reCoordsPla         = '\d+';  
-  $reEntryDate = $this->getRegExpDate();
-  $rePoints = $this->getRegExpResearchPoints();
-  $reNumber =  $this->getRegExpFloatingDouble();
-  $reDescr = $this->getRegExpSingleLineText3();
+  $reText       = $this->getRegExpSingleLineText3();
+  $reName       = $this->getRegExpUserName();
+  $reAlliance   = $this->getRegExpSingleLineText();
+  $rePlanetName = $this->getRegExpBracketString();
+  $reCoordsGal  = '\d+';
+  $reCoordsSol  = '\d+';
+  $reCoordsPla  = '\d+';
+  $reEntryDate  = $this->getRegExpDate();
+  $rePoints     = $this->getRegExpResearchPoints();
+  $reNumber     = $this->getRegExpFloatingDouble();
+  $reDescr      = $this->getRegExpSingleLineText3();
 
   $regExp  = '/';
   $regExp  .= 'Name\s+?';
@@ -177,8 +177,8 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
   $regExp  .= '(?:(?P<strTitel>'.$reText.')\s*)?';
   $regExp  .= '[\n\r]+';
   $regExp  .= 'Beschreibung\s+';
-  $regExp  .= '(?:(?P<strDescr>'.$reDescr.'{1,}))?';
-  $regExp  .= '[\n\r]+';
+  $regExp  .= '(?:(?P<strDescr>(?:'.$reDescr.'[\n\r]+)+))?';
+  $regExp  .= '[\n\r]?';
   $regExp  .= 'Diverses\s+';
   $regExp  .= '(?:(?P<IWBPAcc>besoffener\sPinguin\sAccount\sBesitzer)|(?P<strMisc>'.$reText.')\s*)?';
   $regExp  .= '[\n\r]+';
