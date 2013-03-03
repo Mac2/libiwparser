@@ -36,7 +36,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_wirtschaft_def');
     $this->setName('Verteidigungs&uuml;bersicht');
-    $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s+Forschungs.{1,3}bersicht\s+Werft.{1,3}bersicht\s+Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht(?:.*Verteidigungs.{1,3}bersicht)?/sm');
+    $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s*Forschungs.{1,3}bersicht\s*Werft.{1,3}bersicht\s*Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht(?:.*Verteidigungs.{1,3}bersicht)?/sm');
     $this->setRegExpBeginData( '/Defence.{1,3}bersicht.*Verteidigungs.{1,3}bersicht/sm' );
     $this->setRegExpEndData( '' );
   }
@@ -58,7 +58,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
         $aKolos = array();
-        
+
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
@@ -93,45 +93,50 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
 
                 $aSlotLines = explode("\n", $strSlotLine);
                 foreach ($aSlotLines as $strSlotLine) {
-                    $aDataLine = explode("\t", $strSlotLine);
-                    
-                    $strDefenceType = array_shift($aDataLine);
+                    $aData = explode(" ", trim($strSlotLine));
+                    $aData = array_filter($aData, function($val){return ($val !== "/");});  //! alle / rausfiltern
+                    $aData = array_values($aData);                                          //! keys korrigieren
+
+                    $strDefenceType = array_shift($aData);
+                    array_shift($aData); // legende entfernen
                     if (strpos($strDefenceType,"orb") !== FALSE)
                         $strDefenceType = "orbital";
                     else if (strpos($strDefenceType,"pla") !== FALSE)
                         $strDefenceType = "planetar";
-                    
+                                        
                     $slot = new DTOParserWirtschaftDefSlotResultC;
                     $slot->strSlotType = PropertyValueC::ensureString($strDefenceType);
 
                     if (empty($strDefenceType))
                         continue;
-                    foreach ($aDataLine as $i => $strData) {
-                        $values = explode("/", $strData);
-                        $slot->aAvailable[$aKolos[$i]] = PropertyValueC::ensureInteger($values[0]);
-                        $slot->aUsed[$aKolos[$i]] = PropertyValueC::ensureInteger($values[1]);
-                        $slot->aTotal[$aKolos[$i]] = PropertyValueC::ensureInteger($values[2]);
+                    for ($i=0; $i<=count($aData)-3; $i+=3) {
+                        $slot->aAvailable[$aKolos[$i/3]] = PropertyValueC::ensureInteger($aData[$i]);
+                        $slot->aUsed[$aKolos[$i/3]] = PropertyValueC::ensureInteger($aData[$i+1]);
+                        $slot->aTotal[$aKolos[$i/3]] = PropertyValueC::ensureInteger($aData[$i+2]);
                     }
                     $retVal->aSlots[] = $slot;
                 }
                 
-                $aDataLines = explode("\n", $strDataLines);
-                foreach ($aDataLines as $strDataLine) {
-                    $aDataLine = explode("\t", $strDataLine);
+                $aResultDefence = array();
+                $fRetValDefence = preg_match_all($this->getRegularExpressionBuildDefence(), $strDataLines, $aResultDefence, PREG_SET_ORDER);
 
-                    $strDefenceName = array_shift($aDataLine);
+                foreach ($aResultDefence as $resultDef) {
+                    $strDefenceName = $resultDef['name'];
                     $defence = new DTOParserWirtschaftDefDefenceResultC;
                     $defence->strDefenceName = PropertyValueC::ensureString($strDefenceName);
 
                     if (empty($strDefenceName))
                         continue;
-                    foreach ($aDataLine as $i => $strData) {
-                        $values = explode("/", $strData);
-                        $defence->aCounts[$aKolos[$i]] = PropertyValueC::ensureInteger($values[0]);
-                        $defence->aMaxCounts[$aKolos[$i]] = PropertyValueC::ensureInteger($values[1]);
+                    $resultDef['anz'] = str_replace("\t", " ", $resultDef["anz"]);
+                    $aData = explode(" ", trim($resultDef['anz']));
+                    $aData = array_filter($aData, function($val){return ($val !== "/");});  //! alle / rausfiltern
+                    $aData = array_values($aData);                                          //! keys korrigieren
+                    for ($i=0; $i<=count($aData)-2; $i+=2) {
+                        $defence->aCounts[$aKolos[$i/2]] = PropertyValueC::ensureInteger($aData[$i]);
+                        $defence->aMaxCounts[$aKolos[$i/2]] = PropertyValueC::ensureInteger($aData[$i+1]);
                     }
-
-                    $retVal->aDefences[] = $defence;
+                    
+                $retVal->aDefences[] = $defence;
                 }
             }
         } else {
@@ -150,6 +155,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
     $reKoloTypes        = $this->getRegExpKoloTypes();
     $reKoloCoords       = $this->getRegExpKoloCoords();
     $reNumber           = $this->getRegExpDecimalNumber();
+    $reDefence          = $this->getRegExpDefence();
     
     $regExp = '&';
     $regExp .= '(?P<kolo_line>';
@@ -157,23 +163,24 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
     $regExp .= '   (?:';
     $regExp .= '     [\n\r]+';
     $regExp .= '     \('.$reKoloTypes.'\)';
-    $regExp .= '     \t';
+    $regExp .= '     \s+';
     $regExp .= '     '.$reKoloCoords.'';
-    $regExp .= '   )*';
+    $regExp .= '   )+';
     $regExp .= '   [\n\r]+';
     $regExp .= '   \('.$reKoloTypes.'\)';
     $regExp .= ')';
     $regExp .= '\s+';
     $regExp .= '^Verteidigungsslots\s';
     $regExp .= '(?P<slot_line>';
-    $regExp .= '   (?:(?:pla|orb)\sfrei/belegt/gesamt(?:\s+' . $reNumber . "\s/\s" . $reNumber . "\s/\s" . $reNumber . ')*\s+';
+    $regExp .= '   (?:(?:pla|orb)\sfrei/belegt/gesamt(?:\s+' . $reNumber . "\s/\s" . $reNumber . "\s/\s" . $reNumber . ')*[\n\r]+';
     $regExp .= '   )+';
     $regExp .= ')';
+    $regExp .= '\s*';
     $regExp .= '^Verteidigungsanlagen\s\(Anzahl/Baubar\)';
     $regExp .='(?P<data_lines>(?:';
     $regExp .='      [\n\r]+';    //! Zeilenumbruch
-    $regExp .='      [^\t\n]+';   //! ein Wort
-    $regExp .='      (?:\t\d*\s/\s\d*)+';   //! Bundle von (Nr / Nr)
+    $regExp .='     ' . $reDefence;
+    $regExp .='      (?:[\t|\s]\d*\s/\s\d*)+';   //! Bundle von (Nr / Nr)
     $regExp .='      )+';
     $regExp .= ')\s+';
     $regExp .= '&mx';
@@ -200,6 +207,23 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
     return $regExpKolo;
   }
 
+  /////////////////////////////////////////////////////////////////////////////
+
+  private function getRegularExpressionBuildDefence()
+  {
+    /**
+    */
+
+    $reDefence        = $this->getRegExpDefence();
+
+    $regExp = '~';
+    $regExp .= '(?P<name>' . $reDefence . ')';
+    $regExp .= '(?P<anz>(?:[\t|\s]\d*\s/\s\d*)+)';   //! Bundle von (Nr / Nr)
+    $regExp .= '~mx';
+
+    return $regExp;
+  }
+  
   /////////////////////////////////////////////////////////////////////////////
 
   /**

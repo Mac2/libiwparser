@@ -641,6 +641,36 @@ class ParserFunctionC
   /////////////////////////////////////////////////////////////////////////////
 
   /**
+   * returns a regular expression patter matching possible defence buildings
+   *
+   */
+  protected function getRegExpDefence()
+  {
+    $retVal = '';
+
+    $retVal .= '(?:';
+    $retVal .= 'SDI\sRaketensystem|';
+    $retVal .= 'SDI\sAtomraketen|';
+    $retVal .= 'SDI\sPlasmalaser|';
+    $retVal .= 'SDI\sGravitonbeam|';
+    $retVal .= 'Stopfentenwerfer|';
+    $retVal .= 'Raketensatellit|';
+    $retVal .= 'Gausskanonensatellit|';
+    $retVal .= 'LaserSat|';
+    $retVal .= 'PulslaserSat|';
+    $retVal .= 'SD01\sGatling|';
+    $retVal .= 'SD02\sPulslaser|';
+    $retVal .= 'SDI\sStellarkonverter|';
+    $retVal .= 'Fusiontorpedowerfer\s\(Sat\)|';
+    $retVal .= 'MassdriverSat|';
+    $retVal .= ')';
+
+    return $retVal;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  /**
    * returns a regular expression pattern matching a mixed time
    *
    */

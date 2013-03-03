@@ -63,9 +63,7 @@ class PropertyValueC
     {
 
         $filtered_number = 0;
-
-        if (preg_match('~^(?P<sign>-|\+|)(?P<digit>\d{1,3}(?:(\D?)\d{3})?(?:\3\d{3})*)(?:\D(?P<part>\d{1,2}))?$~', $value, $numberpart)) {
-
+        if (preg_match('~^\s*(?P<sign>-|\+|)(?P<digit>\d{1,3}(?:(\D?)\d{3})?(?:\3\d{3})*)(?:\D(?P<part>\d{1,2}))?\s*$~', $value, $numberpart)) {
             $filtered_number = preg_replace('~\D~', '', $numberpart['digit']);
 
             if (isset($numberpart['part'])) {                        //Nachkommastellen vorhanden?
