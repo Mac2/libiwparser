@@ -58,7 +58,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
         $aKolos = array();
-
+        
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
@@ -94,7 +94,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
                 $aSlotLines = explode("\n", $strSlotLine);
                 foreach ($aSlotLines as $strSlotLine) {
                     $aData = explode(" ", trim($strSlotLine));
-                    $aData = array_filter($aData, function($val){return ($val !== "/");});  //! alle / rausfiltern
+                    $aData = array_filter($aData, function($val){return !(in_array($val,array("/","")));});  //! alle / und leer rausfiltern
                     $aData = array_values($aData);                                          //! keys korrigieren
 
                     $strDefenceType = array_shift($aData);
@@ -170,17 +170,17 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
     $regExp .= '   \('.$reKoloTypes.'\)';
     $regExp .= ')';
     $regExp .= '\s+';
-    $regExp .= '^Verteidigungsslots\s';
+    $regExp .= '^Verteidigungsslots\s*[\n\r]*';
     $regExp .= '(?P<slot_line>';
-    $regExp .= '   (?:(?:pla|orb)\sfrei/belegt/gesamt(?:\s+' . $reNumber . "\s/\s" . $reNumber . "\s/\s" . $reNumber . ')*[\n\r]+';
+    $regExp .= '   (?:(?:pla|orb)\sfrei/belegt/gesamt\s*(?:' . $reNumber . "\s/\s" . $reNumber . "\s/\s" . $reNumber . '\s*)*[\n\r]+';
     $regExp .= '   )+';
     $regExp .= ')';
     $regExp .= '\s*';
-    $regExp .= '^Verteidigungsanlagen\s\(Anzahl/Baubar\)';
+    $regExp .= '^Verteidigungsanlagen\s\(Anzahl/Baubar\)\s*';
     $regExp .='(?P<data_lines>(?:';
     $regExp .='      [\n\r]+';    //! Zeilenumbruch
     $regExp .='     ' . $reDefence;
-    $regExp .='      (?:[\t|\s]\d*\s/\s\d*)+';   //! Bundle von (Nr / Nr)
+    $regExp .='      \s*(?:[\t|\s]\d*\s/\s\d*\s*)+';   //! Bundle von (Nr / Nr)
     $regExp .='      )+';
     $regExp .= ')\s+';
     $regExp .= '&mx';
