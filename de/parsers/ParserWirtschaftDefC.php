@@ -110,9 +110,9 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
                     if (empty($strDefenceType))
                         continue;
                     for ($i=0; $i<=count($aData)-3; $i+=3) {
-                        $slot->aAvailable[$aKolos[$i/3]] = PropertyValueC::ensureInteger($aData[$i]);
-                        $slot->aUsed[$aKolos[$i/3]] = PropertyValueC::ensureInteger($aData[$i+1]);
-                        $slot->aTotal[$aKolos[$i/3]] = PropertyValueC::ensureInteger($aData[$i+2]);
+                        $slot->aAvailable[$aKolos[(int)($i/3)]] = PropertyValueC::ensureInteger($aData[$i]);
+                        $slot->aUsed[$aKolos[(int)($i/3)]] = PropertyValueC::ensureInteger($aData[$i+1]);
+                        $slot->aTotal[$aKolos[(int)($i/3)]] = PropertyValueC::ensureInteger($aData[$i+2]);
                     }
                     $retVal->aSlots[] = $slot;
                 }
@@ -132,8 +132,8 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
                     $aData = array_filter($aData, function($val){return ($val !== "/");});  //! alle / rausfiltern
                     $aData = array_values($aData);                                          //! keys korrigieren
                     for ($i=0; $i<=count($aData)-2; $i+=2) {
-                        $defence->aCounts[$aKolos[$i/2]] = PropertyValueC::ensureInteger($aData[$i]);
-                        $defence->aMaxCounts[$aKolos[$i/2]] = PropertyValueC::ensureInteger($aData[$i+1]);
+                        $defence->aCounts[$aKolos[(int)($i/2)]] = PropertyValueC::ensureInteger($aData[$i]);
+                        $defence->aMaxCounts[$aKolos[(int)($i/2)]] = PropertyValueC::ensureInteger($aData[$i+1]);
                     }
                     
                 $retVal->aDefences[] = $defence;
