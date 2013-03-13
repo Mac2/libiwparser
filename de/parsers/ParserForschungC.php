@@ -288,7 +288,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
     $regExp .= '            (?:Stufe\s\d\s|)';
     $regExp .= '            (?P<state>---|wird\serforscht|zu\swenig\sRess|forschen|erforscht)';
     $regExp .= '            (?:\nbis\:\s(?P<finish>'.$reDateTime.')\n\s*(?P<expire>'.$reMixedTime.')|)';
-    $regExp .= '            (?:\n(?P<duration>'.$reMixedTime.')\n\s*(?P<endtime>'.$reDateTime.')|)';
+    $regExp .= '            (?:\n\s*(?P<duration>'.$reMixedTime.')\n\s*(?P<endtime>'.$reDateTime.')|)';
     $regExp .= '        )';
     $regExp .= '    )
                 )';
