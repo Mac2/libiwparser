@@ -49,79 +49,73 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
   /**
    * @see ParserI::parseText()
    */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserInfoForschungResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $this->stripTextToData();
-
-    $regExp = $this->getRegularExpression();
-    $regExpRess = $this->getRegularExpressionRess();
-
-    $aResult = array();
-    $fRetVal = preg_match( $regExp, $this->getText(), $aResult );
-
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function parseText(DTOParserResultC $parserResult)
     {
-        $parserResult->bSuccessfullyParsed = true;
-        
-        $retVal->aResearchsNeeded = HelperC::convertBracketStringToArray($aResult['strResearchsNeeded']);
-        $retVal->aBuildingsNeeded = HelperC::convertBracketStringToArray($aResult['strBuildingsNeeded']);
-        $retVal->aObjectsNeeded = HelperC::convertBracketStringToArray($aResult['strObjectsNeeded']);
+        $parserResult->objResultData = new DTOParserInfoForschungResultC();
+        $retVal                      =& $parserResult->objResultData;
+        $fRetVal                     = 0;
 
-        if (isset($aResult['strResearchsDevelop']))
-            $retVal->aResearchsDevelop = HelperC::convertBracketStringToArray($aResult['strResearchsDevelop']);
-        if (isset($aResult['strBuildingsDevelop']))
-            $retVal->aBuildingsDevelop = HelperC::convertBracketStringToArray($aResult['strBuildingsDevelop']);
-        if (isset($aResult['strBuildingLevelsDevelop']))
+        $this->stripTextToData();
+
+        $regExp     = $this->getRegularExpression();
+        $regExpRess = $this->getRegularExpressionRess();
+
+        $aResult = array();
+        $fRetVal = preg_match($regExp, $this->getText(), $aResult);
+
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
+
+            $retVal->aResearchsNeeded       = HelperC::convertBracketStringToArray($aResult['strResearchsNeeded']);
+            $retVal->aBuildingsNeeded       = HelperC::convertBracketStringToArray($aResult['strBuildingsNeeded']);
+            $retVal->aObjectsNeeded         = HelperC::convertBracketStringToArray($aResult['strObjectsNeeded']);
+            $retVal->aResearchsDevelop      = HelperC::convertBracketStringToArray($aResult['strResearchsDevelop']);
+            $retVal->aBuildingsDevelop      = HelperC::convertBracketStringToArray($aResult['strBuildingsDevelop']);
             $retVal->aBuildingLevelsDevelop = HelperC::convertBracketStringToArray($aResult['strBuildingLevelsDevelop']);
-        if (isset($aResult['strDefencesDevelop']))
-            $retVal->aDefencesDevelop = HelperC::convertBracketStringToArray($aResult['strDefencesDevelop']);
-        if (isset($aResult['strGeneticsDevelop']))
-            $retVal->aGeneticsDevelop = HelperC::convertBracketStringToArray($aResult['strGeneticsDevelop']);
-        
-        $retVal->strResearchName = PropertyValueC::ensureString( $aResult['strResearchName'] );
-        $retVal->strAreaName = PropertyValueC::ensureString( $aResult['strAreaName'] );
-        $retVal->strStatus = PropertyValueC::ensureString( $aResult['strStatus'] );
-        
-        if (isset($aResult['first']) && !empty($aResult['first'])) {
-            $retVal->strResearchComment = PropertyValueC::ensureString( $aResult['comment'] );
-            $retVal->strResearchFirst = PropertyValueC::ensureString( $aResult['first'] );
-        }
-        else
-            $retVal->strResearchComment = PropertyValueC::ensureString( $aResult['commentonly'] );
-        
-        $retVal->iFP = PropertyValueC::ensureInteger( $aResult['fp'] );
-        $retVal->iPeopleResearched = PropertyValueC::ensureInteger( $aResult['count'] );
+            $retVal->aDefencesDevelop       = HelperC::convertBracketStringToArray($aResult['strDefencesDevelop']);
+            $retVal->aGeneticsDevelop       = HelperC::convertBracketStringToArray($aResult['strGeneticsDevelop']);
+            $retVal->strResearchName        = PropertyValueC::ensureString($aResult['strResearchName']);
+            $retVal->strAreaName            = PropertyValueC::ensureString($aResult['strAreaName']);
+            $retVal->strStatus              = PropertyValueC::ensureString($aResult['strStatus']);
 
-        if (empty($aResult['prozent'])) $aResult['prozent'] = 100;
-        if (empty($aResult['malus'])) $aResult['malus'] = 100;
-        $aResult['faktor'] = (float) $aResult['prozent'] * $aResult['malus'] / 100;
+            if (!empty($aResult['first'])) {
+                $retVal->strResearchComment = PropertyValueC::ensureString($aResult['comment']);
+                $retVal->strResearchFirst   = PropertyValueC::ensureString($aResult['first']);
+            } else {
+                $retVal->strResearchComment = PropertyValueC::ensureString($aResult['commentonly']);
+            }
+            $retVal->iFP               = PropertyValueC::ensureInteger($aResult['fp']);
+            $retVal->iPeopleResearched = PropertyValueC::ensureInteger($aResult['count']);
 
-        $retVal->iResearchCosts = PropertyValueC::ensureInteger( $aResult['faktor'] );
-        
-        if (isset($aResult['strPrototypName']) && !empty($aResult['strPrototypName']))
-        {
-            $retVal->bIsPrototypResearch = true;
-            $retVal->strPrototypName = PropertyValueC::ensureString( $aResult['strPrototypName'] );
+            if (empty($aResult['prozent'])) {
+                $aResult['prozent'] = 100;
+            }
+            if (empty($aResult['malus'])) {
+                $aResult['malus'] = 100;
+            }
+            $aResult['faktor'] = (float)$aResult['prozent'] * $aResult['malus'] / 100;
+
+            $retVal->iResearchCosts = PropertyValueC::ensureInteger($aResult['faktor']);
+
+            if (!empty($aResult['strPrototypName'])) {
+                $retVal->bIsPrototypResearch = true;
+                $retVal->strPrototypName     = PropertyValueC::ensureString($aResult['strPrototypName']);
+            }
+
+            $treffer = array();
+            preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER);
+            foreach ($treffer as $teff) {
+                $retVal->aCosts[] = array(
+                    'strResourceName' => PropertyValueC::ensureResource($teff['resource_name']),
+                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                );
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
-        
-        $treffer = array();
-        preg_match_all ($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER );
-        foreach ($treffer as $teff)
-        {
-            $retVal->aCosts[] = array('strResourceName' => PropertyValueC::ensureResource( $teff['resource_name'] ), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
-        }
+
     }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-    }
-    
-  }
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -130,7 +124,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     /**
     */
 
-    $reResource                = $this->getRegExpResource();
+    $reResource  = $this->getRegExpResource();
 
     $regExpRess  = '/';
     $regExpRess  .= '(?P<resource_name>'.$reResource.')\:\s(?P<resource_count>'.$this->getRegExpDecimalNumber().')';
@@ -200,15 +194,15 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     $regExp  .= ')?';
 
     $regExp  .= '\s*Voraussetzungen\sForschungen\s+?';
-    $regExp  .= '(?P<strResearchsNeeded>'.$reBracketString.')?';
+    $regExp  .= '(?P<strResearchsNeeded>'.$reBracketString.'|)';
     $regExp  .= '\s+?';
 
     $regExp  .= 'Voraussetzungen\sGeb.{1,3}ude\s+?';
-    $regExp  .= '(?P<strBuildingsNeeded>'.$reBracketString.')?';
+    $regExp  .= '(?P<strBuildingsNeeded>'.$reBracketString.'|)';
     $regExp  .= '\s+?';
 
     $regExp  .= 'Voraussetzungen\sObjekte\s+?';
-    $regExp  .= '(?P<strObjectsNeeded>'.$reBracketString.')?';
+    $regExp  .= '(?P<strObjectsNeeded>'.$reBracketString.'|)';
     $regExp  .= '\s+?';
 
     $regExp  .= '(?:\s+?';
@@ -216,23 +210,23 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     $regExp  .= '\s+?)?';
 
     $regExp  .= 'Erm.{1,3}glicht\sForschungen\s+?';
-    $regExp  .= '(?P<strResearchsDevelop>('.$reBracketString.'))?';
+    $regExp  .= '(?P<strResearchsDevelop>('.$reBracketString.')|)';
     $regExp  .= '\s+?';
 
     $regExp  .= 'Erm.{1,3}glicht\sGeb.{1,3}ude\s+?';
-    $regExp  .= '(?P<strBuildingsDevelop>'.$reBracketString.')?';
+    $regExp  .= '(?P<strBuildingsDevelop>'.$reBracketString.'|)';
     $regExp  .= '\s+?';
 
     $regExp  .= 'Erm.{1,3}glicht\sGeb.{1,3}udestufen\s+?';
-    $regExp  .= '(?P<strBuildingLevelsDevelop>'.$reBracketString.')?';
+    $regExp  .= '(?P<strBuildingLevelsDevelop>'.$reBracketString.'|)';
     $regExp  .= '\s+?';
 
     $regExp  .= 'Erm.{1,3}glicht\sVerteidigungsanlagen\s+?';
-    $regExp  .= '(?P<strDefencesDevelop>'.$reBracketString.')?';
+    $regExp  .= '(?P<strDefencesDevelop>'.$reBracketString.'|)';
     $regExp  .= '\s+?';
 
     $regExp  .= 'Erm.{1,3}glicht\sGenetikoptionen\s*?';
-    $regExp  .= '(?P<strGeneticsDevelop>'.$reBracketString.')?';
+    $regExp  .= '(?P<strGeneticsDevelop>'.$reBracketString.'|)';
 
     $regExp  .= '/mx';
 
