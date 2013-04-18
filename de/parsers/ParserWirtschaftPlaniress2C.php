@@ -44,10 +44,10 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_wirtschaft_planiress2');
-        $this->setName("KoloRess Übersicht Teil2");
-        $this->setRegExpCanParseText('/Ressourcenkoloübersicht\sTeil\s2/s');
-        $this->setRegExpBeginData('/Kolonie\s+FP\s+Credits\s+Steuersatz\s+Bevölkerung\s+Zufr/');
-        $this->setRegExpEndData('/XML\sEinstellung/');
+        $this->setName("KoloRess&Uuml;bersicht Teil2");
+        $this->setRegExpCanParseText('/Ressourcenkolo.+bersicht\sTeil\s2/s');
+        $this->setRegExpBeginData('/Kolonie\s+FP\s\w+\sSteuersatz\s(?:Bev.+lkerung|blubbernde\sGallertmasse)\sZufr/');
+        $this->setRegExpEndData('');
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -72,46 +72,50 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
             $steuer = 0;
             foreach ($aResult as $result) {
                 if (!empty($result['is_sum'])) {
-                    $retVal->iFPProduction = PropertyValueC::ensureInteger($result['fp_amount']);
+                    $retVal->iFPProduction            = PropertyValueC::ensureInteger($result['fp_amount']);
                     $retVal->fFPProductionWithoutMods = PropertyValueC::ensureFloat($result['fp_clean']);
-                    $retVal->fResearchModGlobal = PropertyValueC::ensureFloat($result['fp_mod_planet']) + PropertyValueC::ensureFloat($result['fp_mod_global']);
-                    $retVal->fCreditProduction = PropertyValueC::ensureFloat($result['credits_production']);
-                    $retVal->fCreditAmount = PropertyValueC::ensureFloat($result['credits_amount']);
-                    $retVal->fCreditAlliance = PropertyValueC::ensureFloat($result['credits_alliance']);
+                    $retVal->fResearchModGlobal       = PropertyValueC::ensureFloat($result['fp_mod_planet']) + PropertyValueC::ensureFloat($result['fp_mod_global']);
+                    $retVal->fCreditProduction        = PropertyValueC::ensureFloat($result['credits_production']);
+                    $retVal->fCreditAmount            = PropertyValueC::ensureFloat($result['credits_amount']);
+                    $retVal->fCreditAlliance          = PropertyValueC::ensureFloat($result['credits_alliance']);
                     if (($retVal->fCreditProduction + $retVal->fCreditAlliance) != 0) {
                         $steuer = $retVal->fCreditAlliance / ($retVal->fCreditProduction + $retVal->fCreditAlliance);
                     }
                     $retVal->iPeopleWithoutWork = PropertyValueC::ensureInteger($result['people_free']);
-                    $retVal->iPeopleWithWork = PropertyValueC::ensureInteger($result['people_there']);
-                    $retVal->iPeopleCouldWork = PropertyValueC::ensureInteger($result['people_max']);
+                    $retVal->iPeopleWithWork    = PropertyValueC::ensureInteger($result['people_there']);
+                    $retVal->iPeopleCouldWork   = PropertyValueC::ensureInteger($result['people_max']);
 
                 } else {
 
-                    $strCoords = $result['coords'];
+                    $strCoords  = $result['coords'];
                     $iCoordsGal = PropertyValueC::ensureInteger($result['coords_gal']);
                     $iCoordsSol = PropertyValueC::ensureInteger($result['coords_sol']);
                     $iCoordsPla = PropertyValueC::ensureInteger($result['coords_pla']);
-                    $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                    $aCoords    = array(
+                        'coords_gal' => $iCoordsGal,
+                        'coords_sol' => $iCoordsSol,
+                        'coords_pla' => $iCoordsPla
+                    );
 
-                    $retVal->aKolos[$strCoords] = new DTOParserWirtschaftPlaniress2KoloResultC;
-                    $retVal->aKolos[$strCoords]->aCoords = $aCoords;
-                    $retVal->aKolos[$strCoords]->strCoords = PropertyValueC::ensureString($strCoords);
+                    $retVal->aKolos[$strCoords]                = new DTOParserWirtschaftPlaniress2KoloResultC;
+                    $retVal->aKolos[$strCoords]->aCoords       = $aCoords;
+                    $retVal->aKolos[$strCoords]->strCoords     = PropertyValueC::ensureString($strCoords);
                     $retVal->aKolos[$strCoords]->strPlanetName = PropertyValueC::ensureString($result['planet_name']);
 
-                    $retVal->aKolos[$strCoords]->fFPProduction = PropertyValueC::ensureFloat($result['fp_amount']);
+                    $retVal->aKolos[$strCoords]->fFPProduction            = PropertyValueC::ensureFloat($result['fp_amount']);
                     $retVal->aKolos[$strCoords]->fFPProductionWithoutMods = PropertyValueC::ensureFloat($result['fp_clean']);
-                    $retVal->aKolos[$strCoords]->fResearchModGlobal = PropertyValueC::ensureFloat($result['fp_mod_global']);
-                    $retVal->aKolos[$strCoords]->fResearchModPlanet = PropertyValueC::ensureFloat($result['fp_mod_planet']);
+                    $retVal->aKolos[$strCoords]->fResearchModGlobal       = PropertyValueC::ensureFloat($result['fp_mod_global']);
+                    $retVal->aKolos[$strCoords]->fResearchModPlanet       = PropertyValueC::ensureFloat($result['fp_mod_planet']);
 
                     $retVal->aKolos[$strCoords]->fCreditProduction = PropertyValueC::ensureFloat($result['credits_production']);
-                    $retVal->aKolos[$strCoords]->iSteuersatz = PropertyValueC::ensureInteger($result['steuersatz']);
+                    $retVal->aKolos[$strCoords]->iSteuersatz       = PropertyValueC::ensureInteger($result['steuersatz']);
 
                     $retVal->aKolos[$strCoords]->iPeopleWithoutWork = PropertyValueC::ensureInteger($result['people_free']);
-                    $retVal->aKolos[$strCoords]->iPeopleWithWork = PropertyValueC::ensureInteger($result['people_there']);
-                    $retVal->aKolos[$strCoords]->iPeopleCouldWork = PropertyValueC::ensureInteger($result['people_max']);
-                    $retVal->aKolos[$strCoords]->iSexRate = PropertyValueC::ensureInteger($result['people_production']);
+                    $retVal->aKolos[$strCoords]->iPeopleWithWork    = PropertyValueC::ensureInteger($result['people_there']);
+                    $retVal->aKolos[$strCoords]->iPeopleCouldWork   = PropertyValueC::ensureInteger($result['people_max']);
+                    $retVal->aKolos[$strCoords]->iSexRate           = PropertyValueC::ensureInteger($result['people_production']);
 
-                    $retVal->aKolos[$strCoords]->fZufr = PropertyValueC::ensureFloat($result['zufr']);
+                    $retVal->aKolos[$strCoords]->fZufr        = PropertyValueC::ensureFloat($result['zufr']);
                     $retVal->aKolos[$strCoords]->fZufrGrowing = PropertyValueC::ensureFloat($result['zufr_production']);
 
                 }
@@ -122,7 +126,7 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
     }
 
@@ -130,12 +134,10 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
 
     private function getRegularExpression()
     {
-        //$reKoloTypes = $this->getRegExpKoloTypes();
-        //$reKoloCoords = $this->getRegExpKoloCoords();
         $reFloatingDouble = $this->getRegExpFloatingDouble();
         $reUnsignedDouble = $this->getRegExpUnsignedDouble();
-        $reDecimalNumber = $this->getRegExpDecimalNumber();
-        $reKoloNames = $this->getRegExpSingleLineText(); //! Mac: nicht getRegExpSingleLineText3, da KoloNames auch kürzer als 3 Zeichen sein können
+        $reDecimalNumber  = $this->getRegExpDecimalNumber();
+        $reKoloNames      = $this->getRegExpSingleLineText(); //! Mac: nicht getRegExpSingleLineText3, da KoloNames auch kuerzer als 3 Zeichen sein koennen
 
         $regExp = '/';
 

@@ -54,11 +54,11 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
      */
     public function parseMsg(DTOParserResultC $parserResult)
     {
-        $parserResult->objResultData = new DTOParserMsgResultMsgScanGebRessC;
+        $parserResult->objResultData = new DTOParserMsgResultMsgScanGebRessC();
         $retVal =& $parserResult->objResultData;
 
         $regExpText = $this->getRegularExpressionText();
-        $msg = $this->getMsg();
+        $msg        = $this->getMsg();
 
         foreach ($msg as $key => $value) {
             $retVal->$key = $value;
@@ -70,30 +70,34 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
         if ($fRetValText !== false && $fRetValText > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $aBuildings = array();
-            $aResources = array();
+            $aBuildings   = array();
+            $aResources   = array();
 
-            $strCoords = $aResultText['coords'];
-            $strOwner = $aResultText['owner'];
+            $strCoords    = $aResultText['coords'];
+            $strOwner     = $aResultText['owner'];
             $strOwnerAlly = $aResultText['alliance'];
             $strPlanetTyp = $aResultText['planetname'];
             $strObjektTyp = $aResultText['objektname'];
-            $iCoordsGal = PropertyValueC::ensureInteger($aResultText['coords_gal']);
-            $iCoordsSol = PropertyValueC::ensureInteger($aResultText['coords_sol']);
-            $iCoordsPla = PropertyValueC::ensureInteger($aResultText['coords_pla']);
-            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+            $iCoordsGal   = PropertyValueC::ensureInteger($aResultText['coords_gal']);
+            $iCoordsSol   = PropertyValueC::ensureInteger($aResultText['coords_sol']);
+            $iCoordsPla   = PropertyValueC::ensureInteger($aResultText['coords_pla']);
+            $aCoords      = array(
+                'coords_gal' => $iCoordsGal,
+                'coords_sol' => $iCoordsSol,
+                'coords_pla' => $iCoordsPla
+            );
 
             if (isset($aResultText['buildings'])) {
                 $aResultBuildings = array();
-                $regExpBuildings = $this->getRegularExpressionBuildings();
+                $regExpBuildings  = $this->getRegularExpressionBuildings();
                 $fRetValBuildings = preg_match_all($regExpBuildings, $aResultText['buildings'], $aResultBuildings, PREG_SET_ORDER);
 
                 if ($fRetValBuildings !== false && $fRetValBuildings > 0) {
                     foreach ($aResultBuildings as $result) {
                         $strBuildingName = $result['building_name'];
-                        $iBuildingCount = $result['building_count'];
+                        $iBuildingCount  = $result['building_count'];
                         $strBuildingName = PropertyValueC::ensureString($strBuildingName);
-                        $iBuildingCount = PropertyValueC::ensureInteger($iBuildingCount);
+                        $iBuildingCount  = PropertyValueC::ensureInteger($iBuildingCount);
                         if ($strBuildingName == "-???-") {
                             continue;
                         }
@@ -101,49 +105,47 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
                             continue;
                         }
 
-// 			  $aBuildings[md5($strBuildingName)] = array('buildings_name' => $strBuildingName,'buildings_count' => $iBuildingCount);
                         $aBuildings[$strBuildingName] = $iBuildingCount;
                     }
                 }
             }
             if (isset($aResultText['resources'])) {
                 $aResultResources = array();
-                $regExpResources = $this->getRegularExpressionResources();
+                $regExpResources  = $this->getRegularExpressionResources();
                 $fRetValResources = preg_match_all($regExpResources, $aResultText['resources'], $aResultResources, PREG_SET_ORDER);
 
                 if ($fRetValResources !== false && $fRetValResources > 0) {
                     foreach ($aResultResources as $result) {
                         $strResourceName = $result['resource_name'];
-                        $iResourceCount = $result['resource_count'];
+                        $iResourceCount  = $result['resource_count'];
                         $strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources');
-                        $iResourceCount = PropertyValueC::ensureInteger($iResourceCount);
+                        $iResourceCount  = PropertyValueC::ensureInteger($iResourceCount);
                         if (!$strResourceName || $strResourceName == "-???-") {
                             continue;
                         }
                         if ($iResourceCount == "-???-") {
                             continue;
                         }
-// 			  $aResources[md5($strResourceName)] = array('resource_name' => $strResourceName,'resource_count' => $iResourceCount);
                         $aResources[$strResourceName] = $iResourceCount;
                     }
                 }
             }
 
-//         	$retVal->strPlanetName = PropertyValueC::ensureString( $strPlanetName );
-            $retVal->strOwnerName = PropertyValueC::ensureString($strOwner);
+//         	$retVal->strPlanetName       = PropertyValueC::ensureString( $strPlanetName );
+            $retVal->strOwnerName        = PropertyValueC::ensureString($strOwner);
             $retVal->strOwnerAllianceTag = PropertyValueC::ensureString($strOwnerAlly);
-            $retVal->strCoords = PropertyValueC::ensureString($strCoords);
-            $retVal->iTimestamp = HelperC::convertDateTimeToTimestamp($aResultText['datetime']);
-            $retVal->ePlanetType = PropertyValueC::ensureString($strPlanetTyp);
-            $retVal->eObjectType = PropertyValueC::ensureString($strObjektTyp);
+            $retVal->strCoords           = PropertyValueC::ensureString($strCoords);
+            $retVal->iTimestamp          = HelperC::convertDateTimeToTimestamp($aResultText['datetime']);
+            $retVal->ePlanetType         = PropertyValueC::ensureString($strPlanetTyp);
+            $retVal->eObjectType         = PropertyValueC::ensureString($strObjektTyp);
 
-            $retVal->aCoords = $aCoords;
+            $retVal->aCoords    = $aCoords;
             $retVal->aBuildings = $aBuildings;
             $retVal->aResources = $aResources;
         } else {
             $retVal->bSuccessfullyParsed = false;
-            $retVal->aErrors[] = 'Unable to match the pattern. (Geb/Ress)';
-            $retVal->aErrors[] = '...' . $msg->strParserText;
+            $retVal->aErrors[]           = 'Unable to match the pattern. (Geb/Ress)';
+            $retVal->aErrors[]           = '...' . $msg->strParserText;
         }
 
     }
@@ -155,7 +157,7 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
 
     protected function getRegularExpressionResources()
     {
-        $reResource = $this->getRegExpSingleLineText3();
+        $reResource      = $this->getRegExpSingleLineText3();
         $reDecimalNumber = $this->getRegExpDecimalNumber();
 
         $regExp = '/';
@@ -171,8 +173,7 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
 
     protected function getRegularExpressionBuildings()
     {
-// 	$reBuilding      = $this->getRegExpBuildings();
-        $reBuilding = $this->getRegExpSingleLineText3();
+        $reBuilding      = $this->getRegExpSingleLineText3();
         $reDecimalNumber = $this->getRegExpDecimalNumber();
 
         $regExp = '/';
@@ -191,36 +192,35 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
 
 
         $reUserName = $this->getRegExpUserName();
-//     $reBuildings     = $this->getRegExpBuildings();
-        $reMixedTime = $this->getRegExpDateTime();
-        $reBasisTyp = $this->getRegExpSingleLineText3();
-        $rePlanetTyp = $this->getRegExpPlanetTypes();
-        $reObjektTyp = $this->getRegExpObjectTypes();
+        $reMixedTime     = $this->getRegExpDateTime();
+        $reBasisTyp      = $this->getRegExpSingleLineText3();
+        $rePlanetTyp     = $this->getRegExpPlanetTypes();
+        $reObjektTyp     = $this->getRegExpObjectTypes();
         $reDecimalNumber = $this->getRegExpDecimalNumber();
-        $reResource = $this->getRegExpResource();
+        $reResource      = $this->getRegExpResource();
 
         $regExp = '/
-                    Sondierungsbericht\s\(Gebäude\)\svon\s
-                    (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
+			Sondierungsbericht\s\(Geb.{1,3}ude\)\svon\s
+			(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
         $regExp .= '\sam\s(?P<datetime>' . $reMixedTime . ')\.';
         $regExp .= '\sBesitzer\sist\s((?P<owner>' . $reUserName . ')\s(\[(?P<alliance>' . $reBasisTyp . ')\])?)?\.';
-        $regExp .= '\s*Planetentyp\s+(?P<planetname>(' . $rePlanetTyp . '|-\?\?\?-))\s*
-                    \s*Objekttyp\s+(?P<objektname>(' . $reObjektTyp . '|-\?\?\?-))\s*
-                    (\s*Basistyp\s' . $reBasisTyp . '\s*)?';
+        $regExp .= '	\s*Planetentyp\s+(?P<planetname>(' . $rePlanetTyp . '|-\?\?\?-))\s*
+			\s*Objekttyp\s+(?P<objektname>(' . $reObjektTyp . '|-\?\?\?-))\s*
+			(\s*Basistyp\s' . $reBasisTyp . '\s*)?';
         $regExp .= '	(?:
-                            Gebäude
-                            [\s\n]+
-                            (?P<buildings>
-                                ((' . $reBasisTyp . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
-                            )
-                        |)';
+			Geb.{1,3}ude
+			[\s\n]+
+			(?P<buildings>
+			((' . $reBasisTyp . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
+			)
+			|)';
         $regExp .= '	(?:
-                            Ressourcen
-                            [\s\n]+
-                            (?P<resources>
-                            ((' . $reResource . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
-                            )
-                        |)';
+			Ressourcen
+			[\s\n]+
+			(?P<resources>
+			((' . $reResource . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
+			)
+			|)';
         $regExp .= '^Hinweise\s';
         $regExp .= '(.*\n){1,5}';
         $regExp .= '(^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';

@@ -21,6 +21,7 @@ use libIwParsers\DTOParserResultC;
 use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
+
 use libIwParsers\de\parserResults\DTOParserInfoGebResultC;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -44,8 +45,8 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_info_geb');
-        $this->setName("Gebäudeinformationen");
-        $this->setRegExpCanParseText('/Gebäudeinfo\s+Gebäudeinfo|Gebäudeinfo.+Farbenlegende/s');
+        $this->setName("Geb&auml;udeinformationen");
+        $this->setRegExpCanParseText('/Geb.{1,3}udeinfo\s+Geb.{1,3}udeinfo|Geb.{1,3}udeinfo.+Farbenlegende/s');
         $this->setRegExpBeginData('');
         $this->setRegExpEndData('');
     }
@@ -62,15 +63,15 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
 
         $this->stripTextToData();
 
-        $regExp = $this->getRegularExpression();
-        $regExpRess = $this->getRegularExpressionRess();
-        $regExpMain = $this->getRegularExpressionMaintenance();
+        $regExp       = $this->getRegularExpression();
+        $regExpRess   = $this->getRegularExpressionRess();
+        $regExpMain   = $this->getRegularExpressionMaintenance();
         $regExpEffect = $this->getRegularExpressionEffect();
-        $regExpTime = $this->getRegularExpressionTime();
+        $regExpTime   = $this->getRegularExpressionTime();
 
         $aResult = array();
         $fRetVal = preg_match($regExp, $this->getText(), $aResult);
-// print_die($aResult);
+
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
@@ -110,12 +111,12 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
                 $retVal->strGebComment = trim(PropertyValueC::ensureString($aResult['commentS']));
             }
 
-            $retVal->iHS = PropertyValueC::ensureInteger($aResult['iHS']);
+            $retVal->iHS     = PropertyValueC::ensureInteger($aResult['iHS']);
             $retVal->imaxAnz = PropertyValueC::ensureInteger($aResult['imaxAnz']);
 
             if (!empty($aResult['stufe'])) {
                 $retVal->bIsStufenGeb = true;
-                $retVal->iStufe = PropertyValueC::ensureInteger($aResult['stufe']);
+                $retVal->iStufe       = PropertyValueC::ensureInteger($aResult['stufe']);
             }
 
             //! Kosten
@@ -170,7 +171,10 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
             $treffer = array();
             preg_match_all($regExpMain, $aResult['unterhalt'], $treffer, PREG_SET_ORDER);
             foreach ($treffer as $teff) {
-                $retVal->aMaintenance[] = array('strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
+                $retVal->aMaintenance[] = array(
+                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                );
             }
 
             //! Bauzeit
@@ -251,7 +255,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
 
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }
@@ -312,7 +316,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         /**
          */
 
-        $reResource = $this->getRegExpResource();
+        $reResource      = $this->getRegExpResource();
         $reResourceCount = $this->getRegExpFloatingDouble();
 
         $regExpRess = '/';
@@ -329,16 +333,16 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         /**
          */
 
-        $reResearch = $this->getRegExpSingleLineText3(); //! accepted also numbers in ResearchName
+        $reResearch      = $this->getRegExpSingleLineText3(); //! accepted also numbers in ResearchName
         $reBracketString = $this->getRegExpBracketString();
-        $reDecNumber = $this->getRegExpDecimalNumber();
-        $reResource = $this->getRegExpResource();
-        $reMixedTime = $this->getRegExpMixedTime();
-        $reObjects = $this->getRegExpObjectTypes();
-        $rePlanets = $this->getRegExpPlanetTypes();
+        $reDecNumber     = $this->getRegExpDecimalNumber();
+        $reResource      = $this->getRegExpResource();
+        $reMixedTime     = $this->getRegExpMixedTime();
+        $reObjects       = $this->getRegExpObjectTypes();
+        $rePlanets       = $this->getRegExpPlanetTypes();
 
         $regExp = '/';
-        $regExp .= 'Gebäudeinfo\:\s';
+        $regExp .= 'Geb.{1,3}udeinfo\:\s';
         $regExp .= '(?P<strBuildingName>' . $reResearch . ')\s*?';
         $regExp .= '\n+';
 
@@ -346,7 +350,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         $regExp .= '(?:';
         //! Stufengebaeude
         $regExp .= '(?P<commentS>(?:^[\s\S]*\n)?)';
-        $regExp .= '(?:^StufenGebäude';
+        $regExp .= '(?:^Stufengeb.{1,3}ude';
         $regExp .= '(?:\s*' . $reResearch . '[\n\t])*';
         $regExp .= '^Stufe\s(?P<stufe>\d+)[\n\t]';
         $regExp .= '\s*)';
@@ -375,7 +379,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         $regExp .= '(?P<imaxAnz>' . '\d+' . '(?:\s*\(global\))?)\s*?';
         $regExp .= '\n*)?';
 
-        $regExp .= '(?:Entscheidungsgeb\sDieses\sGebäude\skann\snicht\smehr\sgebaut\swerden,\swenn\seines\sder\sfolgenden\sGebäude\sgebaut\swurde\:[\n\t]';
+        $regExp .= '(?:Entscheidungsgeb\sDieses\sGeb.{1,3}ude\skann\snicht\smehr\sgebaut\swerden,\swenn\seines\sder\sfolgenden\sGeb.{1,3}ude\sgebaut\swurde\:[\n\t]';
         $regExp .= '(?:' . $reResearch . '[\n\t])+';
         $regExp .= ')?';
 
@@ -386,7 +390,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         $regExp .= '\s*Voraussetzungen\sForschungen\s+?';
         $regExp .= '(?P<strResearchsNeeded>' . $reBracketString . ')?';
         $regExp .= '\s+?';
-        $regExp .= 'Voraussetzungen\sGebäude\s+?';
+        $regExp .= 'Voraussetzungen\sGeb.{1,3}ude\s+?';
         $regExp .= '(?P<strBuildingsNeeded>' . $reBracketString . '(?:\(Gruppe\))?)?';
         $regExp .= '\s+?';
         $regExp .= '(?:Voraussetzungen\sPlaneteneigenschaften\s+?';
@@ -401,18 +405,18 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         $regExp .= '(?P<strObjectsNeeded>' . $reObjects . ')?';
         $regExp .= '\s+?)?';
 
-        $regExp .= '(?:\s*Dieses\sGebäude\sbenötigt\sweitere\skomplexe\sVoraussetzungen\s)?';
+        $regExp .= '(?:\s*Dieses\sGeb.{1,3}ude\sben.{1,3}tigt\sweitere\skomplexe\sVoraussetzungen\s)?';
 
         $regExp .= '(?:';
-        $regExp .= 'Kann\szerstört\swerden\sdurch\s+?';
+        $regExp .= 'Kann\szerst.{1,3}rt\swerden\sdurch\s+?';
         $regExp .= '(?P<strDestroyable>(?:.*\s' . $reBracketString . '\s*)*)?';
         $regExp .= '\s+?)?';
 
-        $regExp .= 'Ermöglicht\sForschungen\s+?';
+        $regExp .= 'Erm.{1,3}glicht\sForschungen\s+?';
         $regExp .= '(?P<strResearchsDevelop>' . $reBracketString . ')?';
         $regExp .= '\s+?';
 
-        $regExp .= 'Ermöglicht\sGebäude\s+?';
+        $regExp .= 'Erm.{1,3}glicht\sGeb.{1,3}ude\s+?';
         $regExp .= '(?P<strBuildingsDevelop>' . $reBracketString . ')?';
         $regExp .= '\s+?';
 

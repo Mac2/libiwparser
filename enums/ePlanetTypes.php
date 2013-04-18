@@ -22,28 +22,17 @@ namespace libIwParsers\enums;
 
 class ePlanetTypes
 {
-    const Steinklumpen = 'Steinklumpen';
-    const Asteroiden = 'Asteroiden';
-    const Eisplanet = 'Eisplanet';
-    const Gasgigant = 'Gasgigant';
-    const Nichts = 'Nichts';
-    const Elektrosturm = 'Elektrosturm';
-    const Ionensturm = 'Ionensturm';
-    const Raumverzerrung = 'Raumverzerrung';
-    const gravAnomalie = 'gravAnomalie';
-    const Sonne = 'Sonne';
-    const schwarzesLoch = 'schwarzesLoch';
-
-    //TODO: validate englisch constants
-    const Chunkofstone = 'chunkOfStone';
-    const Asteroid = 'asteroid';
-    const Iceplanet = 'icePlanet';
-    const Giantgasball = 'gasGiant';
-    const Nothing = 'void';
-    const Electricitystorm = 'electricityStorm';
-    const Ionstorm = 'ionStorm';
-    const Spacedistortion = 'spaceDistortion';
-    const Gravitationanomaly = 'gravimetricAnomaly';
-    const Sun = 'sun';
-    const BlackHole = 'blackHole';
+    public static $enum = array(
+        'Steinklumpen'   => 'Steinklumpen',
+        'Asteroiden'     => 'Asteroiden',
+        'Eisplanet'      => 'Eisplanet',
+        'Gasgigant'      => 'Gasgigant',
+        'Nichts'         => 'Nichts',
+        'Elektrosturm'   => 'Elektrosturm',
+        'Ionensturm'     => 'Ionensturm',
+        'Raumverzerrung' => 'Raumverzerrung',
+        'grav. Anomalie' => 'grav. Anomalie',
+        'Sonne'          => 'Sonne',
+        'schwarzes Loch' => 'schwarzes Loch',
+    );
 }

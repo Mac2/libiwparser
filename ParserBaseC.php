@@ -30,8 +30,8 @@ namespace libIwParsers;
  */
 class ParserBaseC extends ParserFunctionC
 {
-    const ALL_WHITESPACE = 'ALL_WHITESPACE';
-    const LEADING_WHITESPACE = 'LEADING_WHITESPACE';
+    const ALL_WHITESPACE      = 'ALL_WHITESPACE';
+    const LEADING_WHITESPACE  = 'LEADING_WHITESPACE';
     const TRAILING_WHITESPACE = 'TRAILING_WHITESPACE';
 
     /**
@@ -95,13 +95,13 @@ class ParserBaseC extends ParserFunctionC
         }
 
         $reStartData = $this->getRegExpStartData();
-        $reEndData = $this->getRegExpEndData();
+        $reEndData   = $this->getRegExpEndData();
 
         $text = '';
         if ($reStartData !== '') {
             $aStart = preg_split($reStartData, $this->getText());
 
-            for ($n = 0; $n < count($aStart); $n++) { //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
+            for ($n = 1; $n < count($aStart); $n++) { //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
                 if (isset($aStart[$n])) {
                     if ($reEndData !== '') {
                         $aEnd = preg_split($reEndData, $aStart[$n]); //! jeden Bericht einzeln auf ein Ende pruefen
@@ -353,7 +353,7 @@ class ParserBaseC extends ParserFunctionC
                 break;
         }
 
-        $toReplace = array_keys($replacements);
+        $toReplace   = array_keys($replacements);
         $replaceWith = array_values($replacements);
 
         $retVal = preg_replace($toReplace, $replaceWith, $text);

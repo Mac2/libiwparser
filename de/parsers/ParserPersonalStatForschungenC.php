@@ -45,8 +45,8 @@ class ParserPersonalStatForschungenC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_personal_stat_forschungen');
-        $this->setName('persönlicher Forschungsablauf');
-        $this->setRegExpCanParseText('/Statistiken\s\-\sForschungsablauf[\n\s]+Datum\s+Vergangene\s+Zeit\s+Forschung[\n\s]+/sm');
+        $this->setName('pers&ouml;nlicher Forschungsablauf');
+        $this->setRegExpCanParseText('/Statistiken\s\-\sForschungsablauf[\n\s]+Datum[\s\t]+Vergangene\s+Zeit[\s\t]+Forschung[\n\s]+/sm');
         $this->setRegExpBeginData($this->getRegExpCanParseText());
         $this->setRegExpEndData('');
     }
@@ -73,20 +73,20 @@ class ParserPersonalStatForschungenC extends ParserBaseC implements ParserI
 
             foreach ($aResult as $result) {
                 $iDateOfResearch = HelperC::convertDateTimeToTimestamp($result['dateOfResearch']);
-                $iDateExpired = HelperC::convertMixedDurationToSeconds($result['dateExpired']);
-                $strResearch = $result['research'];
+                $iDateExpired    = HelperC::convertMixedDurationToSeconds($result['dateExpired']);
+                $strResearch     = $result['research'];
 
                 $research = new DTOParserPersonalStatForschungenResearchResultC;
 
-                $research->iDateExpired = PropertyValueC::ensureInteger($iDateExpired);
+                $research->iDateExpired    = PropertyValueC::ensureInteger($iDateExpired);
                 $research->iDateOfResearch = PropertyValueC::ensureInteger($iDateOfResearch);
-                $research->strResearch = PropertyValueC::ensureString(trim($strResearch));
+                $research->strResearch     = PropertyValueC::ensureString(trim($strResearch));
 
                 $retVal->aResearchs[] = $research;
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }
@@ -101,8 +101,8 @@ class ParserPersonalStatForschungenC extends ParserBaseC implements ParserI
          */
 
         $reDateOfResearch = $this->getRegExpDateTime();
-        $reDateExpired = $this->getRegExpMixedTime();
-        $reResearch = $this->getRegExpSingleLineText();
+        $reDateExpired    = $this->getRegExpMixedTime();
+        $reResearch       = $this->getRegExpSingleLineText();
 
         $regExp = '/^';
         $regExp .= '(?P<dateOfResearch>' . $reDateOfResearch . ')\s*';

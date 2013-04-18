@@ -59,7 +59,7 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
         $retVal =& $parserResult->objResultData;
 
         $regExp = $this->getRegularExpression();
-        $msg = $this->getMsg();
+        $msg    = $this->getMsg();
 
         $parserResult->strIdentifier = 'de_index_geb';
 
@@ -75,14 +75,14 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
                 $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPla']);
                 $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGal']);
                 $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSol']);
-//             $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);        
+//              $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
                 $strCoords = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
 
                 if (isset($retVal->aGeb[$strCoords])) {
 
                     $neu = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
                     if ($neu > $retVal->aGeb[$strCoords]->iGebEnd) {
-                        $retVal->aGeb[$strCoords]->iGebEnd = $neu;
+                        $retVal->aGeb[$strCoords]->iGebEnd       = $neu;
                         $retVal->aGeb[$strCoords]->strGebName[2] = PropertyValueC::ensureString($result['strGebName']);
                     } else if ($neu > $retVal->aGeb[$strCoords]->iGebEnd2) {
                         $retVal->aGeb[$strCoords]->iGebEnd2 = $neu;
@@ -102,9 +102,9 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
 
                     $retObj->strPlanetName = PropertyValueC::ensureString($result['strPlanetName']);
                     $retObj->strGebName[0] = PropertyValueC::ensureString($result['strGebName']);
-                    $retObj->iGebEnd = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
-                    $retObj->iGebEnd2 = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
-                    $retObj->iGebEnd3 = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
+                    $retObj->iGebEnd       = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
+                    $retObj->iGebEnd2      = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
+                    $retObj->iGebEnd3      = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
                     if (isset($result['mtMixedTime'])) {
                         $retObj->iGebEndIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
                     }
@@ -116,8 +116,8 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
-            $parserResult->aErrors[] = $msg->strParserText;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = $msg->strParserText;
         }
     }
 
@@ -129,8 +129,8 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
     private function getRegularExpression()
     {
         $rePlanetName = $this->getRegExpSingleLineText();
-        $reDateTime = $this->getRegExpDateTime();
-        $reMixedTime = $this->getRegExpMixedTime();
+        $reDateTime   = $this->getRegExpDateTime();
+        $reMixedTime  = $this->getRegExpMixedTime();
 
         $regExp = '/';
         $regExp .= '(?P<strPlanetName>' . $rePlanetName . ')';
@@ -143,7 +143,7 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
         $regExp .= '(?P<dtDateTime>' . $reDateTime . ')';
         $regExp .= '(\s(-\s)?';
         $regExp .= '(?P<mtMixedTime>' . $reMixedTime . '))?';
-        $regExp .= ')|(nÜscht))';
+        $regExp .= ')|(n.{1,3}scht))';
         $regExp .= '/mxs';
 
         return $regExp;

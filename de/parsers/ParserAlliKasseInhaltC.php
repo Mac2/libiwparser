@@ -20,6 +20,7 @@ use libIwParsers\PropertyValueC;
 use libIwParsers\DTOParserResultC;
 use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
+
 use libIwParsers\de\parserResults\DTOParserAlliKasseInhaltResultC;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,14 +70,14 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $fCredits = $aResult['fCredits'];
+            $fCredits         = $aResult['fCredits'];
             $retVal->fCredits = PropertyValueC::ensureFloat($fCredits);
 
-            $strAlliance = $aResult['strAlliance'];
+            $strAlliance         = $aResult['strAlliance'];
             $retVal->strAlliance = PropertyValueC::ensureString($strAlliance);
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }

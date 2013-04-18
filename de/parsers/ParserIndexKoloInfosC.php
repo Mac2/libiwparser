@@ -59,29 +59,33 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
         $retVal =& $parserResult->objResultData;
 
         $regExp = $this->getRegularExpression();
-        $msg = $this->getMsg();
+        $msg    = $this->getMsg();
 
         $parserResult->strIdentifier = 'de_index_koloinfos';
-        $aResult = array();
-        $fRetVal = preg_match_all($regExp, $msg->strParserText, $aResult, PREG_SET_ORDER);
+        $aResult                     = array();
+        $fRetVal                     = preg_match_all($regExp, $msg->strParserText, $aResult, PREG_SET_ORDER);
 
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $retObj = new DTOParserIndexKoloInfosResultKoloInfoC();
+            $retObj    = new DTOParserIndexKoloInfosResultKoloInfoC();
             $deff_type = "";
 
             foreach ($aResult as $result) {
 
                 if (!empty($result['strPlanetName'])) {
                     $retObj->strPlanetName = PropertyValueC::ensureString($result['strPlanetName']);
-                    $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPla']);
-                    $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGal']);
-                    $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSol']);
-                    $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-                    $strCoords = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
+                    $iCoordsPla            = PropertyValueC::ensureInteger($result['iCoordsPla']);
+                    $iCoordsGal            = PropertyValueC::ensureInteger($result['iCoordsGal']);
+                    $iCoordsSol            = PropertyValueC::ensureInteger($result['iCoordsSol']);
+                    $aCoords               = array(
+                        'coords_gal' => $iCoordsGal,
+                        'coords_sol' => $iCoordsSol,
+                        'coords_pla' => $iCoordsPla
+                    );
+                    $strCoords             = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
 
-                    $retObj->aCoords = $aCoords;
+                    $retObj->aCoords   = $aCoords;
                     $retObj->strCoords = $strCoords;
 
                     if (isset($result['strKoloTyp'])) {
@@ -106,25 +110,36 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
                     }
 
                     if (isset($result['aktKolo'])) {
-                        $obj = array('akt' => PropertyValueC::ensureInteger($result['aktKolo']), 'max' => PropertyValueC::ensureInteger($result['maxKolo']));
+                        $obj           = array(
+                            'akt' => PropertyValueC::ensureInteger($result['aktKolo']),
+                            'max' => PropertyValueC::ensureInteger($result['maxKolo'])
+                        );
                         $retObj->aKolo = $obj;
                     }
 
                     if (isset($result['aktKB'])) {
-                        $obj = array('akt' => PropertyValueC::ensureInteger($result['aktKB']), 'max' => PropertyValueC::ensureInteger($result['maxKB']));
+                        $obj         = array(
+                            'akt' => PropertyValueC::ensureInteger($result['aktKB']),
+                            'max' => PropertyValueC::ensureInteger($result['maxKB'])
+                        );
                         $retObj->aKB = $obj;
                     }
 
                     if (isset($result['aktAB'])) {
-                        $obj = array('akt' => PropertyValueC::ensureInteger($result['aktAB']), 'max' => PropertyValueC::ensureInteger($result['maxAB']));
+                        $obj         = array(
+                            'akt' => PropertyValueC::ensureInteger($result['aktAB']),
+                            'max' => PropertyValueC::ensureInteger($result['maxAB'])
+                        );
                         $retObj->aAB = $obj;
                     }
 
                     if (isset($result['aktSB'])) {
-                        $obj = array('akt' => PropertyValueC::ensureInteger($result['aktSB']), 'max' => PropertyValueC::ensureInteger($result['maxSB']));
+                        $obj         = array(
+                            'akt' => PropertyValueC::ensureInteger($result['aktSB']),
+                            'max' => PropertyValueC::ensureInteger($result['maxSB'])
+                        );
                         $retObj->aSB = $obj;
                     }
-
                 } else if (!empty($result['strObjecte'])) {
                     if (isset($result['deff_type']) && strpos($result['deff_type'], "Schiffs") !== false) {
                         $deff_type = "ship";
@@ -135,12 +150,18 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
                     $foRetVal = preg_match_all($this->getRegularExpressionObject(), $result['strObjecte'], $aoResult, PREG_SET_ORDER);
                     if ($foRetVal) {
                         foreach ($aoResult as $ores) {
-                            $ores['iCount'] = PropertyValueC::ensureInteger($ores['iCount']);
+                            $ores['iCount']    = PropertyValueC::ensureInteger($ores['iCount']);
                             $ores['strObject'] = PropertyValueC::ensureString($ores['strObject']);
                             if ($deff_type == "ship") {
-                                $retObj->aSchiffe[] = array('count' => $ores['iCount'], 'object' => trim($ores['strObject']));
+                                $retObj->aSchiffe[] = array(
+                                    'count'  => $ores['iCount'],
+                                    'object' => trim($ores['strObject'])
+                                );
                             } else if ($deff_type == "plan") {
-                                $retObj->aPlanDeff[] = array('count' => $ores['iCount'], 'object' => trim($ores['strObject']));
+                                $retObj->aPlanDeff[] = array(
+                                    'count'  => $ores['iCount'],
+                                    'object' => trim($ores['strObject'])
+                                );
                             }
                         }
                     }
@@ -150,11 +171,10 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
                 }
             }
             $retVal->aKolos[] = $retObj;
-
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
-            $parserResult->aErrors[] = $msg->strParserText;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = $msg->strParserText;
         }
 
     }
@@ -164,7 +184,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
     private function getRegularExpressionObject()
     {
         $reObject = $this->getRegExpSingleLineText3();
-        $reCount = $this->getRegExpDecimalNumber();
+        $reCount  = $this->getRegExpDecimalNumber();
 
         $regExp = '/
                 (?P<strObject>' . $reObject . ')
@@ -181,14 +201,14 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
     private function getRegularExpression()
     {
         $rePlanetName = $this->getRegExpSingleLineText();
-        $reDateTime = $this->getRegExpDateTime();
-        $reMixedTime = $this->getRegExpMixedTime();
-        $reObject = $this->getRegExpSingleLineText3();
-        $reCount = $this->getRegExpDecimalNumber();
-        $reUserName = $this->getRegExpUserName();
-        $reKoloType = $this->getRegExpKoloTypes();
-        $reAreas = $this->getRegExpAreas();
-        $reProblem = "(Bevölkerungsmangel|Scannerabschaltung\swegen\sChemiemangel|Werften\ssind\sruntergefallen\s\*nöl\*|Energiemangel|Forschungsausfall\sdurch\sEnergiemangel|Wassermangel)";
+        $reDateTime   = $this->getRegExpDateTime();
+        $reMixedTime  = $this->getRegExpMixedTime();
+        $reObject     = $this->getRegExpSingleLineText3();
+        $reCount      = $this->getRegExpDecimalNumber();
+        $reUserName   = $this->getRegExpUserName();
+        $reKoloType   = $this->getRegExpKoloTypes();
+        $reAreas      = $this->getRegExpAreas();
+        $reProblem    = "(Bev.{1,3}lkerungsmangel|Scannerabschaltung\swegen\sChemiemangel|Werften\ssind\sruntergefallen\s\*n.{1,3}l\*|Energiemangel|Forschungsausfall\sdurch\sEnergiemangel|Wassermangel)";
 
         $regExp = '/ ';
 
@@ -229,19 +249,19 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
         $regExp .= '\s+\/\s+';
         $regExp .= '(?P<maxAB>' . $reCount . ')|)';
         $regExp .= ')?';
-//     $regExp  .= '(\s*.*\s){1,1}';
+//      $regExp  .= '(\s*.*\s){1,1}';
         $regExp .= ')|';
-        $regExp .= '((?P<deff_type>(Schiffsübersicht|Verteidigungsübersicht|Sondenverteidigungsübersicht)\s)';
+        $regExp .= '((?P<deff_type>(Schiffs.{1,3}bersicht|Verteidigungs.{1,3}bersicht|Sondenverteidigungs.{1,3}bersicht)\s)';
         $regExp .= '((?P<strSchiffeArea>' . $reAreas . ')\s)?';
         $regExp .= '(?P<strObjecte>(?:
-                    \s*?' . $reObject . '\s*' . $reCount . '\s*?
-                    )+)';
+             \s*?' . $reObject . '\s*' . $reCount . '\s*?
+             )+)';
         $regExp .= ')|';
         $regExp .= '((Dauer\sder\sRunde\s+' . $reObject . '\s+)';
         $regExp .= '(Noobstatus\sBis\:\s(?P<noobstatus>(' . $reDateTime . '))\s\(\d{1,2}\sTage\s\d{2}\:\d{2}\:\d{2}\)\s*)?';
         $regExp .= '(Probleme\s+(?P<problems>(?:
-                    ^' . $reProblem . '\s+
-                    )+)';
+             ^' . $reProblem . '\s+
+             )+)';
         $regExp .= ')?';
         $regExp .= ')';
         $regExp .= '/mx';

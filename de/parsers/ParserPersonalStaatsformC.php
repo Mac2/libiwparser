@@ -69,7 +69,7 @@ class ParserPersonalStaatsformC extends ParserBaseC implements ParserI
          */
 
         $reStaatsform = $this->getRegExpStaatsform_de();
-        $reVorteile = $this->getRegExpText();
+        $reVorteile   = $this->getRegExpText();
 
         $regExp = '/^';
         $regExp .= 'aktuelle\sStaatsform\s+';
@@ -86,7 +86,7 @@ class ParserPersonalStaatsformC extends ParserBaseC implements ParserI
             $parserResult->bSuccessfullyParsed = true;
 
             $retVal->strStaatsform = PropertyValueC::ensureString($aResult[1]);
-            $retVal->strVorteile = PropertyValueC::ensureString($aResult[2]);
+            $retVal->strVorteile   = PropertyValueC::ensureString($aResult[2]);
             if (stripos($retVal->strStaatsform, "barbar") === false) {
                 $retVal->bStaatsformChosen = true;
             } else {
@@ -94,7 +94,7 @@ class ParserPersonalStaatsformC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }

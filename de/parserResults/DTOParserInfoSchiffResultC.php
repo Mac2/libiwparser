@@ -43,6 +43,12 @@ class DTOParserInfoSchiffResultC
      * @var array $aResearchs array of researchs, needed for the ship
      */
     public $aResearchs = array();
+    
+    /**
+     * @soap
+     * @var array $aActions array of actions the ship can do
+    */
+    public $aActions = array();
 
     /**
      * @soap

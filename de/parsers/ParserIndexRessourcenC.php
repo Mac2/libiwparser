@@ -59,7 +59,7 @@ class ParserIndexRessourcenC extends ParserMsgBaseC implements ParserMsgI
         $retVal =& $parserResult->objResultData;
 
         $regExp = $this->getRegularExpression();
-        $msg = $this->getMsg();
+        $msg    = $this->getMsg();
 
         $parserResult->strIdentifier = 'de_index_ressourcen';
 
@@ -74,7 +74,7 @@ class ParserIndexRessourcenC extends ParserMsgBaseC implements ParserMsgI
 
                 $ress_name = PropertyValueC::ensureEnum($result['strRessName'], 'eResources');
                 if ($ress_name == "Bevölkerung") {
-                    $retObj = new DTOParserIndexRessourcenBevResultC();
+                    $retObj                  = new DTOParserIndexRessourcenBevResultC();
                     $retObj->strResourceName = $ress_name;
                     if (isset($result['Bevfrei'])) {
                         $retObj->iBevfrei = PropertyValueC::ensureInteger($result['Bevfrei']);
@@ -86,14 +86,10 @@ class ParserIndexRessourcenC extends ParserMsgBaseC implements ParserMsgI
                         $retObj->iBevmax = PropertyValueC::ensureInteger($result['Bevmax']);
                     }
                 } else {
-                    $retObj = new DTOParserIndexRessourcenRessResultC();
+                    $retObj                  = new DTOParserIndexRessourcenRessResultC();
                     $retObj->strResourceName = $ress_name;
                     if (isset($result['vorrat'])) {
-                        if ($ress_name == "Credits") {
-                            $retObj->iResourceVorrat = (int)(PropertyValueC::ensureFloat($result['vorrat']));
-                        } else {
-                            $retObj->iResourceVorrat = PropertyValueC::ensureInteger($result['vorrat']);
-                        }
+                        $retObj->iResourceVorrat = PropertyValueC::ensureInteger($result['vorrat']);
                     }
                     if (isset($result['production'])) {
                         $retObj->fResourceProduction = PropertyValueC::ensureFloat($result['production']);
@@ -103,8 +99,8 @@ class ParserIndexRessourcenC extends ParserMsgBaseC implements ParserMsgI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
-            $parserResult->aErrors[] = $msg->strParserText;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = $msg->strParserText;
         }
     }
 
@@ -116,8 +112,8 @@ class ParserIndexRessourcenC extends ParserMsgBaseC implements ParserMsgI
     private function getRegularExpression()
     {
 
-        $reRessNames = $this->getRegExpResource();
-        $reRessProd = $this->getRegExpFloatingDouble();
+        $reRessNames  = $this->getRegExpResource();
+        $reRessProd   = $this->getRegExpFloatingDouble();
         $reRessVorrat = $this->getRegExpDecimalNumber();
 
         $regExp = '/';

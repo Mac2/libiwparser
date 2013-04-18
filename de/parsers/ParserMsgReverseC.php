@@ -55,10 +55,10 @@ class ParserMsgReverseC extends ParserMsgBaseC implements ParserMsgI
     public function parseMsg(DTOParserResultC $parserResult)
     {
         $parserResult->objResultData = new DTOParserMsgResultMsgReverseC();
-        $retVal =& $parserResult->objResultData;
+        $retVal                      =& $parserResult->objResultData;
 
-        $regExpText = $this->getRegularExpressionText();
-        $msg = $this->getMsg();
+        $regExpText         = $this->getRegularExpressionText();
+        $msg                = $this->getMsg();
         $msg->strParserText = trim($msg->strParserText);
 
         foreach ($msg as $key => $value) {
@@ -67,7 +67,7 @@ class ParserMsgReverseC extends ParserMsgBaseC implements ParserMsgI
 
         if (empty($msg->strParserText)) { //! Mac: leerer Input, evtl. nicht ausgeklappt ?
             $retVal->bSuccessfullyParsed = false;
-            $retVal->aErrors[] = 'found empty ReverseMsg';
+            $retVal->aErrors[]           = 'found empty ReverseMsg';
 
             return;
         }
@@ -78,55 +78,65 @@ class ParserMsgReverseC extends ParserMsgBaseC implements ParserMsgI
         if ($fRetValText !== false && $fRetValText > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $aSchiffe = array();
-            $aResources = array();
+            $aSchiffe      = array();
+            $aResources    = array();
 
             $strPlanetName = $aResultText['planet_name'];
-            $strCoords = $aResultText['coords'];
-            $iCoordsGal = PropertyValueC::ensureInteger($aResultText['coords_gal']);
-            $iCoordsSol = PropertyValueC::ensureInteger($aResultText['coords_sol']);
-            $iCoordsPla = PropertyValueC::ensureInteger($aResultText['coords_pla']);
-            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+            $strCoords     = $aResultText['coords'];
+            $iCoordsGal    = PropertyValueC::ensureInteger($aResultText['coords_gal']);
+            $iCoordsSol    = PropertyValueC::ensureInteger($aResultText['coords_sol']);
+            $iCoordsPla    = PropertyValueC::ensureInteger($aResultText['coords_pla']);
+            $aCoords       = array(
+                'coords_gal' => $iCoordsGal,
+                'coords_sol' => $iCoordsSol,
+                'coords_pla' => $iCoordsPla
+            );
 
             if (isset($aResultText['schiffe'])) {
                 $aResultSchiffe = array();
-                $regExpSchiffe = $this->getRegularExpressionSchiffe();
+                $regExpSchiffe  = $this->getRegularExpressionSchiffe();
                 $fRetValSchiffe = preg_match_all($regExpSchiffe, $aResultText['schiffe'], $aResultSchiffe, PREG_SET_ORDER);
 
                 if ($fRetValSchiffe !== false && $fRetValSchiffe > 0) {
                     foreach ($aResultSchiffe as $result) {
-                        $strSchiffName = $result['schiff_name'];
-                        $iSchiffCount = $result['schiffe_count'];
-                        $strSchiffName = PropertyValueC::ensureString($strSchiffName);
-                        $iSchiffCount = PropertyValueC::ensureInteger($iSchiffCount);
-                        $aSchiffe[md5($strSchiffName)] = array('schiffe_name' => $strSchiffName, 'schiffe_count' => $iSchiffCount);
+                        $strSchiffName                 = $result['schiff_name'];
+                        $iSchiffCount                  = $result['schiffe_count'];
+                        $strSchiffName                 = PropertyValueC::ensureString($strSchiffName);
+                        $iSchiffCount                  = PropertyValueC::ensureInteger($iSchiffCount);
+                        $aSchiffe[md5($strSchiffName)] = array(
+                            'schiffe_name'  => $strSchiffName,
+                            'schiffe_count' => $iSchiffCount
+                        );
                     }
                 }
             }
             if (isset($aResultText['resources'])) {
                 $aResultResources = array();
-                $regExpResources = $this->getRegularExpressionResources();
+                $regExpResources  = $this->getRegularExpressionResources();
                 $fRetValResources = preg_match_all($regExpResources, $aResultText['resources'], $aResultResources, PREG_SET_ORDER);
 
                 if ($fRetValResources !== false && $fRetValResources > 0) {
                     foreach ($aResultResources as $result) {
-                        $strResourceName = $result['resource_name'];
-                        $iResourceCount = $result['resource_count'];
-                        $strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources');
-                        $iResourceCount = PropertyValueC::ensureInteger($iResourceCount);
-                        $aResources[md5($strResourceName)] = array('resource_name' => $strResourceName, 'resource_count' => $iResourceCount);
+                        $strResourceName                   = $result['resource_name'];
+                        $iResourceCount                    = $result['resource_count'];
+                        $strResourceName                   = PropertyValueC::ensureEnum($strResourceName, 'eResources');
+                        $iResourceCount                    = PropertyValueC::ensureInteger($iResourceCount);
+                        $aResources[md5($strResourceName)] = array(
+                            'resource_name'  => $strResourceName,
+                            'resource_count' => $iResourceCount
+                        );
                     }
                 }
             }
 
             $retVal->strPlanetName = PropertyValueC::ensureString($strPlanetName);
-            $retVal->strCoords = PropertyValueC::ensureString($strCoords);
-            $retVal->aCoords = $aCoords;
-            $retVal->aSchiffe = $aSchiffe;
-            $retVal->aResources = $aResources;
+            $retVal->strCoords     = PropertyValueC::ensureString($strCoords);
+            $retVal->aCoords       = $aCoords;
+            $retVal->aSchiffe      = $aSchiffe;
+            $retVal->aResources    = $aResources;
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the ReverseMsg pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the ReverseMsg pattern.';
         }
 
     }
@@ -138,16 +148,16 @@ class ParserMsgReverseC extends ParserMsgBaseC implements ParserMsgI
     private function getRegularExpressionText()
     {
 
-        $reSchiffe = $this->getRegExpSchiffe();
+        $reSchiffe  = $this->getRegExpSchiffe();
 
         #Just even don't think to ask anything about this regexp, fu!
         $regExp = '/
         Eine\sFlotte\s(ist\szu|wurde\sauf)\sdem\sPlaneten
         (?:\s(?P<planet_name>.*)\s|\s)
         (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-        \s(zurückgekehrt|stationiert)\.
+        \s(zur.{1,3}ckgekehrt|stationiert)\.
         [\s\n]+
-        (Es\skamen\sfolgende\sSachen\szurück|Es\swurden\sfolgende\sSachen\sstationiert)
+        (Es\skamen\sfolgende\sSachen\szur.{1,3}ck|Es\swurden\sfolgende\sSachen\sstationiert)
         [\s\n]+
         (?:
         Schiffe

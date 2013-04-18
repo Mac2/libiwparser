@@ -22,6 +22,7 @@ use libIwParsers\DTOParserResultC;
 use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
+
 use libIwParsers\de\parserResults\DTOParserAlliKasseLogResultC;
 use libIwParsers\de\parserResults\DTOParserAlliKasseLogMemberResultC;
 
@@ -71,20 +72,20 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
-            $strAlliance = "";
+            $strAlliance                       = "";
             foreach ($aResult as $result) {
                 $log = new DTOParserAlliKasseLogMemberResultC;
 
                 $iDateTime = HelperC::convertDateTimeToTimestamp($result['reDateTime']);
-                $iCredits = $result['iCredits'];
+                $iCredits  = $result['iCredits'];
 
                 $log->strFromUser = PropertyValueC::ensureString($result['strFromUser']);
-                $log->strToUser = PropertyValueC::ensureString($result['strToUser']);
+                $log->strToUser   = PropertyValueC::ensureString($result['strToUser']);
                 if (!empty($result['strReason'])) {
                     $log->strReason = PropertyValueC::ensureString($result['strReason']);
                 }
-                $log->iDateTime = PropertyValueC::ensureInteger($iDateTime);
-                $log->iCredits = PropertyValueC::ensureInteger($iCredits);
+                $log->iDateTime  = PropertyValueC::ensureInteger($iDateTime);
+                $log->iCredits   = PropertyValueC::ensureInteger($iCredits);
                 $retVal->aLogs[] = $log;
                 if (!empty($result['strAlliance'])) {
                     $strAlliance = PropertyValueC::ensureString($result['strAlliance']);
@@ -94,10 +95,10 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
         } //! Mac: klappt noch nicht richtig, da das nur eigentlich nur bei "leerem" Input kommen sollte - nicht 0 Matches
         else if ($fRetVal !== false && $fRetVal == 0) {
             $parserResult->bSuccessfullyParsed = true;
-            $parserResult->aErrors[] = 'no Data found';
+            $parserResult->aErrors[]           = 'no Data found';
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }
@@ -111,15 +112,15 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
 
         $reDateTime = $this->getRegExpDateTime();
         $reFromUser = $this->getRegExpUserName();
-        $reToUser = $this->getRegExpUserName();
-        $reInteger = $this->getRegExpDecimalNumber();
-        $reReason = $this->getRegExpSingleLineText();
+        $reToUser   = $this->getRegExpUserName();
+        $reInteger  = $this->getRegExpDecimalNumber();
+        $reReason   = $this->getRegExpSingleLineText();
 
         $regExp = '/^';
         $regExp .= '((\(Wing\s(?P<strAlliance>.*)\)\s*)?';
         $regExp .= '(^.*$\n)+';
-        $regExp .= '^Auszahlungslog\san\sSpieler\swährend\sder\sletzten\sdrei\sWochen\s)?';
-//      $regExp .= '(?:';
+        $regExp .= '^Auszahlungslog\san\sSpieler\sw.{1,3}hrend\sder\sletzten\sdrei\sWochen\s)?';
+    //  $regExp .= '(?:';
         $regExp .= '(?P<reDateTime>' . $reDateTime . ')';
         $regExp .= '\svon\s';
         $regExp .= '(?P<strFromUser>' . $reFromUser . ')';
@@ -133,7 +134,7 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
         $regExp .= '(?P<strReason>' . $reReason . ')';
         $regExp .= '\.)';
         $regExp .= '|)';
-//      $regExp .= ')*';
+    //  $regExp .= ')*';
         $regExp .= '/m';
 
         return $regExp;

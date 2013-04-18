@@ -59,7 +59,7 @@ class ParserIndexSchiffC extends ParserMsgBaseC implements ParserMsgI
         $retVal =& $parserResult->objResultData;
 
         $regExp = $this->getRegularExpression();
-        $msg = $this->getMsg();
+        $msg    = $this->getMsg();
 
         $parserResult->strIdentifier = 'de_index_schiff';
 
@@ -73,10 +73,10 @@ class ParserIndexSchiffC extends ParserMsgBaseC implements ParserMsgI
             foreach ($aResult as $result) {
 
                 if (!empty($result['iCoordsPla']) && !empty($result['iCoordsGal']) && !empty($result['iCoordsSol'])) {
-                    $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPla']);
-                    $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGal']);
-                    $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSol']);
-                    $strCoords = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
+                    $iCoordsPla    = PropertyValueC::ensureInteger($result['iCoordsPla']);
+                    $iCoordsGal    = PropertyValueC::ensureInteger($result['iCoordsGal']);
+                    $iCoordsSol    = PropertyValueC::ensureInteger($result['iCoordsSol']);
+                    $strCoords     = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
                     $strPlanetName = PropertyValueC::ensureString($result['strPlanetName']);
                 }
 
@@ -109,11 +109,11 @@ class ParserIndexSchiffC extends ParserMsgBaseC implements ParserMsgI
                     $retObj->strPlanetName = $strPlanetName;
                 }
                 $retObj->strSchiffName = PropertyValueC::ensureString($result['strSchiffName']);
-                $retObj->iSchiffEnd = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
+                $retObj->iSchiffEnd    = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
                 if (isset($result['mtMixedTime'])) {
                     $retObj->iSchiffEndIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
                 }
-                $retObj->iAnzSchiff = PropertyValueC::ensureInteger($result['iAnzahlSchiff']);
+                $retObj->iAnzSchiff  = PropertyValueC::ensureInteger($result['iAnzahlSchiff']);
                 $retObj->iAnzWerften = PropertyValueC::ensureInteger($result['iAnzahlWerft']);
                 $retObj->strWerftTyp = PropertyValueC::ensureString($result['strWerftName']);
                 if (isset($strCoords) && isset($retObj->strSchiffName)) {
@@ -138,8 +138,8 @@ class ParserIndexSchiffC extends ParserMsgBaseC implements ParserMsgI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
-            $parserResult->aErrors[] = $msg->strParserText;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = $msg->strParserText;
         }
     }
 
@@ -151,8 +151,8 @@ class ParserIndexSchiffC extends ParserMsgBaseC implements ParserMsgI
     private function getRegularExpression()
     {
         $rePlanetName = $this->getRegExpSingleLineText();
-        $reDateTime = $this->getRegExpDateTime();
-        $reMixedTime = $this->getRegExpMixedTime();
+        $reDateTime   = $this->getRegExpDateTime();
+        $reMixedTime  = $this->getRegExpMixedTime();
 
         $regExp = '/';
         $regExp .= '(\[(?P<iCoordsGal>\d+)\:(?P<iCoordsSol>\d+)\:(?P<iCoordsPla>\d+)\]';

@@ -380,7 +380,6 @@ class ParserFunctionC
     protected function getRegExpKoloCoords()
     {
         $retVal = '(?:';
-
         $retVal .= '\d{1,2}';
         $retVal .= '\:';
         $retVal .= '\d{1,3}';
@@ -396,16 +395,16 @@ class ParserFunctionC
     /**
      * returns a regular expression pattern matching a date
      *
-     * @TODO support the other date formats availible in IW (Settings ->
-     *       Administration -> Time formats)
+     * @TODO support the other date formats availible in IW (Settings -> Administration -> Time formats)
      * @TODO don't match wrong dates like 51.45.2208 or 30.02.2009
+     * this doesn't matter here, the convert.. functions are better for this - masel
      */
     protected function getRegExpDate()
     {
         $retVal = '';
 
         $retVal .= '(?:(?<=\s)|(?<=^))'; //the date shall start in a whitesace or start of line
-        $retVal .= '\d{2}\.\d{2}\.\d{4}';
+        $retVal .= '\d{2}\.\d{2}\.20\d{2}';
         $retVal .= '(?=\s|$)'; //the date shall end in a whitesace or end of line
 
         return $retVal;
@@ -417,6 +416,7 @@ class ParserFunctionC
      * returns a regular expression pattern matching a date
      *
      * @TODO don't match wrong dates like 51.45.2208 or 30.02.2009
+     * this doesn't matter here, the convert.. functions are better for this - masel
      */
     protected function getRegExpDateTime()
     {
@@ -563,7 +563,37 @@ class ParserFunctionC
         return $retVal;
     }
 
-    /////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
+
+  /**
+   * returns a regular expression patter matching possible defence buildings
+   *
+   */
+  protected function getRegExpDefence()
+  {
+    $retVal = '';
+
+    $retVal .= '(?:';
+    $retVal .= 'SDI\sRaketensystem|';
+    $retVal .= 'SDI\sAtomraketen|';
+    $retVal .= 'SDI\sPlasmalaser|';
+    $retVal .= 'SDI\sGravitonbeam|';
+    $retVal .= 'Stopfentenwerfer|';
+    $retVal .= 'Raketensatellit|';
+    $retVal .= 'Gausskanonensatellit|';
+    $retVal .= 'LaserSat|';
+    $retVal .= 'PulslaserSat|';
+    $retVal .= 'SD01\sGatling|';
+    $retVal .= 'SD02\sPulslaser|';
+    $retVal .= 'SDI\sStellarkonverter|';
+    $retVal .= 'Fusiontorpedowerfer\s\(Sat\)|';
+    $retVal .= 'MassdriverSat|';
+    $retVal .= ')';
+
+    return $retVal;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
 
     /**
      * returns a regular expression pattern matching a mixed time

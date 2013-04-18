@@ -47,8 +47,8 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
 
         $this->setIdentifier('de_mil_schiff_uebersicht');
         $this->setName('Schiffsübersicht');
-        $this->setRegExpCanParseText('/Militär[\s\S]*Schiffübersicht[\s\S]*Schiffsübersicht/');
-        $this->setRegExpBeginData('/Schiffsübersicht/sm');
+        $this->setRegExpCanParseText('/Milit.{1,3}r[\s\S]*Schiff.{1,3}bersicht[\s\S]*Schiffs.{1,3}bersicht/');
+        $this->setRegExpBeginData('/Schiffs.{1,3}bersicht/sm');
         $this->setRegExpEndData('');
     }
 
@@ -75,7 +75,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
             $parserResult->bSuccessfullyParsed = true;
 
             foreach ($aResult as $result) {
-                $strKoloLine = $result['kolo_line'];
+                $strKoloLine  = $result['kolo_line'];
                 $strDataLines = $result['data_lines'];
 
                 if (empty($aKolos)) {
@@ -86,15 +86,19 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
 
                     foreach ($aResultKolo as $resultKolo) {
                         $strKoloType = $resultKolo['kolo_type'];
-                        $strCoords = $resultKolo['coords'];
-                        $iCoordsGal = PropertyValueC::ensureInteger($resultKolo['coords_gal']);
-                        $iCoordsSol = PropertyValueC::ensureInteger($resultKolo['coords_sol']);
-                        $iCoordsPla = PropertyValueC::ensureInteger($resultKolo['coords_pla']);
-                        $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                        $strCoords   = $resultKolo['coords'];
+                        $iCoordsGal  = PropertyValueC::ensureInteger($resultKolo['coords_gal']);
+                        $iCoordsSol  = PropertyValueC::ensureInteger($resultKolo['coords_sol']);
+                        $iCoordsPla  = PropertyValueC::ensureInteger($resultKolo['coords_pla']);
+                        $aCoords     = array(
+                            'coords_gal' => $iCoordsGal,
+                            'coords_sol' => $iCoordsSol,
+                            'coords_pla' => $iCoordsPla
+                        );
 
-                        $retVal->aKolos[$strCoords] = new DTOParserMilSchiffUebersichtKoloResultC;
-                        $retVal->aKolos[$strCoords]->aCoords = $aCoords;
-                        $retVal->aKolos[$strCoords]->strCoords = PropertyValueC::ensureString($strCoords);
+                        $retVal->aKolos[$strCoords]                = new DTOParserMilSchiffUebersichtKoloResultC;
+                        $retVal->aKolos[$strCoords]->aCoords       = $aCoords;
+                        $retVal->aKolos[$strCoords]->strCoords     = PropertyValueC::ensureString($strCoords);
                         $retVal->aKolos[$strCoords]->strObjectType = PropertyValueC::ensureString($strKoloType);
 
                         $aKolos[] = $strCoords;
@@ -102,19 +106,19 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
 
                 }
 
-                $regExpSchiff = $this->getRegularExpressionSchiff();
-                $aDataLines = array();
+                $regExpSchiff  = $this->getRegularExpressionSchiff();
+                $aDataLines    = array();
                 $fRetValSchiff = preg_match_all($regExpSchiff, $strDataLines, $aDataLines, PREG_SET_ORDER);
 
                 foreach ($aDataLines as $strDataLine) {
                     $aDataLine = explode("\t", $strDataLine["anz"]);
 
-                    $schiff = new DTOParserMilSchiffUebersichtSchiffResultC;
+                    $schiff                = new DTOParserMilSchiffUebersichtSchiffResultC;
                     $schiff->strSchiffName = PropertyValueC::ensureString($strDataLine["schiff"]);
 
                     $schiff->iCountGesamt = PropertyValueC::ensureInteger(array_pop($aDataLine));
-                    $schiff->iCountStat = PropertyValueC::ensureInteger(array_pop($aDataLine));
-                    $schiff->iCountFlug = PropertyValueC::ensureInteger(array_pop($aDataLine));
+                    $schiff->iCountStat   = PropertyValueC::ensureInteger(array_pop($aDataLine));
+                    $schiff->iCountFlug   = PropertyValueC::ensureInteger(array_pop($aDataLine));
 
                     if (empty($schiff->iCountGesamt) || $schiff->iCountGesamt == 0) {
                         continue;
@@ -130,7 +134,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }
@@ -142,27 +146,27 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
         /**
          */
 
-        $reKoloTypes = $this->getRegExpKoloTypes();
+        $reKoloTypes  = $this->getRegExpKoloTypes();
         $reKoloCoords = $this->getRegExpKoloCoords();
-        $reNumber = $this->getRegExpDecimalNumber();
+        $reNumber     = $this->getRegExpDecimalNumber();
 
         $regExp = '/^
-                    \s?
-                    (?P<kolo_line>' . $reKoloCoords . '
-                        (?:\n+\(' . $reKoloTypes . '\)\s' . $reKoloCoords . ')*
-                        \n+\(' . $reKoloTypes . '\)
-                        \s+
-                        Im\sFlug\sStat\sGesamt
-                    )
-                    (?P<data_lines>
-                        (?:
-                            \n+
-                            [^\t\n]+';
+             \s?
+          (?P<kolo_line>' . $reKoloCoords . '
+             (?:\n+\(' . $reKoloTypes . '\)\s' . $reKoloCoords . ')*
+             \n+\(' . $reKoloTypes . '\)
+             \s+
+             Im\sFlug\sStat\sGesamt
+          )
+          (?P<data_lines>
+             (?:
+                \n+
+                [^\t\n]+';
         $regExp .= '(?:\s(?:' . $reNumber . ')?)+'; //! erlaubt auch andere Trennzeichen
         $regExp .= '
-                        )*
-                    )
-                    $/mx';
+             )*
+          )
+    $/mx';
 
         return $regExp;
     }
@@ -172,10 +176,10 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
     private function getRegularExpressionSchiff()
     {
         $reSchiff = $this->getRegExpSingleLineText3();
-        $reAnz = $this->getRegExpDecimalNumber();
+        $reAnz    = $this->getRegExpDecimalNumber();
 
         $regExpSchiffe = '/';
-        $regExpSchiffe .= '(?:^(?P<schiff>' . $reSchiff . ')\s+(?P<anz>(?:' . $reAnz . '\s*)+)' . '\s*$)+'; //
+        $regExpSchiffe .= '(?:^(?P<schiff>' . $reSchiff . ')\t(?P<anz>(?:[^\s]*\t?)+)' . '\s*$)+';
         $regExpSchiffe .= '/mx';
 
         return $regExpSchiffe;
@@ -188,13 +192,13 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
         /**
          */
 
-        $reKoloTypes = $this->getRegExpKoloTypes();
+        $reKoloTypes  = $this->getRegExpKoloTypes();
 
         $regExpKolo = '/
-                          (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-                          \n+
-                          \((?P<kolo_type>' . $reKoloTypes . ')\)
-                        /mx';
+          (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
+          \n+
+          \((?P<kolo_type>' . $reKoloTypes . ')\)
+    /mx';
 
         return $regExpKolo;
     }

@@ -22,48 +22,29 @@ namespace libIwParsers\enums;
 
 class ePlanetSpecials
 {
-    const alteRuinen = 'alte Ruinen';
-    const Asteroidengürtel = 'Asteroidengürtel';
-    const instabilerKern = 'instabiler Kern';
-    const Gold = 'Gold';
-    const Mond = 'Mond';
-    const natürlicheQuelle = 'natürliche Quelle';
-    const planetarerRing = 'planetarer Ring';
-    const radioaktiv = 'radioaktiv';
-    const toxisch = 'toxisch';
-    const Ureinwohner = 'Ureinwohner';
-    const wenigRohstoffe = 'wenig Rohstoffe';
-    const WenigRohstoffe = 'wenig Rohstoffe';
-    const blauerNebel = 'blauer Nebel';
-    const BlauerNebel = 'blauer Nebel';
-    const gelberNebel = 'gelber Nebel';
-    const GelberNebel = 'gelber Nebel';
-    const grünerNebel = 'grüner Nebel';
-    const GrünerNebel = 'grüner Nebel';
-    const roterNebel = 'roter Nebel';
-    const RoterNebel = 'roter Nebel';
-    const violetterNebel = 'violetter Nebel';
-    const VioletterNebel = 'violetter Nebel';
-
-    //TODO: validate englisch constants
-    const oldRuins = 'oldRuins';
-    const asteroidBelt = 'asteroidBelt';
-    const instableCore = 'instableCore';
-    const gold = 'gold';
-    const moon = 'moon';
-    const naturalWell = 'naturalWell';
-    const radiactive = 'radiactive';
-    const toxic = 'toxic';
-    const natives = 'natives';
-    const fewResources = 'fewResources';
-    const blueNebula = 'blueNebula';
-    const BlueNebula = 'blueNebula';
-    const yellowNebula = 'yellowNebula';
-    const YellowNebula = 'yellowNebula';
-    const greenNebula = 'greenNebula';
-    const GreenNebula = 'greenNebula';
-    const redNebula = 'redNebula';
-    const RedNebula = 'redNebula';
-    const violetNebula = 'violetNebula';
-    const VioletNebula = 'violetNebula';
+    public static $enum = array(
+        'alte Ruinen'       => 'alte Ruinen',
+        'Asteroidengürtel'  => 'Asteroidengürtel',
+        'instabiler Kern'   => 'instabiler Kern',
+        'Gold'              => 'Gold',
+        'Mond'              => 'Mond',
+        'natürliche Quelle' => 'natürlicheQuelle',
+        'Natürliche Quelle' => 'natürlicheQuelle',
+        'planetarer Ring'   => 'planetarer Ring',
+        'radioaktiv'        => 'radioaktiv',
+        'toxisch'           => 'toxisch',
+        'Ureinwohner'       => 'Ureinwohner',
+        'wenig Rohstoffe'   => 'wenig Rohstoffe',
+        'Wenig Rohstoffe'   => 'wenig Rohstoffe',
+        'blauer Nebel'      => 'blauer Nebel',
+        'Blauer Nebel'      => 'blauer Nebel',
+        'gelber Nebel'      => 'gelber Nebel',
+        'Gelber Nebel'      => 'gelber Nebel',
+        'grüner Nebel'      => 'grüner Nebel',
+        'Grüner Nebel'      => 'grüner Nebel',
+        'roter Nebel'       => 'roter Nebel',
+        'Roter Nebel'       => 'roter Nebel',
+        'violetter Nebel'   => 'violetter Nebel',
+        'Violetter Nebel'   => 'violetter Nebel',
+    );
 }

@@ -66,7 +66,7 @@ class PropertyValueC
 
         $filtered_number = 0;
 
-        if (preg_match('~^(?P<sign>-|\+|)(?P<digit>\d{1,3}(?:(\D?)\d{3})?(?:\3\d{3})*)(?:\D(?P<part>\d{1,2}))?$~', $value, $numberpart)) {
+        if (preg_match('~^\s*(?P<sign>-|\+|)(?P<digit>\d{1,3}(?:(\D?)\d{3})?(?:\3\d{3})*)(?:\D(?P<part>\d{1,2}))?\s*$~', $value, $numberpart)) {
 
             $filtered_number = preg_replace('~\D~', '', $numberpart['digit']);
 
@@ -92,9 +92,7 @@ class PropertyValueC
 
     public static function ensureString($value)
     {
-        $value = (string)$value;
-
-        return $value;
+        return (string)$value;
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -116,49 +114,19 @@ class PropertyValueC
     /**
      * Checks if the given value is a value of the enum $enumName
      *
-     * The method first strips out all characters, that are not allowed in
-     * PHP labels. It then checks if the class $enumName contains a constant
-     * labeled like the stripped $value, and if it finds such a constant,
-     * it returns its value.
-     *
      * e.g.
      * If you try to ensure resource names, you'd call it like this:
      *
      * $result = PropertyValueC::ensureEnum( 'Eisen', 'eResources' );
      *
-     * Because eResources defines a constant labeled 'Eisen', the method
-     * returns its value (which is 'iron').
-     *
-     * Imagine the following:
-     *
-     * $result = PropertyValueC::ensureEnum( 'chem. Elemente', 'eResources' );
-     *
-     * Of course, 'chem. Elemente' can't be a constant of eResources, because
-     * they can't contain dots or spaces. So the method strips those characters
-     * and searches for a constant labeled 'chemElemente'. It finds the constant
-     * and returns its value 'chemicals'.
+     * @author masel <masel789@googlemail.com>
      */
     public static function ensureEnum($value, $enumName)
     {
-        $reflectionClass = new \ReflectionClass('libIwParsers\enums\\' . $enumName);
+        $enumClass = "\\libIwParsers\\enums\\".$enumName;
 
-        //TODO: Find better solution
-        //dirty hack for ePlanetObjects:
-        //replace --- with noObject, because --- can't be defined as a
-        //constant.
-        //I also thought about returning an empty string if after stripping
-        //characters that are not allowed nothing was left. But I'm not convinced
-        //by the behaviour that that would imply (enureEnum would accept empty
-        //strings as valid enum values).
-        $value = preg_replace('/---/', 'noObject', $value);
-
-        //replace characters that are not allowed
-        //see: http://de2.php.net/manual/en/language.variables.basics.php
-        //TODO: first character mustn't be a number.
-        $value = preg_replace('/[^a-zA-Z0-9_\x7f-\xff]/', '', $value);
-
-        if ($reflectionClass->hasConstant($value)) {
-            return $reflectionClass->getConstant($value);
+        if (isset($enumClass::$enum[$value])) {
+            return ($enumClass::$enum[$value]);
         } else {
             throw new \Exception("'$value' is not a valid enumerable value for enum '$enumName'.");
         }

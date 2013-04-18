@@ -19,6 +19,7 @@ namespace libIwParsers\de\parsers;
 use libIwParsers\DTOParserResultC;
 use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
+
 use libIwParsers\de\parserResults\DTOParserIndexResultC;
 use libIwParsers\de\parserResults\DTOParserIndexResultIndexC;
 
@@ -45,7 +46,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
         $this->setIdentifier('de_index');
         $this->setName("Startseite");
         $this->setRegExpCanParseText('/Notizblock.*Umwandlung.*Serverzeit/smU'); //! Mac: requires Ungreedy U Modifier because charsize could be too large!
-        $this->setRegExpBeginData('/Lade\sneue\sSpieler\sein\sund\sgewinne\seine\sÜberraschung\s*?/s');
+        $this->setRegExpBeginData('/Lade\sneue\sSpieler\sein\sund\sgewinne\seine\s.{1,3}berraschung\s*?/s');
         $this->setRegExpEndData('/__\s?X/s');
     }
 
@@ -81,21 +82,20 @@ class ParserIndexC extends ParserBaseC implements ParserI
                 if (preg_match($regExp, $result, $treffer)) {
 
                     $parser = "";
-
-                    if (empty($treffer['FleetOwn'])) {
+                    if (!empty($treffer['FleetOwn'])) {
                         $fleetType = 'own';
-                        $parser = 'Fleet';
+                        $parser    = 'Fleet';
                     }
                     if (!empty($treffer['FleetOpposit'])) {
                         $fleetType = 'opposit';
-                        $parser = 'Fleet';
+                        $parser    = 'Fleet';
                     }
                     if (!empty($treffer['Research'])) {
                         $parser = 'Research';
                     }
                     if (!empty($treffer['KoloInfos'])) {
                         $parser = 'KoloInfos';
-                        $temp = $treffer['KoloInfos'];
+                        $temp   = $treffer['KoloInfos'];
                     }
                     if (!empty($treffer['Geb'])) {
                         $parser = 'Geb';
@@ -151,14 +151,14 @@ class ParserIndexC extends ParserBaseC implements ParserI
                     $parser->parseMsg($return);
                     $retVal->aContainer[] = $return;
 
-                    $parser = '';
+                    $parser    = '';
                     $fleetType = '';
                     continue;
                 }
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
     }
 
@@ -172,20 +172,22 @@ class ParserIndexC extends ParserBaseC implements ParserI
          * die Daten sind Blöcke, Wobei die Reihenfolge ungewiss ist
          */
         $rePlanetName = $this->getRegExpSingleLineText();
+        $reRessProd   = $this->getRegExpFloatingDouble();
+        $reRessVorrat = $this->getRegExpDecimalNumber();
 
         #Just even don't think to ask anything about this regexp, fu!
         $regExp = '/
         \s*?(?:
-            (?P<Ressen>\sRessourcen\s(?!abholen))|
+            (?P<Ressen>Eisen(?:\sEisen)?\s+\(' . $reRessProd . '\)\s+' . $reRessVorrat . '\s+Eis(?:\sEis)?\s+\(' . $reRessProd . '\))|
             Globale\sNachricht\s+?Votings|
             Votings|
             (?P<KoloInfos>Kolonieinformation|^Kolonie\s' . $rePlanetName . '\s\(\d+\:\d+\:\d+\)\nLebensbedingungen)|
             (?P<Research>Forschungsstatus)|
             (?P<Noob>Noobstatus)|
-            (?P<Geb>Gebäudebau\s+?Ausbaustatus|
+            (?P<Geb>Geb.{1,3}udebau\s+?Ausbaustatus|
             Ausbaustatus)|
-            (?P<Werften>^Werftübersicht)|
-            (?P<Schiff>^Schiffbauübersicht)|
+            (?P<Werften>^Werft.{1,3}bersicht)|
+            (?P<Schiff>^Schiffbau.{1,3}bersicht)|
             (?P<FleetOwn>(?:Eigene\sFlotten\s+?Eigene\sFlotten|Eigene\sFlotten)
                 (?:\s+Ziel\s+Start\s+Ankunft\s+Aktionen\s+(?:(?:\*\s)?\+))?
             )|
@@ -195,7 +197,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
                 (?:\(Durch\sSittermodus\snicht\sabrufbar\.\)\s+?)?
             )|
             (?P<FleetOpposit>(?:fremde\sFlotten\s+?Fremde\sFlotten|Fremde\sFlotten)
-                (?:\s+\(Es\ssind\sfremde\sFlotten\süber\sdem\sPlaneten\sstationiert\.\))?
+                (?:\s+\(Es\ssind\sfremde\sFlotten\s.{1,3}ber\sdem\sPlaneten\sstationiert\.\))?
                 (?:\s+Ziel\s+Start\s+Ankunft\s+Aktionen\s+(?:(?:\*\s)?\+))?
             )|
             (?P<shoutbox>Allianz\sShoutbox\s*Inhalt.+neue\sMitteilung\s+Mitteilung)

@@ -22,30 +22,29 @@ namespace libIwParsers\enums;
 
 class eResources
 {
-    const Eisen = 'Eisen';
-    const Stahl = 'Stahl';
-    const VV4A = 'VV4A';
-    const chemElemente = 'chem. Elemente';
-    const Eis = 'Eis';
-    const Wasser = 'Wasser';
-    const Energie = 'Energie';
-    const Pinguine = 'Pinguine';
-    const Credits = 'Credits';
-    const Bevölkerung = 'Bevölkerung';
-    const FP = 'FP';
+    public static $enum = array(
+        'Eisen'                   => 'Eisen',
+        'Stahl'                   => 'Stahl',
+        'VV4A'                    => 'VV4A',
+        'chem. Elemente'          => 'chem. Elemente',
+        'Eis'                     => 'Eis',
+        'Wasser'                  => 'Wasser',
+        'Energie'                 => 'Energie',
+        'Credits'                 => 'Credits',
+        'Bevölkerung'             => 'Bevölkerung',
 
-    //TODO: validate englisch constants
-    const Iron = 'iron';
-    const steel = 'steel';
-    const vv4a = 'vv4a';
-    const Chemelements = 'chemicals';
-    const Ice = 'ice';
-    const Water = 'water';
-    const Energy = 'energy';
-    const Penguins = 'penguins';
-    const Rabbits = 'credits';
-    const Population = 'population';
+        'Erdbeeren'               => 'Eisen',
+        'Erdbeermarmelade'        => 'Stahl',
+        'Erdbeerkonfitüre'        => 'VV4A',
+        'Brause'                  => 'chem. Elemente',
+        'Vanilleeis'              => 'Eis',
+        'Eismatsch'               => 'Wasser',
+        'Traubenzucker'           => 'Energie',
+        'Kekse'                   => 'Credits',
+        'blubbernde Gallertmasse' => 'Bevölkerung',
 
-    //TODO: figure out what muffins are. Equivalent to 'Bierflaschen'?
-    //public const Muffins     = '???';
+        'Pinguine'                => 'Pinguine',
+        'FP'                      => 'FP',
+        'Forschungspunkte'        => 'FP'     
+    );
 }

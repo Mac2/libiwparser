@@ -21,6 +21,7 @@ use libIwParsers\DTOParserResultC;
 use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
+
 use libIwParsers\de\parserResults\DTOParserHighscoreResultC;
 use libIwParsers\de\parserResults\DTOParserHighscoreResultMemberC;
 
@@ -82,18 +83,18 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
             }
 
             $retVal->iTimestamp = $this->getDateTimeOfUpdate();
-            $retVal->strType = $this->getTypeOfHighscore();
+            $retVal->strType    = $this->getTypeOfHighscore();
 
             foreach ($aResult as $result) {
                 $member = new DTOParserHighscoreResultMemberC;
 
-                $member->iPos = PropertyValueC::ensureInteger($result['userPos']);
-                $member->strName = PropertyValueC::ensureString($result['userName']);
+                $member->iPos       = PropertyValueC::ensureInteger($result['userPos']);
+                $member->strName    = PropertyValueC::ensureString($result['userName']);
                 $member->strAllianz = PropertyValueC::ensureString($result['userAllianz']);
-                $member->iGebP = PropertyValueC::ensureInteger($result['userGebP']);
-                $member->iFP = PropertyValueC::ensureInteger($result['userFP']);
-                $member->iGesamtP = PropertyValueC::ensureInteger($result['userGesP']);
-                $member->iPperDay = PropertyValueC::ensureInteger($result['userPerDay']);
+                $member->iGebP      = PropertyValueC::ensureInteger($result['userGebP']);
+                $member->iFP        = PropertyValueC::ensureInteger($result['userFP']);
+                $member->iGesamtP   = PropertyValueC::ensureInteger($result['userGesP']);
+                $member->iPperDay   = PropertyValueC::ensureInteger($result['userPerDay']);
 
                 if (!in_array($result['userChange'], array('neu', '+', '-', 'o'))) {
                     $member->iPosChange = PropertyValueC::ensureInteger($result['userChange']);
@@ -107,7 +108,7 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }
@@ -199,11 +200,11 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
          * Pos | Name | Allianz | Gebpkt | FP | Gesamtpkt | Pkt/Tag | Pos Aenderung| dabei seit
          */
 
-        $reName = $this->getRegExpUserName();
-        $reAllianz = $this->getRegExpSingleLineText();
+        $reName      = $this->getRegExpUserName();
+        $reAllianz   = $this->getRegExpSingleLineText();
         $reDabeiSeit = $this->getRegExpDate();
-        $rePoints = $this->getRegExpDecimalNumber();
-        $rePoints2 = $this->getRegExpFloatingDouble();
+        $rePoints    = $this->getRegExpDecimalNumber();
+        $rePoints2   = $this->getRegExpFloatingDouble();
 
         $regExp = '/^';
         $regExp .= '(?P<userPos>' . '\d+' . ')\s+?';
@@ -215,7 +216,7 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
         $regExp .= '(?P<userGesP>' . $rePoints2 . ')\s+?';
         $regExp .= '(?P<userPerDay>' . $rePoints2 . ')\s+?';
         $regExp .= '(?P<userChange>(?:' . $rePoints . '|neu|\-|\+|o))\s+?';
-//
+
         $regExp .= '(?P<dateOfEntry>' . $reDabeiSeit . '|---)\s*?';
         $regExp .= '[\n\t]+/m';
 

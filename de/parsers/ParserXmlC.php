@@ -67,13 +67,13 @@ class ParserXmlC extends ParserBaseC implements ParserI
             foreach ($aResult as $xmlinfo) {
                 $link = new DTOParserXmlResultLinkC();
                 if (!empty($xmlinfo['unilink'])) {
-                    $link->strUrl = $xmlinfo['unilink'];
+                    $link->strUrl  = $xmlinfo['unilink'];
                     $link->strType = "universe";
                     $retVal->aUniversumLinks[] = $link;
                 } else {
-                    $link->iId = $xmlinfo['id'];
+                    $link->iId     = $xmlinfo['id'];
                     $link->strHash = $xmlinfo['hash'];
-                    $link->strUrl = $xmlinfo[0] . '&typ=xml';
+                    $link->strUrl  = $xmlinfo[0] . '&typ=xml';
                     $link->strType = $xmlinfo['type'];
 
                     if ($link->strType == 'kb') {
@@ -86,7 +86,7 @@ class ParserXmlC extends ParserBaseC implements ParserI
             $parserResult->bSuccessfullyParsed = true;
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = "unable to match Pattern of xml-link";
+            $parserResult->aErrors[]           = "unable to match Pattern of xml-link";
         }
 
     }

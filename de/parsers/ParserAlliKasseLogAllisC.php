@@ -22,8 +22,9 @@ use libIwParsers\DTOParserResultC;
 use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
+
 use libIwParsers\de\parserResults\DTOParserAlliKasseLogResultC;
-use libIwParsers\de\parserResults\DTOParserAlliKasseLogAllisResultC;
+use libIwParsers\de\parserResults\DTOParserAlliKasseLogMemberResultC;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,7 +50,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
         $this->setName("Allianzkasse Auszahlungen(Allianzen)");
         $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
         $this->setRegExpBeginData('/Allianzkasse\s+Allianzkasse/sm');
-//    $this->setRegExpBeginData( '/Auszahlungslog\san\sWings\/etc\sder\sletzten\sdrei\sWochen\s/' );    //! Mac: effizienter, da Input kleiner  ?
+//      $this->setRegExpBeginData( '/Auszahlungslog\san\sWings\/etc\sder\sletzten\sdrei\sWochen\s/' );    //! Mac: effizienter, da Input kleiner  ?
         $this->setRegExpEndData('');
     }
 
@@ -72,18 +73,18 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
-            $strAlliance = "";
+            $strAlliance                       = "";
             foreach ($aResult as $result) {
-                $log = new DTOParserAlliKasseLogAllisResultC;
+                $log = new DTOParserAlliKasseLogMemberResultC;
 
                 $iDateTime = HelperC::convertDateTimeToTimestamp($result['reDateTime']);
-                $iCredits = $result['iCredits'];
+                $iCredits  = $result['iCredits'];
 
                 $log->strFromUser = PropertyValueC::ensureString($result['strFromUser']);
                 $log->strAlliName = PropertyValueC::ensureString($result['strAlliName']);
-                $log->strAlliTag = PropertyValueC::ensureString($result['strAlliTag']);
-                $log->iDateTime = PropertyValueC::ensureInteger($iDateTime);
-                $log->iCredits = PropertyValueC::ensureInteger($iCredits);
+                $log->strAlliTag  = PropertyValueC::ensureString($result['strAlliTag']);
+                $log->iDateTime   = PropertyValueC::ensureInteger($iDateTime);
+                $log->iCredits    = PropertyValueC::ensureInteger($iCredits);
 
                 $retVal->aLogs[] = $log;
                 if (!empty($result['strAlliance'])) {
@@ -94,10 +95,10 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
         } //! Mac: klappt noch nicht richtig, da das nur eigentlich nur bei "leerem" Input kommen sollte - nicht 0 Matches
         else if ($fRetVal !== false && $fRetVal == 0) {
             $parserResult->bSuccessfullyParsed = true;
-            $parserResult->aErrors[] = 'no Data found';
+            $parserResult->aErrors[]           = 'no Data found';
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
     }
 
@@ -110,14 +111,14 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
 
         $reDateTime = $this->getRegExpDateTime();
         $reFromUser = $this->getRegExpUserName();
-        $reInteger = $this->getRegExpDecimalNumber();
+        $reInteger  = $this->getRegExpDecimalNumber();
         $reAlliance = $this->getRegExpSingleLineText();
 
         $regExp = '/^';
         $regExp .= '((\(Wing (?P<strAlliance>.*)\)\s*)?';
         $regExp .= '(^.*$\n)+';
         $regExp .= '^Auszahlungslog\san\sWings\/etc\sder\sletzten\sdrei\sWochen\s)?';
-        //  $regExp .= '(?:';
+    //  $regExp .= '(?:';
         $regExp .= '(?P<reDateTime>' . $reDateTime . ')';
         $regExp .= '\svon\s';
         $regExp .= '(?P<strFromUser>' . $reFromUser . ')';
@@ -129,7 +130,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
         $regExp .= '\s';
         $regExp .= '(?P<iCredits>' . $reInteger . ')';
         $regExp .= '\s(Credits|Kekse)\sausgezahlt';
-        //  $regExp .= ')*';
+    //  $regExp .= ')*';
         $regExp .= '/m';
 
         return $regExp;

@@ -62,9 +62,9 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
 
         $this->stripTextToData();
 
-        $regExp = $this->getRegularExpression();
-        $regExpRess = $this->getRegularExpressionRess();
-        // $regExpEffective    = $this->getRegularExpressionEffective();
+        $regExp          = $this->getRegularExpression();
+        $regExpRess      = $this->getRegularExpressionRess();
+//      $regExpEffective = $this->getRegularExpressionEffective();
 
         $aResult = array();
         $fRetVal = preg_match($regExp, $this->getText(), $aResult);
@@ -72,40 +72,43 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $retVal->strDefenceName = $aResult['strDefenceName'];
+            $retVal->strDefenceName  = $aResult['strDefenceName'];
             $retVal->iProductionTime = HelperC::convertMixedDurationToSeconds($aResult['strTime']);
-            $retVal->aResearchs = HelperC::convertBracketStringToArray($aResult['strResearchs']);
+            $retVal->aResearchs      = HelperC::convertBracketStringToArray($aResult['strResearchs']);
 
             $retVal->strAreaName = PropertyValueC::ensureString($aResult['strTyp']);
 
-            $retVal->iVerbrauchBrause = PropertyValueC::ensureInteger($aResult['iVerbrauchBrause']);
+            $retVal->iVerbrauchBrause  = PropertyValueC::ensureInteger($aResult['iVerbrauchBrause']);
             $retVal->iVerbrauchEnergie = PropertyValueC::ensureInteger($aResult['iVerbrauchEnergie']);
 
             $retVal->strWeaponClass = PropertyValueC::ensureString($aResult['strWeaponClass']);
-            $retVal->iAttack = PropertyValueC::ensureInteger($aResult['iAngriff']);
-            $retVal->iDefence = PropertyValueC::ensureInteger($aResult['iDefence']);
-            //	$retVal->iArmour_kin = PropertyValueC::ensureInteger($aResult['iPanzkin']);
-            //	$retVal->iArmour_grav = PropertyValueC::ensureInteger($aResult['iPanzgrav']);
-            //	$retVal->iArmour_electr = PropertyValueC::ensureInteger($aResult['iPanzelektr']);
-            $retVal->iShields = PropertyValueC::ensureInteger($aResult['iSchilde']);
+            $retVal->iAttack        = PropertyValueC::ensureInteger($aResult['iAngriff']);
+            $retVal->iDefence       = PropertyValueC::ensureInteger($aResult['iDefence']);
+        //	$retVal->iArmour_kin = PropertyValueC::ensureInteger($aResult['iPanzkin']);
+        //	$retVal->iArmour_grav = PropertyValueC::ensureInteger($aResult['iPanzgrav']);
+        //	$retVal->iArmour_electr = PropertyValueC::ensureInteger($aResult['iPanzelektr']);
+            $retVal->iShields  = PropertyValueC::ensureInteger($aResult['iSchilde']);
             $retVal->iAccuracy = PropertyValueC::ensureFloat($aResult['iZielgenauigkeit']);
 
             $treffer = array();
             preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER);
             foreach ($treffer as $teff) {
-                $retVal->aCosts[] = array('strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'), 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
+                $retVal->aCosts[] = array(
+                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                );
             }
 
             //! Mac: effektivitat der Deffanlagen gegen alle Schiffstypen beträgt 100%!! (abweichend von den Datenblättern)
-//        $treffer = array();
-//        preg_match_all ($regExpEffective, $aResult['effective'], $treffer, PREG_SET_ORDER );
-//        foreach ($treffer as $teff)
-//        {
-//            $retVal->aEffectivity[] = array('strAreaName' => PropertyValueC::ensureString( $teff['area_name'] ), 'fEffective' => PropertyValueC::ensureFloat($teff['effective_count']/100));
-//        }
+        //  $treffer = array();
+        //  preg_match_all ($regExpEffective, $aResult['effective'], $treffer, PREG_SET_ORDER );
+        //  foreach ($treffer as $teff)
+        //  {
+        //      $retVal->aEffectivity[] = array('strAreaName' => PropertyValueC::ensureString( $teff['area_name'] ), 'fEffective' => PropertyValueC::ensureFloat($teff['effective_count']/100));
+        //  }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
     }
 
@@ -130,7 +133,7 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
         $reResource = $this->getRegExpAreas();
 
         $regExpRess = '/';
-        $regExpRess .= '(?P<area_name>' . $reResource . ')\s+(?P<effective_count>' . '\d+(?:\%|\\\%)' . ')';
+        $regExpRess .= '(?P<area_name>' . $reResource . ')\s+(?P<effective_count>' . '\d+' . ')(?:\%|\\\%)';
         $regExpRess .= '/mx';
 
         return $regExpRess;
@@ -140,12 +143,12 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
     private function getRegularExpression()
     {
 
-        $reDefenceName = $this->getRegExpSingleLineText3();
+        $reDefenceName  = $this->getRegExpSingleLineText3();
         $reResearchName = $this->getRegExpBracketString();
-        $reMixedTime = $this->getRegExpMixedTime();
-        $reResource = $this->getRegExpResource();
-        $reCosts = $this->getRegExpDecimalNumber();
-        $reBonus = $this->getRegExpFloatingDouble();
+        $reMixedTime    = $this->getRegExpMixedTime();
+        $reResource     = $this->getRegExpResource();
+        $reCosts        = $this->getRegExpDecimalNumber();
+        $reBonus        = $this->getRegExpFloatingDouble();
 
         $regExp = '/';
         $regExp .= 'Verteidigungseinrichtungen\s-\sInfo\:\s';
@@ -182,28 +185,28 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
         $regExp .= 'Verteidigung\s+?';
         $regExp .= '(?P<iDefence>' . '\d+' . ')\s*?';
         $regExp .= '\n+';
-        //  $regExp  .= 'Panzerung\s\(kinetisch\)\s+?';
-        //  $regExp  .= '(?P<iPanzkin>'.'\d+'.')\s*?';
-        //  $regExp  .= '\n+';
-        //  $regExp  .= 'Panzerung\s\(elektrisch\)\s+?';
-        //  $regExp  .= '(?P<iPanzelektr>'.'\d+'.')\s*?';
-        //  $regExp  .= '\n+';
-        //  $regExp  .= 'Panzerung\s\(gravimetrisch\)\s+?';
-        //  $regExp  .= '(?P<iPanzgrav>'.'\d+'.')\s*?';
-        //  $regExp  .= '\n+';
+    //  $regExp  .= 'Panzerung\s\(kinetisch\)\s+?';
+    //  $regExp  .= '(?P<iPanzkin>'.'\d+'.')\s*?';
+    //  $regExp  .= '\n+';
+    //  $regExp  .= 'Panzerung\s\(elektrisch\)\s+?';
+    //  $regExp  .= '(?P<iPanzelektr>'.'\d+'.')\s*?';
+    //  $regExp  .= '\n+';
+    //  $regExp  .= 'Panzerung\s\(gravimetrisch\)\s+?';
+    //  $regExp  .= '(?P<iPanzgrav>'.'\d+'.')\s*?';
+    //  $regExp  .= '\n+';
         $regExp .= 'Schilde\s+?';
         $regExp .= '(?P<iSchilde>' . '\d+' . ')\s*?';
         $regExp .= '\n+';
-        //  $regExp  .= 'Wendigkeit\s+?';
-        //  $regExp  .= '(?P<iWendigkeit>'.'\d+'.')\s*?';
-        //  $regExp  .= '\n+';
+    //  $regExp  .= 'Wendigkeit\s+?';
+    //  $regExp  .= '(?P<iWendigkeit>'.'\d+'.')\s*?';
+    //  $regExp  .= '\n+';
         $regExp .= 'Zielgenauigkeit\s+?';
         $regExp .= '(?P<iZielgenauigkeit>' . $reBonus . ')\s*?';
         $regExp .= '\n+';
         $regExp .= 'Effektivit.t\sgegen\s*\n(?P<effective>(?:^' . $reDefenceName . '\s*\d+(?:\%|\\\%)\n)+)';
 
-        //  $regExp  .= 'Besonderheiten';
-        //  $regExp  .= '\n+';
+    //  $regExp  .= 'Besonderheiten';
+    //  $regExp  .= '\n+';
         $regExp .= '/mxu';
 
         return $regExp;

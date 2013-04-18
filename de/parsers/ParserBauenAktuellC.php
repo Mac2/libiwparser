@@ -21,6 +21,7 @@ use libIwParsers\DTOParserResultC;
 use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
+
 use libIwParsers\de\parserResults\DTOParserBauenAktuellResultC;
 use libIwParsers\de\parserResults\DTOParserBauenAktuellResultBuildingC;
 
@@ -45,7 +46,7 @@ class ParserBauenAktuellC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_bauen_aktuell');
-        $this->setName('aktueller Gebäudebau');
+        $this->setName('aktueller Geb&auml;udebau');
         $this->setRegExpCanParseText('/aktuell\sim\sBau\sauf\sdiesem\sPlaneten/sm');
         $this->setRegExpBeginData($this->getRegExpCanParseText());
         $this->setRegExpEndData('/Ausbau/sm');
@@ -74,18 +75,18 @@ class ParserBauenAktuellC extends ParserBaseC implements ParserI
             foreach ($aResult as $result) {
                 $iDateToExpire = HelperC::convertMixedDurationToSeconds($result['dateToExpire']);
                 $iDateOfFinish = HelperC::convertDateTimeToTimestamp($result['dateOfFinish']);
-                $strBuilding = $result['building'];
+                $strBuilding   = $result['building'];
 
-                $entry = new DTOParserBauenAktuellResultBuildingC();
+                $entry                = new DTOParserBauenAktuellResultBuildingC();
                 $entry->iDateToExpire = PropertyValueC::ensureInteger($iDateToExpire);
                 $entry->iDateOfFinish = PropertyValueC::ensureInteger($iDateOfFinish);
-                $entry->strBuilding = PropertyValueC::ensureString(trim($strBuilding));
+                $entry->strBuilding   = PropertyValueC::ensureString(trim($strBuilding));
 
                 $retVal->aBuildings[] = $entry;
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }

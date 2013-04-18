@@ -168,7 +168,7 @@ class HelperC
          * MM   :=   0 - 00 - 59      [0-5]?\d
          * SS   :=   0 - 00 - 59      [0-5]?\d
          */
-        if (preg_match('^/(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-5]\d)(?:\:(?P<second>[0-5]?\d))?\s?(?:(?P<pm>pm)|am|)$/i', $value, $aResult) != false) {
+        if (preg_match('/^(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-5]\d)(?:\:(?P<second>[0-5]?\d))?\s?(?:(?P<pm>pm)|am|)$/i', $value, $aResult) != false) {
 
             if (!isset($aResult['second'])) {
                 $aResult['second'] = 0;
@@ -233,6 +233,7 @@ class HelperC
 
         $aResult = array();
         $mktime = array();
+        $mktime['second'] = 0;
 
         /*
          * match datetime patterns
@@ -244,13 +245,15 @@ class HelperC
          * MM   :=   0 - 00 - 59      [0-5]?\d
          * SS   :=   0 - 00 - 59      [0-5]?\d
          */
-        if (preg_match('/^(?P<day>\d{1,2})\.(?P<month>\d{1,2})\.(?P<year>\d{4})\s(?P<hour>2[0-4]|[01]\d|\d):(?P<minute>[0-5]?\d):(?P<second>[0-5]?\d)$/', $value, $aResult) != false) {
+        if (preg_match('/^(?P<day>\d{1,2})\.(?P<month>\d{1,2})\.(?P<year>\d{4})\s(?P<hour>2[0-4]|[01]\d|\d):(?P<minute>[0-5]?\d)(?:\:(?P<second>[0-5]?\d))?$/', $value, $aResult) != false) {
             $mktime['day'] = (int)$aResult['day'];
             $mktime['month'] = (int)$aResult['month'];
             $mktime['year'] = (int)$aResult['year'];
-            $mktime['hour'] = (int)$aResult['hours'];
+            $mktime['hour'] = (int)$aResult['hour'];
             $mktime['minute'] = (int)$aResult['minute'];
-            $mktime['second'] = (int)$aResult['second'];
+            if (isset($aResult['second'])) {
+                $mktime['second'] = (int)$aResult['second'];
+            }
         } else if (preg_match('/^(?P<day>\d{1,2})\w{0,2}(?:\s|\.)(?:(?P<month_num>\d{1,2})|(?P<month_str>\w))(?P<year>\d{4})\s(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-5]\d)(?:\:(?P<second>[0-5]\d))?$/', $value, $aResult) != false) {
             $mktime['day'] = (int)$aResult['day'];
             if (!empty($aResult['month_num'])) { //a month number
@@ -277,7 +280,7 @@ class HelperC
             if (isset($aResult['second'])) {
                 $mktime['second'] = (int)$aResult['second'];
             }
-        } elseif (preg_match('/^(?P<month_str>\w)\s(?P<day>\d{1,2})\w{0,2}(?:\s|\,\s)(?P<year>\d{4})(?:\s|\,\s)(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-6]\d)(?:\:(?P<second>[0-6]\d))?\s?(?:(?P<pm>pm)|am|)/i', $value, $aResult) != false) {
+        } elseif (preg_match('/^(?P<month_str>\w)\s(?P<day>\d{1,2})\w{0,2}(?:\s|\,\s)(?P<year>\d{4})(?:\s|\,\s)(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-6]\d)(?:\:(?P<second>[0-6]\d))?\s?(?:(?P<pm>pm)|am|)$/i', $value, $aResult) != false) {
             $mktime['day'] = (int)$aResult['day'];
             if (isset($month2int[$aResult['month_str']])) { //a valid month string
                 $mktime['month'] = (int)$month2int[$aResult['month_str']];
@@ -296,8 +299,14 @@ class HelperC
                 $mktime['hour'] += 12;
             }
         } else {
-            //all datetime patterns checked, try date patterns
-            return HelperC::convertDateToTimestamp($value);
+            //all datetime patterns unsuccessfully checked, try date patterns...
+            $result = HelperC::convertDateToTimestamp($value);
+            if ($result !== false ) {
+                return $result;
+            } else {
+                //all date patterns also unsuccessfully checked, last try time patterns...
+                return HelperC::convertTimeToTimestamp($value);
+            }
         }
 
         if (checkdate($mktime['month'], $mktime['day'], $mktime['year'])) {
@@ -313,7 +322,7 @@ class HelperC
     {
         $return = array();
         $treffer = array();
-        if (preg_match_all('%(?:\(((?:[^\n\(\)]+)(?:\((?:[^\n\(\)]*)\)(?:[^\n\(\)]*))*)\))%', $string, $treffer)) {
+        if (preg_match_all('/(?:\(((?:[^\n\(\)]+)(?:\((?:[^\n\(\)]*)\)(?:[^\n\(\)]*))*)\))/', $string, $treffer)) {
             $return = $treffer[1];
         }
 

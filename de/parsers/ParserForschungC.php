@@ -22,6 +22,7 @@ use libIwParsers\DTOParserResultC;
 use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
+
 use libIwParsers\de\parserResults\DTOParserForschungResultC;
 use libIwParsers\de\parserResults\DTOParserForschungResearchedResultC;
 use libIwParsers\de\parserResults\DTOParserForschungOpenResultC;
@@ -48,7 +49,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_forschung');
-        $this->setName("Forschungsübersicht");
+        $this->setName("Forschungs&uuml;bersicht");
         $this->setRegExpCanParseText('/Forschung.*Alle\sForschungen\sanzeigen/s');
         $this->setRegExpBeginData('/Es\swerden\momentan\s.*\spro\sStunde\serzeugt.*Alle\sForschungen\sanzeigen/'); //! Mac: Damit verschw. FP geparsed werden
         $this->setRegExpEndData('');
@@ -66,7 +67,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
 
         $this->stripTextToData();
 
-        $regExp = $this->getRegularExpression();
+        $regExp     = $this->getRegularExpression();
         $regExpRess = $this->getRegularExpressionRess();
 
         //! Mac: da sonst Probleme mit regExpAreas auftreten, muss hier eine Ersetzung erfolgen
@@ -79,7 +80,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
 
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
-            $area_name = "";
+            $area_name                         = "";
             foreach ($aResult as $result) {
                 if (!empty($result["globalMalusRed"]) || !empty($result["globalBonusRed"]) || !empty($result["FPverschw"])) {
                     if (!empty($result["globalMalusRed"])) {
@@ -105,15 +106,15 @@ class ParserForschungC extends ParserBaseC implements ParserI
                     $result["research"] = "";
                 }
 
-                if ($result["research"] == "erforscht") {
+                if ($result["research"] == "erforscht") { //sollte nicht mehr der Fall sein?
                     $parserResult->bSuccessfullyParsed = false;
-                    $parserResult->aErrors[] = 'Unable to determine researchname (<pre>' . $result[0] . '</pre>)';
+                    $parserResult->aErrors[]           = 'Unable to determine researchname (<pre>' . $result[0] . '</pre>)';
                     continue;
                 }
 
                 if (empty($result['state']) || !in_array($result['state'], array('erforscht', 'zu wenig Ress', 'forschen', '---', 'wird erforscht'))) {
                     $parserResult->bSuccessfullyParsed = false;
-                    $parserResult->aErrors[] = 'Unable to determine valid research status (' . $result["research"] . ')';
+                    $parserResult->aErrors[]           = 'Unable to determine valid research status (' . $result["research"] . ')';
                     continue;
                 }
 
@@ -131,84 +132,93 @@ class ParserForschungC extends ParserBaseC implements ParserI
                 }
 
                 if (isset($result['state']) && $result['state'] == 'erforscht') {
-                    $ret = new DTOParserForschungResearchedResultC;
-                    $ret->strResearchName = PropertyValueC::ensureString($result['research']);
+                    $ret                     = new DTOParserForschungResearchedResultC;
+                    $ret->strResearchName    = PropertyValueC::ensureString($result['research']);
                     $ret->strResearchComment = PropertyValueC::ensureString($result['comment']);
-                    $ret->strAreaName = PropertyValueC::ensureString($area_name);
-                    $ret->iFP = PropertyValueC::ensureInteger($result['fp'] / $result['faktor'] * 100);
-                    $ret->iPeopleResearched = PropertyValueC::ensureInteger($result['count']);
-                    $ret->iResearchCosts = PropertyValueC::ensureInteger($result['faktor']);
-                    $ret->iUserResearchTime = HelperC::convertMixedDurationToSeconds($result['dauer']);
+                    $ret->strAreaName        = PropertyValueC::ensureString($area_name);
+                    $ret->iFP                = PropertyValueC::ensureInteger($result['fp'] / $result['faktor'] * 100);
+                    $ret->iPeopleResearched  = PropertyValueC::ensureInteger($result['count']);
+                    $ret->iResearchCosts     = PropertyValueC::ensureInteger($result['faktor']);
+                    $ret->iUserResearchTime  = HelperC::convertMixedDurationToSeconds($result['dauer']);
 
                     if (!empty($result['kosten'])) {
                         $treffer = array();
                         $kRetVal = preg_match_all($regExpRess, $result['kosten'], $treffer, PREG_SET_ORDER);
                         if ($kRetVal !== false && $kRetVal > 0) {
                             foreach ($treffer as $teff) {
-                                $ret->aCosts[] = array('strResourceName' => $teff['resource_name'], 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
+                                $ret->aCosts[] = array(
+                                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                                );
                             }
                         } else {
-                            $parserResult->aErrors[] = 'Unable to match the costs pattern (' . $ret->strResearchName . ').';
+                            //$parserResult->aErrors[] = 'Unable to match the costs pattern (' .$ret->strResearchName. ').';
                         }
                     }
                     $retVal->aResearchsResearched[] = $ret;
                     continue;
                 } else if (isset($result['state']) && ($result['state'] == '---' || $result['state'] == 'zu wenig Ress')) {
-                    $ret = new DTOParserForschungOpenResultC;
-                    $ret->strResearchName = PropertyValueC::ensureString($result['research']);
+                    $ret                     = new DTOParserForschungOpenResultC;
+                    $ret->strResearchName    = PropertyValueC::ensureString($result['research']);
                     $ret->strResearchComment = PropertyValueC::ensureString($result['comment']);
-                    $ret->strAreaName = PropertyValueC::ensureString($area_name);
-                    $ret->iFP = PropertyValueC::ensureInteger($result['fp'] / $result['faktor'] * 100);
-                    $ret->iPeopleResearched = PropertyValueC::ensureInteger($result['count']);
-                    $ret->iResearchCosts = PropertyValueC::ensureInteger($result['faktor']);
-                    $ret->iUserResearchTime = HelperC::convertMixedDurationToSeconds($result['dauer']);
+                    $ret->strAreaName        = PropertyValueC::ensureString($area_name);
+                    $ret->iFP                = PropertyValueC::ensureInteger($result['fp'] / $result['faktor'] * 100);
+                    $ret->iPeopleResearched  = PropertyValueC::ensureInteger($result['count']);
+                    $ret->iResearchCosts     = PropertyValueC::ensureInteger($result['faktor']);
+                    $ret->iUserResearchTime  = HelperC::convertMixedDurationToSeconds($result['dauer']);
 
                     if (!empty($result['kosten'])) {
                         $treffer = array();
                         $kRetVal = preg_match_all($regExpRess, $result['kosten'], $treffer, PREG_SET_ORDER);
                         if ($kRetVal !== false && $kRetVal > 0) {
                             foreach ($treffer as $teff) {
-                                $ret->aCosts[] = array('strResourceName' => $teff['resource_name'], 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
+                                $ret->aCosts[] = array(
+                                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                                );
                             }
                         } else {
-                            $parserResult->aErrors[] = 'Unable to match the costs pattern (' . $ret->strResearchName . ').';
+                            //$parserResult->aErrors[] = 'Unable to match the costs pattern (' .$ret->strResearchName. ').';
                         }
                     }
 
                     $retVal->aResearchsOpen[] = $ret;
                     continue;
                 } else if (isset($result['state']) && $result['state'] == 'forschen') {
-                    $ret = new DTOParserForschungOpenResultC;
-                    $ret->strResearchName = PropertyValueC::ensureString($result['research']);
+                    $ret                     = new DTOParserForschungOpenResultC;
+                    $ret->strResearchName    = PropertyValueC::ensureString($result['research']);
                     $ret->strResearchComment = PropertyValueC::ensureString($result['comment']);
-                    $ret->strAreaName = PropertyValueC::ensureString($area_name);
-                    $ret->iFP = PropertyValueC::ensureInteger($result['fp'] / $result['faktor'] * 100);
-                    $ret->iPeopleResearched = PropertyValueC::ensureInteger($result['count']);
-                    $ret->iResearchCosts = PropertyValueC::ensureInteger($result['faktor']);
-                    $ret->iUserResearchTime = HelperC::convertDateTimeToTimestamp($result['endtime']);
+                    $ret->strAreaName        = PropertyValueC::ensureString($area_name);
+                    $ret->iFP                = PropertyValueC::ensureInteger($result['fp'] / $result['faktor'] * 100);
+                    $ret->iPeopleResearched  = PropertyValueC::ensureInteger($result['count']);
+                    $ret->iResearchCosts     = PropertyValueC::ensureInteger($result['faktor']);
+                    $ret->iUserResearchTime  = HelperC::convertDateTimeToTimestamp($result['endtime']);
 
                     if (!empty($result['kosten'])) {
                         $treffer = array();
                         $kRetVal = preg_match_all($regExpRess, $result['kosten'], $treffer, PREG_SET_ORDER);
                         if ($kRetVal !== false && $kRetVal > 0) {
                             foreach ($treffer as $teff) {
-                                $ret->aCosts[] = array('strResourceName' => $teff['resource_name'], 'iResourceCount' => PropertyValueC::ensureInteger($teff['resource_count']));
+                                $ret->aCosts[] = array(
+                                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                                );
                             }
                         } else {
-                            $parserResult->aErrors[] = 'Unable to match the costs pattern for (' . $ret->strResearchName . ').';
+                            //$parserResult->aErrors[] = 'Unable to match the costs pattern for (' .$ret->strResearchName. ').';
                         }
                     }
 
                     $retVal->aResearchsOpen[] = $ret;
                     continue;
                 } else if ($result['state'] == 'wird erforscht') {
-                    $ret = new DTOParserForschungProgressResultC;
-                    $ret->strResearchName = PropertyValueC::ensureString($result['research']);
+                    $ret                     = new DTOParserForschungProgressResultC;
+                    $ret->strResearchName    = PropertyValueC::ensureString($result['research']);
                     $ret->strResearchComment = PropertyValueC::ensureString($result['comment']);
-                    $ret->strAreaName = PropertyValueC::ensureString($area_name);
-                    $ret->iFP = PropertyValueC::ensureInteger($result['fp'] / $result['faktor'] * 100);
-                    $ret->iPeopleResearched = PropertyValueC::ensureInteger($result['count']);
-                    $ret->iResearchCosts = PropertyValueC::ensureInteger($result['faktor']);
+                    $ret->strAreaName        = PropertyValueC::ensureString($area_name);
+                    $ret->iFP                = PropertyValueC::ensureInteger($result['fp'] / $result['faktor'] * 100);
+                    $ret->iPeopleResearched  = PropertyValueC::ensureInteger($result['count']);
+                    $ret->iResearchCosts     = PropertyValueC::ensureInteger($result['faktor']);
                     if (isset($result['finish'])) {
                         $ret->iUserResearchTime = HelperC::convertDateTimeToTimestamp($result['finish']);
                     }
@@ -221,7 +231,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }
@@ -234,7 +244,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
          */
 
         $reResource = $this->getRegExpResource();
-        $recount = $this->getRegExpDecimalNumber();
+        $recount    = $this->getRegExpDecimalNumber();
         $regExpRess = '/';
         $regExpRess .= '(?P<resource_name>' . $reResource . ')\:\s(?P<resource_count>' . $recount . ')';
         $regExpRess .= '/mx';
@@ -247,25 +257,25 @@ class ParserForschungC extends ParserBaseC implements ParserI
         /**
          */
 
-        $reResearch = '[\wÖöäÄüÜ]+[^\n\t\:\+]{3,}'; //! Mac: hier evtl. konrket 'erforscht' ausschliessen ?
+        $reResearch        = '[\wÖöäÄüÜ]+[^\n\t\:\+]{3,}(?<!erforscht)'; //! Mac: hier evtl. konrket 'erforscht' ausschliessen ?
         $reResearchComment = $this->getRegExpSingleLineText3();
-        $reFP = $this->getRegExpDecimalNumber();
-        $reDateTime = $this->getRegExpDateTime();
-        $reMixedTime = $this->getRegExpMixedTime();
-        $reAreas = $this->getRegExpAreas();
+        $reFP              = $this->getRegExpDecimalNumber();
+        $reDateTime        = $this->getRegExpDateTime();
+        $reMixedTime       = $this->getRegExpMixedTime();
+        $reAreas           = $this->getRegExpAreas();
 
         $regExp = '/';
 
         //! allg. Infoblock (Infos ueber globale Mods, sind nicht immer vorhande!?)
         $regExp .= '(?:';
-        $regExp .= 'Die\sForscher\shaben\sschon\s(?P<FPverschw>' . $reFP . ')\sFP\serfolgreich\svergeudet,\sindem\ssie\swas\svöllig\sanderes\staten\sals\sforschen\.\s';
+        $regExp .= 'Die\sForscher\shaben\sschon\s(?P<FPverschw>' . $reFP . ')\sFP\serfolgreich\svergeudet,\sindem\ssie\swas\sv.{1,3}llig\sanderes\staten\sals\sforschen\.\s';
         $regExp .= '(?:' . $reResearchComment . '\s' . '){0,4}';
         $regExp .= 'Forschungen\sausblenden\s\/\sAlle\sForschungen\sanzeigen\s+';
         $regExp .= '  (?:Aktuelle\sEffekte\sauf\sForschungsboni\sund\s-mali:';
         $regExp .= '    \sReduktion\sdes\smaximalen\sMalus\sum\s(?P<globalMalusRed>\d{1,3})\sProzentpunkte,';
         $regExp .= '    \sErh.{0,3}hung\sdes\sBonus\sum\s(?P<globalBonusRed>\d{1,3})\sProzentpunkte\.';
         $regExp .= '  )?';
-        $regExp .= ' )';
+        $regExp .= ')';
         //! eigentlicher Forschungsblock
         $regExp .= '|';
         $regExp .= '(?:';
@@ -274,22 +284,21 @@ class ParserForschungC extends ParserBaseC implements ParserI
         $regExp .= '    (?:^(?P<area>(?:' . $reAreas . '(?!\s(?:' . $reAreas . '|' . $reFP . '\sForschungspunkte\s))|Raumfahrt(?=\sRaumfahrt)))\s|';
         $regExp .= '        (?:';
         $regExp .= '            (?P<research>' . $reResearch . ')\s';
-//      $regExp .= '            (?P<comment>[+,:\\\%\.öÖüÜäÄ\w\s]*\n|)';
         $regExp .= '            (?P<comment>.*\n|)';
         $regExp .= '            (?P<fp>' . $reFP . ')';
         $regExp .= '            \sForschungspunkte\s';
         $regExp .= '            (?:\(von\s(?P<count>\d+)(?:\%|\\\%)\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\%|\\\%)\sFPKosten\)\s|)';
         $regExp .= '            (?:Dauer\:\s(?P<dauer>' . $reMixedTime . ')\s|)';
         $regExp .= '            (?P<kosten>(?:(?:.*)\:\s' . $reFP . '\s)+|)';
-        $regExp .= '            (?:\s*(?:Ressourcen\sin\sabsehbarer\sZeit\snicht\svorhanden|Ressourcen\svorhanden\sin.*(?:\(Info\nbenötigt\sIWSA\)|))\s|)';
+        $regExp .= '            (?:\s*(?:Ressourcen\sin\sabsehbarer\sZeit\snicht\svorhanden|Ressourcen\svorhanden\sin.*(?:\(Info\nben.{1,3}tigt\sIWSA\)|))\s|)';
 
-        $regExp .= '            (?:[\s\n]*Aufgrund\svon\sgenerellen\stechnischen\sUnverständnis\sim\sUniversum\,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s(?:\%|\\\%)\.\s\?\s|)';
+        $regExp .= '            (?:[\s\n]*Aufgrund\svon\sgenerellen\stechnischen\sUnverst.{1,3}ndnis\sim\sUniversum\,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s(?:\%|\\\%)\.\s\?\s|)';
         $regExp .= '            (?:^(?:Forschung_wird\sangezeigt|Forschung_wird\snicht\sangezeigt|S|N|)\s|)'; //! evtl. nur beim FF vorhanden ?
         $regExp .= '            \s*';
         $regExp .= '            (?:Stufe\s\d\s|)';
         $regExp .= '            (?P<state>---|wird\serforscht|zu\swenig\sRess|forschen|erforscht)';
         $regExp .= '            (?:\nbis\:\s(?P<finish>' . $reDateTime . ')\n\s*(?P<expire>' . $reMixedTime . ')|)';
-        $regExp .= '            (?:\n(?P<duration>' . $reMixedTime . ')\n\s*(?P<endtime>' . $reDateTime . ')|)';
+        $regExp .= '            (?:\n\s*(?P<duration>' . $reMixedTime . ')\n\s*(?P<endtime>' . $reDateTime . ')|)';
         $regExp .= '        )';
         $regExp .= '    )';
         $regExp .= ')';

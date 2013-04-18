@@ -22,18 +22,12 @@ namespace libIwParsers\enums;
 
 class eObjectTypes
 {
-    const noObject = 'noObject';
-
-    const Kolonie = 'Kolonie';
-    const Raumstation = 'Raumstation';
-    const Artefaktbasis = 'Artefaktbasis';
-    const Kampfbasis = 'Kampfbasis';
-    const Sammelbasis = 'Sammelbasis';
-
-    //TODO: validate englisch constants
-    const colony = 'colony';
-    const spaceStation = 'spaceStation';
-    const artifactStation = 'artifactStation';
-    const battleStation = 'battleStation';
-    const miningStation = 'miningStation';
+    public static $enum = array(
+        '---'           => '---',
+        'Kolonie'       => 'Kolonie',
+        'Raumstation'   => 'Raumstation',
+        'Artefaktbasis' => 'Artefaktbasis',
+        'Kampfbasis'    => 'Kampfbasis',
+        'Sammelbasis'   => 'Sammelbasis',
+    );
 }

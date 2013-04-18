@@ -25,7 +25,9 @@ namespace libIwParsers\enums;
  */
 class eBasisTypes
 {
-    const Alpha = 'alpha';
-    const Beta = 'beta';
-    const Gamma = 'gamma';
+    public static $enum = array(
+        'Alpha' => 'alpha',
+        'Beta'  => 'beta',
+        'Gamma' => 'gamma',
+    );
 }

@@ -47,9 +47,9 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_wirtschaft_geb');
-        $this->setName('Gebäudeübersicht');
-        $this->setRegExpCanParseText('/Gebäudeübersicht\s+Forschungsübersicht\s+Werftübersicht\s+Defenceübersicht.*Gebäudeübersicht(?:.*Gebäudeübersicht)?/sm');
-        $this->setRegExpBeginData('/Gebäudeübersicht/sm');
+        $this->setName('Geb&auml;ude&uuml;bersicht');
+        $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s+Forschungs.{1,3}bersicht\s+Werft.{1,3}bersicht\s+Defence.{1,3}bersicht.*Geb.{1,3}ude.{1,3}bersicht(?:.*Geb.{1,3}ude.{1,3}bersicht)?/sm');
+        $this->setRegExpBeginData('/Geb.+ude.+bersicht/sm');
         $this->setRegExpEndData('');
     }
 
@@ -78,10 +78,10 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
             foreach ($aResult as $result) {
                 $strAreaName = $result['area_name'];
 
-                $strKoloLine = $result['kolo_line'];
+                $strKoloLine  = $result['kolo_line'];
                 $strDataLines = $result['data_lines'];
 
-                $area = new DTOParserWirtschaftGebAreaResultC;
+                $area              = new DTOParserWirtschaftGebAreaResultC;
                 $area->strAreaName = PropertyValueC::ensureString($strAreaName);
 
                 if (empty($aKolos)) {
@@ -92,15 +92,19 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
 
                     foreach ($aResultKolo as $resultKolo) {
                         $strKoloType = $resultKolo['kolo_type'];
-                        $strCoords = $resultKolo['coords'];
-                        $iCoordsGal = PropertyValueC::ensureInteger($resultKolo['coords_gal']);
-                        $iCoordsSol = PropertyValueC::ensureInteger($resultKolo['coords_sol']);
-                        $iCoordsPla = PropertyValueC::ensureInteger($resultKolo['coords_pla']);
-                        $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                        $strCoords   = $resultKolo['coords'];
+                        $iCoordsGal  = PropertyValueC::ensureInteger($resultKolo['coords_gal']);
+                        $iCoordsSol  = PropertyValueC::ensureInteger($resultKolo['coords_sol']);
+                        $iCoordsPla  = PropertyValueC::ensureInteger($resultKolo['coords_pla']);
+                        $aCoords     = array(
+                            'coords_gal' => $iCoordsGal,
+                            'coords_sol' => $iCoordsSol,
+                            'coords_pla' => $iCoordsPla
+                        );
 
-                        $retVal->aKolos[$strCoords] = new DTOParserWirtschaftGebKoloResultC;
-                        $retVal->aKolos[$strCoords]->aCoords = $aCoords;
-                        $retVal->aKolos[$strCoords]->strCoords = PropertyValueC::ensureString($strCoords);
+                        $retVal->aKolos[$strCoords]                = new DTOParserWirtschaftGebKoloResultC;
+                        $retVal->aKolos[$strCoords]->aCoords       = $aCoords;
+                        $retVal->aKolos[$strCoords]->strCoords     = PropertyValueC::ensureString($strCoords);
                         $retVal->aKolos[$strCoords]->strObjectType = PropertyValueC::ensureString($strKoloType);
 
                         $aKolos[] = $strCoords;
@@ -111,8 +115,8 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
                 foreach ($aDataLines as $strDataLine) {
                     $aDataLine = explode("\t", $strDataLine);
 
-                    $strBuildingName = array_shift($aDataLine);
-                    $building = new DTOParserWirtschaftGebBuildingResultC;
+                    $strBuildingName           = array_shift($aDataLine);
+                    $building                  = new DTOParserWirtschaftGebBuildingResultC;
                     $building->strBuildingName = PropertyValueC::ensureString($strBuildingName);
 
                     if (empty($strBuildingName)) {
@@ -133,7 +137,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }
@@ -145,26 +149,26 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
         /**
          */
 
-        $reKoloTypes = $this->getRegExpKoloTypes();
+        $reKoloTypes  = $this->getRegExpKoloTypes();
         $reKoloCoords = $this->getRegExpKoloCoords();
 
         $regExp = '/^
-          (?P<area_name>[\&\w\süÜäÄöÖ]+)[\\n\\r]+
-          \\t?
+          (?P<area_name>[\&\w\süÜäÄöÖ]+)\n+
+          \t?
           (?P<kolo_line>
           ' . $reKoloCoords . '
             (
-              [\\n\\r]+
+              \n+
               \(' . $reKoloTypes . '\)
-              \\t
+              \t
               ' . $reKoloCoords . '
             )*
-            [\\n\\r]+
+            \n+
             \(' . $reKoloTypes . '\)\sSumme
           )
           (?P<data_lines>(?:
-            [\\n\\r]+
-            [^\\t\\n]+
+            \n+
+            [^\t\n]+
             (?:\t\d*)+
           )+)
     $/mx';
@@ -179,13 +183,13 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
         /**
          */
 
-        $reKoloTypes = $this->getRegExpKoloTypes();
+        $reKoloTypes  = $this->getRegExpKoloTypes();
 
         $regExpKolo = '/
-                          (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-                          \n+
-                          \((?P<kolo_type>' . $reKoloTypes . ')\)
-                       /mx';
+          (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
+          \n+
+          \((?P<kolo_type>' . $reKoloTypes . ')\)
+          /mx';
 
         return $regExpKolo;
     }

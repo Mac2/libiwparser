@@ -69,7 +69,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
         $retVal->strType = $this->type;
 
         $regExp = $this->getRegularExpression();
-        $msg = $this->getMsg();
+        $msg    = $this->getMsg();
 
         $parserResult->strIdentifier = 'de_index_fleet';
         $aResult = array();
@@ -92,37 +92,40 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
                     $retObj->strPlanetNameTo = $planetName;
                 }
                 $retObj->strPlanetNameFrom = PropertyValueC::ensureString($result['strPlanetNameFrom']);
-                $retObj->strUserNameFrom = PropertyValueC::ensureString($result['strUserNameFrom']);
+                $retObj->strUserNameFrom   = PropertyValueC::ensureString($result['strUserNameFrom']);
 
                 $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPlaFrom']);
                 $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGalFrom']);
                 $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSolFrom']);
-                $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                $aCoords    = array(
+                    'coords_gal' => $iCoordsGal,
+                    'coords_sol' => $iCoordsSol,
+                    'coords_pla' => $iCoordsPla
+                );
                 $strCoords = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
 
-                $retObj->aCoordsFrom = $aCoords;
-                $retObj->strCoordsFrom = $strCoords;
+                $retObj->aCoordsFrom    = $aCoords;
+                $retObj->strCoordsFrom  = $strCoords;
                 $retObj->eTransfairType = PropertyValueC::ensureString($result['eTransfairType']);
 
                 $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPlaTo']);
                 $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGalTo']);
                 $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSolTo']);
-                $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-                $strCoords = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
+                $aCoords    = array(
+                    'coords_gal' => $iCoordsGal,
+                    'coords_sol' => $iCoordsSol,
+                    'coords_pla' => $iCoordsPla
+                );
+                $strCoords  = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
 
-                $retObj->aCoordsTo = $aCoords;
+                $retObj->aCoordsTo   = $aCoords;
                 $retObj->strCoordsTo = $strCoords;
 
                 if (!empty($result['dtDateTime'])) {
                     $retObj->iAnkunft = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
                 } else {
                     $retObj->iAnkunft = 0;
-//            $retObj->iAnkunft = GetVar("now");  //! Mac: darf nicht, da sonst parsen innerhalb dieser Zeit, jedesmal als neuer Flug erkannt wird
                 }
-
-//        if (!$retObj->iAnkunft) {
-//                $retObj->iAnkunft = array();
-//        }
 
                 if (!empty($result['mtMixedTime'])) {
                     $retObj->iAnkunftIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
@@ -136,8 +139,8 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
                         $foRetVal = preg_match_all($this->getRegularExpressionObject(), $result['strObjecte'], $aoResult, PREG_SET_ORDER);
                         if ($foRetVal) {
                             foreach ($aoResult as $ores) {
-                                $ores['iCount'] = PropertyValueC::ensureInteger($ores['iCount']);
-                                $ores['strObject'] = PropertyValueC::ensureString($ores['strObject']);
+                                $ores['iCount']     = PropertyValueC::ensureInteger($ores['iCount']);
+                                $ores['strObject']  = PropertyValueC::ensureString($ores['strObject']);
                                 $retObj->aObjects[] = array('count' => $ores['iCount'], 'object' => $ores['strObject']);
                             }
                         }
@@ -148,8 +151,8 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
-            $parserResult->aErrors[] = $msg->strParserText;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = $msg->strParserText;
         }
     }
 
@@ -160,7 +163,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
     private function getRegularExpressionObject()
     {
         $reObject = $this->getRegExpSingleLineText3();
-        $reCount = $this->getRegExpDecimalNumber();
+        $reCount  = $this->getRegExpDecimalNumber();
 
         $regExp = '/
         (?P<iCount>' . $reCount . ')
@@ -207,15 +210,15 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
      */
     private function getRegularExpression()
     {
-        $rePlanetName = $this->getRegExpSingleLineText();
-        $reUserName = $this->getRegExpUserName();
-        $reDateTime = $this->getRegExpDateTime();
-        $reMixedTime = $this->getRegExpMixedTime();
+        $rePlanetName  = $this->getRegExpSingleLineText();
+        $reUserName    = $this->getRegExpUserName();
+        $reDateTime    = $this->getRegExpDateTime();
+        $reMixedTime   = $this->getRegExpMixedTime();
         $reShipActions = $this->getRegExpShipActions();
-        $reShipTexts = $this->getRegExpShipTexts(); //! Mac: zufaellige Texte nach Ankunft
-        $reObject = '(?:' . $this->getRegExpResource() . '|' . $this->getRegExpSchiffe() . '|' . $reShipTexts . ')';
-        $reCount = $this->getRegExpDecimalNumber();
-//    $reCoords         = $this->getRegExpKoloCoords();
+        $reShipTexts   = $this->getRegExpShipTexts(); //! Mac: zufaellige Texte nach Ankunft
+        $reObject      = '(?:' . $this->getRegExpResource() . '|' . $this->getRegExpSchiffe() . '|' . $reShipTexts . ')';
+        $reCount       = $this->getRegExpDecimalNumber();
+//      $reCoords         = $this->getRegExpKoloCoords();
 
         $regExpOpera = '(?:\s+(?:(?:' . $reCount . '\s+?' . $reObject . '\s*)+)\s*)?'; //! Opera kopiert die Objects nochmal ... warum auch immer oO
 
@@ -230,7 +233,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
         $regExp .= '(?:(?P<strPlanetNameFrom>' . $rePlanetName . ')\s|)';
         $regExp .= '\((?P<iCoordsGalFrom>\d+)\:(?P<iCoordsSolFrom>\d+)\:(?P<iCoordsPlaFrom>\d+)\)';
         $regExp .= '[\s\n]+';
-//	$regExp .= '(?:(?P<strUserNameFrom>^'.$reObject.')\s|)';
+//	    $regExp .= '(?:(?P<strUserNameFrom>^'.$reObject.')\s|)';
         $regExp .= '(?:(?P<strUserNameFrom>^' . $reUserName . ')|)';
         $regExp .= '\s*';
         $regExp .= '(?:';

@@ -45,9 +45,9 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->setIdentifier('de_wirtschaft_planiress');
-        $this->setName("KoloRessübersicht Teil1");
-        $this->setRegExpCanParseText('/Ressourcenkoloübersicht.*Lager\sund\sBunker\sanzeigen/s');
-        $this->setRegExpBeginData('/Kolonie\s+\w+\s+Stahl\s+\w+\s+chem.\sElemente\s+\w+\s+\w+\s+Energie/');
+        $this->setName("KoloRess&Uuml;bersicht Teil1");
+        $this->setRegExpCanParseText('/Ressourcenkolo.{1,3}bersicht.*Lager\sund\sBunker\sanzeigen/s');
+        $this->setRegExpBeginData('/Kolonie\s+\w+\s+(?:Erdbeermarmelade|Stahl)\s+\w+\s+\w+\s+\w+\s+\w+\s+(Traubenzucker|Energie)/');
         $this->setRegExpEndData('/Lager\sund\sBunker\sanzeigen/');
     }
 
@@ -67,7 +67,15 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
 
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
-        $ress = array('eisen' => 'Eisen', 'stahl' => 'Stahl', 'vv4a' => 'VV4A', 'chemie' => 'chem. Elemente', 'eis' => 'Eis', 'wasser' => 'Wasser', 'nrg' => 'Energie');
+        $ress    = array(
+            'eisen'  => 'Eisen',
+            'stahl'  => 'Stahl',
+            'vv4a'   => 'VV4A',
+            'chemie' => 'Brause',
+            'eis'    => 'Eis',
+            'wasser' => 'Wasser',
+            'nrg'    => 'Energie'
+        );
 
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
@@ -81,21 +89,25 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
             foreach ($aResult as $result) {
                 $strKoloType = $result['object_type'];
                 $strKoloName = $result['planet_name'];
-                $strCoords = PropertyValueC::ensureString($result['coords']);
-                $iCoordsGal = PropertyValueC::ensureInteger($result['coords_gal']);
-                $iCoordsSol = PropertyValueC::ensureInteger($result['coords_sol']);
-                $iCoordsPla = PropertyValueC::ensureInteger($result['coords_pla']);
-                $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                $strCoords   = PropertyValueC::ensureString($result['coords']);
+                $iCoordsGal  = PropertyValueC::ensureInteger($result['coords_gal']);
+                $iCoordsSol  = PropertyValueC::ensureInteger($result['coords_sol']);
+                $iCoordsPla  = PropertyValueC::ensureInteger($result['coords_pla']);
+                $aCoords     = array(
+                    'coords_gal' => $iCoordsGal,
+                    'coords_sol' => $iCoordsSol,
+                    'coords_pla' => $iCoordsPla
+                );
 
-                $retVal->aKolos[$strCoords] = new DTOParserWirtschaftPlaniressKoloResultC;
-                $retVal->aKolos[$strCoords]->aCoords = $aCoords;
-                $retVal->aKolos[$strCoords]->strCoords = PropertyValueC::ensureString($strCoords);
+                $retVal->aKolos[$strCoords]                = new DTOParserWirtschaftPlaniressKoloResultC;
+                $retVal->aKolos[$strCoords]->aCoords       = $aCoords;
+                $retVal->aKolos[$strCoords]->strCoords     = PropertyValueC::ensureString($strCoords);
                 $retVal->aKolos[$strCoords]->strObjectType = PropertyValueC::ensureString($strKoloType);
-                $retVal->aKolos[$strCoords]->eObjectType = PropertyValueC::ensureEnum($strKoloType, 'eObjectTypes');
+                $retVal->aKolos[$strCoords]->eObjectType   = PropertyValueC::ensureEnum($strKoloType, 'eObjectTypes');
                 $retVal->aKolos[$strCoords]->strPlanetName = PropertyValueC::ensureString($strKoloName);
 
                 foreach ($ress as $key => $strResourceName) {
-                    $ordr = new DTOParserWirtschaftPlaniressRessResultC();
+                    $ordr                  = new DTOParserWirtschaftPlaniressRessResultC();
                     $ordr->strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources');
                     if (isset($result[$key . '_vorrat'])) {
                         $ordr->iResourceVorrat = PropertyValueC::ensureInteger($result[$key . '_vorrat']);
@@ -119,7 +131,7 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }
@@ -205,7 +217,7 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
         $reKoloTypes = $this->getRegExpKoloTypes();
         $reFloatingDouble = $this->getRegExpFloatingDouble();
         $reDecimalNumber = $this->getRegExpDecimalNumber();
-        $reKoloNames = $this->getRegExpSingleLineText();
+        $reKoloNames     = $this->getRegExpSingleLineText();
 
         $regExp = '/';
 

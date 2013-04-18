@@ -21,6 +21,7 @@ use libIwParsers\DTOParserResultC;
 use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
+
 use libIwParsers\de\parserResults\DTOParserAlliMemberlisteResultC;
 use libIwParsers\de\parserResults\DTOParserAlliMemberlisteResultMemberC;
 
@@ -100,21 +101,21 @@ class ParserAlliMemberlisteC extends ParserBaseC implements ParserI
 
                 $member = new DTOParserAlliMemberlisteResultMemberC;
 
-                $member->strName = PropertyValueC::ensureString($result['userName']);
-                $member->eRank = PropertyValueC::ensureString($result['userRank']);
+                $member->strName    = PropertyValueC::ensureString($result['userName']);
+                $member->eRank      = PropertyValueC::ensureString($result['userRank']);
                 $member->iDabeiSeit = PropertyValueC::ensureInteger($iDateOfEntry);
-                $member->strTitel = PropertyValueC::ensureString($strUserTitle);
+                $member->strTitel   = PropertyValueC::ensureString($strUserTitle);
 
                 $member->iGesamtP = PropertyValueC::ensureInteger($result['userGesP']);
-                $member->iFP = PropertyValueC::ensureInteger($result['userFP']);
-                $member->iGebP = PropertyValueC::ensureInteger($result['userGebP']);
+                $member->iFP      = PropertyValueC::ensureInteger($result['userFP']);
+                $member->iGebP    = PropertyValueC::ensureInteger($result['userGebP']);
                 $member->iPperDay = PropertyValueC::ensureInteger($result['userPerDay']);
 
                 $retVal->aMembers[] = $member;
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }
@@ -169,11 +170,11 @@ class ParserAlliMemberlisteC extends ParserBaseC implements ParserI
          * Name | Rang | dabei seit | Titel
          */
 
-        $reName = $this->getRegExpUserName();
-        $reRang = $this->getRegExpUserRank_de();
+        $reName      = $this->getRegExpUserName();
+        $reRang      = $this->getRegExpUserRank_de();
         $reDabeiSeit = $this->getRegExpDate();
-        $reTitel = $this->getRegExpUserTitle();
-        $rePoints = $this->getRegExpDecimalNumber();
+        $reTitel     = $this->getRegExpUserTitle();
+        $rePoints    = $this->getRegExpDecimalNumber();
 
         $regExp = '/^';
         $regExp .= '(?P<userName>' . $reName . ')\s+?';

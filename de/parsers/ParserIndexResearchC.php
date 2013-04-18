@@ -59,7 +59,7 @@ class ParserIndexResearchC extends ParserMsgBaseC implements ParserMsgI
         $retVal =& $parserResult->objResultData;
 
         $regExp = $this->getRegularExpression();
-        $msg = $this->getMsg();
+        $msg    = $this->getMsg();
 
         $parserResult->strIdentifier = 'de_index_research';
 
@@ -72,7 +72,6 @@ class ParserIndexResearchC extends ParserMsgBaseC implements ParserMsgI
                 $retObj = new DTOParserIndexResearchResultResearchC();
 
                 $retObj->strResearchName = PropertyValueC::ensureString($result['strResearchName']);
-
                 $retObj->iResearchEnd = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
                 if (isset($result['mtMixedTime'])) {
                     $retObj->iResearchEndIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
@@ -82,8 +81,8 @@ class ParserIndexResearchC extends ParserMsgBaseC implements ParserMsgI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
-            $parserResult->aErrors[] = $msg->strParserText;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = $msg->strParserText;
         }
     }
 
@@ -93,16 +92,16 @@ class ParserIndexResearchC extends ParserMsgBaseC implements ParserMsgI
     private function getRegularExpression()
     {
         $reResearchName = $this->getRegExpSingleLineText();
-        $reDateTime = $this->getRegExpDateTime();
-        $reMixedTime = $this->getRegExpMixedTime();
+        $reDateTime     = $this->getRegExpDateTime();
+        $reMixedTime    = $this->getRegExpMixedTime();
 
         $regExp = '/
-                   (?P<strResearchName>' . $reResearchName . ')
-                   \s+
-                   (?P<dtDateTime>' . $reDateTime . ')
-                   \s
-                   (?P<mtMixedTime>' . $reMixedTime . ')?
-                  ';
+                (?P<strResearchName>' . $reResearchName . ')
+                \s+
+                (?P<dtDateTime>' . $reDateTime . ')
+                \s
+                (?P<mtMixedTime>' . $reMixedTime . ')?
+                ';
         $regExp .= '/mxs';
 
         return $regExp;

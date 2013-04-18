@@ -54,10 +54,10 @@ class ParserMsgTransfairC extends ParserMsgBaseC implements ParserMsgI
     public function parseMsg(DTOParserResultC $parserResult)
     {
         $parserResult->objResultData = new DTOParserMsgResultMsgTransfairC();
-        $retVal =& $parserResult->objResultData;
+        $retVal                      =& $parserResult->objResultData;
 
         $regExpText = $this->getRegularExpressionText();
-        $msg = $this->getMsg();
+        $msg        = $this->getMsg();
 
         foreach ($msg as $key => $value) {
             $retVal->$key = $value;
@@ -72,57 +72,67 @@ class ParserMsgTransfairC extends ParserMsgBaseC implements ParserMsgI
             $aCarriedResources = array();
             $aFetchedResources = array();
 
-            $strPlanetName = $aResultText['planet_name'];
+            $strPlanetName   = $aResultText['planet_name'];
             $strFromUserName = isset($aResultText['from_user_name']) ? $aResultText['from_user_name'] : "";
-            $strToUserName = isset($aResultText['to_user_name']) ? $aResultText['to_user_name'] : "";
-            $strCoords = $aResultText['coords'];
-            $iCoordsGal = PropertyValueC::ensureInteger($aResultText['coords_gal']);
-            $iCoordsSol = PropertyValueC::ensureInteger($aResultText['coords_sol']);
-            $iCoordsPla = PropertyValueC::ensureInteger($aResultText['coords_pla']);
-            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+            $strToUserName   = isset($aResultText['to_user_name']) ? $aResultText['to_user_name'] : "";
+            $strCoords       = $aResultText['coords'];
+            $iCoordsGal      = PropertyValueC::ensureInteger($aResultText['coords_gal']);
+            $iCoordsSol      = PropertyValueC::ensureInteger($aResultText['coords_sol']);
+            $iCoordsPla      = PropertyValueC::ensureInteger($aResultText['coords_pla']);
+            $aCoords         = array(
+                'coords_gal' => $iCoordsGal,
+                'coords_sol' => $iCoordsSol,
+                'coords_pla' => $iCoordsPla
+            );
 
             if (isset($aResultText['carried_resources'])) {
                 $aResultResources = array();
-                $regExpResources = $this->getRegularExpressionResources();
+                $regExpResources  = $this->getRegularExpressionResources();
                 $fRetValResources = preg_match_all($regExpResources, $aResultText['carried_resources'], $aResultResources, PREG_SET_ORDER);
 
                 if ($fRetValResources !== false && $fRetValResources > 0) {
                     foreach ($aResultResources as $result) {
-                        $strResourceName = $result['resource_name'];
-                        $iResourceCount = $result['resource_count'];
-                        $strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources');
-                        $iResourceCount = PropertyValueC::ensureInteger($iResourceCount);
-                        $aCarriedResources[md5($strResourceName)] = array('resource_name' => $strResourceName, 'resource_count' => $iResourceCount);
+                        $strResourceName                          = $result['resource_name'];
+                        $iResourceCount                           = $result['resource_count'];
+                        $strResourceName                          = PropertyValueC::ensureEnum($strResourceName, 'eResources');
+                        $iResourceCount                           = PropertyValueC::ensureInteger($iResourceCount);
+                        $aCarriedResources[md5($strResourceName)] = array(
+                            'resource_name'  => $strResourceName,
+                            'resource_count' => $iResourceCount
+                        );
                     }
                 }
             }
 
             if (isset($aResultText['fetched_resources'])) {
                 $aResultResources = array();
-                $regExpResources = $this->getRegularExpressionResources();
+                $regExpResources  = $this->getRegularExpressionResources();
                 $fRetValResources = preg_match_all($regExpResources, $aResultText['fetched_resources'], $aResultResources, PREG_SET_ORDER);
 
                 if ($fRetValResources !== false && $fRetValResources > 0) {
                     foreach ($aResultResources as $result) {
-                        $strResourceName = $result['resource_name'];
-                        $iResourceCount = $result['resource_count'];
-                        $strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources');
-                        $iResourceCount = PropertyValueC::ensureInteger($iResourceCount);
-                        $aFetchedResources[md5($strResourceName)] = array('resource_name' => $strResourceName, 'resource_count' => $iResourceCount);
+                        $strResourceName                          = $result['resource_name'];
+                        $iResourceCount                           = $result['resource_count'];
+                        $strResourceName                          = PropertyValueC::ensureEnum($strResourceName, 'eResources');
+                        $iResourceCount                           = PropertyValueC::ensureInteger($iResourceCount);
+                        $aFetchedResources[md5($strResourceName)] = array(
+                            'resource_name'  => $strResourceName,
+                            'resource_count' => $iResourceCount
+                        );
                     }
                 }
             }
 
-            $retVal->strPlanetName = PropertyValueC::ensureString($strPlanetName);
-            $retVal->strFromUserName = PropertyValueC::ensureString($strFromUserName);
-            $retVal->strToUserName = PropertyValueC::ensureString($strToUserName);
-            $retVal->strCoords = PropertyValueC::ensureString($strCoords);
-            $retVal->aCoords = $aCoords;
+            $retVal->strPlanetName     = PropertyValueC::ensureString($strPlanetName);
+            $retVal->strFromUserName   = PropertyValueC::ensureString($strFromUserName);
+            $retVal->strToUserName     = PropertyValueC::ensureString($strToUserName);
+            $retVal->strCoords         = PropertyValueC::ensureString($strCoords);
+            $retVal->aCoords           = $aCoords;
             $retVal->aCarriedResources = $aCarriedResources;
             $retVal->aFetchedResources = $aFetchedResources;
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the TransfairMsg pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the TransfairMsg pattern.';
         }
     }
 
@@ -136,37 +146,37 @@ class ParserMsgTransfairC extends ParserMsgBaseC implements ParserMsgI
 
         #Just even don't think to ask anything about this regexp, fu!
         $regExp = '/
-                    Eine\sFlotte\sist\sauf\sdem\sPlaneten
-                    (?:\s(?P<planet_name>.*)\s|\s)
-                    (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-                    \sangekommen\.
-                    (?:
-                        \sDer\sAbsender\sist\s
-                        (?P<from_user_name>' . $reUserName . ')
-                    |)
-                    (?:
-                        \sDer\sEmpf.nger\sist\s
-                        (?P<to_user_name>' . $reUserName . ')
-                    |)
-                    [\s\n]+
-                    Es\swurden\sfolgende\sSachen\sangeliefert
-                    (?:
-                        [\s\n]+
-                        Ressourcen
-                        [\s\n]+
-                        (?P<carried_resources>([\w\süöä]+\s+\d+[\s\n]*)+
-                    )
-                    |)
-                    [\s\n]+
-                    Es\swurden\sfolgende\sSachen\sabgeholt
-                    (?:
-                        [\s\n]+
-                        Ressourcen
-                        [\s\n]+
-                        (?P<fetched_resources>([\w\süöä]+\s+\d+[\s\n]*)+)
-                    |)
+        Eine\sFlotte\sist\sauf\sdem\sPlaneten
+        (?:\s(?P<planet_name>.*)\s|\s)
+        (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
+        \sangekommen\.
+        (?:
+        \sDer\sAbsender\sist\s
+        (?P<from_user_name>' . $reUserName . ')
+        |)
+        (?:
+        \sDer\sEmpf.nger\sist\s
+        (?P<to_user_name>' . $reUserName . ')
+        |)
+        [\s\n]+
+        Es\swurden\sfolgende\sSachen\sangeliefert
+        (?:
+        [\s\n]+
+        Ressourcen
+        [\s\n]+
+        (?P<carried_resources>([\w\süöä]+\s+\d+[\s\n]*)+
+        )
+        |)
+        [\s\n]+
+        Es\swurden\sfolgende\sSachen\sabgeholt
+        (?:
+        [\s\n]+
+        Ressourcen
+        [\s\n]+
+        (?P<fetched_resources>([\w\süöä]+\s+\d+[\s\n]*)+)
+        |)
 
-                   /mx';
+        /mx';
 
         return $regExp;
     }

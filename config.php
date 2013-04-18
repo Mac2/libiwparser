@@ -69,6 +69,9 @@ return array(
                 'class' => '\libIwParsers\de\parsers\ParserWirtschaftDefC',
             ),
             array(
+                'class' => '\libIwParsers\de\parsers\ParserWirtschaftUniverseC',
+            ),
+            array(
                 'class' => '\libIwParsers\de\parsers\ParserMsgTransfairC',
             ),
             array(
