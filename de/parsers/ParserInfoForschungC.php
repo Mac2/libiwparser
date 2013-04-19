@@ -108,13 +108,19 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
                 $retVal->strPrototypName     = PropertyValueC::ensureString($aResult['strPrototypName']);
             }
 
-            $treffer = array();
-            preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER);
-            foreach ($treffer as $teff) {
-                $retVal->aCosts[] = array(
-                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
-                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
-                );
+            if (!empty($aResult['kosten'])) {
+                $treffer = array();
+                if (preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER)) {
+                    foreach ($treffer as $teff) {
+                        $retVal->aCosts[] = array(
+                            'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                            'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                        );
+                    }
+                } else {
+                    $parserResult->bSuccessfullyParsed = false;
+                    $parserResult->aErrors[]           = 'Unable to find ressnames.';
+                }
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
@@ -178,7 +184,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
 
         $regExp .= 'Kosten\s+?';
         $regExp .= '(?P<fp>' . $reFP . ')\sForschungspunkte';
-        $regExp .= '(?P<kosten>(?:\s' . $reResource . '\:\s' . $reCosts . ')*)';
+        $regExp .= '(?P<kosten>(?:\s' . $reResource . '\:\s' . $reCosts . ')+|(?:\s\:\s' . $reCosts . ')+|)';
         $regExp .= '[\n\s]+';
 
         $regExp .= '(\s+?';
