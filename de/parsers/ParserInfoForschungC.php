@@ -122,6 +122,9 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
                     $parserResult->aErrors[]           = 'Unable to find ressnames.';
                 }
             }
+            if (!empty($aResult['strMiscCosts'])) {
+                $retVal->strMiscCosts = $aResult['strMiscCosts'];
+            }
         } else {
             $parserResult->bSuccessfullyParsed = false;
             $parserResult->aErrors[]           = 'Unable to match the pattern.';
@@ -198,6 +201,8 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
         $regExp .= '(?:[\s\n]*?Aufgrund\svon\sgenerellen\stechnischen\sUnverst.{1,3}ndnis\sim\sUniversum,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s(?:\%|\\\%)\.';
         $regExp .= '\n+';
         $regExp .= '|)';
+
+        $regExp .= '[\n\s]*';
 
         $regExp .= '(?:';
         $regExp .= '\s*Prototyp\s+?';
