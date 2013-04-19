@@ -116,6 +116,9 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
                     $parserResult->aErrors[]           = 'Unable to find ressnames.';
                 }
             }
+            if (!empty($aResult['strMiscCosts'])) {
+                $retVal->strMiscCosts = $aResult['strMiscCosts'];
+            }
         } else {
             $parserResult->bSuccessfullyParsed = false;
             $parserResult->aErrors[]           = 'Unable to match the pattern.';
@@ -193,12 +196,14 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
     $regExp  .= '[\n\r]+';
     $regExp  .= ')?';
 
+    $regExp .= '[\n\s]*';
+
     $regExp  .= '(?:';
     $regExp  .= '\s*Prototyp\s+?';
     $regExp  .= 'Die\sForschung\sbringt\seinen\sPrototyp\svon\s(?P<strPrototypName>'        . $reSchiffeName       . ')\s*?';
     $regExp  .= '[\n\r]+';
     $regExp  .= ')?';
-
+        
     $regExp  .= '\s*Voraussetzungen\sForschungen\s+?';
     $regExp  .= '(?P<strResearchsNeeded>'.$reBracketString.'|)';
     $regExp  .= '\s+?';
