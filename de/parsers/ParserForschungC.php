@@ -77,8 +77,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
         $area_name = "";
         foreach( $aResult as $result )
         {
-            if (!empty($result["globalMalusRed"]) || !empty($result["globalBonusRed"]) || !empty($result["FPverschw"]))
-            {
+            if (!empty($result["globalMalusRed"]) || !empty($result["globalBonusRed"]) || !empty($result["FPverschw"]) || $result["FPverschw"] === "0") {
                 if (!empty($result["globalMalusRed"])) $retVal->iMalusRed = PropertyValueC::ensureInteger($result['globalMalusRed']);
                 if (!empty($result["globalBonusRed"])) $retVal->iBonusRed = PropertyValueC::ensureInteger($result['globalBonusRed']);
                 if (!empty($result["FPverschw"])) $retVal->iverschwFP = PropertyValueC::ensureInteger($result['FPverschw']);
@@ -276,8 +275,8 @@ class ParserForschungC extends ParserBaseC implements ParserI
     $regExp .= '            (?P<research>'.$reResearch .')\s';
     $regExp .= '            (?P<comment>.*\n|)';
     $regExp .= '            (?P<fp>' . $reFP . ')';
-    $regExp .= '            \sForschungspunkte\s';
-    $regExp .= '            (?:\(von\s(?P<count>\d+)(?:\%|\\\%)\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\%|\\\%)\sFPKosten\)\s|)';
+    $regExp .= '            \sForschungspunkte\s*';
+    $regExp .= '            (?:\(von\s(?P<count>\d+)(?:\\\){0,2}%\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\\\){0,2}%\sFPKosten\)\s|)';
     $regExp .= '            (?:Dauer\:\s(?P<dauer>'.$reMixedTime .')\s|)';
     $regExp .= '            (?P<kosten>(?:(?:.*)\:\s'.$reFP.'\s)+|)';
     $regExp .= '            (?:\s*(?:Ressourcen\sin\sabsehbarer\sZeit\snicht\svorhanden|Ressourcen\svorhanden\sin.*(?:\(Info\nben.{1,3}tigt\sIWSA\)|))\s|)';
