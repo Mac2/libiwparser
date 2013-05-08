@@ -94,14 +94,15 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
                 $aSlotLines = explode("\n", $strSlotLine);
                 foreach ($aSlotLines as $strSlotLine) {
                     $aData = explode(" ", trim($strSlotLine));
-                    $aData = array_filter($aData, function($val){return !(in_array($val,array("/","")));});  //! alle / und leer rausfiltern
+                    $aData = array_filter($aData, "filtercallback1"); //! alle / und leer rausfiltern
+
                     $aData = array_values($aData);                                          //! keys korrigieren
 
                     $strDefenceType = array_shift($aData);
                     array_shift($aData); // legende entfernen
-                    if (strpos($strDefenceType,"orb") !== FALSE)
+                    if (strpos($strDefenceType,"orb") !== false)
                         $strDefenceType = "orbital";
-                    else if (strpos($strDefenceType,"pla") !== FALSE)
+                    else if (strpos($strDefenceType,"pla") !== false)
                         $strDefenceType = "planetar";
                                         
                     $slot = new DTOParserWirtschaftDefSlotResultC;
@@ -129,7 +130,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
                         continue;
                     $resultDef['anz'] = str_replace("\t", " ", $resultDef["anz"]);
                     $aData = explode(" ", trim($resultDef['anz']));
-                    $aData = array_filter($aData, function($val){return ($val !== "/");});  //! alle / rausfiltern
+                    $aData = array_filter($aData, "filtercallback2");      //! alle / rausfiltern
                     $aData = array_values($aData);                                          //! keys korrigieren
                     for ($i=0; $i<=count($aData)-2; $i+=2) {
                         $defence->aCounts[$aKolos[(int)($i/2)]] = PropertyValueC::ensureInteger($aData[$i]);
@@ -186,6 +187,28 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
     $regExp .= '&mx';
 
     return $regExp;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  private function filtercallback1($val)
+  {
+    /**
+    */
+
+    return !(in_array($val, array("/", "")));
+
+  }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+  private function filtercallback2($val)
+  {
+    /**
+    */
+
+    return ($val !== "/");
+
   }
 
   /////////////////////////////////////////////////////////////////////////////
