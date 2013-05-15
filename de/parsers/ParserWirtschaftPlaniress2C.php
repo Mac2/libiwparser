@@ -46,7 +46,7 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $this->setIdentifier('de_wirtschaft_planiress2');
         $this->setName("KoloRess&Uuml;bersicht Teil2");
         $this->setRegExpCanParseText('/Ressourcenkolo.+bersicht\sTeil\s2/s');
-        $this->setRegExpBeginData('/Kolonie\s+FP\s\w+\sSteuersatz\s(?:Bev.+lkerung|blubbernde\sGallertmasse)\sZufr/');
+        $this->setRegExpBeginData('/Kolonie\s+FP\s+\w+\s+Steuersatz\s+(?:Bev.+lkerung|blubbernde\sGallertmasse)\s+Zufr/');
         $this->setRegExpEndData('');
     }
 
@@ -120,6 +120,10 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
 
                 }
             }
+            if (empty($retVal->aKolos)) {
+                $parserResult->bSuccessfullyParsed = false;
+                $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            }
             # die Steuer kann leider erst berechnet werden, nachdem die Gesamtwerte ausgelesen wurden -> deshalb extra Schleife
             foreach ($retVal->aKolos as $kolo) {
                 $kolo->fCreditAlliance = ($kolo->fCreditProduction > 0) ? ($kolo->fCreditProduction / (1 - $steuer) - $kolo->fCreditProduction) : 0;
@@ -166,7 +170,7 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $regExp .= '(?:';
         $regExp .= '\s+';
         $regExp .= '(?P<steuersatz>\d{1,3})';
-        $regExp .= '\%';
+        $regExp .= '(\\\){0,2}%';
         $regExp .= '\s+';
         $regExp .= '|\s+)';
 
