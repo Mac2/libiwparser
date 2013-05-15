@@ -626,7 +626,7 @@ class ParserFunctionC
 
         $retVal .= '(?:(?<=\s)|(?<=^))'; //shall start in a whitesace or start of line
 
-        $retVal .= '(?:Eisen|Eis|Wasser|Stahl|Energie|VV4A|FP|Forschungspunkte|chem\.\sElemente|Bevölkerung|Credits)';
+        $retVal .= '(?:Eisen|Eis|Wasser|Stahl|Energie|VV4A|FP|Forschungspunkte|chem\.\sElemente|Bev.{1,3}lkerung|Credits)';
 
         $retVal .= '(?=\:|,|\s|$)'; //shall end in a whitesace or : or , or end of line
 
@@ -684,7 +684,7 @@ class ParserFunctionC
 
         $retVal .= '[^ ]'; //first character must not be a space
         $retVal .= '(?:'; //propably, there will be more characters
-        $retVal .= '.+'; //characters
+        $retVal .= '.*'; //characters
         $retVal .= '[^ ]'; //last character must not be a space
         $retVal .= ')?';
 

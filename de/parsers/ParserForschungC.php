@@ -82,7 +82,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
             $parserResult->bSuccessfullyParsed = true;
             $area_name                         = "";
             foreach ($aResult as $result) {
-                if (!empty($result["globalMalusRed"]) || !empty($result["globalBonusRed"]) || !empty($result["FPverschw"])) {
+                if (!empty($result["globalMalusRed"]) || !empty($result["globalBonusRed"]) || !empty($result["FPverschw"]) || $result["FPverschw"] === "0") {
                     if (!empty($result["globalMalusRed"])) {
                         $retVal->iMalusRed = PropertyValueC::ensureInteger($result['globalMalusRed']);
                     }
@@ -131,7 +131,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                     $result['fp'] = 0;
                 }
 
-                if (isset($result['state']) && $result['state'] == 'erforscht') {
+                if ($result['state'] === 'erforscht') {
                     $ret                     = new DTOParserForschungResearchedResultC;
                     $ret->strResearchName    = PropertyValueC::ensureString($result['research']);
                     $ret->strResearchComment = PropertyValueC::ensureString($result['comment']);
@@ -157,7 +157,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                     }
                     $retVal->aResearchsResearched[] = $ret;
                     continue;
-                } else if (isset($result['state']) && ($result['state'] == '---' || $result['state'] == 'zu wenig Ress')) {
+                } else if ($result['state'] === '---' || $result['state'] === 'zu wenig Ress') {
                     $ret                     = new DTOParserForschungOpenResultC;
                     $ret->strResearchName    = PropertyValueC::ensureString($result['research']);
                     $ret->strResearchComment = PropertyValueC::ensureString($result['comment']);
@@ -184,7 +184,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
 
                     $retVal->aResearchsOpen[] = $ret;
                     continue;
-                } else if (isset($result['state']) && $result['state'] == 'forschen') {
+                } else if ($result['state'] === 'forschen') {
                     $ret                     = new DTOParserForschungOpenResultC;
                     $ret->strResearchName    = PropertyValueC::ensureString($result['research']);
                     $ret->strResearchComment = PropertyValueC::ensureString($result['comment']);
@@ -259,16 +259,17 @@ class ParserForschungC extends ParserBaseC implements ParserI
 
         $reResearch        = '[\wÖöäÄüÜ]+[^\n\t\:\+]{3,}(?<!erforscht)'; //! Mac: hier evtl. konrket 'erforscht' ausschliessen ?
         $reResearchComment = $this->getRegExpSingleLineText3();
-        $reFP              = $this->getRegExpDecimalNumber();
+        $reDecimalNumber   = $this->getRegExpDecimalNumber();
         $reDateTime        = $this->getRegExpDateTime();
         $reMixedTime       = $this->getRegExpMixedTime();
         $reAreas           = $this->getRegExpAreas();
+        $reResource        = $this->getRegExpResource();
 
         $regExp = '/';
 
         //! allg. Infoblock (Infos ueber globale Mods, sind nicht immer vorhande!?)
         $regExp .= '(?:';
-        $regExp .= 'Die\sForscher\shaben\sschon\s(?P<FPverschw>' . $reFP . ')\sFP\serfolgreich\svergeudet,\sindem\ssie\swas\sv.{1,3}llig\sanderes\staten\sals\sforschen\.\s';
+        $regExp .= 'Die\sForscher\shaben\sschon\s(?P<FPverschw>' . $reDecimalNumber . ')\sFP\serfolgreich\svergeudet,\sindem\ssie\swas\sv.{1,3}llig\sanderes\staten\sals\sforschen\.\s';
         $regExp .= '(?:' . $reResearchComment . '\s' . '){0,4}';
         $regExp .= 'Forschungen\sausblenden\s\/\sAlle\sForschungen\sanzeigen\s+';
         $regExp .= '  (?:Aktuelle\sEffekte\sauf\sForschungsboni\sund\s-mali:';
@@ -281,15 +282,15 @@ class ParserForschungC extends ParserBaseC implements ParserI
         $regExp .= '(?:';
         //! keine aufeinanderfolgenden, identischen Zeilen ausser bei Raumfahrt,
         //! und keine Area gefolgt von einer Zahl -> Forschungspkt
-        $regExp .= '    (?:^(?P<area>(?:' . $reAreas . '(?!\s(?:' . $reAreas . '|' . $reFP . '\sForschungspunkte\s))|Raumfahrt(?=\sRaumfahrt)))\s|';
+        $regExp .= '    (?:^(?P<area>(?:'.$reAreas.'(?!\s(?:'.$reAreas.'|'.$reDecimalNumber.'\sForschungspunkte\s))|Raumfahrt(?=\sRaumfahrt)))\s|';
         $regExp .= '        (?:';
-        $regExp .= '            (?P<research>' . $reResearch . ')\s';
+        $regExp .= '            (?P<research>'.$reResearch .')\s';
         $regExp .= '            (?P<comment>.*\n|)';
-        $regExp .= '            (?P<fp>' . $reFP . ')';
-        $regExp .= '            \sForschungspunkte\s';
-        $regExp .= '            (?:\(von\s(?P<count>\d+)(?:\%|\\\%)\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\%|\\\%)\sFPKosten\)\s|)';
-        $regExp .= '            (?:Dauer\:\s(?P<dauer>' . $reMixedTime . ')\s|)';
-        $regExp .= '            (?P<kosten>(?:(?:.*)\:\s' . $reFP . '\s)+|)';
+        $regExp .= '            (?P<fp>' . $reDecimalNumber . ')';
+        $regExp .= '            \sForschungspunkte\s*';
+        $regExp .= '            (?:\(von\s(?P<count>\d+)(?:\\\){0,2}%\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\\\){0,2}%\sFPKosten\)\s|)';
+        $regExp .= '            (?:Dauer\:\s(?P<dauer>'.$reMixedTime .')\s|)';
+        $regExp .= '            (?P<kosten>(?:(?:'.$reResource.')\:\s'.$reDecimalNumber.'\s)+|)';
         $regExp .= '            (?:\s*(?:Ressourcen\sin\sabsehbarer\sZeit\snicht\svorhanden|Ressourcen\svorhanden\sin.*(?:\(Info\nben.{1,3}tigt\sIWSA\)|))\s|)';
 
         $regExp .= '            (?:[\s\n]*Aufgrund\svon\sgenerellen\stechnischen\sUnverst.{1,3}ndnis\sim\sUniversum\,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s(?:\%|\\\%)\.\s\?\s|)';
@@ -297,8 +298,8 @@ class ParserForschungC extends ParserBaseC implements ParserI
         $regExp .= '            \s*';
         $regExp .= '            (?:Stufe\s\d\s|)';
         $regExp .= '            (?P<state>---|wird\serforscht|zu\swenig\sRess|forschen|erforscht)';
-        $regExp .= '            (?:\nbis\:\s(?P<finish>' . $reDateTime . ')\n\s*(?P<expire>' . $reMixedTime . ')|)';
-        $regExp .= '            (?:\n\s*(?P<duration>' . $reMixedTime . ')\n\s*(?P<endtime>' . $reDateTime . ')|)';
+        $regExp .= '            (?:\nbis\:\s(?P<finish>'.$reDateTime.')\n\s*(?P<expire>'.$reMixedTime.')|)';
+        $regExp .= '            (?:\n\s*(?P<duration>'.$reMixedTime.')\n\s*(?P<endtime>'.$reDateTime.')|)';
         $regExp .= '        )';
         $regExp .= '    )';
         $regExp .= ')';
