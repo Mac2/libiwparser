@@ -39,6 +39,8 @@ class HelperC
      */
     static public function convertMixedDurationToSeconds($value)
     {
+        $value = trim($value);
+
         $aResult = array();
         if (preg_match('/^(?:(?P<days>\d+)\s(?:Tag|Tage|day|days)\s+|)(?P<hours>\d{1,2})\:(?P<minutes>[0-5]\d|\d)(?:\:(?P<seconds>[0-5]\d|\d))?$/', $value, $aResult) != false) {
 
@@ -100,6 +102,7 @@ class HelperC
 
         $aResult = array();
         $mktime = array();
+        $value = trim($value);
 
         /*
          * match date
@@ -158,6 +161,7 @@ class HelperC
     static public function convertTimeToTimestamp($value)
     {
         $aResult = array();
+        $value = trim($value);
 
         /*
          * match time patterns
@@ -234,6 +238,7 @@ class HelperC
         $aResult = array();
         $mktime = array();
         $mktime['second'] = 0;
+        $value = trim($value);
 
         /*
          * match datetime patterns

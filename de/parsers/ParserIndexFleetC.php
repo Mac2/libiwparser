@@ -237,7 +237,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
         $regExp .= '(?:(?P<strUserNameFrom>^' . $reUserName . ')|)';
         $regExp .= '\s*';
         $regExp .= '(?:';
-        $regExp .= '    (?P<dtDateTime>' . $reDateTime . '\s*(?: - (?:\s*' . $reMixedTime . ')?)?)';
+        $regExp .= '    (?P<dtDateTime>' . $reDateTime . ')\s*(?: - \s*(?P<mtMixedTime>' . $reMixedTime . ')?)?';
         $regExp .= '    (?:\s*(?:\(?angekommen\)?|' . $reMixedTime . ')\s*)?' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')'
             . '   |' . $reObject . '\s*-?\s\(?angekommen\)?' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')' //! bei Angriff: beliebiger Text + angekommen
             . '   |' . $reObject . '\s*' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')' //! nach Ankunft: beliebiger Text
