@@ -94,7 +94,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
                 $aSlotLines = explode("\n", $strSlotLine);
                 foreach ($aSlotLines as $strSlotLine) {
                     $aData = explode(" ", trim($strSlotLine));
-                    $aData = array_filter($aData, "filtercallback1"); //! alle / und leer rausfiltern
+                    $aData = array_filter($aData, array($this, 'filtercallback1')); //! alle / und leer rausfiltern
 
                     $aData = array_values($aData);                                          //! keys korrigieren
 
@@ -130,7 +130,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
                         continue;
                     $resultDef['anz'] = str_replace("\t", " ", $resultDef["anz"]);
                     $aData = explode(" ", trim($resultDef['anz']));
-                    $aData = array_filter($aData, "filtercallback2");      //! alle / rausfiltern
+                    $aData = array_filter($aData, array($this, 'filtercallback2'));      //! alle / rausfiltern
                     $aData = array_values($aData);                                          //! keys korrigieren
                     for ($i=0; $i<=count($aData)-2; $i+=2) {
                         $defence->aCounts[$aKolos[(int)($i/2)]] = PropertyValueC::ensureInteger($aData[$i]);
