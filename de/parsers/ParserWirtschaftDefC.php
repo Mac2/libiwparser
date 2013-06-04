@@ -190,7 +190,7 @@ class ParserWirtschaftDefC extends ParserBaseC implements ParserI
         $regExp .= '     \(' . $reKoloTypes . '\)';
         $regExp .= '     \s+';
         $regExp .= '     ' . $reKoloCoords . '';
-        $regExp .= '   )+';
+        $regExp .= '   )*';
         $regExp .= '   \n+';
         $regExp .= '   \(' . $reKoloTypes . '\)';
         $regExp .= ')';
