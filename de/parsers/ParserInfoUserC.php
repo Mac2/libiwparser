@@ -130,8 +130,6 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
         /**
          */
 
-    //  $rePlanetType       = $this->getRegExpPlanetTypes();
-    //  $reObjectType       = $this->getRegExpKoloTypes();
         $reText       = $this->getRegExpSingleLineText3();
         $reName       = $this->getRegExpUserName();
         $reAlliance   = $this->getRegExpSingleLineText();
