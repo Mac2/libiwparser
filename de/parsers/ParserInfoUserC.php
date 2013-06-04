@@ -101,6 +101,8 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
         $retVal->strStaatsform = PropertyValueC::ensureString( $aResult['strStaatsform'] );
         if (isset($aResult['strTitel']))
             $retVal->strTitel = PropertyValueC::ensureString( $aResult['strTitel'] );
+        if (isset($aResult['strDescr']))
+            $retVal->strDescr = PropertyValueC::ensureString($aResult['strDescr']);
     }
     else
     {
@@ -117,8 +119,6 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
     /**
     */
 
-//    $rePlanetType       = $this->getRegExpPlanetTypes();
-//    $reObjectType       = $this->getRegExpKoloTypes();
   $reText       = $this->getRegExpSingleLineText3();
   $reName       = $this->getRegExpUserName();
   $reAlliance   = $this->getRegExpSingleLineText();
