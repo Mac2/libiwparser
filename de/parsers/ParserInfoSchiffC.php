@@ -211,7 +211,7 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
         $reResource = $this->getRegExpAreas();
 
         $regExpRess = '/';
-        $regExpRess .= '(?P<area_name>' . $reResource . ')\s+(?P<effective_count>' . '\d+' . ')(?:\%|\\\%)';
+        $regExpRess .= '(?P<area_name>' . $reResource . ')\s+(?P<effective_count>' . '\d+' . ')(?:\\\){0,2}%';
         $regExpRess .= '/mx';
 
         return $regExpRess;
@@ -368,7 +368,7 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
         $regExp .= 'Zielgenauigkeit\s+?';
         $regExp .= '(?P<iZielgenauigkeit>' . '\d+' . ')\s*?';
         $regExp .= '\n+';
-        $regExp .= 'Effektivit.{1,3}t\sgegen\s*\n(?P<effective>(?:^' . $reSchiffName . '\s*\d+(?:\%|\\\%)\n)+)';
+        $regExp .= 'Effektivit.{1,3}t\sgegen\s*\n(?P<effective>(?:^' . $reSchiffName . '\s*\d+(?:\\\){0,2}%\n)+)';
 
         $regExp .= '(?:Geleitschutz';
         $regExp .= ' \n+';

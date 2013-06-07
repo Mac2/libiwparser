@@ -170,7 +170,7 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
         $regExp .= '(?:';
         $regExp .= '\s+';
         $regExp .= '(?P<steuersatz>\d{1,3})';
-        $regExp .= '(\\\){0,2}%';
+        $regExp .= '(?:\\\){0,2}%';
         $regExp .= '\s+';
         $regExp .= '|\s+)';
 
