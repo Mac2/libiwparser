@@ -113,6 +113,9 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
             if (isset($aResult['strTitel'])) {
                 $retVal->strTitel = PropertyValueC::ensureString($aResult['strTitel']);
             }
+            if (isset($aResult['strDescr'])) {
+                $retVal->strDescr = PropertyValueC::ensureString($aResult['strDescr']);
+            }
         } else {
             $parserResult->bSuccessfullyParsed = false;
             $parserResult->aErrors[]           = 'Unable to match the pattern.';
@@ -127,8 +130,6 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
         /**
          */
 
-    //  $rePlanetType       = $this->getRegExpPlanetTypes();
-    //  $reObjectType       = $this->getRegExpKoloTypes();
         $reText       = $this->getRegExpSingleLineText3();
         $reName       = $this->getRegExpUserName();
         $reAlliance   = $this->getRegExpSingleLineText();
@@ -187,8 +188,8 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
         $regExp .= '(?:(?P<strTitel>' . $reText . ')\s*)?';
         $regExp .= '\n+';
         $regExp .= 'Beschreibung\s+';
-        $regExp .= '(?:(?P<strDescr>(?:' . $reDescr . '[\n\r]+)+))?';
-        $regExp .= '\n+';
+        $regExp .= '(?:(?P<strDescr>(?:' . $reDescr . '\n+)+))?';
+        $regExp .= '\n*';
         $regExp .= 'Diverses\s+';
         $regExp .= '(?:(?P<IWBPAcc>besoffener\sPinguin\sAccount\sBesitzer)|(?P<strMisc>' . $reText . ')\s*)?';
         $regExp .= '\n+';
