@@ -111,6 +111,7 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
             if (!empty($aResult['kosten'])) {
                 $treffer = array();
                 if (preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER)) {
+                    $retVal->bIsResearchcostsVisible=true;
                     foreach ($treffer as $teff) {
                         $retVal->aCosts[] = array(
                             'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
@@ -118,8 +119,8 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
                         );
                     }
                 } else {
-                    $parserResult->bSuccessfullyParsed = false;
-                    $parserResult->aErrors[]           = 'Unable to find ressnames.';
+                    //$parserResult->bSuccessfullyParsed = false;
+                    //$parserResult->aErrors[]           = 'Unable to find ressnames.';
                 }
             }
             if (!empty($aResult['strMiscCosts'])) {

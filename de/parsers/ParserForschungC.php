@@ -290,7 +290,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
         $regExp .= '            \sForschungspunkte\s*';
         $regExp .= '            (?:\(von\s(?P<count>\d+)(?:\\\){0,2}%\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\\\){0,2}%\sFPKosten\)\s|)';
         $regExp .= '            (?:Dauer\:\s(?P<dauer>'.$reMixedTime .')\s|)';
-        $regExp .= '            (?P<kosten>(?:(?:'.$reResource.')\:\s'.$reDecimalNumber.'\s)+|)';
+        $regExp .= '            (?P<kosten>(?:(?:'.$reResource.')?\:\s'.$reDecimalNumber.'\s*)+|)';  //! Ressname optional, da Chrome sie weglaesst
         $regExp .= '            (?:\s*(?:Ressourcen\sin\sabsehbarer\sZeit\snicht\svorhanden|Ressourcen\svorhanden\sin.*(?:\(Info\nben.{1,3}tigt\sIWSA\)|))\s|)';
 
         $regExp .= '            (?:[\s\n]*Aufgrund\svon\sgenerellen\stechnischen\sUnverst.{1,3}ndnis\sim\sUniversum\,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s(?:\\\){0,2}%\.\s\?\s|)';
