@@ -292,7 +292,7 @@ class ParserBaseC extends ParserFunctionC
 //      $value = utf8_decode( $value );
 //      $this->_wasUTF8 = true;
 //    }
-  
+
       $value = str_replace( array_keys($replacements),
                           array_values($replacements),
                           $value );
@@ -325,9 +325,10 @@ class ParserBaseC extends ParserFunctionC
   /**
    * Strips whitespace from lines.
    *
-   * @param $text the text whos lines shall be striped
-   * @param $option one of ParserBaseC::XYZ_WHITESPACE constants
-   * @return the striped text
+   * @param string  $text   the text whos lines shall be striped
+   * @param string  $option one of ParserBaseC::XYZ_WHITESPACE constants
+   *
+   * @return mixed|null the striped text
    */
   protected function stripWhitespace( $text, $option = ParserBaseC::ALL_WHITESPACE )
   {
@@ -361,7 +362,7 @@ class ParserBaseC extends ParserFunctionC
     $retVal = preg_replace( $toReplace, $replaceWith, $text );
     
     //TODO: error processing
-    if( $retVal === NULL )
+    if( $retVal === null )
     {
       
     }
