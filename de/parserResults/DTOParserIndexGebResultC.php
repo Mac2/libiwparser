@@ -26,9 +26,9 @@ class DTOParserIndexGebResultC
 {
   /**
    * @soap
-   * @var array $aBuildings
+   * @var array $aGeb
    */
-  public $aBuildings = array ();
+  public $aGeb = array ();
 
 }
 
