@@ -29,7 +29,7 @@ class DTOParserIndexGebResultC
      * @soap
      * @var array $aBuildings
      */
-    public $aBuildings = array();
+    public $aGeb = array();
 
 }
 
@@ -73,5 +73,11 @@ class DTOParserIndexGebResultGebC
      * @var int $iDateOfFinish the number of seconds since 1900
      */
     public $iDateOfFinish = 0;
-
+    
+    public $strGebName = array();
+    
+    public $iGebEnd = 0;
+    public $iGebEnd2 = 0;
+    public $iGebEnd3 = 0;
+    
 }
