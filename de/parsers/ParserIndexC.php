@@ -164,7 +164,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
 
     /////////////////////////////////////////////////////////////////////////////
 
-    /**
+    /** @FIXME Beim Ressourcenblock fehlen Eisen/Eis da sie beim splitten rausgeworfen werden. Sollte noch mit einem Look-behind geloest werden (Mac)
      */
     private function getRegularExpression()
     {

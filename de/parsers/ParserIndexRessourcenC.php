@@ -123,7 +123,7 @@ class ParserIndexRessourcenC extends ParserMsgBaseC implements ParserMsgI
         $regExp .= '   \(' . $reRessVorrat . '\)\s+(?P<Bevfrei>' . $reRessVorrat . ')\s\/\s(?P<Bevges>' . $reRessVorrat . ')\s\/\s(?P<Bevmax>' . $reRessVorrat . ')\s\(frei\/gesamt\/max\)\s';
         $regExp .= ')?';
         $regExp .= '(?:\((?P<production>' . $reRessProd . ')\)\s+)?';
-        $regExp .= '(?:\(Abbau\spro\sTag\s(?:\d{1,3}\.\d{1,3})(\\\%|\%)\)\s+)?'; //! Mac: hier explizt, da Punkt nicht abh. von den Accounteinstellungen
+        $regExp .= '(?:\(Abbau\spro\sTag\s(?:\d{1,3}\.\d{1,3})(?:\\\){0,2}%\)\s+)?'; //! Mac: hier explizt, da Punkt nicht abh. von den Accounteinstellungen
         $regExp .= '(?:(?P<vorrat>' . $reRessVorrat . '|' . $reRessProd . '))?';
         $regExp .= '/mxs';
 

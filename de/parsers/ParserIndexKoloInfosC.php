@@ -220,7 +220,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
         $regExp .= '(:?';
         $regExp .= '\nLebensbedingungen\s+';
         $regExp .= '(?P<iLB>' . '\d+' . ')';
-        $regExp .= '\s(?:\%|\\\%|\\\\\%)';
+        $regExp .= '\s(?:\\\){0,2}%';
         $regExp .= '\nFlottenscannerreichweite\s+\(normal\)\s+';
         $regExp .= '(?P<mtScanRange>' . $reMixedTime . ')';
         $regExp .= '\n';

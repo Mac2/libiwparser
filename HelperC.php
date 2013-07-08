@@ -281,7 +281,7 @@ class HelperC
             $mktime['month'] = (int)$aResult['month'];
             $mktime['year'] = (int)$aResult['year'];
             $mktime['hour'] = (int)$aResult['hour'];
-            $mktime['minutes'] = (int)$aResult['minute'];
+            $mktime['minute'] = (int)$aResult['minute'];
             if (isset($aResult['second'])) {
                 $mktime['second'] = (int)$aResult['second'];
             }

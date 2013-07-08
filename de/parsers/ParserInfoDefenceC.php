@@ -133,7 +133,7 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
         $reResource = $this->getRegExpAreas();
 
         $regExpRess = '/';
-        $regExpRess .= '(?P<area_name>' . $reResource . ')\s+(?P<effective_count>' . '\d+' . ')(?:\%|\\\%)';
+        $regExpRess .= '(?P<area_name>' . $reResource . ')\s+(?P<effective_count>' . '\d+' . ')(?:\\\){0,2}%';
         $regExpRess .= '/mx';
 
         return $regExpRess;
@@ -203,7 +203,7 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
         $regExp .= 'Zielgenauigkeit\s+?';
         $regExp .= '(?P<iZielgenauigkeit>' . $reBonus . ')\s*?';
         $regExp .= '\n+';
-        $regExp .= 'Effektivit.t\sgegen\s*\n(?P<effective>(?:^' . $reDefenceName . '\s*\d+(?:\%|\\\%)\n)+)';
+        $regExp .= 'Effektivit.t\sgegen\s*\n(?P<effective>(?:^' . $reDefenceName . '\s*\d+(?:\\\){0,2}%\n)+)';
 
     //  $regExp  .= 'Besonderheiten';
     //  $regExp  .= '\n+';

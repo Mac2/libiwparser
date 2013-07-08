@@ -10,6 +10,7 @@
  */
 /**
  * @author     Martin Martimeo <martin@martimeo.de>
+ * @author     Mac <MacXY@herr-der-mails.de>
  * @package    libIwParsers
  * @subpackage parsers_de
  */
@@ -145,4 +146,9 @@ class DTOParserInfoForschungResultC
      */
     public $strPrototypName = '';
 
+    /**
+     * @soap
+     * @var boolean $bIsResearchcostsVisible
+     */
+    public $bIsResearchcostsVisible = false;
 }
