@@ -111,15 +111,15 @@ class DTOParserWirtschaftPlaniressRessResultC
 
   /**
    * @soap
-   * @var integer $iResourceBunker what can be stored without to be raided
+   * @var integer|null $iResourceBunker what can be stored without to be raided, null on parsing without shown capa
    */
-  public $iResourceBunker = 0;
+  public $iResourceBunker = null;
 
   /**
    * @soap
-   * @var integer $iResourceLager storage capa (or 0 at eisen,vv4a,stahl)
+   * @var integer|null $iResourceLager storage capa (or 0 at eisen,vv4a,stahl), null on parsing without shown capa
    */
-  public $iResourceLager = 0;
+  public $iResourceLager = null;
 
 }
 
