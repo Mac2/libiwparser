@@ -134,6 +134,9 @@ class ParserIndexSchiffC extends ParserMsgBaseC implements ParserMsgI
                         $retVal->aSchiff[$strCoords][$retObj->strSchiffName][] = $retObj;
                     }
                 }
+                else {
+                    $parserResult->aErrors[] = "Aktueller Schiffbau ignoriert, da keine Koordinaten vorhanden sind";
+                }
 //             }
             }
         } else {

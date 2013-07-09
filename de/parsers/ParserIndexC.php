@@ -187,7 +187,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
             (?P<Geb>Geb.{1,3}udebau\s+?Ausbaustatus|
             Ausbaustatus)|
             (?P<Werften>^Werft.{1,3}bersicht)|
-            (?P<Schiff>^Schiffbau.{1,3}bersicht)|
+            (?P<Schiff>^Schiffbau.{1,3}bersicht|^Aktueller\sSchiffbau)|
             (?P<FleetOwn>(?:Eigene\sFlotten\s+?Eigene\sFlotten|Eigene\sFlotten)
                 (?:\s+Ziel\s+Start\s+Ankunft\s+Aktionen\s+(?:(?:\*\s)?\+))?
             )|
