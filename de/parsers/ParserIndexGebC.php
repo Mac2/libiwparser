@@ -82,51 +82,30 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
     if( $fRetVal !== false && $fRetVal > 0 )
     {
         $parserResult->bSuccessfullyParsed = true;
-      
-        foreach( $aResult as $result )
-        {    
-            
-            $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPla']);
-            $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGal']);    
-            $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSol']);
-//             $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);        
-            $strCoords = $iCoordsGal.':'.$iCoordsSol.':'.$iCoordsPla;
 
-            if (isset($retVal->aGeb[$strCoords])) {
-                
-                $neu = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
-                if ($neu > $retVal->aGeb[$strCoords]->iGebEnd) {
-                    $retVal->aGeb[$strCoords]->iGebEnd = $neu;
-					$retVal->aGeb[$strCoords]->strGebName[2] = PropertyValueC::ensureString($result['strGebName']);
-                }
-                else if ($neu > $retVal->aGeb[$strCoords]->iGebEnd2) {
-                    $retVal->aGeb[$strCoords]->iGebEnd2 = $neu;
-                    if (isset($retVal->aGeb[$strCoords]->strGebName[1])) {
-                         $retVal->aGeb[$strCoords]->strGebName[2] = $retVal->aGeb[$strCoords]->strGebName[1];
-                    }
-					$retVal->aGeb[$strCoords]->strGebName[1] = PropertyValueC::ensureString($result['strGebName']);
-                }
-                else if ($neu > $retVal->aGeb[$strCoords]->iGebEnd3) {
-                    $retVal->aGeb[$strCoords]->iGebEnd3 = $neu;
-                    if (isset($retVal->aGeb[$strCoords]->strGebName[0])) {
-                         $retVal->aGeb[$strCoords]->strGebName[1] = $retVal->aGeb[$strCoords]->strGebName[0];
-                    }
-					$retVal->aGeb[$strCoords]->strGebName[0] = PropertyValueC::ensureString($result['strGebName']);
-                }
+        foreach( $aResult as $result ) {
+
+            $iCoordsPla     = PropertyValueC::ensureInteger($result['iCoordsPla']);
+            $iCoordsGal     = PropertyValueC::ensureInteger($result['iCoordsGal']);
+            $iCoordsSol     = PropertyValueC::ensureInteger($result['iCoordsSol']);
+            $strCoords      = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
+
+            if (empty($retVal->aGeb[$strCoords]->strPlanetName)) {
+
+                $retVal->aGeb[$strCoords] = new DTOParserIndexGebResultGebC();
+                $retVal->aGeb[$strCoords]->strPlanetName = PropertyValueC::ensureString($result['strPlanetName']);
+                $retVal->aGeb[$strCoords]->strCoords = $strCoords;
+                $retVal->aGeb[$strCoords]->aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                $retVal->aGeb[$strCoords]->aGebName = array();
+
             }
-            else {
-                $retObj = new DTOParserIndexGebResultGebC();
-            
-                $retObj->strPlanetName = PropertyValueC::ensureString($result['strPlanetName']);
-                $retObj->strGebName[0] = PropertyValueC::ensureString($result['strGebName']);
-                $retObj->iGebEnd = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
-                $retObj->iGebEnd2 = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
-                $retObj->iGebEnd3 = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
-                if (isset($result['mtMixedTime']))
-                    $retObj->iGebEndIn = HelperC::convertMixedTimeToTimestamp( $result['mtMixedTime'] );
-                $retObj->strCoords = $strCoords;
-                if (!empty($retObj->strGebName[0])) 
-                	$retVal->aGeb[$strCoords] = $retObj;
+
+            $strGebName     = PropertyValueC::ensureString($result['strGebName']);
+            $iUnixTimestamp = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
+
+            if (!empty($strGebName)) {
+                $retVal->aGeb[$strCoords]->aGebName[$iUnixTimestamp] = $strGebName;
+                ksort($retVal->aGeb[$strCoords]->aGebName, SORT_NUMERIC);    //sortieren nach Bauzeitende aufsteigend, ist aber nicht nötig da ohnhin immer sortiert?
             }
         }
     }
@@ -154,13 +133,17 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
     $regExp .= '\s';
     $regExp .= '\((?P<iCoordsGal>\d+)\:(?P<iCoordsSol>\d+)\:(?P<iCoordsPla>\d+)\)';
     $regExp .= '\s+';
-    $regExp .= '((';
-    $regExp .= '(?P<strGebName>'.$rePlanetName.')';
-    $regExp .= '\s+bis\s';
-    $regExp .= '(?P<dtDateTime>'.$reDateTime.')';
-    $regExp .= '(\s(-\s)?';
-    $regExp .= '(?P<mtMixedTime>'.$reMixedTime.'))?';
-    $regExp .= ')|(n.{1,3}scht))';
+    $regExp .= '(';
+    $regExp .= ' (';
+    $regExp .= '  (?P<strGebName>'.$rePlanetName.')';
+    $regExp .= '  \s+bis\s';
+    $regExp .= '  (?P<dtDateTime>'.$reDateTime.')';
+    $regExp .= '  (';
+    $regExp .= '   \s(-\s)?';
+    $regExp .= '   (?P<mtMixedTime>'.$reMixedTime.')';
+    $regExp .= '  )?';
+    $regExp .= ' )|(n.{1,5}scht)';
+    $regExp .= ')';
     $regExp .= '/mxs';
 
     return $regExp;

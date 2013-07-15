@@ -39,37 +39,26 @@ class DTOParserIndexGebResultGebC
 {
   /**
    * @soap
-   * @var string $strPlanetName
+   * @var string $strPlanetName string with the name of the planet
    */
   public $strPlanetName = '';
 
   /**
    * @soap
-   * @var string $strCoords
+   * @var string $strCoords string with planetary coordinates
    */
   public $strCoords = '';
 
   /**
    * @soap
-   * @var array $aCoords
+   * @var array $aCoords associative array with planetary coordinates
    */
   public $aCoords = array();
 
   /**
-   * @soap
-   * @var string $strBuilding the name of the building
-   */
-  public $strBuilding = '';
+ * @soap
+ * @var array $aGebName associative array with the buildings in the queue
+ */
+ public $aGebName = array();
 
-  /**
-   * @soap
-   * @var int $iDateToExpire the number of seconds the building need to be built
-   */
-  public $iDateToExpire = 0;
-
-  /**
-   * @soap
-   * @var int $iDateOfFinish the number of seconds since 1900
-   */
-  public $iDateOfFinish = 0;
 }
