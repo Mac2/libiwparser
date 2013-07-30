@@ -26,6 +26,18 @@ namespace libIwParsers\de\parserResults;
  */
 class DTOParserInfoForschungResultC
 {
+     /**
+     * @soap
+     * @var array $aResearch
+     */
+    public $aResearch = array();
+}
+
+/**
+ * Sub DTO with the Data
+ */
+class DTOParserInfoForschungResultForschungC
+{
     /**
      * @soap
      * @var string $strResearchName the name of the research

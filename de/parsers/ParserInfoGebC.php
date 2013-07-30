@@ -23,6 +23,7 @@ use libIwParsers\ParserI;
 use libIwParsers\HelperC;
 
 use libIwParsers\de\parserResults\DTOParserInfoGebResultC;
+use libIwParsers\de\parserResults\DTOParserInfoGebResultGebC;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -70,189 +71,192 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
         $regExpTime   = $this->getRegularExpressionTime();
 
         $aResult = array();
-        $fRetVal = preg_match($regExp, $this->getText(), $aResult);
-
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $retVal->aResearchsNeeded = HelperC::convertBracketStringToArray($aResult['strResearchsNeeded']);
-            $retVal->aBuildingsNeeded = HelperC::convertBracketStringToArray($aResult['strBuildingsNeeded']);
-            if (in_array("Gruppe", $retVal->aBuildingsNeeded)) {
-                unset($retVal->aBuildingsNeeded[array_search("Gruppe", $retVal->aBuildingsNeeded)]);
-            }
-
-            if (isset($aResult['strResearchsDevelop'])) {
-                $retVal->aResearchsDevelop = HelperC::convertBracketStringToArray($aResult['strResearchsDevelop']);
-            }
-
-            if (isset($aResult['strBuildingsDevelop'])) {
-                $retVal->aBuildingsDevelop = HelperC::convertBracketStringToArray($aResult['strBuildingsDevelop']);
-                if (in_array("Gruppe", $retVal->aBuildingsDevelop)) {
-                    unset($retVal->aBuildingsDevelop[array_search("Gruppe", $retVal->aBuildingsDevelop)]);
+            foreach ($aResult as $result) {        
+                $retObj = new DTOParserInfoGebResultGebC();
+                
+                $retObj->aResearchsNeeded = HelperC::convertBracketStringToArray($result['strResearchsNeeded']);
+                $retObj->aBuildingsNeeded = HelperC::convertBracketStringToArray($result['strBuildingsNeeded']);
+                if (in_array("Gruppe", $retObj->aBuildingsNeeded)) {
+                    unset($retObj->aBuildingsNeeded[array_search("Gruppe", $retObj->aBuildingsNeeded)]);
                 }
-            }
-            if (isset($aResult['strPlanetNeeded'])) {
-                $retVal->strPlanetNeeded = PropertyValueC::ensureString($aResult['strPlanetNeeded']);
-            }
 
-            if (isset($aResult['strObjectsNeeded'])) {
-                $retVal->strObjectTypesNeeded = PropertyValueC::ensureString($aResult['strObjectsNeeded']);
-            }
+                if (isset($result['strResearchsDevelop'])) {
+                    $retObj->aResearchsDevelop = HelperC::convertBracketStringToArray($result['strResearchsDevelop']);
+                }
 
-            if (isset($aResult['strPlanetPropertiesNeeded'])) {
-                $retVal->aPlanetPropertiesNeeded = explode(" ", PropertyValueC::ensureString($aResult['strPlanetPropertiesNeeded']));
-            }
-
-            $retVal->strGebName = trim(PropertyValueC::ensureString($aResult['strBuildingName']));
-
-            if (isset($aResult['comment'])) {
-                $retVal->strGebComment = trim(PropertyValueC::ensureString($aResult['comment']));
-            } else if (isset($aResult['commentS'])) {
-                $retVal->strGebComment = trim(PropertyValueC::ensureString($aResult['commentS']));
-            }
-
-            $retVal->iHS     = PropertyValueC::ensureInteger($aResult['iHS']);
-            $retVal->imaxAnz = PropertyValueC::ensureInteger($aResult['imaxAnz']);
-
-            if (!empty($aResult['stufe'])) {
-                $retVal->bIsStufenGeb = true;
-                $retVal->iStufe       = PropertyValueC::ensureInteger($aResult['stufe']);
-            }
-
-            //! Kosten
-            $treffer = array();
-            preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER);
-            $stufe = 0;
-            foreach ($treffer as $teff) {
-                if (!empty($teff['stufe'])) {
-                    $stufe = PropertyValueC::ensureInteger($teff['stufe']);
-                    if (isset ($teff["rise_type"]) && strpos($teff["rise_type"], "global") !== false) {
-                        $retVal->strRiseType = "global";
-                    } else if (isset ($teff["rise_type"]) && strpos($teff["rise_type"], "global") === false) {
-                        $retVal->strRiseType = "local";
+                if (isset($result['strBuildingsDevelop'])) {
+                    $retObj->aBuildingsDevelop = HelperC::convertBracketStringToArray($result['strBuildingsDevelop']);
+                    if (in_array("Gruppe", $retObj->aBuildingsDevelop)) {
+                        unset($retObj->aBuildingsDevelop[array_search("Gruppe", $retObj->aBuildingsDevelop)]);
                     }
-                    continue;
+                }
+                if (isset($result['strPlanetNeeded'])) {
+                    $retObj->strPlanetNeeded = PropertyValueC::ensureString($result['strPlanetNeeded']);
                 }
 
-                if (!empty($stufe) && !empty($teff['resource_name'])) {
-                    if (count($retVal->aCosts) == 0) {
-                        $retVal->aCosts[] = array(
-                            'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
-                            'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count']),
-                            'stufe'           => $stufe
-                        );
-                    } else {
-                        $exist = false;
-                        foreach ($retVal->aCosts as $dat) {
+                if (isset($result['strObjectsNeeded'])) {
+                    $retObj->strObjectTypesNeeded = PropertyValueC::ensureString($result['strObjectsNeeded']);
+                }
 
-                            if ($dat['iResourceCount'] == PropertyValueC::ensureInteger($teff['resource_count']) && $dat["strResourceName"] == PropertyValueC::ensureEnum($teff['resource_name'], 'eResources') && $stufe > $dat["stufe"]) {
-                                $exist = true;
-                                break;
-                            }
+                if (isset($result['strPlanetPropertiesNeeded'])) {
+                    $retObj->aPlanetPropertiesNeeded = explode(" ", PropertyValueC::ensureString($result['strPlanetPropertiesNeeded']));
+                }
+
+                $retObj->strGebName = trim(PropertyValueC::ensureString($result['strBuildingName']));
+
+                if (isset($result['comment'])) {
+                    $retObj->strGebComment = trim(PropertyValueC::ensureString($result['comment']));
+                } else if (isset($result['commentS'])) {
+                    $retObj->strGebComment = trim(PropertyValueC::ensureString($result['commentS']));
+                }
+
+                $retObj->iHS     = PropertyValueC::ensureInteger($result['iHS']);
+                $retObj->imaxAnz = PropertyValueC::ensureInteger($result['imaxAnz']);
+
+                if (!empty($result['stufe'])) {
+                    $retObj->bIsStufenGeb = true;
+                    $retObj->iStufe       = PropertyValueC::ensureInteger($result['stufe']);
+                }
+
+                //! Kosten
+                $treffer = array();
+                preg_match_all($regExpRess, $result['kosten'], $treffer, PREG_SET_ORDER);
+                $stufe = 0;
+                foreach ($treffer as $teff) {
+                    if (!empty($teff['stufe'])) {
+                        $stufe = PropertyValueC::ensureInteger($teff['stufe']);
+                        if (isset ($teff["rise_type"]) && strpos($teff["rise_type"], "global") !== false) {
+                            $retObj->strRiseType = "global";
+                        } else if (isset ($teff["rise_type"]) && strpos($teff["rise_type"], "global") === false) {
+                            $retObj->strRiseType = "local";
                         }
-                        if (!$exist) {
-                            $retVal->aCosts[] = array(
+                        continue;
+                    }
+
+                    if (!empty($stufe) && !empty($teff['resource_name'])) {
+                        if (count($retObj->aCosts) == 0) {
+                            $retObj->aCosts[] = array(
                                 'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
                                 'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count']),
                                 'stufe'           => $stufe
                             );
-                        }
-                    }
-                } else {
-                    $retVal->aCosts[] = array(
-                        'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
-                        'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count']),
-                        'stufe'           => 0
-                    );
-                }
-            }
+                        } else {
+                            $exist = false;
+                            foreach ($retObj->aCosts as $dat) {
 
-            //! unterhalt
-            $treffer = array();
-            preg_match_all($regExpMain, $aResult['unterhalt'], $treffer, PREG_SET_ORDER);
-            foreach ($treffer as $teff) {
-                $retVal->aMaintenance[] = array(
-                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
-                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
-                );
-            }
-
-            //! Bauzeit
-            $treffer = array();
-            preg_match_all($regExpTime, $aResult['dauer'], $treffer, PREG_SET_ORDER);
-            $stufe = 0;
-            foreach ($treffer as $teff) {
-                if (!empty($teff['stufe'])) {
-                    $stufe = PropertyValueC::ensureInteger($teff['stufe']);
-                }
-
-                if (!empty($stufe) && !empty($teff['build_time'])) {
-                    if (count($retVal->aBuildTime) == 0) {
-                        $retVal->aBuildTime[] = array(
-                            'iBuildTime' => HelperC::convertMixedDurationToSeconds($teff["build_time"]),
-                            'stufe'      => $stufe
-                        );
-                    } else {
-                        $exist = false;
-                        foreach ($retVal->aBuildTime as $dat) {
-
-                            if ($dat['iBuildTime'] == HelperC::convertMixedDurationToSeconds($teff["build_time"]) && $stufe > $dat["stufe"]) {
-                                $exist = true;
-                                break;
+                                if ($dat['iResourceCount'] == PropertyValueC::ensureInteger($teff['resource_count']) && $dat["strResourceName"] == PropertyValueC::ensureEnum($teff['resource_name'], 'eResources') && $stufe > $dat["stufe"]) {
+                                    $exist = true;
+                                    break;
+                                }
+                            }
+                            if (!$exist) {
+                                $retObj->aCosts[] = array(
+                                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count']),
+                                    'stufe'           => $stufe
+                                );
                             }
                         }
-                        if (!$exist) {
-                            $retVal->aBuildTime[] = array(
+                    } else {
+                        $retObj->aCosts[] = array(
+                            'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                            'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count']),
+                            'stufe'           => 0
+                        );
+                    }
+                }
+
+                //! unterhalt
+                $treffer = array();
+                preg_match_all($regExpMain, $result['unterhalt'], $treffer, PREG_SET_ORDER);
+                foreach ($treffer as $teff) {
+                    $retObj->aMaintenance[] = array(
+                        'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                        'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                    );
+                }
+
+                //! Bauzeit
+                $treffer = array();
+                preg_match_all($regExpTime, $result['dauer'], $treffer, PREG_SET_ORDER);
+                $stufe = 0;
+                foreach ($treffer as $teff) {
+                    if (!empty($teff['stufe'])) {
+                        $stufe = PropertyValueC::ensureInteger($teff['stufe']);
+                    }
+
+                    if (!empty($stufe) && !empty($teff['build_time'])) {
+                        if (count($retObj->aBuildTime) == 0) {
+                            $retObj->aBuildTime[] = array(
                                 'iBuildTime' => HelperC::convertMixedDurationToSeconds($teff["build_time"]),
                                 'stufe'      => $stufe
                             );
-                        }
-                    }
-                } else { //! keine Verteuerung
-                    $retVal->aBuildTime[] = array(
-                        'iBuildTime' => HelperC::convertMixedDurationToSeconds($teff["build_time"]),
-                        'stufe'      => 0
-                    );
-                }
-            }
+                        } else {
+                            $exist = false;
+                            foreach ($retObj->aBuildTime as $dat) {
 
-            //! Nutzen
-            $treffer = array();
-            preg_match_all($regExpEffect, $aResult['bringt'], $treffer, PREG_SET_ORDER);
-            $stufe = 0;
-            foreach ($treffer as $teff) {
-                if (!empty($teff['stufe'])) {
-                    $stufe = PropertyValueC::ensureInteger($teff['stufe']);
-                    continue;
-                }
-                if (!empty($stufe) && !empty($teff['resource_name'])) {
-                    if (count($retVal->aEffect) == 0) {
-                        $retVal->aEffect[] = array(
-                            'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
-                            'iResourceCount'  => PropertyValueC::ensureFloat($teff['resource_count']),
-                            'stufe'           => $stufe
+                                if ($dat['iBuildTime'] == HelperC::convertMixedDurationToSeconds($teff["build_time"]) && $stufe > $dat["stufe"]) {
+                                    $exist = true;
+                                    break;
+                                }
+                            }
+                            if (!$exist) {
+                                $retObj->aBuildTime[] = array(
+                                    'iBuildTime' => HelperC::convertMixedDurationToSeconds($teff["build_time"]),
+                                    'stufe'      => $stufe
+                                );
+                            }
+                        }
+                    } else { //! keine Verteuerung
+                        $retObj->aBuildTime[] = array(
+                            'iBuildTime' => HelperC::convertMixedDurationToSeconds($teff["build_time"]),
+                            'stufe'      => 0
                         );
-                    } else {
-                        $last = $retVal->aEffect[count($retVal->aEffect) - 1];
-                        if (!empty($last) && $last['iResourceCount'] != PropertyValueC::ensureFloat($teff['resource_count'])) {
-                            $retVal->aEffect[] = array(
+                    }
+                }
+
+                //! Nutzen
+                $treffer = array();
+                preg_match_all($regExpEffect, $result['bringt'], $treffer, PREG_SET_ORDER);
+                $stufe = 0;
+                foreach ($treffer as $teff) {
+                    if (!empty($teff['stufe'])) {
+                        $stufe = PropertyValueC::ensureInteger($teff['stufe']);
+                        continue;
+                    }
+                    if (!empty($stufe) && !empty($teff['resource_name'])) {
+                        if (count($retObj->aEffect) == 0) {
+                            $retObj->aEffect[] = array(
                                 'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
                                 'iResourceCount'  => PropertyValueC::ensureFloat($teff['resource_count']),
                                 'stufe'           => $stufe
                             );
+                        } else {
+                            $last = $retObj->aEffect[count($retObj->aEffect) - 1];
+                            if (!empty($last) && $last['iResourceCount'] != PropertyValueC::ensureFloat($teff['resource_count'])) {
+                                $retObj->aEffect[] = array(
+                                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                                    'iResourceCount'  => PropertyValueC::ensureFloat($teff['resource_count']),
+                                    'stufe'           => $stufe
+                                );
+                            }
                         }
+                    } else {
+                        $retObj->aEffect[] = array(
+                            'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                            'iResourceCount'  => PropertyValueC::ensureFloat($teff['resource_count']),
+                            'stufe'           => 0
+                        );
                     }
-                } else {
-                    $retVal->aEffect[] = array(
-                        'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
-                        'iResourceCount'  => PropertyValueC::ensureFloat($teff['resource_count']),
-                        'stufe'           => 0
-                    );
                 }
-            }
-
+            
             //! @todo zerstoerbar durch ...
-
+                $retVal->aGeb[$retObj->strGebName] = $retObj;
+            }
         } else {
             $parserResult->bSuccessfullyParsed = false;
             $parserResult->aErrors[]           = 'Unable to match the pattern.';

@@ -22,6 +22,7 @@ use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
 use libIwParsers\de\parserResults\DTOParserInfoDefenceResultC;
+use libIwParsers\de\parserResults\DTOParserInfoDefenceResultDefenceC;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,45 +68,49 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
 //      $regExpEffective = $this->getRegularExpressionEffective();
 
         $aResult = array();
-        $fRetVal = preg_match($regExp, $this->getText(), $aResult);
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
+            foreach ($aResult as $result) {        
+                $retObj = new DTOParserInfoDefenceResultDefenceC();
+                
+                $retObj->strDefenceName  = $result['strDefenceName'];
+                $retObj->iProductionTime = HelperC::convertMixedDurationToSeconds($result['strTime']);
+                $retObj->aResearchs      = HelperC::convertBracketStringToArray($result['strResearchs']);
 
-            $retVal->strDefenceName  = $aResult['strDefenceName'];
-            $retVal->iProductionTime = HelperC::convertMixedDurationToSeconds($aResult['strTime']);
-            $retVal->aResearchs      = HelperC::convertBracketStringToArray($aResult['strResearchs']);
+                $retObj->strAreaName = PropertyValueC::ensureString($result['strTyp']);
 
-            $retVal->strAreaName = PropertyValueC::ensureString($aResult['strTyp']);
+                $retObj->iVerbrauchBrause  = PropertyValueC::ensureInteger($result['iVerbrauchBrause']);
+                $retObj->iVerbrauchEnergie = PropertyValueC::ensureInteger($result['iVerbrauchEnergie']);
 
-            $retVal->iVerbrauchBrause  = PropertyValueC::ensureInteger($aResult['iVerbrauchBrause']);
-            $retVal->iVerbrauchEnergie = PropertyValueC::ensureInteger($aResult['iVerbrauchEnergie']);
+                $retObj->strWeaponClass = PropertyValueC::ensureString($result['strWeaponClass']);
+                $retObj->iAttack        = PropertyValueC::ensureInteger($result['iAngriff']);
+                $retObj->iDefence       = PropertyValueC::ensureInteger($result['iDefence']);
+            //	$retObj->iArmour_kin = PropertyValueC::ensureInteger($result['iPanzkin']);
+            //	$retObj->iArmour_grav = PropertyValueC::ensureInteger($result['iPanzgrav']);
+            //	$retObj->iArmour_electr = PropertyValueC::ensureInteger($result['iPanzelektr']);
+                $retObj->iShields  = PropertyValueC::ensureInteger($result['iSchilde']);
+                $retObj->iAccuracy = PropertyValueC::ensureFloat($result['iZielgenauigkeit']);
 
-            $retVal->strWeaponClass = PropertyValueC::ensureString($aResult['strWeaponClass']);
-            $retVal->iAttack        = PropertyValueC::ensureInteger($aResult['iAngriff']);
-            $retVal->iDefence       = PropertyValueC::ensureInteger($aResult['iDefence']);
-        //	$retVal->iArmour_kin = PropertyValueC::ensureInteger($aResult['iPanzkin']);
-        //	$retVal->iArmour_grav = PropertyValueC::ensureInteger($aResult['iPanzgrav']);
-        //	$retVal->iArmour_electr = PropertyValueC::ensureInteger($aResult['iPanzelektr']);
-            $retVal->iShields  = PropertyValueC::ensureInteger($aResult['iSchilde']);
-            $retVal->iAccuracy = PropertyValueC::ensureFloat($aResult['iZielgenauigkeit']);
-
-            $treffer = array();
-            preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER);
-            foreach ($treffer as $teff) {
-                $retVal->aCosts[] = array(
-                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
-                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
-                );
+                $treffer = array();
+                preg_match_all($regExpRess, $result['kosten'], $treffer, PREG_SET_ORDER);
+                foreach ($treffer as $teff) {
+                    $retObj->aCosts[] = array(
+                        'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                        'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                    );
+                }
+                
+                //! Mac: effektivitat der Deffanlagen gegen alle Schiffstypen beträgt 100%!! (abweichend von den Datenblättern)
+                //  $treffer = array();
+                //  preg_match_all ($regExpEffective, $aResult['effective'], $treffer, PREG_SET_ORDER );
+                //  foreach ($treffer as $teff)
+                //  {
+                //      $retVal->aEffectivity[] = array('strAreaName' => PropertyValueC::ensureString( $teff['area_name'] ), 'fEffective' => PropertyValueC::ensureFloat($teff['effective_count']/100));
+                //  }
+                $retVal->aDefence[$retObj->strDefenceName] = $retObj;
             }
-
-            //! Mac: effektivitat der Deffanlagen gegen alle Schiffstypen beträgt 100%!! (abweichend von den Datenblättern)
-        //  $treffer = array();
-        //  preg_match_all ($regExpEffective, $aResult['effective'], $treffer, PREG_SET_ORDER );
-        //  foreach ($treffer as $teff)
-        //  {
-        //      $retVal->aEffectivity[] = array('strAreaName' => PropertyValueC::ensureString( $teff['area_name'] ), 'fEffective' => PropertyValueC::ensureFloat($teff['effective_count']/100));
-        //  }
         } else {
             $parserResult->bSuccessfullyParsed = false;
             $parserResult->aErrors[]           = 'Unable to match the pattern.';

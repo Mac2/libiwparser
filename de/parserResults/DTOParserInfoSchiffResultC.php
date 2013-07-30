@@ -28,6 +28,18 @@ class DTOParserInfoSchiffResultC
 {
     /**
      * @soap
+     * @var array $aSchiffe
+     */
+    public $aSchiffe = array();
+}
+
+/**
+ * Sub DTO with the Data
+ */
+class DTOParserInfoSchiffResultSchiffC
+{
+    /**
+     * @soap
      * @var string $strSchiffName the name of the ship
      */
     public $strSchiffName = '';

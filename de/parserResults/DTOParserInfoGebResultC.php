@@ -27,6 +27,18 @@ class DTOParserInfoGebResultC
 {
     /**
      * @soap
+     * @var array $aGeb
+     */
+    public $aGeb = array();
+}
+
+/**
+ * Sub DTO with the Data
+ */
+class DTOParserInfoGebResultGebC
+{
+    /**
+     * @soap
      * @var string $strGebName the name of the building
      */
     public $strGebName = '';

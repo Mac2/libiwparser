@@ -27,6 +27,18 @@ class DTOParserInfoUserResultC
 {
     /**
      * @soap
+     * @var array $aUser
+     */
+    public $aUser = array();
+}
+
+/**
+ * Sub DTO with the Data
+ */
+class DTOParserInfoUserResultUserC
+{
+    /**
+     * @soap
      * @var string $strUserName the user of the object
      */
     public $strUserName = '';

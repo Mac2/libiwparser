@@ -23,6 +23,7 @@ use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
 use libIwParsers\de\parserResults\DTOParserInfoForschungResultC;
+use libIwParsers\de\parserResults\DTOParserInfoForschungResultForschungC;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -67,64 +68,70 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
         $regExpRess = $this->getRegularExpressionRess();
 
         $aResult = array();
-        $fRetVal = preg_match($regExp, $this->getText(), $aResult);
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $retVal->aResearchsNeeded       = HelperC::convertBracketStringToArray($aResult['strResearchsNeeded']);
-            $retVal->aBuildingsNeeded       = HelperC::convertBracketStringToArray($aResult['strBuildingsNeeded']);
-            $retVal->aObjectsNeeded         = HelperC::convertBracketStringToArray($aResult['strObjectsNeeded']);
-            $retVal->aResearchsDevelop      = HelperC::convertBracketStringToArray($aResult['strResearchsDevelop']);
-            $retVal->aBuildingsDevelop      = HelperC::convertBracketStringToArray($aResult['strBuildingsDevelop']);
-            $retVal->aBuildingLevelsDevelop = HelperC::convertBracketStringToArray($aResult['strBuildingLevelsDevelop']);
-            $retVal->aDefencesDevelop       = HelperC::convertBracketStringToArray($aResult['strDefencesDevelop']);
-            $retVal->aGeneticsDevelop       = HelperC::convertBracketStringToArray($aResult['strGeneticsDevelop']);
-            $retVal->strResearchName        = PropertyValueC::ensureString($aResult['strResearchName']);
-            $retVal->strAreaName            = PropertyValueC::ensureString($aResult['strAreaName']);
-            $retVal->strStatus              = PropertyValueC::ensureString($aResult['strStatus']);
+            //! @TODO Mac: mehrfach Bericht funktionieren noch nicht zuverlässig, da der Comment Block zu allg. ist und alle weiteren Infos mitschlucken kann
+            foreach ($aResult as $result) {        
+                $retObj = new DTOParserInfoForschungResultForschungC();
 
-            if (!empty($aResult['first'])) {
-                $retVal->strResearchComment = PropertyValueC::ensureString($aResult['comment']);
-                $retVal->strResearchFirst   = PropertyValueC::ensureString($aResult['first']);
-            } else {
-                $retVal->strResearchComment = PropertyValueC::ensureString($aResult['commentonly']);
-            }
-            $retVal->iFP               = PropertyValueC::ensureInteger($aResult['fp']);
-            $retVal->iPeopleResearched = PropertyValueC::ensureInteger($aResult['count']);
+                $retObj->aResearchsNeeded       = HelperC::convertBracketStringToArray($result['strResearchsNeeded']);
+                $retObj->aBuildingsNeeded       = HelperC::convertBracketStringToArray($result['strBuildingsNeeded']);
+                $retObj->aObjectsNeeded         = HelperC::convertBracketStringToArray($result['strObjectsNeeded']);
+                $retObj->aResearchsDevelop      = HelperC::convertBracketStringToArray($result['strResearchsDevelop']);
+                $retObj->aBuildingsDevelop      = HelperC::convertBracketStringToArray($result['strBuildingsDevelop']);
+                $retObj->aBuildingLevelsDevelop = HelperC::convertBracketStringToArray($result['strBuildingLevelsDevelop']);
+                $retObj->aDefencesDevelop       = HelperC::convertBracketStringToArray($result['strDefencesDevelop']);
+                $retObj->aGeneticsDevelop       = HelperC::convertBracketStringToArray($result['strGeneticsDevelop']);
+                $retObj->strResearchName        = PropertyValueC::ensureString($result['strResearchName']);
+                $retObj->strAreaName            = PropertyValueC::ensureString($result['strAreaName']);
+                $retObj->strStatus              = PropertyValueC::ensureString($result['strStatus']);
 
-            if (empty($aResult['prozent'])) {
-                $aResult['prozent'] = 100;
-            }
-            if (empty($aResult['malus'])) {
-                $aResult['malus'] = 100;
-            }
-            $aResult['faktor'] = (float)$aResult['prozent'] * $aResult['malus'] / 100;
-
-            $retVal->iResearchCosts = PropertyValueC::ensureInteger($aResult['faktor']);
-
-            if (!empty($aResult['strPrototypName'])) {
-                $retVal->bIsPrototypResearch = true;
-                $retVal->strPrototypName     = PropertyValueC::ensureString($aResult['strPrototypName']);
-            }
-
-            if (!empty($aResult['kosten'])) {
-                $treffer = array();
-                if (preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER)) {
-                    $retVal->bIsResearchcostsVisible=true;
-                    foreach ($treffer as $teff) {
-                        $retVal->aCosts[] = array(
-                            'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
-                            'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
-                        );
-                    }
+                if (!empty($result['first'])) {
+                    $retObj->strResearchComment = PropertyValueC::ensureString($result['comment']);
+                    $retObj->strResearchFirst   = PropertyValueC::ensureString($result['first']);
                 } else {
-                    //$parserResult->bSuccessfullyParsed = false;
-                    //$parserResult->aErrors[]           = 'Unable to find ressnames.';
+                    $retObj->strResearchComment = PropertyValueC::ensureString($result['commentonly']);
                 }
-            }
-            if (!empty($aResult['strMiscCosts'])) {
-                $retVal->strMiscCosts = $aResult['strMiscCosts'];
+                $retObj->iFP               = PropertyValueC::ensureInteger($result['fp']);
+                $retObj->iPeopleResearched = PropertyValueC::ensureInteger($result['count']);
+
+                if (empty($result['prozent'])) {
+                    $result['prozent'] = 100;
+                }
+                if (empty($result['malus'])) {
+                    $result['malus'] = 100;
+                }
+                $result['faktor'] = (float)$result['prozent'] * $result['malus'] / 100;
+
+                $retObj->iResearchCosts = PropertyValueC::ensureInteger($result['faktor']);
+
+                if (!empty($result['strPrototypName'])) {
+                    $retObj->bIsPrototypResearch = true;
+                    $retObj->strPrototypName     = PropertyValueC::ensureString($result['strPrototypName']);
+                }
+
+                if (!empty($result['kosten'])) {
+                    $treffer = array();
+                    if (preg_match_all($regExpRess, $result['kosten'], $treffer, PREG_SET_ORDER)) {
+                        $retObj->bIsResearchcostsVisible=true;
+                        foreach ($treffer as $teff) {
+                            $retObj->aCosts[] = array(
+                                'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                                'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                            );
+                        }
+                    } else {
+                        //$parserResult->bSuccessfullyParsed = false;
+                        //$parserResult->aErrors[]           = 'Unable to find ressnames.';
+                    }
+                }
+                if (!empty($result['strMiscCosts'])) {
+                    $retObj->strMiscCosts = $result['strMiscCosts'];
+                }
+                $retVal->aResearch[$retObj->strResearchName] = $retObj;
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;

@@ -23,6 +23,7 @@ use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
 use libIwParsers\de\parserResults\DTOParserInfoSchiffResultC;
+use libIwParsers\de\parserResults\DTOParserInfoSchiffResultSchiffC;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -70,120 +71,124 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
         $regExpEffective = $this->getRegularExpressionEffective();
 
         $aResult = array();
-        $fRetVal = preg_match($regExp, $this->getText(), $aResult);
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $retVal->strSchiffName   = $aResult['strSchiffName'];
-            $retVal->iProductionTime = HelperC::convertMixedDurationToSeconds($aResult['strTime']);
-            $retVal->aResearchs      = HelperC::convertBracketStringToArray($aResult['strResearchs']);
+            foreach ($aResult as $result) {        
+                $retObj = new DTOParserInfoSchiffResultSchiffC();
+                $retObj->strSchiffName   = $result['strSchiffName'];
+                $retObj->iProductionTime = HelperC::convertMixedDurationToSeconds($result['strTime']);
+                $retObj->aResearchs      = HelperC::convertBracketStringToArray($result['strResearchs']);
 
-            $treffer = array();
-            if (!empty($retVal->aResearchs)) {
-                preg_match_all($regExpAreaName, $retVal->aResearchs[0], $treffer, PREG_SET_ORDER);
-                foreach ($treffer as $teff) {
-                    $AreaName = HelperC::convertBracketStringToArray($teff['AreaName']);
-                    if (isset($AreaName[0])) {
-                        if ($AreaName[0] == "Korvette") {
-                            $AreaName[0] = "Korvetten";
-                        } else if ($AreaName[0] == "Schlachtschiff") {
-                            $AreaName[0] = "Schlachtschiffe";
-                        } else if ($AreaName[0] == "Dreadnought") {
-                            $AreaName[0] = "Dreadnoughts";
+                $treffer = array();
+                if (!empty($retObj->aResearchs)) {
+                    preg_match_all($regExpAreaName, $retObj->aResearchs[0], $treffer, PREG_SET_ORDER);
+                    foreach ($treffer as $teff) {
+                        $AreaName = HelperC::convertBracketStringToArray($teff['AreaName']);
+                        if (isset($AreaName[0])) {
+                            if ($AreaName[0] == "Korvette") {
+                                $AreaName[0] = "Korvetten";
+                            } else if ($AreaName[0] == "Schlachtschiff") {
+                                $AreaName[0] = "Schlachtschiffe";
+                            } else if ($AreaName[0] == "Dreadnought") {
+                                $AreaName[0] = "Dreadnoughts";
+                            }
+                            $retObj->strAreaName[] = $AreaName[0];
                         }
-                        $retVal->strAreaName[] = $AreaName[0];
                     }
                 }
-            }
-            $treffer = array();
-            preg_match_all($regExpYards, $aResult['strYards'], $treffer, PREG_SET_ORDER);
-            foreach ($treffer as $teff) {
-                if (isset($teff['werft_typ'])) {
-                    $retVal->strWerftTyp = $teff['werft_typ'];
+                $treffer = array();
+                preg_match_all($regExpYards, $result['strYards'], $treffer, PREG_SET_ORDER);
+                foreach ($treffer as $teff) {
+                    if (isset($teff['werft_typ'])) {
+                        $retObj->strWerftTyp = $teff['werft_typ'];
+                    }
                 }
-            }
 
-            if (!empty($aResult['strActions'])) {
-                $retVal->aActions = preg_split('/\n+/', $aResult['strActions']);
-            }
+                if (!empty($result['strActions'])) {
+                    $retObj->aActions = preg_split('/\n+/', $result['strActions']);
+                }
 
-            $retVal->iGschwdSol = $aResult['iGschwdSol'];
-            $retVal->iGschwdGal = $aResult['iGschwdGal'];
-            if (!empty($aResult['bGalFlucht'])) {
-                $retVal->bCanLeaveGalaxy = true;
-            }
+                $retObj->iGschwdSol = $result['iGschwdSol'];
+                $retObj->iGschwdGal = $result['iGschwdGal'];
+                if (!empty($result['bGalFlucht'])) {
+                    $retObj->bCanLeaveGalaxy = true;
+                }
 
-            $retVal->iVerbrauchBrause  = $aResult['iVerbrauchBrause'];
-            $retVal->iVerbrauchEnergie = $aResult['iVerbrauchEnergie'];
-            if (!empty($aResult['iKapa1'])) {
-                $retVal->bIsTransporter = true;
-                $retVal->iKapa1         = PropertyValueC::ensureInteger($aResult['iKapa1']);
-            }
-            if (!empty($aResult['iKapa2'])) {
-                $retVal->bIsTransporter = true;
-                $retVal->iKapa2         = PropertyValueC::ensureInteger($aResult['iKapa2']);
-            }
-            if (!empty($aResult['iKapaBev'])) {
-                $retVal->bIsTransporter = true;
-                $retVal->iKapaBev       = PropertyValueC::ensureInteger($aResult['iKapaBev']);
-            }
+                $retObj->iVerbrauchBrause  = $result['iVerbrauchBrause'];
+                $retObj->iVerbrauchEnergie = $result['iVerbrauchEnergie'];
+                if (!empty($result['iKapa1'])) {
+                    $retObj->bIsTransporter = true;
+                    $retObj->iKapa1         = PropertyValueC::ensureInteger($result['iKapa1']);
+                }
+                if (!empty($result['iKapa2'])) {
+                    $retObj->bIsTransporter = true;
+                    $retObj->iKapa2         = PropertyValueC::ensureInteger($result['iKapa2']);
+                }
+                if (!empty($result['iKapaBev'])) {
+                    $retObj->bIsTransporter = true;
+                    $retObj->iKapaBev       = PropertyValueC::ensureInteger($result['iKapaBev']);
+                }
 
-            if (!empty($aResult['bBeTransported'])) {
-                $retVal->bCanBeTransported = true;
-            }
+                if (!empty($result['bBeTransported'])) {
+                    $retObj->bCanBeTransported = true;
+                }
 
-            if (!empty($aResult['iSchiffKapa1'])) {
-                $retVal->bIsCarrier = true;
-                $retVal->iShipKapa1 = PropertyValueC::ensureInteger($aResult['iSchiffKapa1']);
-            }
+                if (!empty($result['iSchiffKapa1'])) {
+                    $retObj->bIsCarrier = true;
+                    $retObj->iShipKapa1 = PropertyValueC::ensureInteger($result['iSchiffKapa1']);
+                }
 
-            if (!empty($aResult['iSchiffKapa2'])) {
-                $retVal->bIsCarrier = true;
-                $retVal->iShipKapa2 = PropertyValueC::ensureInteger($aResult['iSchiffKapa2']);
-            }
+                if (!empty($result['iSchiffKapa2'])) {
+                    $retObj->bIsCarrier = true;
+                    $retObj->iShipKapa2 = PropertyValueC::ensureInteger($result['iSchiffKapa2']);
+                }
 
-            if (!empty($aResult['iSchiffKapa3'])) {
-                $retVal->bIsCarrier = true;
-                $retVal->iShipKapa3 = PropertyValueC::ensureInteger($aResult['iSchiffKapa3']);
-            }
+                if (!empty($result['iSchiffKapa3'])) {
+                    $retObj->bIsCarrier = true;
+                    $retObj->iShipKapa3 = PropertyValueC::ensureInteger($result['iSchiffKapa3']);
+                }
 
-            $retVal->strWeaponClass = PropertyValueC::ensureString($aResult['strWeaponClass']);
-            $retVal->iAttack        = PropertyValueC::ensureInteger($aResult['iAngriff']);
-            $retVal->iDefence       = PropertyValueC::ensureInteger($aResult['iDefence']);
-            $retVal->iArmour_kin    = PropertyValueC::ensureInteger($aResult['iPanzkin']);
-            $retVal->iArmour_grav   = PropertyValueC::ensureInteger($aResult['iPanzgrav']);
-            $retVal->iArmour_electr = PropertyValueC::ensureInteger($aResult['iPanzelektr']);
-            $retVal->iShields       = PropertyValueC::ensureInteger($aResult['iSchilde']);
-            $retVal->iAccuracy      = PropertyValueC::ensureInteger($aResult['iZielgenauigkeit']);
-            $retVal->iMobility      = PropertyValueC::ensureInteger($aResult['iWendigkeit']);
+                $retObj->strWeaponClass = PropertyValueC::ensureString($result['strWeaponClass']);
+                $retObj->iAttack        = PropertyValueC::ensureInteger($result['iAngriff']);
+                $retObj->iDefence       = PropertyValueC::ensureInteger($result['iDefence']);
+                $retObj->iArmour_kin    = PropertyValueC::ensureInteger($result['iPanzkin']);
+                $retObj->iArmour_grav   = PropertyValueC::ensureInteger($result['iPanzgrav']);
+                $retObj->iArmour_electr = PropertyValueC::ensureInteger($result['iPanzelektr']);
+                $retObj->iShields       = PropertyValueC::ensureInteger($result['iSchilde']);
+                $retObj->iAccuracy      = PropertyValueC::ensureInteger($result['iZielgenauigkeit']);
+                $retObj->iMobility      = PropertyValueC::ensureInteger($result['iWendigkeit']);
 
-            if (isset($aResult['iJaeger'])) {
-                $retVal->iNoEscort = PropertyValueC::ensureInteger($aResult['iJaeger']);
-            }
-            if (isset($aResult['fBonusAtt'])) {
-                $retVal->fBonusAtt = PropertyValueC::ensureFloat($aResult['fBonusAtt']);
-            }
-            if (isset($aResult['fBonusDef'])) {
-                $retVal->fBonusDef = PropertyValueC::ensureFloat($aResult['fBonusDef']);
-            }
+                if (isset($result['iJaeger'])) {
+                    $retObj->iNoEscort = PropertyValueC::ensureInteger($result['iJaeger']);
+                }
+                if (isset($result['fBonusAtt'])) {
+                    $retObj->fBonusAtt = PropertyValueC::ensureFloat($result['fBonusAtt']);
+                }
+                if (isset($result['fBonusDef'])) {
+                    $retObj->fBonusDef = PropertyValueC::ensureFloat($result['fBonusDef']);
+                }
 
-            $treffer = array();
-            preg_match_all($regExpRess, $aResult['kosten'], $treffer, PREG_SET_ORDER);
-            foreach ($treffer as $teff) {
-                $retVal->aCosts[] = array(
-                    'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
-                    'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
-                );
-            }
+                $treffer = array();
+                preg_match_all($regExpRess, $result['kosten'], $treffer, PREG_SET_ORDER);
+                foreach ($treffer as $teff) {
+                    $retObj->aCosts[] = array(
+                        'strResourceName' => PropertyValueC::ensureEnum($teff['resource_name'], 'eResources'),
+                        'iResourceCount'  => PropertyValueC::ensureInteger($teff['resource_count'])
+                    );
+                }
 
-            $treffer = array();
-            preg_match_all($regExpEffective, $aResult['effective'], $treffer, PREG_SET_ORDER);
-            foreach ($treffer as $teff) {
-                $retVal->aEffectivity[] = array(
-                    'strAreaName' => PropertyValueC::ensureString($teff['area_name']),
-                    'fEffective'  => PropertyValueC::ensureInteger($teff['effective_count'])
-                );
+                $treffer = array();
+                preg_match_all($regExpEffective, $result['effective'], $treffer, PREG_SET_ORDER);
+                foreach ($treffer as $teff) {
+                    $retObj->aEffectivity[] = array(
+                        'strAreaName' => PropertyValueC::ensureString($teff['area_name']),
+                        'fEffective'  => PropertyValueC::ensureInteger($teff['effective_count'])
+                    );
+                }
+                $retVal->aSchiffe[$retObj->strSchiffName] = $retObj;
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;

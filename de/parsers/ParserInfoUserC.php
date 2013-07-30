@@ -22,6 +22,7 @@ use libIwParsers\ParserBaseC;
 use libIwParsers\ParserI;
 use libIwParsers\HelperC;
 use libIwParsers\de\parserResults\DTOParserInfoUserResultC;
+use libIwParsers\de\parserResults\DTOParserInfoUserResultUserC;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,56 +66,61 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
         $regExp = $this->getRegularExpression();
 
         $aResult = array();
-        $fRetVal = preg_match($regExp, $this->getText(), $aResult);
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
-            $retVal->strUserName        = PropertyValueC::ensureString($aResult['strUserName']);
-            $retVal->strUserAlliance    = PropertyValueC::ensureString($aResult['strUserAlliance']);
-            $retVal->strUserAllianceTag = PropertyValueC::ensureString($aResult['strUserAllianceTag']);
-            $retVal->strUserAllianceJob = PropertyValueC::ensureString($aResult['strUserAllianceJob']);
+            foreach ($aResult as $result) {        
+                $retObj = new DTOParserInfoUserResultUserC();
 
-            if (!empty($aResult['strPlanetName'])) { //Informationen über den Hauptplanet vorhanden
+                $retObj->strUserName        = PropertyValueC::ensureString($result['strUserName']);
+                $retObj->strUserAlliance    = PropertyValueC::ensureString($result['strUserAlliance']);
+                $retObj->strUserAllianceTag = PropertyValueC::ensureString($result['strUserAllianceTag']);
+                $retObj->strUserAllianceJob = PropertyValueC::ensureString($result['strUserAllianceJob']);
 
-                $iCoordsGal        = PropertyValueC::ensureInteger($aResult['iCoordsGal']);
-                $iCoordsSol        = PropertyValueC::ensureInteger($aResult['iCoordsSol']);
-                $iCoordsPla        = PropertyValueC::ensureInteger($aResult['iCoordsPla']);
-                $aCoords           = array(
-                    'coords_gal' => $iCoordsGal,
-                    'coords_sol' => $iCoordsSol,
-                    'coords_pla' => $iCoordsPla
-                );
-                $retVal->aCoords   = $aCoords;
-                $retVal->strCoords = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
+                if (!empty($result['strPlanetName'])) { //Informationen über den Hauptplanet vorhanden
 
-                $planetname            = HelperC::convertBracketStringToArray($aResult['strPlanetName']);
-                $retVal->strPlanetName = PropertyValueC::ensureString($planetname[0]);
+                    $iCoordsGal        = PropertyValueC::ensureInteger($result['iCoordsGal']);
+                    $iCoordsSol        = PropertyValueC::ensureInteger($result['iCoordsSol']);
+                    $iCoordsPla        = PropertyValueC::ensureInteger($result['iCoordsPla']);
+                    $aCoords           = array(
+                        'coords_gal' => $iCoordsGal,
+                        'coords_sol' => $iCoordsSol,
+                        'coords_pla' => $iCoordsPla
+                    );
+                    $retObj->aCoords   = $aCoords;
+                    $retObj->strCoords = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
 
-            }
+                    $planetname            = HelperC::convertBracketStringToArray($result['strPlanetName']);
+                    $retObj->strPlanetName = PropertyValueC::ensureString($planetname[0]);
 
-            if (!empty($aResult['AdminAcc'])) {
-                $retVal->strAccType = 'Admin';
-            } elseif (!empty($aResult['IWBPAcc'])) {
-                $retVal->strAccType = 'IWBP';
-            } else {
-                $retVal->strAccType = 'Spieler';
-            }
+                }
 
-            $retVal->iEntryDate = HelperC::convertDateTimeToTimestamp($aResult['iEntryDate']);
+                if (!empty($result['AdminAcc'])) {
+                    $retObj->strAccType = 'Admin';
+                } elseif (!empty($result['IWBPAcc'])) {
+                    $retObj->strAccType = 'IWBP';
+                } else {
+                    $retObj->strAccType = 'Spieler';
+                }
 
-            $retVal->iGebPkt   = PropertyValueC::ensureInteger($aResult['iGebPkt']);
-            $retVal->iFP       = PropertyValueC::ensureInteger($aResult['iFP']);
-            $retVal->iHSPos    = PropertyValueC::ensureInteger($aResult['iHSPos']);
-            $retVal->iHSChange = PropertyValueC::ensureInteger($aResult['iHSChange']);
-            $retVal->iEvo      = PropertyValueC::ensureInteger($aResult['iEvo']);
+                $retObj->iEntryDate = HelperC::convertDateTimeToTimestamp($result['iEntryDate']);
 
-            $retVal->strStaatsform = PropertyValueC::ensureString($aResult['strStaatsform']);
-            if (isset($aResult['strTitel'])) {
-                $retVal->strTitel = PropertyValueC::ensureString($aResult['strTitel']);
-            }
-            if (isset($aResult['strDescr'])) {
-                $retVal->strDescr = PropertyValueC::ensureString($aResult['strDescr']);
+                $retObj->iGebPkt   = PropertyValueC::ensureInteger($result['iGebPkt']);
+                $retObj->iFP       = PropertyValueC::ensureInteger($result['iFP']);
+                $retObj->iHSPos    = PropertyValueC::ensureInteger($result['iHSPos']);
+                $retObj->iHSChange = PropertyValueC::ensureInteger($result['iHSChange']);
+                $retObj->iEvo      = PropertyValueC::ensureInteger($result['iEvo']);
+
+                $retObj->strStaatsform = PropertyValueC::ensureString($result['strStaatsform']);
+                if (isset($result['strTitel'])) {
+                    $retObj->strTitel = PropertyValueC::ensureString($result['strTitel']);
+                }
+                if (isset($result['strDescr'])) {
+                    $retObj->strDescr = PropertyValueC::ensureString($result['strDescr']);
+                }
+                $retVal->aUser[$retObj->strUserName] = $retObj;
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;

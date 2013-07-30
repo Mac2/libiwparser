@@ -27,6 +27,18 @@ class DTOParserInfoDefenceResultC
 {
     /**
      * @soap
+     * @var array $aDefence
+     */
+    public $aDefence = array();
+}
+
+/**
+ * Sub DTO with the Data
+ */
+class DTOParserInfoDefenceResultDefenceC
+{
+    /**
+     * @soap
      * @var string $strSchiffName the name of the ship
      */
     public $strDefenceName = '';
