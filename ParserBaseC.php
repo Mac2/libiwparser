@@ -256,7 +256,7 @@ class ParserBaseC extends ParserFunctionC
       'Vanilleeis'               => 'Eis',
       'Eismatsch'                => 'Wasser',
       'Traubenzucker'            => 'Energie',
-      ' Kekse '                    => ' Credits ',  //! Mac: Workaround um nicht Teile eines Wortes/Gebäudenamens zu ersetzen
+      ' Kekse '                  => ' Credits ',  //! Mac: Workaround um nicht Teile eines Wortes/Gebäudenamens zu ersetzen
 
       'Systrans (Systransporter Klasse 1)'  => 'Systrans (Systemtransporter Klasse 1)',
       'Lurch (Systransporter Klasse 2)'     => 'Lurch (Systemtransporter Klasse 2)',
@@ -266,32 +266,6 @@ class ParserBaseC extends ParserFunctionC
       '\\\%' => '\%',
 
     );
-
-    
-    
-    /**
-     * Okay...
-     * This is to convert the utf-8 input into plain ascii, right?
-     *
-     * Then this is also the problem why you can't simply check for
-     * utf-8 encoded characters any more.
-     *
-     * Example:
-     * 1) utf-8 encoded 'ä' comes in (hex C3A4)
-     * 2) utf8_decode turns it into ascii 'ä' (hex E4)
-     * 3) now every processing unit (methods we call, our development tools, ...)
-     *    that expects UTF-8 data will have problems, because this 'E4' isn't
-     *    a valid UTF-8 character...
-     *
-     * I would suggest to remove the following lines of code and the _wasUTF8 member.
-     * I can't see a reason why we should mix UTF-8 and ASCII. Everything should be
-     * UTF-8 encoded.
-     */
-//    if( mb_detect_encoding($value,"UTF-8",true) ) #gisis db hack
-//    {
-//      $value = utf8_decode( $value );
-//      $this->_wasUTF8 = true;
-//    }
 
       $value = str_replace( array_keys($replacements),
                           array_values($replacements),

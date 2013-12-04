@@ -93,13 +93,13 @@ class DTOParserIndexFleetResultFleetC
 
   /**
    * @soap
-   * @var unix|null $iAnkunft
+   * @var unixtime|null $iAnkunft
    */
   public $iAnkunft = null;
 
   /**
    * @soap
-   * @var unix|null $iAnkunftIn
+   * @var int|null $iAnkunftIn duration in seconds
    */
   public $iAnkunftIn = null;
 

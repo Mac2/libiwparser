@@ -127,9 +127,13 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
         $retObj->strCoordsTo = $strCoords;
 
         if (!empty($result['dtDateTime'])) {
-                $retObj->iAnkunft = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
+            $retObj->iAnkunft = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
         }
 //            $retObj->iAnkunft = GetVar("now");  //! Mac: darf nicht, da sonst parsen innerhalb dieser Zeit, jedesmal als neuer Flug erkannt wird
+
+        if (!empty($result['mtMixedTime'])) {
+			$retObj->iAnkunftIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
+        }
 
         if ($retVal->bObjectsVisible) {
             if (isset($result['strObjecte'])) {
@@ -242,7 +246,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 
 	$regExp .= '\s*';
 	$regExp .= '(?:';
-    $regExp .= '    (?P<dtDateTime>'.$reDateTime.'\s*(?: - (?:\s*'.$reMixedTime.')?)?)';
+    $regExp .= '    (?P<dtDateTime>'.$reDateTime.'\s*(?: - (?:\s*(?P<mtMixedTime>'.$reMixedTime.')?)?)';
     $regExp .= '    (?:\s*(?:\(?angekommen\)?|'.$reMixedTime.')\s*)?'.$regExpOpera.'(?=[\s\n]+'.$reShipActions.')'
 			.  '   |'.$reObject.'\s*-?\s\(?angekommen\)?'.$regExpOpera.'(?=[\s\n]+'.$reShipActions.')'             //! bei Angriff: beliebiger Text + angekommen
             .  '   |'.$reObject.'\s*'.$regExpOpera.'(?=[\s\n]+'.$reShipActions.')'                        //! nach Ankunft: beliebiger Text
@@ -252,10 +256,9 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 	$regExp .= '(?P<eTransfairType>'.$reShipActions.')';
 
     $regExp .= '(\s+(?<!Rückkehr\s)';
-      $regExp .= '    (?P<strObjecte>(?:'.$reDecimalNumber.'\s+?'.$reObject.'\s*?)+)\s*(?:\*\s\+|\+)';
-
-      $regExp .= '    |(?:\*\s\+|\+)';
-      $regExp .= ')?';
+    $regExp .= '    (?P<strObjecte>(?:'.$reDecimalNumber.'\s+?'.$reObject.'\s*?)+)\s*(?:\*\s\+|\+)';
+    $regExp .= '    |(?:\*\s\+|\+)';
+    $regExp .= ')?';
 
     $regExp .= '/mxs';
 

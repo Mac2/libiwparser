@@ -138,9 +138,6 @@ class PropertyValueC
             $value = "chem. Elemente";
         }
 
-        //if ($value == "Chemie ") $value = "Brause";
-        //if (preg_match('/[cC]hem/',$value) > 0) $value = "Brause";
-
         return $value;
     }
 
