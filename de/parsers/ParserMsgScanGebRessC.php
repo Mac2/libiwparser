@@ -101,68 +101,77 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
         $iCoordsPla = PropertyValueC::ensureInteger( $aResultText['coords_pla'] );
         $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
 
-        if (isset($aResultText['buildings']))
-        {
-          $aResultBuildings = array();
-          $regExpBuildings = $this->getRegularExpressionBuildings();
-          $fRetValBuildings = preg_match_all( $regExpBuildings, $aResultText['buildings'], $aResultBuildings, PREG_SET_ORDER );
+        if (!empty($aResultText['buildings'])) {
+            $aResultBuildings = array();
+            $regExpBuildings  = $this->getRegularExpressionBuildings();
+            $fRetValBuildings = preg_match_all($regExpBuildings, $aResultText['buildings'], $aResultBuildings, PREG_SET_ORDER);
 
-          if( $fRetValBuildings !== false && $fRetValBuildings > 0 )
-          {
-            foreach( $aResultBuildings as $result )
-            {
-              $strBuildingName = $result['building_name'];
-			  $iBuildingCount = $result['building_count'];
-              $strBuildingName = PropertyValueC::ensureString( $strBuildingName );
-              $iBuildingCount = PropertyValueC::ensureInteger( $iBuildingCount );
-			  if ($strBuildingName == "-???-") continue;
-			  if (!$iBuildingCount) continue;
+            if ($fRetValBuildings !== false && $fRetValBuildings > 0) {
+                foreach ($aResultBuildings as $result) {
+                    $strBuildingName = $result['building_name'];
+                    $iBuildingCount  = $result['building_count'];
+                    $strBuildingName = PropertyValueC::ensureString($strBuildingName);
+                    $iBuildingCount  = PropertyValueC::ensureInteger($iBuildingCount);
+                    if ($strBuildingName == "-???-") {
+                        continue;
+                    }
+                    if (!$iBuildingCount) {
+                        continue;
+                    }
 
-// 			  $aBuildings[md5($strBuildingName)] = array('buildings_name' => $strBuildingName,'buildings_count' => $iBuildingCount);
-			  $aBuildings[$strBuildingName] = $iBuildingCount;
+                    $aBuildings[$strBuildingName] = $iBuildingCount;
+                }
+            } else {
+                $retVal->bSuccessfullyParsed = false;
+                $retVal->aErrors[]           = 'Unable to match the gebpattern. (Geb/Ress)';
+                $retVal->aErrors[]           = $aResultText['buildings'];
             }
-          }
-        }
-        if (isset($aResultText['resources']))
-        {
-          $aResultResources = array();
-          $regExpResources = $this->getRegularExpressionResources();
-          $fRetValResources = preg_match_all( $regExpResources, $aResultText['resources'], $aResultResources, PREG_SET_ORDER );
-
-          if( $fRetValResources !== false && $fRetValResources > 0 )
-          {
-            foreach( $aResultResources as $result )
-            {
-              $strResourceName = $result['resource_name'];
-              $iResourceCount = $result['resource_count'];
-              $strResourceName = PropertyValueC::ensureResource( $strResourceName );
-              $iResourceCount = PropertyValueC::ensureInteger( $iResourceCount );
-			  if (!$strResourceName || $strResourceName == "-???-") continue;
-			  if ($iResourceCount == "-???-") continue;
-// 			  $aResources[md5($strResourceName)] = array('resource_name' => $strResourceName,'resource_count' => $iResourceCount);
-			  $aResources[$strResourceName] = $iResourceCount;
-            }
-          }
         }
 
-//         	$retVal->strPlanetName = PropertyValueC::ensureString( $strPlanetName );
-		$retVal->strOwnerName = PropertyValueC::ensureString( $strOwner );
-		$retVal->strOwnerAllianceTag = PropertyValueC::ensureString( $strOwnerAlly );
-        $retVal->strCoords = PropertyValueC::ensureString( $strCoords );
-		$retVal->iTimestamp = HelperC::convertDateTimeToTimestamp( $aResultText['datetime'] );
-		$retVal->ePlanetType = PropertyValueC::ensureString( $strPlanetTyp );
-		$retVal->eObjectType = PropertyValueC::ensureString( $strObjektTyp );
+        if (!empty($aResultText['resources'])) {
+            $aResultResources = array();
+            $regExpResources  = $this->getRegularExpressionResources();
+            $fRetValResources = preg_match_all($regExpResources, $aResultText['resources'], $aResultResources, PREG_SET_ORDER);
 
-        $retVal->aCoords = $aCoords;
-        $retVal->aBuildings = $aBuildings;
-        $retVal->aResources = $aResources;
-    }
-    else
-    {
-		  $retVal->bSuccessfullyParsed = false;
-		  $retVal->aErrors[] = 'Unable to match the pattern. (Geb/Ress)';
-		  $retVal->aErrors[] = '...' . $msg->strParserText;
-		}
+            if ($fRetValResources !== false && $fRetValResources > 0) {
+                foreach ($aResultResources as $result) {
+                    $strResourceName = $result['resource_name'];
+                    $iResourceCount  = $result['resource_count'];
+                    $strResourceName = PropertyValueC::ensureResource($strResourceName);
+                    $iResourceCount  = PropertyValueC::ensureInteger($iResourceCount);
+                    if (!$strResourceName || $strResourceName == "-???-") {
+                        continue;
+                    }
+                    if ($iResourceCount == "-???-") {
+                        continue;
+                    }
+                    $aResources[$strResourceName] = $iResourceCount;
+                }
+            } else {
+                $retVal->bSuccessfullyParsed = false;
+                $retVal->aErrors[]           = 'Unable to match the resspattern. (Geb/Ress)';
+                $retVal->aErrors[]           = $aResultText['resources'];
+            }
+        }
+
+		if ($parserResult->bSuccessfullyParsed === true) {
+            $retVal->strOwnerName = PropertyValueC::ensureString( $strOwner );
+            $retVal->strOwnerAllianceTag = PropertyValueC::ensureString( $strOwnerAlly );
+            $retVal->strCoords = PropertyValueC::ensureString( $strCoords );
+            $retVal->iTimestamp = HelperC::convertDateTimeToTimestamp( $aResultText['datetime'] );
+            $retVal->ePlanetType = PropertyValueC::ensureString( $strPlanetTyp );
+            $retVal->eObjectType = PropertyValueC::ensureString( $strObjektTyp );
+
+            $retVal->aCoords = $aCoords;
+            $retVal->aBuildings = $aBuildings;
+            $retVal->aResources = $aResources;
+        }
+
+    } else {
+        $retVal->bSuccessfullyParsed = false;
+        $retVal->aErrors[] = 'Unable to match the pattern. (Geb/Ress)';
+        $retVal->aErrors[] = $msg->strParserText;
+	}
 
   }
 
@@ -207,42 +216,36 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
   private function getRegularExpressionText()
   {
 
-    
-    $reUserName     = $this->getRegExpUserName();
-//     $reBuildings     = $this->getRegExpBuildings();
-    $reMixedTime    = $this->getRegExpDateTime();
-    $reBasisTyp     = $this->getRegExpSingleLineText3();
-    $rePlanetTyp    = $this->getRegExpPlanetTypes();
-    $reObjektTyp    = $this->getRegExpObjectTypes();
-    $reDecimalNumber= $this->getRegExpDecimalNumber();
-    $reResource     = $this->getRegExpResource();
 
-    $regExp  = '/
-			Sondierungsbericht\s\(Geb.{1,3}ude\)\svon\s
-			(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
+    $reUserName       = $this->getRegExpUserName();
+    $reMixedTime      = $this->getRegExpDateTime();
+    $reBasisTyp       = $this->getRegExpSingleLineText3();
+    $rePlanetTyp      = $this->getRegExpPlanetTypes();
+    $reObjektTyp      = $this->getRegExpObjectTypes();
+    $reDecimalNumber  = $this->getRegExpDecimalNumber();
+    $reResource       = $this->getRegExpResource();
+    $reSingleLineText = $this->getRegExpSingleLineText();
+
+    $regExp  = '/Sondierungsbericht\s\(Geb.{1,4}ude\)\svon\s(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
 	$regExp .= 	'\sam\s(?P<datetime>'.$reMixedTime.')\.';
-	$regExp .=	'\sBesitzer\sist\s((?P<owner>'.$reUserName.')\s(\[(?P<alliance>'.$reBasisTyp.')\])?)?\.';
-	$regExp  .= '	\s*Planetentyp\s+(?P<planetname>('.$rePlanetTyp.'|-\?\?\?-))\s*
-			\s*Objekttyp\s+(?P<objektname>('.$reObjektTyp.'|-\?\?\?-))\s*
-			(\s*Basistyp\s'.$reBasisTyp.'\s*)?';
-	$regExp  .= '	(?:
-			Geb.{1,3}ude
-			[\s\n\r\t]+
-			(?P<buildings>
-			(('.$reBasisTyp.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
-			)
-			|)';
-	$regExp  .= '	(?:
-			Ressourcen
-			[\s\n\r\t]+
-			(?P<resources>
-			(('.$reResource.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
-			)
-			|)';
-	$regExp .=	'^Hinweise\s';
-	$regExp .=	'(.*[\n]){1,5}';
-	$regExp .= 	'(^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';
-        $regExp .= '/mx';
+	$regExp .=	'\sBesitzer\sist\s(?:(?P<owner>'.$reUserName.')\s(?:\[(?P<alliance>'.$reBasisTyp.')\])?)?\.';
+	$regExp  .= '\s*Planetentyp\s+(?P<planetname>(?:'.$rePlanetTyp.'|-\?\?\?-))\s*
+			     \s*Objekttyp\s+(?P<objektname>(?:'.$reObjektTyp.'|-\?\?\?-))\s*
+			    (\s*Basistyp\s'.$reBasisTyp.'\s*)?';
+	$regExp .= '(?:Geb.{1,4}ude[\s\n\t]+
+			        (?P<buildings>
+                        (?:'.$reSingleLineText.'\n)+
+			        )?
+			    )';
+	$regExp .= '(?:Ressourcen[\s\n\t]+
+			        (?P<resources>
+			            (?:'.$reSingleLineText.'\n)+
+			        )?
+			    )';
+	$regExp .= '^Hinweise\s';
+	$regExp .= '(.*[\n]){1,5}';
+	$regExp .= '(?:^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';
+    $regExp .= '/mx';
 
     return $regExp;
   }
