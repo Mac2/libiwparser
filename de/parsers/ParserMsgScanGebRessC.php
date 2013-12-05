@@ -222,8 +222,6 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
     $reBasisTyp       = $this->getRegExpSingleLineText3();
     $rePlanetTyp      = $this->getRegExpPlanetTypes();
     $reObjektTyp      = $this->getRegExpObjectTypes();
-    $reDecimalNumber  = $this->getRegExpDecimalNumber();
-    $reResource       = $this->getRegExpResource();
     $reSingleLineText = $this->getRegExpSingleLineText();
 
     $regExp  = '/Sondierungsbericht\s\(Geb.{1,4}ude\)\svon\s(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
