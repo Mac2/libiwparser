@@ -216,7 +216,6 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
   private function getRegularExpressionText()
   {
 
-
     $reUserName       = $this->getRegExpUserName();
     $reMixedTime      = $this->getRegExpDateTime();
     $reBasisTyp       = $this->getRegExpSingleLineText3();

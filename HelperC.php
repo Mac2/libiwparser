@@ -24,6 +24,35 @@
 class HelperC
 {
 
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Tries to convert the given duration into seconds.
+     *
+     *
+     * @param string $value durationstring
+     *
+     * @return int|bool integer if conversion was successfull,
+     *                  boolean false if the provided parameter couldn't be recognized as a duration
+     */
+    static public function convertMixedDurationToSeconds($value)
+    {
+        $value = trim($value);
+
+        $aResult = array();
+        if (preg_match('/^(?:(?P<days>\d+)\s(?:Tag|Tage|day|days)\s+|)(?P<hours>\d{1,2})\:(?P<minutes>[0-5]\d|\d)(?:\:(?P<seconds>[0-5]\d|\d))?$/', $value, $aResult) != false) {
+
+            if (!isset($aResult['seconds'])) {
+                $aResult['seconds'] = 0;
+            }
+
+            return ((int)$aResult['days'] * 24 * 60 * 60 + (int)$aResult['hours'] * 60 * 60 + (int)$aResult['minutes'] * 60 + (int)$aResult['seconds']);
+
+        } else {
+            return false;
+        }
+    }
+
   /////////////////////////////////////////////////////////////////////////////
 
     /**
