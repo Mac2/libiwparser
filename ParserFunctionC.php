@@ -400,12 +400,18 @@ class ParserFunctionC
 
   /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * Alias of getRegExpObjectTypes()
-   */
+    /**
+     * returns a regular expression pattern matching an kolo type
+     *
+     * Object types include:
+     * - artifact stations
+     * - battle stations
+     * - colonies
+     * - robot mining stations
+     */
   protected function getRegExpKoloTypes()
   {
-    return $this->getRegExpObjectTypes();
+    return '(?:Kolonie|KB|RB|AB|SB|Kampfbasis|Sammelbasis|Artefaktsammelbasis|Artefaktbasis)';
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -423,12 +429,7 @@ class ParserFunctionC
    */
   protected function getRegExpObjectTypes()
   {
-    $retVal = '';
-
-    //TODO: include space stations
-    $retVal .= '(?:Kolonie|---|Kampfbasis|KB|Sammelbasis|Artefaktsammelbasis|Artefaktbasis|RB|AB|SB|Raumstation)';
-
-    return $retVal;
+    return '(?:Kolonie|---|Kampfbasis|KB|Sammelbasis|Artefaktsammelbasis|Artefaktbasis|RB|AB|SB|Raumstation)';
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -439,19 +440,13 @@ class ParserFunctionC
    */
   protected function getRegExpPlanetTypes()
   {
-    $retVal = '';
-
-    $retVal .= '(?:Steinklumpen|S|Nichts|N|Eisplanet|E|Gasgigant|G|Asteroid|A|Elektrosturm|Ionensturm|Raumverzerrung|grav.\sAnomalie)';
-
-    return $retVal;
+    return '(?:Steinklumpen|S|Nichts|N|Eisplanet|E|Gasgigant|G|Asteroid|A|Elektrosturm|Ionensturm|Raumverzerrung|grav.\sAnomalie)';
   }
 
   /////////////////////////////////////////////////////////////////////////////
 
   /**
    * returns a regular expression pattern matching a date
-   *
-   * @TODO don't match wrong coords like 81:999:12
    */
   protected function getRegExpKoloCoords()
   {
