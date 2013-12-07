@@ -47,90 +47,83 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
   /**
    * @see ParserI::parseText()
    */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserMilSchiffUebersichtResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $this->stripTextToData();
-
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match_all( $regExp, $this->getText(), $aResult, PREG_SET_ORDER );
-
-    $aKolos = array();
-
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function parseText(DTOParserResultC $parserResult)
     {
-      $parserResult->bSuccessfullyParsed = true;
+        $parserResult->objResultData = new DTOParserMilSchiffUebersichtResultC();
+        $retVal                      =& $parserResult->objResultData;
 
-      foreach( $aResult as $result )
-      {
-    $strKoloLine = $result['kolo_line'];
-    $strDataLines = $result['data_lines'];
+        $this->stripTextToData();
 
-    if (empty($aKolos))
-    {
-      $regExpKolo = $this->getRegularExpressionKolo();
+        $regExp = $this->getRegularExpression();
+        $aResult = array();
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
-      $aResultKolo = array();
-      $fRetValKolo = preg_match_all( $regExpKolo, $strKoloLine, $aResultKolo, PREG_SET_ORDER );
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
 
-      foreach( $aResultKolo as $resultKolo )
-      {
-        $strKoloType = $resultKolo['kolo_type'];
-        $strCoords = $resultKolo['coords'];
-        $iCoordsGal = PropertyValueC::ensureInteger($resultKolo['coords_gal']);
-        $iCoordsSol = PropertyValueC::ensureInteger($resultKolo['coords_sol']);
-        $iCoordsPla = PropertyValueC::ensureInteger($resultKolo['coords_pla']);
-        $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+            $aKolos = array();
+            foreach ($aResult as $result) {
+                $strKoloLine  = $result['kolo_line'];
+                $strDataLines = $result['data_lines'];
 
-        $retVal->aKolos[$strCoords] = new DTOParserMilSchiffUebersichtKoloResultC;
-        $retVal->aKolos[$strCoords]->aCoords = $aCoords;
-        $retVal->aKolos[$strCoords]->strCoords = PropertyValueC::ensureString( $strCoords );
-        $retVal->aKolos[$strCoords]->strObjectType = PropertyValueC::ensureString( $strKoloType );
+                if (empty($aKolos)) {
+                    $regExpKolo = $this->getRegularExpressionKolo();
 
-        $aKolos[] = $strCoords;
-      }
+                    $aResultKolo = array();
+                    $fRetValKolo = preg_match_all($regExpKolo, $strKoloLine, $aResultKolo, PREG_SET_ORDER);
+                    foreach ($aResultKolo as $resultKolo) {
+                        $strKoloType = $resultKolo['kolo_type'];
+                        $strCoords   = $resultKolo['coords'];
+                        $iCoordsGal  = PropertyValueC::ensureInteger($resultKolo['coords_gal']);
+                        $iCoordsSol  = PropertyValueC::ensureInteger($resultKolo['coords_sol']);
+                        $iCoordsPla  = PropertyValueC::ensureInteger($resultKolo['coords_pla']);
+                        $aCoords     = array(
+                            'coords_gal' => $iCoordsGal,
+                            'coords_sol' => $iCoordsSol,
+                            'coords_pla' => $iCoordsPla
+                        );
+
+                        $retVal->aKolos[$strCoords]                = new DTOParserMilSchiffUebersichtKoloResultC;
+                        $retVal->aKolos[$strCoords]->aCoords       = $aCoords;
+                        $retVal->aKolos[$strCoords]->strCoords     = PropertyValueC::ensureString($strCoords);
+                        $retVal->aKolos[$strCoords]->strObjectType = PropertyValueC::ensureString($strKoloType);
+
+                        $aKolos[] = $strCoords;
+                    }
+
+                }
+
+                $regExpSchiff  = $this->getRegularExpressionSchiff();
+                $aDataLines    = array();
+                $fRetValSchiff = preg_match_all($regExpSchiff, $strDataLines, $aDataLines, PREG_SET_ORDER);
+
+                foreach ($aDataLines as $strDataLine) {
+                    $aDataLine = explode("\t", $strDataLine["anz"]);
+
+                    $schiff                = new DTOParserMilSchiffUebersichtSchiffResultC;
+                    $schiff->strSchiffName = PropertyValueC::ensureString($strDataLine["schiff"]);
+
+                    $schiff->iCountGesamt = PropertyValueC::ensureInteger(array_pop($aDataLine));
+                    $schiff->iCountStat   = PropertyValueC::ensureInteger(array_pop($aDataLine));
+                    $schiff->iCountFlug   = PropertyValueC::ensureInteger(array_pop($aDataLine));
+
+                    if (empty($schiff->iCountGesamt) || $schiff->iCountGesamt == 0) continue;
+                    foreach ($aDataLine as $i => $strData) {
+                        $schiff->aCounts[$aKolos[$i]] = PropertyValueC::ensureInteger($strData);
+                    }
+
+                    $retVal->aSchiffe[] = $schiff;
+
+                }
+
+            }
+
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern (de_mil_schiff_uebersicht).';
+        }
 
     }
-
-    $regExpSchiff = $this->getRegularExpressionSchiff();
-    $aDataLines = array();
-    $fRetValSchiff = preg_match_all( $regExpSchiff, $strDataLines, $aDataLines, PREG_SET_ORDER );
-
-    foreach ($aDataLines as $strDataLine)
-    {
-      $aDataLine = explode ("\t", $strDataLine["anz"]);
-
-      $schiff = new DTOParserMilSchiffUebersichtSchiffResultC;
-      $schiff->strSchiffName = PropertyValueC::ensureString( $strDataLine["schiff"] );
-
-      $schiff->iCountGesamt = PropertyValueC::ensureInteger( array_pop ($aDataLine) );
-      $schiff->iCountStat = PropertyValueC::ensureInteger( array_pop ($aDataLine) );
-      $schiff->iCountFlug = PropertyValueC::ensureInteger( array_pop ($aDataLine) );
-        
-      if (empty($schiff->iCountGesamt) || $schiff->iCountGesamt == 0) continue;
-      foreach ($aDataLine as $i => $strData)
-      {
-        $schiff->aCounts[$aKolos[$i]] = PropertyValueC::ensureInteger( $strData );
-      }
-
-      $retVal->aSchiffe[] = $schiff;
-
-    }
-
-      }
-    }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-    }
-
-  }
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -154,8 +147,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
           (?P<data_lines>
              (?:
                 [\n\r]+
-                [^\t\n]+';
-    $regExp .= '(?:\s(?:'.$reNumber.')?)+';     //! erlaubt auch andere Trennzeichen
+                [^\n]+';
     $regExp .= '
              )*
           )

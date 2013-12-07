@@ -47,90 +47,83 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
   /**
    * @see ParserI::parseText()
    */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserWirtschaftGebResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $this->stripTextToData();
-
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match_all( $regExp, $this->getText(), $aResult, PREG_SET_ORDER );
-
-  $aKolos = array();
-
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function parseText(DTOParserResultC $parserResult)
     {
-      $parserResult->bSuccessfullyParsed = true;
+        $parserResult->objResultData = new DTOParserWirtschaftGebResultC();
+        $retVal                      =& $parserResult->objResultData;
 
-      foreach( $aResult as $result )
-      {
-        $strAreaName = $result['area_name'];
+        $this->stripTextToData();
 
-    $strKoloLine = $result['kolo_line'];
-    $strDataLines = $result['data_lines'];
+        $regExp = $this->getRegularExpression();
+        $aResult = array();
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
-    $area = new DTOParserWirtschaftGebAreaResultC;
-    $area->strAreaName = PropertyValueC::ensureString( $strAreaName );
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
 
-    if (empty($aKolos))
-    {
-      $regExpKolo = $this->getRegularExpressionKolo();
+            $aKolos = array();
 
-      $aResultKolo = array();
-      $fRetValKolo = preg_match_all( $regExpKolo, $strKoloLine, $aResultKolo, PREG_SET_ORDER );
+            foreach ($aResult as $result) {
+                $strAreaName = $result['area_name'];
 
-      foreach( $aResultKolo as $resultKolo )
-      {
-        $strKoloType = $resultKolo['kolo_type'];
-        $strCoords = $resultKolo['coords'];
-        $iCoordsGal = PropertyValueC::ensureInteger($resultKolo['coords_gal']);
-        $iCoordsSol = PropertyValueC::ensureInteger($resultKolo['coords_sol']);
-        $iCoordsPla = PropertyValueC::ensureInteger($resultKolo['coords_pla']);
-        $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                $strKoloLine  = $result['kolo_line'];
+                $strDataLines = $result['data_lines'];
 
-        $retVal->aKolos[$strCoords] = new DTOParserWirtschaftGebKoloResultC;
-        $retVal->aKolos[$strCoords]->aCoords = $aCoords;
-        $retVal->aKolos[$strCoords]->strCoords = PropertyValueC::ensureString( $strCoords );
-        $retVal->aKolos[$strCoords]->strObjectType = PropertyValueC::ensureString( $strKoloType );
+                $area              = new DTOParserWirtschaftGebAreaResultC;
+                $area->strAreaName = PropertyValueC::ensureString($strAreaName);
 
-        $aKolos[] = $strCoords;
-      }
+                if (empty($aKolos)) {
+
+                    $aResultKolo = array();
+                    $regExpKolo = $this->getRegularExpressionKolo();
+                    $fRetValKolo = preg_match_all($regExpKolo, $strKoloLine, $aResultKolo, PREG_SET_ORDER);
+                    foreach ($aResultKolo as $resultKolo) {
+                        $strKoloType = $resultKolo['kolo_type'];
+                        $strCoords   = $resultKolo['coords'];
+                        $iCoordsGal  = PropertyValueC::ensureInteger($resultKolo['coords_gal']);
+                        $iCoordsSol  = PropertyValueC::ensureInteger($resultKolo['coords_sol']);
+                        $iCoordsPla  = PropertyValueC::ensureInteger($resultKolo['coords_pla']);
+                        $aCoords     = array(
+                            'coords_gal' => $iCoordsGal,
+                            'coords_sol' => $iCoordsSol,
+                            'coords_pla' => $iCoordsPla
+                        );
+
+                        $retVal->aKolos[$strCoords]                = new DTOParserWirtschaftGebKoloResultC;
+                        $retVal->aKolos[$strCoords]->aCoords       = $aCoords;
+                        $retVal->aKolos[$strCoords]->strCoords     = PropertyValueC::ensureString($strCoords);
+                        $retVal->aKolos[$strCoords]->strObjectType = PropertyValueC::ensureString($strKoloType);
+
+                        $aKolos[] = $strCoords;
+                    }
+                }
+
+                $aDataLines = explode("\n", $strDataLines);
+                foreach ($aDataLines as $strDataLine) {
+                    $aDataLine = explode("\t", $strDataLine);
+
+                    $strBuildingName           = array_shift($aDataLine);
+                    $building                  = new DTOParserWirtschaftGebBuildingResultC;
+                    $building->strBuildingName = PropertyValueC::ensureString($strBuildingName);
+
+                    if (empty($strBuildingName)) continue;
+                    foreach ($aDataLine as $i => $strData) {
+                        if ($i == count($aDataLine) - 1) continue; //! Mac: letzte Spalte Summe ignorieren
+                        $building->aCounts[$aKolos[$i]] = PropertyValueC::ensureInteger($strData);
+                    }
+
+                    $area->aBuildings[] = $building;
+
+                }
+
+                $retVal->aAreas[] = $area;
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern (de_wirtschaft_geb).';
+        }
+
     }
-
-    $aDataLines = explode ("\n", $strDataLines);
-    foreach ($aDataLines as $strDataLine)
-    {
-      $aDataLine = explode ("\t", $strDataLine);
-
-      $strBuildingName = array_shift($aDataLine);
-      $building = new DTOParserWirtschaftGebBuildingResultC;
-      $building->strBuildingName = PropertyValueC::ensureString( $strBuildingName );
-
-      if (empty($strBuildingName)) continue;
-      foreach ($aDataLine as $i => $strData)
-      {
-        if ($i == count($aDataLine)-1) continue;        //! Mac: letzte Spalte Summe ignorieren
-        $building->aCounts[$aKolos[$i]] = PropertyValueC::ensureInteger( $strData );
-      }
-
-      $area->aBuildings[] = $building;
-
-    }
-
-        $retVal->aAreas[] = $area;
-      }
-    }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-    }
-    
-  }
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -139,27 +132,27 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
     /**
     */
 
-    $reKoloTypes           = $this->getRegExpKoloTypes();
+    $reKoloTypes         = $this->getRegExpKoloTypes();
     $reKoloCoords        = $this->getRegExpKoloCoords();
 
     $regExp  = '/^
-          (?P<area_name>[\&\w\süÜäÄöÖ]+)[\n\r]+
+          (?P<area_name>[\w\s\&üÜäÄöÖ]+)\n+
           \t?
           (?P<kolo_line>
           '.$reKoloCoords.'
-            (
-              [\n\r]+
+            (?:
+              \n+
               \('.$reKoloTypes.'\)
               \t
               '.$reKoloCoords.'
             )*
-            [\n\r]+
+            \n+
             \('.$reKoloTypes.'\)\sSumme
           )
           (?P<data_lines>(?:
-            [\n\r]+
+            \n+
             [^\t\n]+
-            (?:\t\d*)+
+            [\t\d]+
           )+)
     $/mx';
 
@@ -173,12 +166,11 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
     /**
     */
 
-    $reKoloTypes           = $this->getRegExpKoloTypes();
-    $reKoloCoords        = $this->getRegExpKoloCoords();
+    $reKoloTypes         = $this->getRegExpKoloTypes();
 
     $regExpKolo  = '/
           (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-          [\n\r]+
+          \n+
           \((?P<kolo_type>'.$reKoloTypes.')\)
     /mx';
 
