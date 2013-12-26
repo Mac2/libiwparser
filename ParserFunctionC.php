@@ -532,8 +532,9 @@ class ParserFunctionC
     $retVal .= 'Sondierung\s\(Schiffe\/Def\/Ress\)|';
     $retVal .= 'Kolonisation|';
     $retVal .= 'Saveflug|';
-    $retVal .= 'Basisaufbau\s\(Ressourcen\)|';
     $retVal .= 'Basisaufbau\s\(Kampf\)|';
+    $retVal .= 'Basisaufbau\s\(Ressourcen\)|';
+    $retVal .= 'Basisaufbau\s\(Artefakte\)|';
     $retVal .= 'Massdriverpaket|';
 //     $retVal .= 'Rückkehr(?=(?:[\n\r]+Stationieren)|)|';
     $retVal .= 'Rückkehr';
