@@ -254,7 +254,9 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 	$regExp .= '[\s\n]+';
 
 	$regExp .= '(?P<eTransfairType>'.$reShipActions.')';
-
+    $regExp .= '([\s\n]+';
+    $regExp .= 'Es\sgibt\s\d+\sweitere\sFlotten\smit\sder\sselben\sAktion,\sselben\sZiel\sund\sselben\sAuftrag\.';
+    $regExp .= '[\s\n]+)?';
     $regExp .= '(\s+(?<!Rückkehr\s)';
     $regExp .= '    (?P<strObjecte>(?:'.$reDecimalNumber.'\s+?'.$reObject.'\s*?)+)\s*(?:\*\s\+|\+)';
     $regExp .= '    |(?:\*\s\+|\+)';
