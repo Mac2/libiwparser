@@ -64,110 +64,101 @@ class ParserIndexSchiffC extends ParserMsgBaseC implements ParserMsgI
   /**
    * @see ParserMsgI::parseMsg()
    */
-  public function parseMsg( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserIndexSchiffResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-    
-    $regExp = $this->getRegularExpression();
-    $msg = $this->getMsg();
-    
-    $parserResult->strIdentifier = 'de_index_schiff';
-
-    $aResult = array();
-
-    $fRetVal = preg_match_all( $regExp, $msg->strParserText, $aResult, PREG_SET_ORDER );
-
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function parseMsg(DTOParserResultC $parserResult)
     {
-        $parserResult->bSuccessfullyParsed = true;
-      
-        foreach( $aResult as $result )
-        {    
-            
-            if (!empty($result['iCoordsPla']) && !empty($result['iCoordsGal']) && !empty($result['iCoordsSol'])) {
-                $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPla']);
-                $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGal']);    
-                $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSol']);
-                $strCoords = $iCoordsGal.':'.$iCoordsSol.':'.$iCoordsPla;
-				$strPlanetName = PropertyValueC::ensureString($result['strPlanetName']);
-            }
+        $parserResult->objResultData = new DTOParserIndexSchiffResultC();
+        $retVal                      =& $parserResult->objResultData;
 
-//             if (isset($retVal->aSchiff[$strCoords])) {
-//                 
-//                 $neu = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
-//                 if ($neu > $retVal->aGeb[$strCoords]->iGebEnd) {
-//                     $retVal->aGeb[$strCoords]->iGebEnd = $neu;
-//                     $retVal->aGeb[$strCoords]->strGebName[2] = utf8_encode(PropertyValueC::ensureString($result['strGebName']));
-//                 }
-//                 else if ($neu > $retVal->aGeb[$strCoords]->iGebEnd2) {
-//                     $retVal->aGeb[$strCoords]->iGebEnd2 = $neu;
-//                     if (isset($retVal->aGeb[$strCoords]->strGebName[1])) {
-//                          $retVal->aGeb[$strCoords]->strGebName[2] = $retVal->aGeb[$strCoords]->strGebName[1];
-//                     }
-//                     $retVal->aGeb[$strCoords]->strGebName[1] = utf8_encode(PropertyValueC::ensureString($result['strGebName']));
-//                 }
-//                 else if ($neu > $retVal->aGeb[$strCoords]->iGebEnd3) {
-//                     $retVal->aGeb[$strCoords]->iGebEnd3 = $neu;
-//                     if (isset($retVal->aGeb[$strCoords]->strGebName[0])) {
-//                          $retVal->aGeb[$strCoords]->strGebName[1] = $retVal->aGeb[$strCoords]->strGebName[0];
-//                     }
-//                     $retVal->aGeb[$strCoords]->strGebName[0] = utf8_encode(PropertyValueC::ensureString($result['strGebName']));
-//                 }
-//             }
-//             else {
-                $retObj = new DTOParserIndexSchiffResultSchiffC();
-            
-                if (isset($strPlanetName)) $retObj->strPlanetName = $strPlanetName;
-				$retObj->strSchiffName = PropertyValueC::ensureString($result['strSchiffName']);
-                $retObj->iSchiffEnd = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
-                if (isset($result['mtMixedTime']))
-                    $retObj->iSchiffEndIn = HelperC::convertMixedTimeToTimestamp( $result['mtMixedTime'] );
-                $retObj->iAnzSchiff = PropertyValueC::ensureInteger($result['iAnzahlSchiff']);
-                $retObj->iAnzWerften = PropertyValueC::ensureInteger($result['iAnzahlWerft']);
-				$retObj->strWerftTyp = PropertyValueC::ensureString($result['strWerftName']);
-                if (isset($strCoords) && isset($retObj->strSchiffName)) {
-                    $retObj->strCoords = $strCoords;
-                    if (isset($retVal->aSchiff[$strCoords][$retObj->strSchiffName])) {
-                        $exist=false;
-                        foreach ($retVal->aSchiff[$strCoords][$retObj->strSchiffName] as  $ship) {
-                            if ($ship->iSchiffEnd == $retObj->iSchiffEnd) {
-                                $exist=true;
-                                $ship->iAnzSchiff += $retObj->iAnzSchiff;
-                                $ship->iAnzWerften += $retObj->iAnzWerften;
-                            }
-                        }
-                        if (!$exist) {
-                            $retVal->aSchiff[$strCoords][$retObj->strSchiffName][] = $retObj;
-                        }
-                    }
-                    else {
-                        $retVal->aSchiff[$strCoords][$retObj->strSchiffName][] = $retObj;
-                    }
+        $regExp = $this->getRegularExpression();
+        $msg    = $this->getMsg();
+
+        $parserResult->strIdentifier = 'de_index_schiff';
+
+        $aResult = array();
+
+        $fRetVal = preg_match_all($regExp, $msg->strParserText, $aResult, PREG_SET_ORDER);
+
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
+
+            foreach ($aResult as $result) {
+                if (!empty($result['iCoordsPla']) && !empty($result['iCoordsGal']) && !empty($result['iCoordsSol'])) {
+                    $iCoordsPla    = PropertyValueC::ensureInteger($result['iCoordsPla']);
+                    $iCoordsGal    = PropertyValueC::ensureInteger($result['iCoordsGal']);
+                    $iCoordsSol    = PropertyValueC::ensureInteger($result['iCoordsSol']);
+                    $strCoords     = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
+                    $strPlanetName = PropertyValueC::ensureString($result['strPlanetName']);
                 }
-//             }
+
+                $retObj1 = new DTOParserIndexSchiffResultSchiffC();
+                $retObj2 = new DTOParserIndexSchiffResultWerftBelegtC();
+
+                if (!empty($strPlanetName)) {
+                    $retObj1->strPlanetName = $strPlanetName;
+                }
+                $retObj1->strSchiffName = PropertyValueC::ensureString($result['strSchiffName']);
+                $retObj1->iSchiffEnd    = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
+                if (!empty($result['mtMixedTime'])) {
+                    $retObj1->iSchiffEndIn = HelperC::convertMixedTimeToTimestamp($result['mtMixedTime']);
+                }
+                $retObj1->iAnzSchiff  = PropertyValueC::ensureInteger($result['iAnzahlSchiff']);
+                $retObj1->iAnzWerften = PropertyValueC::ensureInteger($result['iAnzahlWerft']);
+                $retObj1->strWerftTyp = PropertyValueC::ensureString($result['strWerftName']);
+
+                if (!empty($strCoords)) {
+                    if (!empty($retObj1->strSchiffName)) {
+                        $retObj1->strCoords = $strCoords;
+                        if (isset($retVal->aSchiff[$strCoords][$retObj1->strSchiffName])) {
+                            $exist = false;
+                            foreach ($retVal->aSchiff[$strCoords][$retObj1->strSchiffName] as $ship) {
+                                if ($ship->iSchiffEnd == $retObj1->iSchiffEnd) {
+                                    $exist = true;
+                                    $ship->iAnzSchiff += $retObj1->iAnzSchiff;
+                                    $ship->iAnzWerften += $retObj1->iAnzWerften;
+                                }
+                            }
+                            if (!$exist) {
+                                $retVal->aSchiff[$strCoords][$retObj1->strSchiffName][] = $retObj1;
+                            }
+                        } else {
+                            $retVal->aSchiff[$strCoords][$retObj1->strSchiffName][] = $retObj1;
+                        }
+                    }
+
+                    if (!empty($retObj1->strWerftTyp)) {
+                        $retObj2->strWerftTyp = $retObj1->strWerftTyp;
+                        $retObj2->iAnzWerften = $retObj1->iAnzWerften;
+
+                        $retObj2->strSchiffName = $retObj1->strSchiffName;
+                        $retObj2->iAnzSchiff    = $retObj1->iAnzSchiff;
+
+                        $retObj2->iSchiffEnd   = $retObj1->iSchiffEnd;
+                        $retObj2->iSchiffEndIn = $retObj1->iSchiffEndIn;
+
+                        $retVal->aWerftBelegt[$strCoords][$retObj2->strWerftTyp][] = $retObj2;
+                    }
+
+                }
+
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = $msg->strParserText;
         }
     }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-      $parserResult->aErrors[] = $msg->strParserText;
-    }
-  }
 
   /////////////////////////////////////////////////////////////////////////////
 
-  
+
   /**
-   */  
+   */
   private function getRegularExpression()
   {
     $rePlanetName       = $this->getRegExpSingleLineText();
     $reDateTime         = $this->getRegExpDateTime();
     $reMixedTime         = $this->getRegExpMixedTime();
-    
+
     $regExp = '/';
     $regExp .= '(\[(?P<iCoordsGal>\d+)\:(?P<iCoordsSol>\d+)\:(?P<iCoordsPla>\d+)\]';
     $regExp .= '\s)?';
@@ -197,12 +188,12 @@ class ParserIndexSchiffC extends ParserMsgBaseC implements ParserMsgI
   private function getRegularExpressionWithoutNamedGroups()
   {
     $retVal = $this->getRegularExpression();
-    
+
     $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
-    
+
     return $retVal;
   }
-  
+
   /////////////////////////////////////////////////////////////////////////////
 
 }

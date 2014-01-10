@@ -30,6 +30,12 @@ class DTOParserIndexSchiffResultC
    */
   public $aSchiff = array ();
 
+  /**
+   * @soap
+   * @var array $aWerftBelegt
+   */
+  public $aWerftBelegt = array ();
+
 }
 
 /**
@@ -49,17 +55,32 @@ class DTOParserIndexSchiffResultSchiffC
    
   /**
    * @soap
-   * @var date 
+   * @var date
    */
   public $iSchiffEnd = 0;
   
   /**
    * @soap
-   * @var date 
+   * @var date
    */
   public $iSchiffEndIn = 0;
 
   public $iAnzSchiff = 0;
   public $iAnzWerften = 0;
 
+}
+
+/**
+ * Sub DTO with the Data
+ */
+class DTOParserIndexSchiffResultWerftBelegtC
+{
+    public $strWerftTyp = '';
+    public $iAnzWerften = 0;
+
+    public $strSchiffName = '';
+    public $iAnzSchiff = 0;
+
+    public $iSchiffEnd = 0;
+    public $iSchiffEndIn = 0;
 }
