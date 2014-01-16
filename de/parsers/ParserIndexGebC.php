@@ -100,12 +100,12 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
 
             }
 
-            $strGebName     = PropertyValueC::ensureString($result['strGebName']);
-            $iUnixTimestamp = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
-
-            if (!empty($strGebName)) {
+            if (!empty($result['strGebName'])) {
+                $strGebName                                          = PropertyValueC::ensureString($result['strGebName']);
+                $iUnixTimestamp                                      = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
                 $retVal->aGeb[$strCoords]->aGebName[$iUnixTimestamp] = $strGebName;
-                ksort($retVal->aGeb[$strCoords]->aGebName, SORT_NUMERIC);    //sortieren nach Bauzeitende aufsteigend, ist aber nicht nötig da ohnhin immer sortiert?
+
+                ksort($retVal->aGeb[$strCoords]->aGebName, SORT_NUMERIC); //sortieren nach Bauzeitende aufsteigend, ist aber nicht nötig da ohnhin immer sortiert?
             }
         }
     }
@@ -133,16 +133,16 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
     $regExp .= '\s';
     $regExp .= '\((?P<iCoordsGal>\d+)\:(?P<iCoordsSol>\d+)\:(?P<iCoordsPla>\d+)\)';
     $regExp .= '\s+';
-    $regExp .= '(';
-    $regExp .= ' (';
+    $regExp .= '(?:';
+    $regExp .= ' (?:';
     $regExp .= '  (?P<strGebName>'.$rePlanetName.')';
     $regExp .= '  \s+bis\s';
     $regExp .= '  (?P<dtDateTime>'.$reDateTime.')';
-    $regExp .= '  (';
-    $regExp .= '   \s(-\s)?';
+    $regExp .= '  (?:';
+    $regExp .= '   \s(?:-\s)?';
     $regExp .= '   (?P<mtMixedTime>'.$reMixedTime.')';
     $regExp .= '  )?';
-    $regExp .= ' )|(n.{1,5}scht)';
+    $regExp .= ' )|(?:n.{1,5}scht)';
     $regExp .= ')';
     $regExp .= '/mxs';
 
