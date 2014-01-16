@@ -118,13 +118,13 @@ class ParserIndexGebC extends ParserMsgBaseC implements ParserMsgI
         $regExp .= '\s';
         $regExp .= '\((?P<iCoordsGal>\d+)\:(?P<iCoordsSol>\d+)\:(?P<iCoordsPla>\d+)\)';
         $regExp .= '\s+';
-        $regExp .= '(';
-        $regExp .= ' (';
+        $regExp .= '(?:';
+        $regExp .= ' (?:';
         $regExp .= '  (?P<strGebName>'.$rePlanetName.')';
         $regExp .= '  \s+bis\s';
         $regExp .= '  (?P<dtDateTime>'.$reDateTime.')';
-        $regExp .= '  (';
-        $regExp .= '   \s(-\s)?';
+        $regExp .= '  (?:';
+        $regExp .= '   \s(?:-\s)?';
         $regExp .= '   (?P<mtMixedTime>'.$reMixedTime.')';
         $regExp .= '  )?';
         $regExp .= ' )|(n.{1,5}scht)';
