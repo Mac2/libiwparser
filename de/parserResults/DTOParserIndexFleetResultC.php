@@ -95,15 +95,15 @@ class DTOParserIndexFleetResultFleetC
 
     /**
      * @soap
-     * @var int unixtime
+     * @var unixtime|null $iAnkunft
      */
-    public $iAnkunft = array();
+    public $iAnkunft = null;
 
     /**
      * @soap
-     * @var int unixtime
+     * @var int|null $iAnkunftIn duration in seconds
      */
-    public $iAnkunftIn = array();
+    public $iAnkunftIn = null;
 
     /**
      * @soap

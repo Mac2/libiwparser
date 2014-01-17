@@ -52,7 +52,7 @@ class DTOParserIndexResearchResultResearchC
 
     /**
      * @soap
-     * @var int unixtime
+     * @var int duration in seconds
      */
     public $iResearchEndIn = array();
 

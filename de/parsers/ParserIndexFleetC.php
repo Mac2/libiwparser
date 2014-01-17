@@ -210,31 +210,32 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
      */
     private function getRegularExpression()
     {
-        $rePlanetName  = $this->getRegExpSingleLineText();
-        $reUserName    = $this->getRegExpUserName();
-        $reDateTime    = $this->getRegExpDateTime();
-        $reMixedTime   = $this->getRegExpMixedTime();
-        $reShipActions = $this->getRegExpShipActions();
-        $reShipTexts   = $this->getRegExpShipTexts(); //! Mac: zufaellige Texte nach Ankunft
-        $reObject      = '(?:' . $this->getRegExpResource() . '|' . $this->getRegExpSchiffe() . '|' . $reShipTexts . ')';
-        $reCount       = $this->getRegExpDecimalNumber();
-//      $reCoords         = $this->getRegExpKoloCoords();
+        $rePlanetName    = $this->getRegExpSingleLineText();
+        $reUserName      = $this->getRegExpUserName();
+        $reDateTime      = $this->getRegExpDateTime();
+        $reCoordsUnnamed = $this->getRegExpKoloCoords();
+        $reMixedTime     = $this->getRegExpMixedTime();
+        $reShipActions   = $this->getRegExpShipActions();
+        $reShipTexts     = $this->getRegExpShipTexts(); //! Mac: zufaellige Texte nach Ankunft
+        $reShipNames     = $this->getRegExpSingleLineText3();
+        $reObject        = '(?:' . $this->getRegExpResource() . '|' . $reShipNames . '|' . $reShipTexts . ')';
+        $reDecimalNumber = $this->getRegExpDecimalNumber();
 
-        $regExpOpera = '(?:\s+(?:(?:' . $reCount . '\s+?' . $reObject . '\s*)+)\s*)?'; //! Opera kopiert die Objects nochmal ... warum auch immer oO
+        $regExpOpera = '(?:\s+(?:(?:' . $reDecimalNumber . '\s+?' . $reObject . '\s*)+)\s*)?'; //! Opera kopiert die Objects nochmal ... warum auch immer oO
 
         $regExp = '/';
-        $regExp .= '(?:';
-        $regExp .= '    (?:(?P<strPlanetNameTo>' . $rePlanetName . ')\s)';
-        $regExp .= '|)';
+        $regExp .= '(?P<strPlanetNameTo>'.$rePlanetName.'\s|)';
+        $regExp .= '[\s\n]+';
         $regExp .= '\((?P<iCoordsGalTo>\d{1,2})\:(?P<iCoordsSolTo>\d{1,3})\:(?P<iCoordsPlaTo>\d{1,2})\)';
         $regExp .= '[\s\n]+';
-        $regExp .= '(?:\(\s*via\s+\d+\:\d+\:\d+\s+via\s+\d+\:\d+\:\d+\s\)|)';
+        $regExp .= '(?:\(\s*via\s+'.$reCoordsUnnamed.'\s+via\s+'.$reCoordsUnnamed.'\s\)|)';
         $regExp .= '\s*';
         $regExp .= '(?:(?P<strPlanetNameFrom>' . $rePlanetName . ')\s|)';
         $regExp .= '\((?P<iCoordsGalFrom>\d+)\:(?P<iCoordsSolFrom>\d+)\:(?P<iCoordsPlaFrom>\d+)\)';
         $regExp .= '[\s\n]+';
-//	    $regExp .= '(?:(?P<strUserNameFrom>^'.$reObject.')\s|)';
+
         $regExp .= '(?:(?P<strUserNameFrom>^' . $reUserName . ')|)';
+
         $regExp .= '\s*';
         $regExp .= '(?:';
         $regExp .= '    (?P<dtDateTime>' . $reDateTime . ')\s*(?: - \s*(?P<mtMixedTime>' . $reMixedTime . ')?)?';
@@ -244,8 +245,11 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
             . ')';
         $regExp .= '[\s\n]+';
         $regExp .= '(?P<eTransfairType>' . $reShipActions . ')';
+        $regExp .= '([\s\n]+';
+        $regExp .= 'Es\sgibt\s\d+\sweitere\sFlotten\smit\sder\sselben\sAktion,\sselben\sZiel\sund\sselben\sAuftrag\.';
+        $regExp .= '[\s\n]+)?';
         $regExp .= '(\s+(?<!Rückkehr\s)';
-        $regExp .= '    (?P<strObjecte>(?:' . $reCount . '\s+?' . $reObject . '\s*?)+)\s*(?:\*\s\+|\+)';
+        $regExp .= '    (?P<strObjecte>(?:' . $reDecimalNumber . '\s+?' . $reObject . '\s*?)+)\s*(?:\*\s\+|\+)';
         $regExp .= '    |(?:\*\s\+|\+)';
         $regExp .= ')?';
         $regExp .= '/mxs';

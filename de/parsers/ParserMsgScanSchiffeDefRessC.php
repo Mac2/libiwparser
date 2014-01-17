@@ -77,18 +77,7 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
 // 	    return;
 
         if ($fRetValText !== false && $fRetValText > 0) {
-// 	        $parserResult->bSuccessfullyParsed = true;
             $retVal->bSuccessfullyParsed = true;
-            $strCoords                   = "";
-// 	        $strPlanetName = "";
-            $strOwner     = "";
-            $strOwnerAlly = "";
-            $strPlanetTyp = "";
-            $strObjektTyp = "";
-            $aCoords      = array();
-            $iCoordsGal   = -1;
-            $iCoordsSol   = -1;
-            $iCoordsPla   = -1;
             $aSchiffe     = array();
             $astatSchiffe = array();
             $aResources   = array();

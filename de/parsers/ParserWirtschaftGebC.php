@@ -157,7 +157,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
           \t?
           (?P<kolo_line>
           ' . $reKoloCoords . '
-            (
+            (?:
               \n+
               \(' . $reKoloTypes . '\)
               \t
@@ -169,7 +169,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
           (?P<data_lines>(?:
             \n+
             [^\t\n]+
-            (?:\t\d*)+
+            [\t\d]+
           )+)
     $/mx';
 
@@ -183,7 +183,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
         /**
          */
 
-        $reKoloTypes  = $this->getRegExpKoloTypes();
+        $reKoloTypes = $this->getRegExpKoloTypes();
 
         $regExpKolo = '/
           (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
