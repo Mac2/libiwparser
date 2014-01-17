@@ -60,172 +60,152 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
   /**
    * @see ParserMsgI::parseMsg()
    */
-  public function parseMsg( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserMsgResultMsgScanSchiffeDefRessC();
-    $retVal =& $parserResult->objResultData;
-
-    $regExpText = $this->getRegularExpressionText();
-    $msg = $this->getMsg();
-
-    foreach($msg as $key => $value) {
-     $retVal->$key = $value;
-    }
-
-    $aResultText = array();
-    $fRetValText = preg_match( $regExpText, $msg->strParserText, $aResultText);
-
-  //@todo!    
-//   $parserResult->bSuccessfullyParsed = true;
-//   $parserResult->aErrors[] = 'Parser not yet implemented.';    
-//   return;
-    
-// 	return;
-//     if (strpos($parserResult->objResultData->strMsgTitle,"Eigener Planet wurde sondiert") !== false)
-// 	return;
-    if( $fRetValText !== false && $fRetValText > 0)
+    public function parseMsg(DTOParserResultC $parserResult)
     {
-// 	$parserResult->bSuccessfullyParsed = true;
-	$retVal->bSuccessfullyParsed = true;
-	$strCoords = "";
-// 	$strPlanetName = "";
-	$strOwner = "";
-	$strOwnerAlly = "";
-	$strPlanetTyp = "";
-	$strObjektTyp = "";
-        $aCoords = array();
-        $iCoordsGal = -1;
-        $iCoordsSol = -1;
-        $iCoordsPla = -1;
-        $aSchiffe = array();
-	$astatSchiffe = array();
-        $aResources = array();
-	$aDefence = array();
-		
-        $strCoords =  $aResultText['coords'];
-	$strOwner = $aResultText['owner'];
-	$strOwnerAlly = $aResultText['alliance'];
-	$strPlanetTyp = $aResultText['planetname'];
-	$strObjektTyp = $aResultText['objektname'];
-// 	$time = ;
-// print_pre($time);
-        $iCoordsGal = PropertyValueC::ensureInteger( $aResultText['coords_gal'] );
-        $iCoordsSol = PropertyValueC::ensureInteger( $aResultText['coords_sol'] );
-        $iCoordsPla = PropertyValueC::ensureInteger( $aResultText['coords_pla'] );
-        $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+        $parserResult->objResultData = new DTOParserMsgResultMsgScanSchiffeDefRessC();
+        $retVal                      =& $parserResult->objResultData;
 
-        if (isset($aResultText['schiffe']))
-        {
-          $aResultSchiffe = array();
-          $regExpSchiffe = $this->getRegularExpressionSchiffe();
-          $fRetValSchiffe = preg_match_all( $regExpSchiffe, $aResultText['schiffe'], $aResultSchiffe, PREG_SET_ORDER );
+        $regExpText = $this->getRegularExpressionText();
+        $msg        = $this->getMsg();
 
-          if( $fRetValSchiffe !== false && $fRetValSchiffe > 0 )
-          {
-            foreach( $aResultSchiffe as $result )
-            {
-              $strSchiffName = $result['schiff_name'];
-              $iSchiffCount = $result['schiffe_count'];
-              $strSchiffName = PropertyValueC::ensureString( $strSchiffName );
-              $iSchiffCount = PropertyValueC::ensureInteger( $iSchiffCount );
-			  if ($strSchiffName == "-???-") continue;
-// 			  $aSchiffe[md5($strSchiffName)] = array('schiffe_name' => $strSchiffName,'schiffe_count' => $iSchiffCount);
-			  $aSchiffe[$strSchiffName] = $iSchiffCount;
-	    }
-	  }
-	}
-	if (isset($aResultText['stat_fleet']))
-	{
-		  $aResultStatSchiffe = array();
-		  $regExpStatSchiffe = $this->getRegularExpressionStatSchiffe();
-		  $fRetValStatSchiffe = preg_match_all( $regExpStatSchiffe, $aResultText['stat_fleet'], $aResultStatSchiffe, PREG_SET_ORDER );
-	  
-                  if( $fRetValStatSchiffe !== false && $fRetValStatSchiffe > 0 ) {
-		    foreach ($aResultStatSchiffe as $resultStat ) {
-			$aResultSchiffe = array();
-			$regExpSchiffe = $this->getRegularExpressionSchiffe();
-			$fRetValSchiffe = preg_match_all( $regExpSchiffe, $resultStat['stat_fleet'], $aResultSchiffe, PREG_SET_ORDER );
-			$statOwner=$resultStat['owner_stat'];
-
-			if( $fRetValSchiffe !== false && $fRetValSchiffe > 0 )
-			{
-				foreach( $aResultSchiffe as $result )
-				{
-					$strSchiffName = $result['schiff_name'];
-					$iSchiffCount = $result['schiffe_count'];
-					$strSchiffName = PropertyValueC::ensureString( $strSchiffName );
-					$iSchiffCount = PropertyValueC::ensureInteger( $iSchiffCount );
-					if ($strSchiffName == "-???-") continue;
-		// 			  $astatSchiffe[md5($strSchiffName)] = array('schiffe_name' => $strSchiffName,'schiffe_count' => $iSchiffCount);
-					$astatSchiffe[$statOwner][$strSchiffName] = $iSchiffCount;
-				}
-			}
-		    }
-		  }
+        foreach ($msg as $key => $value) {
+            $retVal->$key = $value;
         }
-        if (isset($aResultText['defence']))
-        {
-          $aResultDefence = array();
-          $regExpDefence = $this->getRegularExpressionDefence();
-          $fRetValDefence = preg_match_all( $regExpDefence, $aResultText['defence'], $aResultDefence, PREG_SET_ORDER );
 
-          if( $fRetValDefence !== false && $fRetValDefence > 0 )
-          {
-            foreach( $aResultDefence as $result )
-            {
-			  $strDefenceName = $result['defence_name'];
-              $iDefenceCount = $result['defence_count'];
-              $strDefenceName = PropertyValueC::ensureString( $strDefenceName );
-              $iDefenceCount = PropertyValueC::ensureInteger( $iDefenceCount );
-			  if ($strDefenceName == "-???-") continue;
-// 			  $aDefence[md5($strDefenceName)] = array('defence_name' => $strDefenceName,'defence_count' => $iDefenceCount);
-			  $aDefence[$strDefenceName] = $iDefenceCount;
+        $aResultText = array();
+        $fRetValText = preg_match($regExpText, $msg->strParserText, $aResultText);
+
+        if ($fRetValText !== false && $fRetValText > 0) {
+
+            $retVal->bSuccessfullyParsed = true;
+
+            $strCoords    = "";
+            $strOwner     = "";
+            $strOwnerAlly = "";
+            $strPlanetTyp = "";
+            $strObjektTyp = "";
+            $aCoords      = array();
+            $iCoordsGal   = -1;
+            $iCoordsSol   = -1;
+            $iCoordsPla   = -1;
+            $aSchiffe     = array();
+            $astatSchiffe = array();
+            $aResources   = array();
+            $aDefence     = array();
+
+            $strCoords    = $aResultText['coords'];
+            $strOwner     = $aResultText['owner'];
+            $strOwnerAlly = $aResultText['alliance'];
+            $strPlanetTyp = $aResultText['planettyp'];
+            $strObjektTyp = $aResultText['objekttyp'];
+
+            $iCoordsGal = PropertyValueC::ensureInteger($aResultText['coords_gal']);
+            $iCoordsSol = PropertyValueC::ensureInteger($aResultText['coords_sol']);
+            $iCoordsPla = PropertyValueC::ensureInteger($aResultText['coords_pla']);
+            $aCoords    = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+
+            if (isset($aResultText['schiffe'])) {
+                $aResultSchiffe = array();
+                $regExpSchiffe  = $this->getRegularExpressionSchiffe();
+                $fRetValSchiffe = preg_match_all($regExpSchiffe, $aResultText['schiffe'], $aResultSchiffe, PREG_SET_ORDER);
+
+                if ($fRetValSchiffe !== false && $fRetValSchiffe > 0) {
+                    foreach ($aResultSchiffe as $result) {
+                        $strSchiffName = $result['schiff_name'];
+                        $iSchiffCount  = $result['schiffe_count'];
+                        $strSchiffName = PropertyValueC::ensureString($strSchiffName);
+                        $iSchiffCount  = PropertyValueC::ensureInteger($iSchiffCount);
+                        if ($strSchiffName == "-???-") {
+                            continue;
+                        }
+                        $aSchiffe[$strSchiffName] = $iSchiffCount;
+                    }
+                }
             }
-          }
-        }
-        if (isset($aResultText['resources']))
-        {
-          $aResultResources = array();
-          $regExpResources = $this->getRegularExpressionResources();
-          $fRetValResources = preg_match_all( $regExpResources, $aResultText['resources'], $aResultResources, PREG_SET_ORDER );
+            if (isset($aResultText['stat_fleet'])) {
+                $aResultStatSchiffe = array();
+                $regExpStatSchiffe  = $this->getRegularExpressionStatSchiffe();
+                $fRetValStatSchiffe = preg_match_all($regExpStatSchiffe, $aResultText['stat_fleet'], $aResultStatSchiffe, PREG_SET_ORDER);
 
-          if( $fRetValResources !== false && $fRetValResources > 0 )
-          {
-            foreach( $aResultResources as $result )
-            {
-              $strResourceName = $result['resource_name'];
-              $iResourceCount = $result['resource_count'];
-              $strResourceName = PropertyValueC::ensureResource( $strResourceName );
-              $iResourceCount = PropertyValueC::ensureInteger( $iResourceCount );
-			  if ($strResourceName == "-???-") continue;
-// 			  $aResources[md5($strResourceName)] = array('resource_name' => $strResourceName,'resource_count' => $iResourceCount);
-			  $aResources[$strResourceName] = $iResourceCount;
+                if ($fRetValStatSchiffe !== false && $fRetValStatSchiffe > 0) {
+                    foreach ($aResultStatSchiffe as $resultStat) {
+                        $aResultSchiffe = array();
+                        $regExpSchiffe  = $this->getRegularExpressionSchiffe();
+                        $fRetValSchiffe = preg_match_all($regExpSchiffe, $resultStat['stat_fleet'], $aResultSchiffe, PREG_SET_ORDER);
+                        $statOwner      = $resultStat['owner_stat'];
+
+                        if ($fRetValSchiffe !== false && $fRetValSchiffe > 0) {
+                            foreach ($aResultSchiffe as $result) {
+                                $strSchiffName = $result['schiff_name'];
+                                $iSchiffCount  = $result['schiffe_count'];
+                                $strSchiffName = PropertyValueC::ensureString($strSchiffName);
+                                $iSchiffCount  = PropertyValueC::ensureInteger($iSchiffCount);
+                                if ($strSchiffName == "-???-") {
+                                    continue;
+                                }
+                                $astatSchiffe[$statOwner][$strSchiffName] = $iSchiffCount;
+                            }
+                        }
+                    }
+                }
             }
-          }
+            if (isset($aResultText['defence'])) {
+                $aResultDefence = array();
+                $regExpDefence  = $this->getRegularExpressionDefence();
+                $fRetValDefence = preg_match_all($regExpDefence, $aResultText['defence'], $aResultDefence, PREG_SET_ORDER);
+
+                if ($fRetValDefence !== false && $fRetValDefence > 0) {
+                    foreach ($aResultDefence as $result) {
+                        $strDefenceName = $result['defence_name'];
+                        $iDefenceCount  = $result['defence_count'];
+                        $strDefenceName = PropertyValueC::ensureString($strDefenceName);
+                        $iDefenceCount  = PropertyValueC::ensureInteger($iDefenceCount);
+                        if ($strDefenceName == "-???-") {
+                            continue;
+                        }
+                        $aDefence[$strDefenceName] = $iDefenceCount;
+                    }
+                }
+            }
+            if (isset($aResultText['resources'])) {
+                $aResultResources = array();
+                $regExpResources  = $this->getRegularExpressionResources();
+                $fRetValResources = preg_match_all($regExpResources, $aResultText['resources'], $aResultResources, PREG_SET_ORDER);
+
+                if ($fRetValResources !== false && $fRetValResources > 0) {
+                    foreach ($aResultResources as $result) {
+                        $strResourceName = $result['resource_name'];
+                        $iResourceCount  = $result['resource_count'];
+                        $strResourceName = PropertyValueC::ensureResource($strResourceName);
+                        $iResourceCount  = PropertyValueC::ensureInteger($iResourceCount);
+                        if ($strResourceName == "-???-") {
+                            continue;
+                        }
+                        $aResources[$strResourceName] = $iResourceCount;
+                    }
+                }
+            }
+
+            $retVal->strOwnerName        = PropertyValueC::ensureString($strOwner);
+            $retVal->strOwnerAllianceTag = PropertyValueC::ensureString($strOwnerAlly);
+            $retVal->strCoords           = PropertyValueC::ensureString($strCoords);
+            $retVal->iTimestamp          = HelperC::convertDateTimeToTimestamp($aResultText['datetime']);
+
+            $retVal->ePlanetType = PropertyValueC::ensureString($strPlanetTyp);
+            $retVal->eObjectType = PropertyValueC::ensureString($strObjektTyp);
+
+            $retVal->aCoords      = $aCoords;
+            $retVal->aSchiffe     = $aSchiffe;
+            $retVal->astatSchiffe = $astatSchiffe;
+            $retVal->aResources   = $aResources;
+            $retVal->aDefences    = $aDefence;
+        } else {
+            $retVal->bSuccessfullyParsed = false;
+            $retVal->aErrors[]           = 'Unable to match the pattern (Schiffe/Deff/Ress).';
+            $retVal->aErrors[]           = '...' . $msg->strParserText;
         }
 
-        	$retVal->strOwnerName = PropertyValueC::ensureString( $strOwner );
-		$retVal->strOwnerAllianceTag = PropertyValueC::ensureString( $strOwnerAlly );
-        $retVal->strCoords = PropertyValueC::ensureString( $strCoords );
-		$retVal->iTimestamp = HelperC::convertDateTimeToTimestamp( $aResultText['datetime'] );
-
-		$retVal->ePlanetType = PropertyValueC::ensureString( $strPlanetTyp );
-		$retVal->eObjectType = PropertyValueC::ensureString( $strObjektTyp );
-
-        $retVal->aCoords = $aCoords;
-        $retVal->aSchiffe = $aSchiffe;
-		$retVal->astatSchiffe = $astatSchiffe;
-        $retVal->aResources = $aResources;
-		$retVal->aDefences = $aDefence;
     }
-    else
-    {
-	  $retVal->bSuccessfullyParsed = false;
-	  $retVal->aErrors[] = 'Unable to match the pattern (Schiffe/Deff/Ress).';
-	  $retVal->aErrors[] = '...'.$msg->strParserText;
-    }
-// print_die($parserResult);
-  }
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -314,8 +294,8 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
 			(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
 	$regExp .= 	'\sam\s(?P<datetime>'.$reMixedTime.')\.';
 	$regExp .=	'\sBesitzer\sist\s((?P<owner>'.$reUserName.')\s(\[(?P<alliance>'.$reBasisTyp.')\])?)?\.';
-	$regExp  .= '	\s*Planetentyp\s+(?P<planetname>('.$rePlanetTyp.'|-\?\?\?-))\s*
-			\s*Objekttyp\s+(?P<objektname>('.$reObjektTyp.'|-\?\?\?-))\s*
+	$regExp  .= '	\s*Planetentyp\s+(?P<planettyp>('.$rePlanetTyp.'|-\?\?\?-))\s*
+			\s*Objekttyp\s+(?P<objekttyp>('.$reObjektTyp.'|-\?\?\?-))\s*
 			(?:(\s*Basistyp\s+.*\s*)|)';
 	$regExp  .= '	(?:
 			Schiffe[\s\n]*Planetare\sFlotte

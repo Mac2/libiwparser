@@ -127,9 +127,8 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
         $retObj->strCoordsTo = $strCoords;
 
         if (!empty($result['dtDateTime'])) {
-            $retObj->iAnkunft = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
-        }
-//            $retObj->iAnkunft = GetVar("now");  //! Mac: darf nicht, da sonst parsen innerhalb dieser Zeit, jedesmal als neuer Flug erkannt wird
+            $retObj->iAnkunft = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );    //  $retObj->iAnkunft = GetVar("now");  //! Mac: darf nicht, da sonst parsen innerhalb dieser Zeit, jedesmal als neuer Flug erkannt wird
+		}
 
         if (!empty($result['mtMixedTime'])) {
 			$retObj->iAnkunftIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
