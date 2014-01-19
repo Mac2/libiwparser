@@ -106,7 +106,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 
                 $retObj->aCoordsFrom    = $aCoords;
                 $retObj->strCoordsFrom  = $strCoords;
-                $retObj->eTransfairType = PropertyValueC::ensureString($result['eTransfairType']);
+                $retObj->eTransfairType = PropertyValueC::ensureEnum($result['eTransfairType'],'eTransfairTypes');
 
                 $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPlaTo']);
                 $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGalTo']);
@@ -217,14 +217,14 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
         $reMixedTime     = $this->getRegExpMixedTime();
         $reShipActions   = $this->getRegExpShipActions();
         $reShipTexts     = $this->getRegExpShipTexts(); //! Mac: zufaellige Texte nach Ankunft
-        $reShipNames     = $this->getRegExpSingleLineText3();
+        $reShipNames     = $this->getRegExpSchiffe();
         $reObject        = '(?:' . $this->getRegExpResource() . '|' . $reShipNames . '|' . $reShipTexts . ')';
         $reDecimalNumber = $this->getRegExpDecimalNumber();
 
         $regExpOpera = '(?:\s+(?:(?:' . $reDecimalNumber . '\s+?' . $reObject . '\s*)+)\s*)?'; //! Opera kopiert die Objects nochmal ... warum auch immer oO
 
         $regExp = '/';
-        $regExp .= '(?P<strPlanetNameTo>'.$rePlanetName.'\s|)';
+        $regExp .= '(?P<strPlanetNameTo>'.$rePlanetName.'|)';
         $regExp .= '[\s\n]+';
         $regExp .= '\((?P<iCoordsGalTo>\d{1,2})\:(?P<iCoordsSolTo>\d{1,3})\:(?P<iCoordsPlaTo>\d{1,2})\)';
         $regExp .= '[\s\n]+';
@@ -238,10 +238,10 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 
         $regExp .= '\s*';
         $regExp .= '(?:';
-        $regExp .= '    (?P<dtDateTime>' . $reDateTime . ')\s*(?: - \s*(?P<mtMixedTime>' . $reMixedTime . ')?)?';
+        $regExp .= '    (?P<dtDateTime>'.$reDateTime.')\s*(?:-(?:\s*(?P<mtMixedTime>'.$reMixedTime.'))?)?';
         $regExp .= '    (?:\s*(?:\(?angekommen\)?|' . $reMixedTime . ')\s*)?' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')'
-            . '   |' . $reObject . '\s*-?\s\(?angekommen\)?' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')' //! bei Angriff: beliebiger Text + angekommen
-            . '   |' . $reObject . '\s*' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')' //! nach Ankunft: beliebiger Text
+                 . '   |' . $reObject . '\s*-?\s\(?angekommen\)?' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')' //! bei Angriff: beliebiger Text + angekommen
+                 . '   |' . $reObject . '\s*' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')' //! nach Ankunft: beliebiger Text
             . ')';
         $regExp .= '[\s\n]+';
         $regExp .= '(?P<eTransfairType>' . $reShipActions . ')';

@@ -62,7 +62,9 @@ class ParserIndexSchiffC extends ParserMsgBaseC implements ParserMsgI
         $msg    = $this->getMsg();
 
         $parserResult->strIdentifier = 'de_index_schiff';
-
+        $foo = trim($msg->strParserText);
+        if (empty($foo))
+            return false;
         $aResult = array();
 
         $fRetVal = preg_match_all($regExp, $msg->strParserText, $aResult, PREG_SET_ORDER);
