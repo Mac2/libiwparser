@@ -123,14 +123,10 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 
                 if (!empty($result['dtDateTime'])) {
                     $retObj->iAnkunft = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
-                } else {
-                    $retObj->iAnkunft = 0;
                 }
 
                 if (!empty($result['mtMixedTime'])) {
                     $retObj->iAnkunftIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
-                } else {
-                    $retObj->iAnkunftIn = 0;
                 }
 
                 if ($retVal->bObjectsVisible) {

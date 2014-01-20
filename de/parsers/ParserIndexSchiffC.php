@@ -23,6 +23,7 @@ use libIwParsers\ParserMsgI;
 use libIwParsers\HelperC;
 use libIwParsers\de\parserResults\DTOParserIndexSchiffResultC;
 use libIwParsers\de\parserResults\DTOParserIndexSchiffResultSchiffC;
+use libIwParsers\de\parserResults\DTOParserIndexSchiffResultWerftBelegtC;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

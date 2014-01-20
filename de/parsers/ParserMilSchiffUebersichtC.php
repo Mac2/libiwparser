@@ -69,11 +69,10 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
-        $aKolos = array();
-
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
-
+ 
+            $aKolos = array();
             foreach ($aResult as $result) {
                 $strKoloLine  = $result['kolo_line'];
                 $strDataLines = $result['data_lines'];
@@ -134,7 +133,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern (de_mil_schiff_uebersicht).';
         }
 
     }

@@ -458,6 +458,7 @@ class ParserFunctionC
         $retVal .= 'Kolonisation|';
         $retVal .= 'Saveflug|';
         $retVal .= 'Basisaufbau\s\(Ressourcen\)|';
+        $retVal .= 'Basisaufbau\s\(Artefakte\)|';
         $retVal .= 'Basisaufbau\s\(Kampf\)|';
         $retVal .= 'Massdriverpaket|';
 //      $retVal .= 'Rückkehr(?=(?:\n+Stationieren)|)|';

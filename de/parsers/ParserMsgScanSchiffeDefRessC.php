@@ -67,15 +67,6 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
         $aResultText = array();
         $fRetValText = preg_match($regExpText, $msg->strParserText, $aResultText);
 
-        //@todo!
-//      $parserResult->bSuccessfullyParsed = true;
-//      $parserResult->aErrors[] = 'Parser not yet implemented.';
-//      return;
-
-// 	return;
-//     if (strpos($parserResult->objResultData->strMsgTitle,"Eigener Planet wurde sondiert") !== false)
-// 	    return;
-
         if ($fRetValText !== false && $fRetValText > 0) {
             $retVal->bSuccessfullyParsed = true;
             $aSchiffe     = array();
@@ -86,8 +77,8 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
             $strCoords    = $aResultText['coords'];
             $strOwner     = $aResultText['owner'];
             $strOwnerAlly = $aResultText['alliance'];
-            $strPlanetTyp = $aResultText['planetname'];
-            $strObjektTyp = $aResultText['objektname'];
+            $strPlanetTyp = $aResultText['planettyp'];
+            $strObjektTyp = $aResultText['objekttyp'];
             $iCoordsGal = PropertyValueC::ensureInteger($aResultText['coords_gal']);
             $iCoordsSol = PropertyValueC::ensureInteger($aResultText['coords_sol']);
             $iCoordsPla = PropertyValueC::ensureInteger($aResultText['coords_pla']);
@@ -282,8 +273,8 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
 			(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
         $regExp .= '\sam\s(?P<datetime>' . $reMixedTime . ')\.';
         $regExp .= '\sBesitzer\sist\s((?P<owner>' . $reUserName . ')\s(\[(?P<alliance>' . $reBasisTyp . ')\])?)?\.';
-        $regExp .= '	\s*Planetentyp\s+(?P<planetname>(' . $rePlanetTyp . '|-\?\?\?-))\s*
-			\s*Objekttyp\s+(?P<objektname>(' . $reObjektTyp . '|-\?\?\?-))\s*
+        $regExp .= '	\s*Planetentyp\s+(?P<planettyp>(' . $rePlanetTyp . '|-\?\?\?-))\s*
+			\s*Objekttyp\s+(?P<objekttyp>(' . $reObjektTyp . '|-\?\?\?-))\s*
 			(?:(\s*Basistyp\s+.*\s*)|)';
         $regExp .= '	(?:
 			Schiffe[\s\n]*Planetare\sFlotte
