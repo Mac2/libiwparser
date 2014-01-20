@@ -87,7 +87,7 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
                 'coords_pla' => $iCoordsPla
             );
 
-            if (isset($aResultText['buildings'])) {
+            if (!empty($aResultText['buildings'])) {
                 $aResultBuildings = array();
                 $regExpBuildings  = $this->getRegularExpressionBuildings();
                 $fRetValBuildings = preg_match_all($regExpBuildings, $aResultText['buildings'], $aResultBuildings, PREG_SET_ORDER);
@@ -107,9 +107,13 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
 
                         $aBuildings[$strBuildingName] = $iBuildingCount;
                     }
+                 } else {
+                    $retVal->bSuccessfullyParsed = false;
+                    $retVal->aErrors[]           = 'Unable to match the gebpattern. (Geb/Ress)';
+                    $retVal->aErrors[]           = $aResultText['buildings'];
                 }
             }
-            if (isset($aResultText['resources'])) {
+            if (!empty($aResultText['resources'])) {
                 $aResultResources = array();
                 $regExpResources  = $this->getRegularExpressionResources();
                 $fRetValResources = preg_match_all($regExpResources, $aResultText['resources'], $aResultResources, PREG_SET_ORDER);
@@ -128,10 +132,14 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
                         }
                         $aResources[$strResourceName] = $iResourceCount;
                     }
+                } else {
+                    $retVal->bSuccessfullyParsed = false;
+                    $retVal->aErrors[]           = 'Unable to match the resspattern. (Geb/Ress)';
+                    $retVal->aErrors[]           = $aResultText['resources'];
                 }
             }
 
-//         	$retVal->strPlanetName       = PropertyValueC::ensureString( $strPlanetName );
+            if ($parserResult->bSuccessfullyParsed === true) {
             $retVal->strOwnerName        = PropertyValueC::ensureString($strOwner);
             $retVal->strOwnerAllianceTag = PropertyValueC::ensureString($strOwnerAlly);
             $retVal->strCoords           = PropertyValueC::ensureString($strCoords);
@@ -142,10 +150,11 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
             $retVal->aCoords    = $aCoords;
             $retVal->aBuildings = $aBuildings;
             $retVal->aResources = $aResources;
+            }
         } else {
             $retVal->bSuccessfullyParsed = false;
             $retVal->aErrors[]           = 'Unable to match the pattern. (Geb/Ress)';
-            $retVal->aErrors[]           = '...' . $msg->strParserText;
+            $retVal->aErrors[]           = $msg->strParserText;
         }
 
     }
@@ -199,17 +208,13 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
         $reDecimalNumber = $this->getRegExpDecimalNumber();
         $reResource      = $this->getRegExpResource();
 
-        $regExp = '/
-			Sondierungsbericht\s\(Geb.{1,3}ude\)\svon\s
-			(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
+        $regExp = '/Sondierungsbericht\s\(Geb.{1,4}ude\)\svon\s(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
         $regExp .= '\sam\s(?P<datetime>' . $reMixedTime . ')\.';
-        $regExp .= '\sBesitzer\sist\s((?P<owner>' . $reUserName . ')\s(\[(?P<alliance>' . $reBasisTyp . ')\])?)?\.';
-        $regExp .= '	\s*Planetentyp\s+(?P<planetname>(' . $rePlanetTyp . '|-\?\?\?-))\s*
-			\s*Objekttyp\s+(?P<objektname>(' . $reObjektTyp . '|-\?\?\?-))\s*
-			(\s*Basistyp\s' . $reBasisTyp . '\s*)?';
-        $regExp .= '	(?:
-			Geb.{1,3}ude
-			[\s\n]+
+        $regExp .= '\sBesitzer\sist\s(?:(?P<owner>' . $reUserName . ')\s(?:\[(?P<alliance>' . $reBasisTyp . ')\])?)?\.';
+        $regExp .= '	\s*Planetentyp\s+(?P<planetname>(?:' . $rePlanetTyp . '|-\?\?\?-))\s*
+			\s*Objekttyp\s+(?P<objektname>(?:' . $reObjektTyp . '|-\?\?\?-))\s*
+			(\s*Basistyp\s' . $reBasisTyp . '\s*)?';    
+        $regExp .= '	(?:Geb.{1,4}ude[\s\n\t]+
 			(?P<buildings>
 			((' . $reBasisTyp . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
 			)
@@ -223,7 +228,7 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
 			|)';
         $regExp .= '^Hinweise\s';
         $regExp .= '(.*\n){1,5}';
-        $regExp .= '(^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';
+        $regExp .= '(?:^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';
         $regExp .= '/mx';
 
         return $regExp;
