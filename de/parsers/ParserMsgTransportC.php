@@ -65,7 +65,7 @@ class ParserMsgTransportC extends ParserMsgBaseC implements ParserMsgI
 
         if (empty($msg->strParserText)) { //! Mac: leerer Input, evtl. nicht ausgeklappt ?
             $retVal->bSuccessfullyParsed = false;
-            $retVal->aErrors[]           = 'found empty TransportMsg';
+            $retVal->aErrors[]           = 'Leere Nachricht, nicht ausgeklappt?';
 
             return;
         }

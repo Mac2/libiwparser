@@ -30,6 +30,66 @@ class ParserFunctionC
     /////////////////////////////////////////////////////////////////////////////
 
     /**
+   * returns a regular expression class matching thousand seperator
+   *
+   * IceWars gives users the possibility to specify their own seperators.
+   * In this method, we define those seperators we support for the thousand
+   * seperator. It's meant to be used within other regular expressions.
+   *
+   * For the moment, we support: ".", "'", "k", '"', '`', '´' and " " as seperators.
+   *
+   * @done by Mac: get supported thousand seperators from config
+   */
+  private function getRegExpThousandSeperator()
+  {
+   $res = "[";
+   $supportedThousandSeperators = ConfigC::get( 'lib.aThousandSeperators' );
+   foreach ($supportedThousandSeperators as $sep) {
+       if (stripos("\".'",$sep) !== FALSE)
+               $res .= "\\" . $sep;
+       else if ($sep == " ")
+            $res .= "[:blank:]";
+       else
+            $res .= $sep;
+   }
+   $res .= "]";
+   return $res;
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  /**
+   * returns a regular expression class matching comma seperator
+   *
+   * IceWars gives users the possibility to specify their own seperators.
+   * In this method, we define those seperators we support for the thousand
+   * seperator. It's meant to be used within other regular expressions.
+   *
+   */
+  private function getRegExpCommaSeperator()
+  {
+    return "[\.\,´`]";
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  /**
+   * returns a regular expression class matching floating point seperator
+   *
+   * IceWars gives users the possibility to specify their own seperators.
+   * In this method, we define those seperators we support for the floating
+   * point seperator. It's meant to be used within other regular expressions.
+   *
+   * For the moment, we support: "." and ",".
+   */
+  private function getRegExpFloatingPointSeperator()
+  {
+    return "[\.,´`]{1}";
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+
+  /**
      * returns a regular expression class matching a bracket string
      *
      * reserachs/ships and buildings are often shown as a bracket string
@@ -77,16 +137,18 @@ class ParserFunctionC
     protected function getRegExpDecimalNumber()
     {
         $retVal = '(?:';
+    $reThousandSeperator = $this->getRegExpThousandSeperator();
 
         $retVal .= '(?:(?<=\s)|(?<=^)|(?<=\())'; //the decimal number shall start in a whitesace or start of line or a braket
-        $retVal .= '(?:\-)?'; //value can be negative
+    $retVal .=  '(?:\-){0,1}'; //value can be negative
         $retVal .= '(?:\d{1,3}'; //1) a sequence of one to three digits
-        $retVal .= '(?:\D\d{3})*'; //1.1) that might be followed by a repetition of one thousandSeperator and three digits multiple times
+    $retVal .=  '(?:' .
+                $reThousandSeperator .
+                '\d{3})*';            //1.1) that might be followed by a repetition of one thousandSeperator and three digits multiple times
         $retVal .= '|'; //  ... OR ...
         $retVal .= '\d+)'; //2) a decimal value is either a repetition of decimals...
-        $retVal .= '(?=\s|$|\)|\%)'; //the decimal number shall end in a whitesace or end of line or a braket or a %
+    $retVal .= '(?=\s|$|\)|\%|\\\%)';            //the decimal number shall end in a whitesace or end of line or a braket
         $retVal .= ')';
-
         return $retVal;
     }
 
@@ -100,16 +162,23 @@ class ParserFunctionC
     protected function getRegExpFloatingDouble()
     {
 
+    $reThousandSeperator = $this->getRegExpThousandSeperator();
+  $reCommaSeperator = $this->getRegExpCommaSeperator();
+
         $retVal = '(?:';
         $retVal .= '(?:(?<=\s)|(?<=^)|(?<=\())'; //the decimal number shall start in a whitesace or start of line or a braket
-        $retVal .= '(?:\-|\+)?'; //value can be negative (or explicit positive)
+    $retVal .=  '(?:\-|\+){0,1}';             //value can be negative (or explicit positive)
         $retVal .= '(?:\d{1,3}'; //1) a sequence of one to three digits
-        $retVal .= '(?:\D\d{3})*'; //1.1) that might be followed by a repetition of one thousandSeperator and three digits multiple times
+    $retVal .=  '(?:' .
+                $reThousandSeperator .
+                '\d{3})*';            //1.1) that might be followed by a repetition of one thousandSeperator and three digits multiple times
         $retVal .= '|'; //  ... OR ...
         $retVal .= '\d+)'; //2) a decimal value is either a repetition of decimals...
-        $retVal .= '(?:\D\d{2}'; //there can be a comma seperated part of 2 digits
-        $retVal .= ')?'; //but needn't to be
-        $retVal .= '(?=\s|$|\)|\*|\%)'; //the decimal number shall end in a whitesace or end of line or a braket or a * or a %
+    $retVal .=  '(?:' .
+                $reCommaSeperator .
+                '\d{2}';        //there can be a comma seperated part of 2 digits
+    $retVal .= '){0,1}';        //but needn't to be
+    $retVal .= '(?=\s|$|\)|\*|\%|\\\%)';            //the decimal number shall end in a whitesace or end of line or a braket or a * or a %
         $retVal .= ')';
 
         return $retVal;
@@ -125,14 +194,20 @@ class ParserFunctionC
     protected function getRegExpUnsignedDouble()
     {
         $retVal = '';
+    $reThousandSeperator = $this->getRegExpThousandSeperator();
+    $reCommaSeperator = $this->getRegExpCommaSeperator();
 
         $retVal .= '(?:(?<=\s)|(?<=^)|(?<=\+)|(?<=\())'; //the decimal number shall start in a whitespace or start of line or a braket
         $retVal .= '(?:\d{1,3}'; //1) a sequence of one to three digits
-        $retVal .= '(?:\D\d{3})*'; //1.1) that might be followed by a repetition of one thousandSeperator and three digits multiple times
+    $retVal .=  '(?:' .
+                $reThousandSeperator .
+                '\d{3})*';            //1.1) that might be followed by a repetition of one thousandSeperator and three digits multiple times
         $retVal .= '|'; //  ... OR ...
         $retVal .= '\d+)'; //2) a decimal value is either a repetition of decimals...
-        $retVal .= '(?:\D\d{2}'; //there can be a comma seperated part of 2 digits
-        $retVal .= ')?'; //but needn't to be
+    $retVal .= '(?:' .
+                $reCommaSeperator .
+                '\d{2}';                //there can be a comma seperated part of 2 digits
+    $retVal .= '){0,1}';                //but needn't to be
         $retVal .= '(?=\s|$|\)|\+)'; //the decimal number shall end in a whitesace or end of line or a braket
 
         return $retVal;
@@ -319,17 +394,27 @@ class ParserFunctionC
      */
     protected function getRegExpPointsPerDay()
     {
-        return $this->getRegExpDecimalNumber() . '(?:\D\d{2})?';
+    return  $this->getRegExpDecimalNumber()             .
+            '(?:'                                       .
+              $this->getRegExpFloatingPointSeperator()  .
+              '\d{2}'                                   .
+            ')?';
     }
 
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Alias of getRegExpObjectTypes()
+     * returns a regular expression pattern matching an kolo type
+     *
+     * Object types include:
+     * - artifact stations
+     * - battle stations
+     * - colonies
+     * - robot mining stations
      */
     protected function getRegExpKoloTypes()
     {
-        return $this->getRegExpObjectTypes();
+    return '(?:Kolonie|KB|RB|AB|SB|Kampfbasis|Sammelbasis|Artefaktsammelbasis|Artefaktbasis)';
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -347,12 +432,7 @@ class ParserFunctionC
      */
     protected function getRegExpObjectTypes()
     {
-        $retVal = '';
-
-        //TODO: include space stations
-        $retVal .= '(?:Kolonie|---|Kampfbasis|KB|Sammelbasis|SB|Artefaktsammelbasis|Artefaktbasis|AB|Raumstation|RB)';
-
-        return $retVal;
+    return '(?:Kolonie|---|Kampfbasis|KB|Sammelbasis|Artefaktsammelbasis|Artefaktbasis|RB|AB|SB|Raumstation)';
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -363,11 +443,7 @@ class ParserFunctionC
      */
     protected function getRegExpPlanetTypes()
     {
-        $retVal = '';
-
-        $retVal .= '(?:Steinklumpen|S|Nichts|N|Eisplanet|E|Gasgigant|G|Asteroid|A|Elektrosturm|Ionensturm|Raumverzerrung|grav.\sAnomalie)';
-
-        return $retVal;
+    return '(?:Steinklumpen|S|Nichts|N|Eisplanet|E|Gasgigant|G|Asteroid|A|Elektrosturm|Ionensturm|Raumverzerrung|grav.\sAnomalie)';
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -404,7 +480,7 @@ class ParserFunctionC
         $retVal = '';
 
         $retVal .= '(?:(?<=\s)|(?<=^))'; //the date shall start in a whitesace or start of line
-        $retVal .= '\d{2}\.\d{2}\.20\d{2}';
+    $retVal .= '\d{2}\.\d{2}\.\d{4}';
         $retVal .= '(?=\s|$)'; //the date shall end in a whitesace or end of line
 
         return $retVal;
@@ -463,7 +539,8 @@ class ParserFunctionC
         $retVal .= 'Kolonisation|';
         $retVal .= 'Saveflug|';
         $retVal .= 'Basisaufbau\s\(Ressourcen\)|';
-        $retVal .= 'Basisaufbau\s\(Kampf\)|';
+    $retVal .= 'Basisaufbau\s\(Artefakte\)|';
+    $retVal .= 'Basisaufbau\s\(Kampf\)|';
         $retVal .= 'Massdriverpaket|';
 //      $retVal .= 'Rückkehr(?=(?:\n+Stationieren)|)|';
         $retVal .= 'Rückkehr';
@@ -626,7 +703,7 @@ class ParserFunctionC
 
         $retVal .= '(?:(?<=\s)|(?<=^))'; //shall start in a whitesace or start of line
 
-        $retVal .= '(?:Eisen|Eis|Wasser|Stahl|Energie|VV4A|FP|Forschungspunkte|chem\.\sElemente|Bev.{1,3}lkerung|Credits)';
+        $retVal .= '(?:Eisen|Eis|Wasser|Stahl|Energie|VV4A|FP|Forschungspunkte|Erdbeeren|Erdbeermarmelade|Brause|Vanilleeis|Traubenzucker|Eismatsch|Kekse|blubbernde\sGallertmasse|Erdbeerkonfitüre|chem\.\sElemente|Bev.{1,3}lkerung|Credits)';
 
         $retVal .= '(?=\:|,|\s|$)'; //shall end in a whitesace or : or , or end of line
 
@@ -684,7 +761,7 @@ class ParserFunctionC
 
         $retVal .= '[^ ]'; //first character must not be a space
         $retVal .= '(?:'; //propably, there will be more characters
-        $retVal .= '.*'; //characters
+    $retVal .= '.+';          //characters
         $retVal .= '[^ ]'; //last character must not be a space
         $retVal .= ')?';
 
@@ -694,3 +771,7 @@ class ParserFunctionC
     }
 
 }
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////

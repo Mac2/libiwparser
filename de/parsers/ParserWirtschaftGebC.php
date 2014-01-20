@@ -70,11 +70,10 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
-        $aKolos = array();
-
         if ($fRetVal !== false && $fRetVal > 0) {
             $parserResult->bSuccessfullyParsed = true;
 
+            $aKolos = array();
             foreach ($aResult as $result) {
                 $strAreaName = $result['area_name'];
 
@@ -137,7 +136,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern (de_wirtschaft_geb).';
         }
 
     }

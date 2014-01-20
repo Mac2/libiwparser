@@ -172,7 +172,7 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
         $regExp .= 'dabei\sseit\s+?';
         $regExp .= '(?P<iEntryDate>' . $reEntryDate . ')\s*?';
         $regExp .= '\n+';
-        $regExp .= 'Geb.{1,3}udepunkte\s+';
+        $regExp .= 'Geb.{1,4}udepunkte\s+';
         $regExp .= '(?P<iGebPkt>' . $rePoints . ')\s*?';
         $regExp .= '\n+';
         $regExp .= 'Forschungspunkte\s+';
@@ -181,8 +181,8 @@ class ParserInfoUserC extends ParserBaseC implements ParserI
         $regExp .= 'Position\sin\sder\sHighscore\s+';
         $regExp .= '(?P<iHSPos>' . $rePoints . ')\s*?';
         $regExp .= '\n+';
-        $regExp .= 'Ver.{1,3}nderung\sin\sder\sHighscore\s+';
-        $regExp .= '(?P<iHSChange>' . $reNumber . ')\sPl.{1,3}tze\s*?';
+        $regExp .= 'Ver.{1,4}nderung\sin\sder\sHighscore\s+';
+        $regExp .= '(?P<iHSChange>' . $reNumber . ')\sPl.{1,4}tze\s*?';
         $regExp .= '\n+';
         $regExp .= 'Evolutionsstufe\s+';
         $regExp .= '(?P<iEvo>' . $rePoints . ')\s*?';

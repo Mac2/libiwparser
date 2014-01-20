@@ -113,7 +113,7 @@ class DTOParserForschungResearchedResultC
 
     /**
      * @soap
-     * @var string enum $eState researched
+     * @var enum $eState researched
      */
     public $eState = 'researched';
 
@@ -178,7 +178,7 @@ class DTOParserForschungOpenResultC
 
     /**
      * @soap
-     * @var string enum $eState open
+   * @var enum $eState open
      */
     public $eState = 'open';
 

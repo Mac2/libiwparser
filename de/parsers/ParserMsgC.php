@@ -362,7 +362,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
         $regExp .= '[\s\n]+';
         $regExp .= ')';
         $regExp .= ')';
-        $regExp .= '(?:(?P<msgText>(' . $reLine . '\s*)+)';
+        $regExp .= '(?:(?P<msgText>(' . $reLine . '(?:\n+|\Z))+)';
         $regExp .= '(?=' . $reHeader . '|\Z)';
         $regExp .= ')';
         $regExp .= '/mxU';

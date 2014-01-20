@@ -63,6 +63,12 @@ class DTOParserInfoUserResultUserC
 
     /**
      * @soap
+     * @var string $bAccType
+     */
+    public $strAccType;
+
+    /**
+     * @soap
      * @var string $strPlanetName name of the object
      */
     public $strPlanetName = '';

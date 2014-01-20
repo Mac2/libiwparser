@@ -21,7 +21,7 @@ namespace libIwParsers\de\parserResults;
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Result DTO of parser de_alli_kasse_log_member
+ * Result DTO of parser de_alli_kasse_log_allis
  */
 class DTOParserAlliKasseLogAllisResultC
 {

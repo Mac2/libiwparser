@@ -123,14 +123,10 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 
                 if (!empty($result['dtDateTime'])) {
                     $retObj->iAnkunft = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
-                } else {
-                    $retObj->iAnkunft = 0;
                 }
 
                 if (!empty($result['mtMixedTime'])) {
                     $retObj->iAnkunftIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
-                } else {
-                    $retObj->iAnkunftIn = 0;
                 }
 
                 if ($retVal->bObjectsVisible) {
@@ -238,7 +234,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 
         $regExp .= '\s*';
         $regExp .= '(?:';
-        $regExp .= '    (?P<dtDateTime>'.$reDateTime.')\s*(?:-(?:\s*(?P<mtMixedTime>'.$reMixedTime.'))?)?';
+        $regExp .= '    (?P<dtDateTime>' . $reDateTime . ')\s*(?: - (?:\s*(?P<mtMixedTime>' . $reMixedTime . '))?)?';
         $regExp .= '    (?:\s*(?:\(?angekommen\)?|' . $reMixedTime . ')\s*)?' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')'
                  . '   |' . $reObject . '\s*-?\s\(?angekommen\)?' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')' //! bei Angriff: beliebiger Text + angekommen
                  . '   |' . $reObject . '\s*' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')' //! nach Ankunft: beliebiger Text
