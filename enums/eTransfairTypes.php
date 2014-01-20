@@ -36,8 +36,14 @@ class eTransfairTypes
         'Sondierung (Geologie) (Scout)'   => 'Sondierung (Geologie) (Scout)',
         'Sondierung (Geologie)'   => 'Sondierung (Geologie)',
         'Stationieren'   => 'Stationieren',
+        'Stationieren & Verteidigen'   => 'Stationieren & Verteidigen',
         'Ressourcenhandel'   => 'Ressourcenhandel',
+        'Ressourcenhandel (ok)'   => 'Ressourcenhandel (ok)',
         'Ressourcen abholen'   => 'Ressourcen abholen',
         'Basisaufbau (Ressourcen)'   => 'Basisaufbau (Ressourcen)',
+        'Basisaufbau (Artefakte)'   => 'Basisaufbau (Artefakte)',
+        'Basisaufbau (Kampf)'   => 'Basisaufbau (Kampf)',
+        'Kolonisation'   => 'Kolonisation',
+        'Saveflug'   => 'Saveflug',
     );
 }
