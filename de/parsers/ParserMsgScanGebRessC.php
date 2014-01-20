@@ -223,7 +223,7 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
 			Ressourcen
 			[\s\n]+
 			(?P<resources>
-			((' . $reResource . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
+			(?:(?:' . $reResource . '|-\?\?\?-)\s+(?:' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+
 			)
 			|)';
         $regExp .= '^Hinweise\s';

@@ -37,7 +37,6 @@ class PropertyValueC
      * filtert beliebige Zahlen mit Tausendertrennzeichen und maximal 2 Nachkommastellen
      *
      * @param string|int|float   $value  Zahl zum Filtern
-     *
      * @uses   PropertyValueC::ensureFloat
      * @return int gefilterte Zahl
      *
@@ -65,9 +64,7 @@ class PropertyValueC
     {
 
         $filtered_number = 0;
-
         if (preg_match('~^\s*(?P<sign>-|\+|)(?P<digit>\d{1,3}(?:(\D?)\d{3})?(?:\3\d{3})*)(?:\D(?P<part>\d{1,2}))?\s*$~', $value, $numberpart)) {
-
             $filtered_number = preg_replace('~\D~', '', $numberpart['digit']);
 
             if (isset($numberpart['part'])) { //Nachkommastellen vorhanden?

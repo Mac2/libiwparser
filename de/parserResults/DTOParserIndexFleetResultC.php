@@ -107,7 +107,7 @@ class DTOParserIndexFleetResultFleetC
 
     /**
      * @soap
-     * @var string enum (übergabe|Transport)
+     * @var enum $eTransfairType (übergabe|Transport)
      */
     public $eTransfairType = array();
 

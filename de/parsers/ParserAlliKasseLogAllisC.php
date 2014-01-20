@@ -24,7 +24,7 @@ use libIwParsers\ParserI;
 use libIwParsers\HelperC;
 
 use libIwParsers\de\parserResults\DTOParserAlliKasseLogResultC;
-use libIwParsers\de\parserResults\DTOParserAlliKasseLogMemberResultC;
+use libIwParsers\de\parserResults\DTOParserAlliKasseLogAllisResultC;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
             $parserResult->bSuccessfullyParsed = true;
             $strAlliance                       = "";
             foreach ($aResult as $result) {
-                $log = new DTOParserAlliKasseLogMemberResultC;
+                $log = new DTOParserAlliKasseLogAllisResultC;
 
                 $iDateTime = HelperC::convertDateTimeToTimestamp($result['reDateTime']);
                 $iCredits  = $result['iCredits'];

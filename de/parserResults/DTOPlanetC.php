@@ -42,7 +42,7 @@ class DTOPlanetC
      * @var DTOCoordinatesC $objCoordinates an object describing
      *      the coordinates of the planet.
      */
-    public $objCoordinates;
+    public $objCoordinates = DTOCoordinatesC;
 
     /**
      * @soap
@@ -79,7 +79,7 @@ class DTOPlanetC
      * @var DTOResourceDepositsC $objCoordinates an object describing
      *      the coordinates of the planet.
      */
-    public $objResourceDeposits;
+    public $objResourceDeposits = DTOResourceDepositsC;
 
     /**
      * @soap
@@ -112,7 +112,7 @@ class DTOPlanetC
      * @var DTOPlanetModifiersC $objPlanetModifiers an object describing
      *      the modifiers of the planet.
      */
-    public $objPlanetModifiers;
+    public $objPlanetModifiers = DTOPlanetModifiersC;
 
     /**
      * @soap

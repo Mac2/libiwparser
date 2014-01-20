@@ -22,6 +22,7 @@ namespace libIwParsers;
 
 return array(
     'lib'  => array(
+    'aThousandSeperators' => array( '.', ' ', "'", '"', 'k', '`', '´',','),
         'aRegisteredParsers' => array(
             array(
                 'class' => '\libIwParsers\de\parsers\ParserInfoGebC',
