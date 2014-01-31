@@ -29,7 +29,6 @@ class DTOParserAlliKasseMemberResultC
    * @var array $aMember the array of DTOParserAlliKasseMemberResultMemberC
    */
   public $aMember = array(); 
-  public $strAlliance = ""; 
 
 }
 

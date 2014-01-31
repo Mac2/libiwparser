@@ -37,7 +37,7 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
     $this->setIdentifier('de_alli_kasse_member');
     $this->setName("Allianzkasse Mitglieder");
     $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData( '/Allianzkasse\s+Allianzkasse/sm' );
+    $this->setRegExpBeginData( '/Name\s+angenommen\s+gesamt\s+pro\s+Tag\s*/sm' );
     $this->setRegExpEndData( '/\(\*\)\.\.\snicht angenommen\,\s\(\*\*\)\.\.\shinter\sder\sNoobbarriere/smU' );
   }
 
@@ -45,60 +45,49 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
 
   /**
    * @see ParserI::parseText()
-   * @todo: Parsen von eingezahlten Credits, aufgrund Bankmangel noch nicht nachvollziehbar wie das aussieht.
    */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserAlliKasseMemberResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $this->stripTextToData();
-
-    $regExp = $this->getRegularExpression();
-    $aResult = array();
-    $fRetVal = preg_match_all( $regExp, $this->getText(), $aResult, PREG_SET_ORDER );
-
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function parseText(DTOParserResultC $parserResult)
     {
-      $parserResult->bSuccessfullyParsed = true;
-	$strAlliance = "";
-      foreach( $aResult as $result )
-      {
-	$member = new DTOParserAlliKasseMemberResultMemberC;
-	
-	$iDateTime = HelperC::convertDateTimeToTimestamp($result['iDateTime']);
-	$fCreditsPaid = PropertyValueC::ensureFloat($result['fCreditsPaid']);
-	
-	if ($result['bHasNotAccepted'] == "*")
-	{
-	  $member->bHasAccepted = false;
-	  $member->strUser    = PropertyValueC::ensureString( $result['strUser'] );
-      //! seit Runde 11 sind Infos trotzdem vorhanden
-	  $member->iCreditsPerDay   = PropertyValueC::ensureInteger( $result['iCreditsPerDay'] );
-      $member->fCreditsPaid   = PropertyValueC::ensureFloat( $fCreditsPaid );
-	} else {
-	
-	  $member->strUser    = PropertyValueC::ensureString( $result['strUser'] );
-	  $member->iCreditsPerDay   = PropertyValueC::ensureInteger( $result['iCreditsPerDay'] );
-	  $member->iDateTime = PropertyValueC::ensureInteger( $iDateTime );
-	  $member->fCreditsPaid   = PropertyValueC::ensureFloat( $fCreditsPaid );
-	  $member->bHasAccepted = true;
-	}
-	
-	$retVal->aMember[] = $member;
-	if (isset($result['strAlliance']) && !empty($result['strAlliance'])) 
-		$strAlliance = PropertyValueC::ensureString( $result['strAlliance'] );
-      }
-      $retVal->strAlliance      = $strAlliance;
-    }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-    }
+        $parserResult->objResultData = new DTOParserAlliKasseMemberResultC();
+        $retVal                      =& $parserResult->objResultData;
+        $fRetVal                     = 0;
 
-  }
+        $this->stripTextToData();
+
+        $regExp  = $this->getRegularExpression();
+        $aResult = array();
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
+            foreach ($aResult as $result) {
+                $member = new DTOParserAlliKasseMemberResultMemberC;
+
+                $iDateTime    = HelperC::convertDateTimeToTimestamp($result['iDateTime']);
+                $fCreditsPaid = PropertyValueC::ensureFloat($result['fCreditsPaid']);
+
+                if (!empty($result['bHasNotAccepted'])) {
+                    $member->bHasAccepted = false;
+                    $member->strUser      = PropertyValueC::ensureString($result['strUser']);
+                    //! seit Runde 11 sind Infos trotzdem vorhanden
+                    $member->iCreditsPerDay = PropertyValueC::ensureInteger($result['iCreditsPerDay']);
+                    $member->fCreditsPaid   = PropertyValueC::ensureFloat($fCreditsPaid);
+                } else {
+
+                    $member->strUser        = PropertyValueC::ensureString($result['strUser']);
+                    $member->iCreditsPerDay = PropertyValueC::ensureInteger($result['iCreditsPerDay']);
+                    $member->iDateTime      = PropertyValueC::ensureInteger($iDateTime);
+                    $member->fCreditsPaid   = PropertyValueC::ensureFloat($fCreditsPaid);
+                    $member->bHasAccepted   = true;
+                }
+
+                $retVal->aMember[] = $member;
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+        }
+
+    }
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -113,22 +102,19 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
         $reExtended = $this->getRegExpFloatingDouble();
 
         $regExp = '/^';
-        $regExp .= '((\(Wing\s(?P<strAlliance>.*)\)\s*)?';
-        $regExp .= '(^.*$)+';
-        $regExp .= 'Name\sangenommen\sgesamt\spro\sTag\s*)?';
-        $regExp .= '^(?P<strUser>' . $reUser . ')';
-        $regExp .= '[\s]+';
+        $regExp .= '(?P<strUser>' . $reUser . ')';
+        $regExp .= '\s+';
         $regExp .= '(?:';
         $regExp .= '\((?P<bHasNotAccepted>\*)\)';
         $regExp .= '|';
         $regExp .= '(?P<iDateTime>' . $reDateTime . ')';
         $regExp .= ')';
-        $regExp .= '[\s]+';
+        $regExp .= '\s+';
         $regExp .= '(?P<fCreditsPaid>' . $reExtended . ')';
-        $regExp .= '[\s]+';
+        $regExp .= '\s+';
         $regExp .= '(?P<iCreditsPerDay>' . $reInteger . ')';
         $regExp .= '\spro\sTag';
-        $regExp .= '$/m';
+        $regExp .= '/m';
 
         return $regExp;
     }

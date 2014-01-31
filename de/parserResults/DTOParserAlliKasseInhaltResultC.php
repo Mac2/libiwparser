@@ -29,7 +29,6 @@ class DTOParserAlliKasseInhaltResultC
    * @var float $fCredits the amount of credits at the alli bank
    */
   public $fCredits = 0; 
-  public $strAlliance = ""; 
 
 }
 

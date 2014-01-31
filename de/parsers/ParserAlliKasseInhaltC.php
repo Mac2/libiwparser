@@ -37,8 +37,8 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
     $this->setIdentifier('de_alli_kasse_inhalt');
     $this->setName("Allianzkasse Kontostand");
     $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData( '/Allianzkasse\s+Allianzkasse/sm' );
-    $this->setRegExpEndData( '/Auszahlung/sm' );
+    $this->setRegExpBeginData( '/Kasseninhalt/' );
+    $this->setRegExpEndData( '/Auszahlung/' );
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -46,36 +46,26 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
   /**
    * @see ParserI::parseText()
    */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserAlliKasseInhaltResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $this->stripTextToData();
-
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match( $regExp, $this->getText(), $aResult );
-
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function parseText(DTOParserResultC $parserResult)
     {
-      $parserResult->bSuccessfullyParsed = true;
+        $parserResult->objResultData = new DTOParserAlliKasseInhaltResultC();
+        $retVal                      =& $parserResult->objResultData;
 
-    $fCredits = $aResult['fCredits'];
-    $retVal->fCredits    = PropertyValueC::ensureFloat( $fCredits );
+        $this->stripTextToData();
 
-    $strAlliance = $aResult['strAlliance'];
-    $retVal->strAlliance    = PropertyValueC::ensureString( $strAlliance );
+        $regExp = $this->getRegularExpression();
+
+        $aResult = array();
+        $fRetVal = preg_match($regExp, $this->getText(), $aResult);
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
+            $retVal->fCredits = PropertyValueC::ensureFloat($aResult['fCredits']);
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+        }
+
     }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-    }
-
-  }
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -84,14 +74,9 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
     /**
     */
 
-  $reFloatingDouble       = $this->getRegExpFloatingDouble();
+    $reFloatingDouble       = $this->getRegExpFloatingDouble();
 
-    $regExp  = '/^';
-    $regExp .= '(\(Wing (?P<strAlliance>.*)\)\s*)?';
-    $regExp .= '(^.*$\n)+';
-    $regExp .= '^Kasseninhalt\s';
-    $regExp .= '(?P<fCredits>'.$reFloatingDouble.')\s(?:Credits|Kekse)';
-    $regExp .= '$/m';
+    $regExp  = '/^(?P<fCredits>'.$reFloatingDouble.')\sCredits$/';
 
     return $regExp;
   }

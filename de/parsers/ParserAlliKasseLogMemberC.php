@@ -38,8 +38,8 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
     $this->setIdentifier('de_alli_kasse_log_member');
     $this->setName("Allianzkasse Auszahlungen(Mitglieder)");
     $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData( '/Allianzkasse\s+Allianzkasse/sm' );
-    $this->setRegExpEndData( '/Auszahlungslog\san\sWings\/etc\sder\sletzten\sdrei\sWochen/smU' );
+    $this->setRegExpBeginData( '/Auszahlungslog\san\sSpieler\sw.{1,5}hrend\sder\sletzten\sdrei\sWochen/' );
+    $this->setRegExpEndData( '/Auszahlungslog\san\sWings\/etc\sder\sletzten/' );
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -48,53 +48,43 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
    * @see ParserI::parseText()
    * @todo: Parsen von eingezahlten Credits, aufgrund Bankmangel noch nicht nachvollziehbar wie das aussieht.
    */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserAlliKasseLogResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $this->stripTextToData();
-
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match_all( $regExp, $this->getText(), $aResult, PREG_SET_ORDER );
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function parseText(DTOParserResultC $parserResult)
     {
-      $parserResult->bSuccessfullyParsed = true;
-      $strAlliance = "";
-      foreach( $aResult as $result )
-      {
-        $log = new DTOParserAlliKasseLogMemberResultC;
+        $parserResult->objResultData = new DTOParserAlliKasseLogResultC();
+        $retVal                      =& $parserResult->objResultData;
 
-        $iDateTime = HelperC::convertDateTimeToTimestamp($result['reDateTime']);
-        $iCredits = $result['iCredits'];
+        $this->stripTextToData();
 
-        $log->strFromUser    = PropertyValueC::ensureString( $result['strFromUser'] );
-        $log->strToUser      = PropertyValueC::ensureString( $result['strToUser'] );
-        if (isset($result['strReason']))
-               $log->strReason      = PropertyValueC::ensureString( $result['strReason'] );
-        $log->iDateTime = PropertyValueC::ensureInteger( $iDateTime );
-        $log->iCredits   = PropertyValueC::ensureInteger( $iCredits );
-        $retVal->aLogs[] = $log;
-        if (isset($result['strAlliance']) && !empty($result['strAlliance'])) $strAlliance = PropertyValueC::ensureString( $result['strAlliance'] );
-      }
-      $retVal->strAlliance      = $strAlliance;
-    }
-    //! Mac: klappt noch nicht richtig, da das nur eigentlich nur bei "leerem" Input kommen sollte - nicht 0 Matches
-    else if( $fRetVal !== false && $fRetVal == 0 )
-    {
-      $parserResult->bSuccessfullyParsed = true;
-      $parserResult->aErrors[] = 'no Data found';
-    }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-    }
+        $regExp = $this->getRegularExpression();
 
-  }
+        $aResult = array();
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
+
+            foreach ($aResult as $result) {
+                $log = new DTOParserAlliKasseLogMemberResultC;
+
+                $log->iDateTime = HelperC::convertDateTimeToTimestamp($result['reDateTime']);
+                $log->iCredits  = PropertyValueC::ensureInteger($result['iCredits']);
+
+                $log->strFromUser = PropertyValueC::ensureString($result['strFromUser']);
+                $log->strToUser   = PropertyValueC::ensureString($result['strToUser']);
+                if (isset($result['strReason'])) {
+                    $log->strReason = PropertyValueC::ensureString($result['strReason']);
+                }
+                $retVal->aLogs[] = $log;
+            }
+
+        } else if ($fRetVal !== false && $fRetVal == 0) {
+            $parserResult->bSuccessfullyParsed = true;
+            $parserResult->aErrors[]           = 'no Data found';
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+        }
+
+    }
 
   /////////////////////////////////////////////////////////////////////////////
 
@@ -103,32 +93,28 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
     /**
     */
 
-  $reDateTime      = $this->getRegExpDateTime();
-  $reFromUser         = $this->getRegExpUserName();
-  $reToUser         = $this->getRegExpUserName();
-  $reInteger       = $this->getRegExpDecimalNumber();
-  $reReason       = $this->getRegExpSingleLineText();
+    $reDateTime = $this->getRegExpDateTime();
+    $reFromUser = $this->getRegExpUserName();
+    $reToUser   = $this->getRegExpUserName();
+    $reInteger  = $this->getRegExpDecimalNumber();
+    $reReason   = '[^\n]*?';
 
-  $regExp  = '/^';
-  $regExp .= '((\(Wing\s(?P<strAlliance>.*)\)\s*)?';
-  $regExp .= '(^.*$\n)+';
-  $regExp .= '^Auszahlungslog\san\sSpieler\sw.{1,3}hrend\sder\sletzten\sdrei\sWochen\s)?';
-//  $regExp .= '(?:';
-  $regExp .= '(?P<reDateTime>'        . $reDateTime       . ')';
-  $regExp .= '\svon\s';
-  $regExp .= '(?P<strFromUser>'        . $reFromUser       . ')';
-  $regExp .= '\san\s';
-  $regExp .= '(?P<strToUser>'        . $reToUser       . ')';
-  $regExp .= '\s';
-  $regExp .= '(?P<iCredits>'        . $reInteger       . ')';  
-  $regExp .= '\s(Credits|Kekse)\sausgezahlt';
-  $regExp .= '(?:';
-  $regExp .= '(?:\sGrund\swar\s';
-  $regExp .= '(?P<strReason>'        . $reReason       . ')';  
-  $regExp .= '\.)';
-  $regExp  .= '|)';
-//  $regExp .= ')*';
-    $regExp .= '/m';
+    $regExp  = '/';
+
+    $regExp .= '(?P<reDateTime>'        . $reDateTime       . ')';
+    $regExp .= '\svon\s';
+    $regExp .= '(?P<strFromUser>'        . $reFromUser       . ')';
+    $regExp .= '\san\s';
+    $regExp .= '(?P<strToUser>'        . $reToUser       . ')';
+    $regExp .= '\s';
+    $regExp .= '(?P<iCredits>'        . $reInteger       . ')';
+    $regExp .= '\sCredits\sausgezahlt';
+
+    $regExp .= '(?:\sGrund\swar\s';
+    $regExp .=  '(?P<strReason>'        . $reReason       . ')';
+    $regExp .= '\.)?';
+
+    $regExp .= '/';
 
     return $regExp;
   }

@@ -29,7 +29,6 @@ class DTOParserAlliKasseLogResultC
    * @var array $aLogs the array of logs
    */
   public $aLogs = array(); 
-  public $strAlliance = ""; 
 
 }
 
