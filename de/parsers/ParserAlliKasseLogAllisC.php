@@ -38,8 +38,8 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
     $this->setIdentifier('de_alli_kasse_log_allis');
     $this->setName("Allianzkasse Auszahlungen(Allianzen)");
     $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData( '/Auszahlungslog\san\sWings\/etc\sder\sletzten\sdrei\sWochen\s*/' );
-    $this->setRegExpEndData( '' );
+    $this->setRegExpBeginData('/Auszahlungslog\san\sWings\/etc\sder\sletzten\sdrei\sWochen\s*/');
+    $this->setRegExpEndData('');
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,6 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
     {
         $parserResult->objResultData = new DTOParserAlliKasseLogResultC();
         $retVal                      =& $parserResult->objResultData;
-        $fRetVal                     = 0;
 
         $this->stripTextToData();
 
@@ -63,7 +62,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
             $parserResult->bSuccessfullyParsed = true;
 
             foreach ($aResult as $result) {
-                $log = new DTOParserAlliKasseLogMemberResultC;
+                $log = new DTOParserAlliKasseLogAllisResultC();
 
                 $log->strFromUser = PropertyValueC::ensureString($result['strFromUser']);
                 $log->strAlliName = PropertyValueC::ensureString($result['strAlliName']);
@@ -87,9 +86,6 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
 
   private function getRegularExpression()
   {
-      /**
-       */
-
       $reDateTime = $this->getRegExpDateTime();
       $reFromUser = $this->getRegExpUserName();
       $reInteger  = $this->getRegExpDecimalNumber();
@@ -120,11 +116,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
    */
   private function getRegularExpressionWithoutNamedGroups()
   {
-    $retVal = $this->getRegularExpression();
-
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
-
-    return $retVal;
+    return HelperC::removeNamedGroups( $this->getRegularExpression() );
   }
 
   /////////////////////////////////////////////////////////////////////////////

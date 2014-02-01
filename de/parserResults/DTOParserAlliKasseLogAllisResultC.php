@@ -19,9 +19,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * Result DTO of parser de_alli_kasse_log_member
+ * Result DTO of parser de_alli_kasse_log_allis
  */
-class DTOParserAlliKasseLogMemberResultC
+class DTOParserAlliKasseLogAllisResultC
 {
 
    /**

@@ -37,8 +37,8 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
     $this->setIdentifier('de_alli_kasse_inhalt');
     $this->setName("Allianzkasse Kontostand");
     $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData( '/Kasseninhalt/' );
-    $this->setRegExpEndData( '/Auszahlung/' );
+    $this->setRegExpBeginData('/Kasseninhalt/');
+    $this->setRegExpEndData('/Auszahlung/');
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -71,9 +71,6 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
 
   private function getRegularExpression()
   {
-    /**
-    */
-
     $reFloatingDouble       = $this->getRegExpFloatingDouble();
 
     $regExp  = '/^(?P<fCredits>'.$reFloatingDouble.')\sCredits$/';
@@ -88,11 +85,7 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
    */
   private function getRegularExpressionWithoutNamedGroups()
   {
-    $retVal = $this->getRegularExpression();
-
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
-
-    return $retVal;
+    return HelperC::removeNamedGroups( $this->getRegularExpression() );
   }
 
   /////////////////////////////////////////////////////////////////////////////

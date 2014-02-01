@@ -37,8 +37,8 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
     $this->setIdentifier('de_alli_kasse_member');
     $this->setName("Allianzkasse Mitglieder");
     $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData( '/Name\s+angenommen\s+gesamt\s+pro\s+Tag\s*/sm' );
-    $this->setRegExpEndData( '/\(\*\)\.\.\snicht angenommen\,\s\(\*\*\)\.\.\shinter\sder\sNoobbarriere/smU' );
+    $this->setRegExpBeginData('/Name\s+angenommen\s+gesamt\s+pro\s+Tag\s*/sm');
+    $this->setRegExpEndData('/\(\*\)\.\.\snicht angenommen\,\s\(\*\*\)\.\.\shinter\sder\sNoobbarriere/smU');
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,6 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
     {
         $parserResult->objResultData = new DTOParserAlliKasseMemberResultC();
         $retVal                      =& $parserResult->objResultData;
-        $fRetVal                     = 0;
 
         $this->stripTextToData();
 
@@ -93,9 +92,6 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
 
     private function getRegularExpression()
     {
-        /**
-         */
-
         $reDateTime = $this->getRegExpDateTime();
         $reUser = $this->getRegExpUserName();
         $reInteger = $this->getRegExpDecimalNumber();
@@ -126,11 +122,7 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
    */
   private function getRegularExpressionWithoutNamedGroups()
   {
-    $retVal = $this->getRegularExpression();
-
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
-
-    return $retVal;
+    return HelperC::removeNamedGroups( $this->getRegularExpression() );
   }
 
   /////////////////////////////////////////////////////////////////////////////
