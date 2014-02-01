@@ -38,9 +38,8 @@ class ParserHighscoreC extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_highscore');
     $this->setName('Ingame Highscore (Spieler)');
-    //! Standard + Textskin FF14
-    $this->setRegExpCanParseText('/eigene\s+Highscore\s+globale\s+Highscores\s+Highscore\s+Wackelpudding.+Letzte\s+Aktualisierung.+Highscore.+Pos\s+?Name\s+?Allianz/sm');    
-    $this->setRegExpBeginData('/eigene\s+Highscore\s+globale\s+Highscores\s+Highscore\s+Wackelpudding/sm');
+    $this->setRegExpCanParseText('/eigene\s+Highscore\s*globale\s+Highscores\s*Highscore\s+Wackelpudding.+Letzte\s+Aktualisierung.+Highscore.+Pos\s+?Name\s+?Allianz/sm');
+    $this->setRegExpBeginData('/eigene\s+Highscore\s*globale\s+Highscores\s*Highscore\s+Wackelpudding/sm');
     $this->setRegExpEndData( '' );
   }
 
