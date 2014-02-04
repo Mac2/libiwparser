@@ -64,43 +64,39 @@ class ParserIndexResearchC extends ParserMsgBaseC implements ParserMsgI
   /**
    * @see ParserMsgI::parseMsg()
    */
-  public function parseMsg( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserIndexResearchResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $regExp = $this->getRegularExpression();
-    $msg = $this->getMsg();
-
-    $parserResult->strIdentifier = 'de_index_research';
-
-    $aResult = array();
-    $fRetVal = preg_match_all( $regExp, $msg->strParserText, $aResult, PREG_SET_ORDER );
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function parseMsg(DTOParserResultC $parserResult)
     {
-        $parserResult->bSuccessfullyParsed = true;
+        $parserResult->objResultData = new DTOParserIndexResearchResultC();
+        $retVal                      =& $parserResult->objResultData;
 
-        foreach( $aResult as $result )
-        {
-            $retObj = new DTOParserIndexResearchResultResearchC();
+        $regExp = $this->getRegularExpression();
+        $msg    = $this->getMsg();
 
-            $retObj->strResearchName = PropertyValueC::ensureString($result['strResearchName']);
+        $parserResult->strIdentifier = 'de_index_research';
 
-            $retObj->iResearchEnd = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );
-            if (isset($result['mtMixedTime']))
-                $retObj->iResearchEndIn = HelperC::convertMixedTimeToTimestamp( $result['mtMixedTime'] );
+        $aResult = array();
+        $fRetVal = preg_match_all($regExp, $msg->strParserText, $aResult, PREG_SET_ORDER);
 
-            $retVal->aResearch[] = $retObj;
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
+
+            foreach ($aResult as $result) {
+                $retObj = new DTOParserIndexResearchResultResearchC();
+
+                $retObj->strResearchName = PropertyValueC::ensureString($result['strResearchName']);
+
+                $retObj->iResearchEnd = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
+                if (isset($result['mtMixedTime']))
+                    $retObj->iResearchEndIn = HelperC::convertMixedTimeToTimestamp($result['mtMixedTime']);
+
+                $retVal->aResearch[] = $retObj;
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = $msg->strParserText;
         }
     }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-      $parserResult->aErrors[] = $msg->strParserText;
-    }
-  }
 
   /////////////////////////////////////////////////////////////////////////////
 

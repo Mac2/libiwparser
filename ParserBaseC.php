@@ -116,9 +116,9 @@ class ParserBaseC extends ParserFunctionC
             }
         }
       }
-    }
 
-    $this->setText( $text );
+      $this->setText( $text );
+    }
 
     return;
   }

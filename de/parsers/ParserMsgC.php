@@ -57,10 +57,9 @@ class ParserMsgC extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_msg');
     $this->setName('Nachrichtenzentrale');
-//    $this->setRegExpCanParseText('/Nachrichtenzentrale.*(?:Nachrichtenzentrale.*Nachrichtenzentrale|Neue\sNachricht\sverfassen)/smU');		//! Mac: requires Ungreedy U Modifier because charsize could be larger than 500k!
     $this->setRegExpCanParseText('/'.$this->getRegularExpressionHeader().'/mxU');
-    $this->setRegExpBeginData('/(?:(Nachrichtenzentrale\s\-\sNachrichten[\s\n\r\t]+\b\w+\b\s+alle\sNachrichten\s.+ffnen\s\/\salle\sNachrichten\sschliessen\s\/\salle\sNachrichten\sselektieren\s\/\salle\sNachrichten\sdeselektieren\s+Seitenanzeige[\d\[\]\s\t\n\r]+)|(Nachrichtenzentrale\s\-\sNeue\sNachrichten[\s\n\r\t]neue\sNachrichten))/s' );
-    $this->setRegExpEndData('/Seitenanzeige[\d\[\]\s\t\n\r]+alle\sNachrichten\s.+ffnen.+alle\sNachrichten\sschliessen.+alle\sNachrichten\sselektieren.+alle\sNachrichten\sdeselektieren/s' );
+    $this->setRegExpBeginData('/alle\sNachrichten\sdeselektieren\sSeitenanzeige\s\[\d+\]/s' );
+    $this->setRegExpEndData('/Seitenanzeige\s\[\d+\]\s+alle\sNachrichten\söffnen/s' );
   }
 
  /////////////////////////////////////////////////////////////////////////////

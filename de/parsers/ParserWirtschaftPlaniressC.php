@@ -36,8 +36,8 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_wirtschaft_planiress');
     $this->setName("KoloRess&Uuml;bersicht Teil1");
-    $this->setRegExpCanParseText('/Ressourcenkolo.{1,3}bersicht.*Lager\sund\sBunker\sanzeigen/s');
-    $this->setRegExpBeginData( '/Kolonie\s+\w+\s+(?:Erdbeermarmelade|Stahl)\s+\w+\s+\w+\s+\w+\s+\w+\s+(Traubenzucker|Energie)/' );
+    $this->setRegExpCanParseText('/Ressourcenkoloübersicht.*Lager\sund\sBunker\sanzeigen/s');
+    $this->setRegExpBeginData( '/Kolonie\s+Eisen\s+Stahl\s+VV4A\s+chem\.\s+Elemente\s+Eis\s+Wasser\s+Energie/' );
     $this->setRegExpEndData( '/Lager\sund\sBunker\sanzeigen/' );
   }
 

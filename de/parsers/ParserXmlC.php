@@ -64,14 +64,13 @@ class ParserXmlC extends ParserBaseC implements ParserI
   {
         $parserResult->objResultData = new DTOParserXmlResultC();
         $retVal =& $parserResult->objResultData;
-        $fRetVal = 0;
 
         $this->stripTextToData();
 
         $regExp = $this->getRegularExpression();
 
         $aResult = array();
-        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER); 
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
         if ( $fRetVal !== FALSE && $fRetVal > 0)
         {

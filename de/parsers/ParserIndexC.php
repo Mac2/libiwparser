@@ -55,8 +55,8 @@ class ParserIndexC extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_index');
     $this->setName("Startseite");
-    $this->setRegExpCanParseText('/Notizblock.*Umwandlung.*Serverzeit/smU');        //! Mac: requires Ungreedy U Modifier because charsize could be too large!
-    $this->setRegExpBeginData('/Lade\sneue\sSpieler\sein\sund\sgewinne\seine\s.{1,3}berraschung\s*?/s' );
+    $this->setRegExpCanParseText('/HILFE\s+&\s+Chat\s+Postit\serstellen/smU');        //! Mac: requires Ungreedy U Modifier because charsize could be too large!
+    $this->setRegExpBeginData('/HILFE\s+&\s+Chat\s+Postit\serstellen/smU' );
     $this->setRegExpEndData('/__\s?X/s' );
   }
 
@@ -65,134 +65,108 @@ class ParserIndexC extends ParserBaseC implements ParserI
   /**
    * @see ParserI::parseText()
    */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserIndexResultC();
-    $retVal =& $parserResult->objResultData;
-
-    $this->stripTextToData();
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $aResult = preg_split( $regExp, $this->getText(), -1, PREG_SPLIT_DELIM_CAPTURE );
-
-    if( !empty($aResult) )
+    public function parseText(DTOParserResultC $parserResult)
     {
-      $parserResult->bSuccessfullyParsed = true;
+        $parserResult->objResultData = new DTOParserIndexResultC();
+        $retVal                      =& $parserResult->objResultData;
 
-      $parser = "";
+        $this->stripTextToData();
+        $regExp = $this->getRegularExpression();
 
-      foreach( $aResult as $result )
-      {
-        if (empty($result))
-        {
-          continue;
+        $aResult = preg_split($regExp, $this->getText(), -1, PREG_SPLIT_DELIM_CAPTURE);
+
+        if (!empty($aResult)) {
+            $parserResult->bSuccessfullyParsed = true;
+
+            $parser = "";
+
+            foreach ($aResult as $result) {
+                if (empty($result)) {
+                    continue;
+                }
+
+                $treffer = array();
+                if (preg_match($regExp, $result, $treffer)) {
+
+                    $parser = "";
+                    if (!empty($treffer['FleetOwn'])) {
+                        $fleetType = 'own';
+                        $parser    = 'Fleet';
+                    }
+                    if (!empty($treffer['FleetOpposit'])) {
+                        $fleetType = 'opposit';
+                        $parser    = 'Fleet';
+                    }
+                    if (!empty($treffer['Research'])) {
+                        $parser = 'Research';
+                    }
+                    if (!empty($treffer['KoloInfos'])) {
+                        $parser = 'KoloInfos';
+                        $temp   = $treffer['KoloInfos'];
+                    }
+                    if (!empty($treffer['Geb'])) {
+                        $parser = 'Geb';
+                    }
+                    if (!empty($treffer['Schiff'])) {
+                        $parser = 'Schiff';
+                    }
+                    if (!empty($treffer['Ressen'])) {
+                        $parser = 'Ressen';
+                    }
+                    if (!empty($treffer['shoutbox'])) {
+                        $parser = ''; //! erstmal skippen, da zuviele falsch positiven Ergebnisse
+                    }
+                    if (!empty($treffer['Message'])) {
+                        if (isset($treffer['unreadMsg']) && !empty($treffer['unreadMsg'])) {
+                            $retVal->iUnreadMsg = $treffer['unreadMsg'];
+                        }
+                        if (isset($treffer['unreadAMsg']) && !empty($treffer['unreadAMsg'])) {
+                            $retVal->iUnreadAllyMsg = $treffer['unreadAMsg'];
+                        }
+                    }
+                    continue;
+                }
+                if (!empty($parser)) {
+                    $msg = new DTOParserIndexResultIndexC;
+
+                    $msg->eParserType = $parser;
+
+                    if ($parser == 'Fleet') {
+                        $parser = new ParserIndexFleetC;
+                        $parser->setType($fleetType);
+                    } else if ($parser == 'Research') {
+                        $retVal->bOngoingResearch = true;
+                        $parser                   = new ParserIndexResearchC;
+                    } else if ($parser == 'KoloInfos') {
+                        $parser = new ParserIndexKoloInfosC;
+                        $temp .= $result;
+                        $result = $temp;
+                    } else if ($parser == 'Geb') {
+                        $parser = new ParserIndexGebC;
+                    } else if ($parser == 'Schiff') {
+                        $parser = new ParserIndexSchiffC;
+                    } else if ($parser == 'Ressen') {
+                        $parser = new ParserIndexRessourcenC;
+                    }
+
+                    $msg->strParserText = $result;
+
+                    $return = new DTOParserResultC ($parser);
+                    $b      = $parser->canParseMsg($msg);
+                    if (!$b) break;
+                    $parser->parseMsg($return);
+                    $retVal->aContainer[] = $return;
+
+                    $parser    = '';
+                    $fleetType = '';
+                    continue;
+                }
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
-
-        $treffer = array();
-        if (preg_match( $regExp, $result, $treffer ))
-        {
-
-          $parser = "";
-          if (!empty($treffer['FleetOwn']))
-          {
-            $fleetType = 'own';
-            $parser = 'Fleet';
-          }
-          if (!empty($treffer['FleetOpposit']))
-          {
-            $fleetType = 'opposit';
-            $parser = 'Fleet';
-          }
-          if (!empty($treffer['Research']))
-          {
-            $parser = 'Research';
-          }
-          if (!empty($treffer['KoloInfos']))
-          {
-            $parser = 'KoloInfos';
-            $temp = $treffer['KoloInfos'];
-          }
-          if (!empty($treffer['Geb']))
-          {
-            $parser = 'Geb';
-          }
-          if (!empty($treffer['Schiff']))
-          {
-            $parser = 'Schiff';
-          }
-          if (!empty($treffer['Ressen']))
-          {
-            $parser = 'Ressen';
-          }
-          if (!empty($treffer['shoutbox']))
-          {
-            $parser = '';   //! erstmal skippen, da zuviele falsch positiven Ergebnisse
-          }
-          if (!empty($treffer['Message']))
-          {
-            if (isset($treffer['unreadMsg']) && !empty($treffer['unreadMsg']))
-                $retVal->iUnreadMsg = $treffer['unreadMsg'];
-            if (isset($treffer['unreadAMsg']) && !empty($treffer['unreadAMsg']))
-                $retVal->iUnreadAllyMsg = $treffer['unreadAMsg'];
-          }
-          continue;
-        }
-        if (!empty($parser))
-        {
-          $msg = new DTOParserIndexResultIndexC;
-
-          $msg->eParserType = $parser;
-
-          if ($parser == 'Fleet')
-          {
-            $parser = new ParserIndexFleetC;
-            $parser->setType( $fleetType );
-          }
-          else if ($parser == 'Research')
-          {
-            $retVal->bOngoingResearch = true;
-            $parser = new ParserIndexResearchC;
-          }
-          else if ($parser == 'KoloInfos')
-          {
-            $parser = new ParserIndexKoloInfosC;
-            $temp .= $result;
-            $result = $temp;
-          }
-          else if ($parser == 'Geb')
-          {
-            $parser = new ParserIndexGebC;
-          }
-          else if ($parser == 'Schiff')
-          {
-            $parser = new ParserIndexSchiffC;
-          }
-          else if ($parser == 'Ressen')
-          {
-            $parser = new ParserIndexRessourcenC;
-          }
-
-          $msg->strParserText = $result;
-
-          $return = new DTOParserResultC ($parser);
-          $b = $parser->canParseMsg($msg);
-          if (!$b) break;
-          $parser->parseMsg ($return);
-          $retVal->aContainer[] = $return;
-
-          $parser = '';
-          $fleetType = '';
-          continue;
-        }
-      }
     }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-    }
-  }
 
   /////////////////////////////////////////////////////////////////////////////
 

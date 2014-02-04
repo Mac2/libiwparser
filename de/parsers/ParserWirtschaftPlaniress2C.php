@@ -36,8 +36,8 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
 
     $this->setIdentifier('de_wirtschaft_planiress2');
     $this->setName("KoloRess&Uuml;bersicht Teil2");
-    $this->setRegExpCanParseText('/Ressourcenkolo.+bersicht\sTeil\s2/s');
-    $this->setRegExpBeginData( '/Kolonie\sFP\s\w+\sSteuersatz\s(?:Bev.+lkerung|blubbernde\sGallertmasse)\sZufr/' );
+    $this->setRegExpCanParseText('/Ressourcenkoloübersicht\sTeil\s2/s');
+    $this->setRegExpBeginData( '/Kolonie\s+FP\s+Credits\s+Steuersatz\s+Bevölkerung\s+Zufr/' );
     $this->setRegExpEndData( '' );
   }
 
