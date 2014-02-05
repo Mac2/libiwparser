@@ -81,21 +81,39 @@ class DTOParserForschungResearchedResultC
 
    /**
    * @soap
-   * @var integer $iFP the amount of research points to be needed
+   * @var integer $iFP the amount of research points to be needed without modificators
    */
-  public $iFP = ''; 
+  public $iFP = '';
+
+   /**
+   * @soap
+   * @var integer $iFP the amount of research points to be needed currently
+   */
+  public $iFP_akt = '';
 
    /**
    * @soap
    * @var integer $iPeopleResearched the people step for this research
    */
-  public $iPeopleResearched = '';   
+  public $iPeopleResearched = '';
 
    /**
-   * @soap
-   * @var integer $iResearchCosts the prozent of the full fp because of the people step
-   */
-  public $iResearchCosts = ''; 
+    * @soap
+    * @var integer $iProzent
+    */
+  public $iProzent = '';
+
+   /**
+    * @soap
+    * @var integer $iMalus
+    */
+  public $iMalus = '';
+
+   /**
+    * @soap
+    * @var integer $iResearchCosts the prozent of the full fp because of the people step
+    */
+  public $iResearchCosts = '';
 
    /**
    * @soap
@@ -142,25 +160,43 @@ class DTOParserForschungOpenResultC
    * @soap
    * @var string $strAreaName the area
    */
-  public $strAreaName = '';    
+  public $strAreaName = '';
 
    /**
    * @soap
-   * @var integer $iFP the amount of research points to be needed
+   * @var integer $iFP the amount of research points to be needed without modificators
    */
-  public $iFP = ''; 
+  public $iFP = '';
+
+   /**
+    * @soap
+    * @var integer $iFP the amount of research points to be needed currently
+    */
+  public $iFP_akt = '';
 
    /**
    * @soap
    * @var integer $iPeopleResearched the people step for this research
    */
-  public $iPeopleResearched = '';   
+  public $iPeopleResearched = '';
+
+   /**
+   * @soap
+   * @var integer $iProzent
+   */
+  public $iProzent = '';
+
+   /**
+   * @soap
+   * @var integer $iMalus
+   */
+  public $iMalus = '';
 
    /**
    * @soap
    * @var integer $iResearchCosts the prozent of the full fp because of the people step
    */
-  public $iResearchCosts = ''; 
+  public $iResearchCosts = '';
 
    /**
    * @soap
@@ -207,19 +243,37 @@ class DTOParserForschungProgressResultC
    * @soap
    * @var string $strAreaName the area
    */
-  public $strAreaName = '';      
+  public $strAreaName = '';
 
    /**
    * @soap
-   * @var integer $iFP the amount of research points to be needed
+   * @var integer $iFP the amount of research points to be needed without modificators
    */
-  public $iFP = ''; 
+  public $iFP = '';
+
+   /**
+   * @soap
+   * @var integer $iFP the amount of research points to be needed currently
+   */
+  public $iFP_akt = '';
 
    /**
    * @soap
    * @var integer $iPeopleResearched the people step for this research
    */
-  public $iPeopleResearched = '';   
+  public $iPeopleResearched = '';
+
+   /**
+   * @soap
+   * @var integer $iProzent
+   */
+  public $iProzent = '';
+
+   /**
+   * @soap
+   * @var integer $iMalus
+   */
+  public $iMalus = '';
 
    /**
    * @soap
