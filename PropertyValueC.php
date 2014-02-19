@@ -69,12 +69,12 @@ class PropertyValueC
             if (isset($numberpart['part'])) {                        //Nachkommastellen vorhanden?
                 if (strlen($numberpart['part']) === 2) {             //zwei Nachkommastellen
                     $filtered_number += $numberpart['part']/100;
-                } else {                                        //eine Nachkommastelle
+                } else {                                             //eine Nachkommastelle
                     $filtered_number += $numberpart['part']/10;
                 }
             }
 
-            if ($numberpart['sign'] === '-') {                        //evl. negatives Vorzeichen wieder dazu
+            if ($numberpart['sign'] === '-') {                       //evl. negatives Vorzeichen wieder dazu
                 $filtered_number = -$filtered_number;
             }
 

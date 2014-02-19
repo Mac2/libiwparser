@@ -98,7 +98,7 @@ class ParserIndexRessourcenC extends ParserMsgBaseC implements ParserMsgI
                 	$retObj->iBevmax = PropertyValueC::ensureInteger($result['Bevmax']);
 	    }
 	    else {
-            	$retObj = new DTOParserIndexRessourcenRessResultC();
+            $retObj = new DTOParserIndexRessourcenRessResultC();
 	    	$retObj->strResourceName = $ress_name;
             	if (isset($result['vorrat']))
                 	$retObj->iResourceVorrat = PropertyValueC::ensureInteger($result['vorrat']);

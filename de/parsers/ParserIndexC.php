@@ -57,7 +57,7 @@ class ParserIndexC extends ParserBaseC implements ParserI
     $this->setName("Startseite");
     $this->setRegExpCanParseText('/Notizblock.*Umwandlung.*Serverzeit/smU');        //! Mac: requires Ungreedy U Modifier because charsize could be too large!
     $this->setRegExpBeginData('/HILFE\s+&\s+Chat\s+Postit\serstellen/smU' );
-    $this->setRegExpEndData('/__\s?X/s' );
+    $this->setRegExpEndData('/__\s?X/s');
   }
 
   /////////////////////////////////////////////////////////////////////////////
