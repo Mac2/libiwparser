@@ -140,7 +140,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                     $ret->iProzent           = PropertyValueC::ensureInteger($result['prozent']);
                     $ret->iMalus             = PropertyValueC::ensureInteger($result['malus']);
                     $ret->iResearchCosts     = PropertyValueC::ensureInteger($result['faktor']);
-                    $ret->iUserResearchTime  = HelperC::convertMixedTimeToTimestamp($result['dauer']);
+                    $ret->iUserResearchTime  = HelperC::convertMixedDurationToSeconds($result['dauer']);
 
                     if (isset($result['kosten']) && !empty($result['kosten'])) {
                         $treffer = array();
@@ -169,7 +169,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                     $ret->iProzent           = PropertyValueC::ensureInteger($result['prozent']);
                     $ret->iMalus             = PropertyValueC::ensureInteger($result['malus']);
                     $ret->iResearchCosts     = PropertyValueC::ensureInteger($result['faktor']);
-                    $ret->iUserResearchTime  = HelperC::convertMixedTimeToTimestamp($result['dauer']);
+                    $ret->iUserResearchTime  = HelperC::convertMixedDurationToSeconds($result['dauer']);
 
                     if (isset($result['kosten']) && !empty($result['kosten'])) {
                         $treffer = array();
@@ -232,7 +232,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
                         $ret->iUserResearchTime = HelperC::convertDateTimeToTimestamp($result['finish']);
                     }
                     if (isset($result['expire'])) {
-                        $ret->iUserResearchDuration = HelperC::convertMixedTimeToTimestamp($result['expire']);
+                        $ret->iUserResearchDuration = HelperC::convertMixedDurationToSeconds($result['expire']);
                     }
                     $retVal->aResearchsProgress[] = $ret;
                     continue;

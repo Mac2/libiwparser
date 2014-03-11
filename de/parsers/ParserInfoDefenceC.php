@@ -66,7 +66,7 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
       	$parserResult->bSuccessfullyParsed = true;
 	
 	$retVal->strDefenceName = $aResult['strDefenceName'];
-	$retVal->iProductionTime = HelperC::convertMixedTimeToTimestamp( $aResult['strTime'] );
+	$retVal->iProductionTime = HelperC::convertMixedDurationToSeconds( $aResult['strTime'] );
 	$retVal->aResearchs = HelperC::convertBracketStringToArray($aResult['strResearchs']);
 
     $retVal->strAreaName = PropertyValueC::ensureString($aResult['strTyp']);
@@ -162,7 +162,7 @@ class ParserInfoDefenceC extends ParserBaseC implements ParserI
   $regExp  .= '[\n\r]+';
 
   $regExp  .= 'Voraussetzungen\sForschungen\s+?';
-  $regExp  .= '(?P<strResearchs>'.$reResearchName.'){0,1}';
+  $regExp  .= '(?P<strResearchs>'.$reResearchName.')?';
   $regExp  .= '[\n\r]+';
  
   $regExp  .= 'Kampfdaten';

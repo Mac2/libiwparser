@@ -45,13 +45,13 @@ class DTOParserIndexResearchResultResearchC
    
   /**
    * @soap
-   * @var date 
+   * @var date $iResearchEnd unixtime until research
    */
   public $iResearchEnd = array();
   
   /**
    * @soap
-   * @var date 
+   * @var integer $iResearchEndIn research duration in seconds
    */
   public $iResearchEndIn = array();
   

@@ -127,7 +127,7 @@ class DTOParserMsgResultMsgC
 
   /**
    * @soap
-   * @var int $iMsgDateTime since when the message has been created
+   * @var integer $iMsgDateTime since when the message has been created
    */
   public $iMsgDateTime = 0;
 
@@ -168,7 +168,7 @@ class DTOParserMsgResultMsgTransportC extends DTOParserMsgResultMsgC
 
   /**
    * @soap
-   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => int
+   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => integer
    */
   public $aCoords = array();
 
@@ -193,7 +193,7 @@ class DTOParserMsgResultMsgScanSchiffeDefRessC extends DTOParserMsgResultMsgC
 {
   /**
    * @soap
-   * @var int $iTimestamp when has this scan been created
+   * @var integer $iTimestamp when has this scan been created
    */
   public $iTimestamp = 0;
 
@@ -217,7 +217,7 @@ class DTOParserMsgResultMsgScanSchiffeDefRessC extends DTOParserMsgResultMsgC
 
   /**
    * @soap
-   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => int
+   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => integer
    */
   public $aCoords = array();
 
@@ -271,7 +271,7 @@ class DTOParserMsgResultMsgScanFailC extends DTOParserMsgResultMsgC
 
   /**
    * @soap
-   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => int
+   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => integer
    */
   public $aCoords = array();
 
@@ -292,7 +292,7 @@ class DTOParserMsgResultMsgSondierungC extends DTOParserMsgResultMsgC
 
   /**
    * @soap
-   * @var array $aCoordsFrom array of (coords_gal,coords_sol,coords_pla) => int
+   * @var array $aCoordsFrom array of (coords_gal,coords_sol,coords_pla) => integer
    */
   public $aCoordsFrom = array();
 
@@ -310,7 +310,7 @@ class DTOParserMsgResultMsgSondierungC extends DTOParserMsgResultMsgC
 
   /**
    * @soap
-   * @var array $aCoordsTo array of (coords_gal,coords_sol,coords_pla) => int
+   * @var array $aCoordsTo array of (coords_gal,coords_sol,coords_pla) => integer
    */
   public $aCoordsTo = array();
   
@@ -330,7 +330,7 @@ class DTOParserMsgResultMsgScanGebRessC extends DTOParserMsgResultMsgC
 {
   /**
    * @soap
-   * @var int $iTimestamp when has this geoscan been created
+   * @var integer $iTimestamp when has this geoscan been created
    */
   public $iTimestamp = 0;
 
@@ -354,7 +354,7 @@ class DTOParserMsgResultMsgScanGebRessC extends DTOParserMsgResultMsgC
 
   /**
    * @soap
-   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => int
+   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => integer
    */
   public $aCoords = array();
 
@@ -423,7 +423,7 @@ class DTOParserMsgResultMsgGaveC extends DTOParserMsgResultMsgC
 
   /**
    * @soap
-   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => int
+   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => integer
    */
   public $aCoords = array();
 
@@ -472,7 +472,7 @@ class DTOParserMsgResultMsgTransfairC extends DTOParserMsgResultMsgC
 
   /**
    * @soap
-   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => int
+   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => integer
    */
   public $aCoords = array();
 
@@ -509,7 +509,7 @@ class DTOParserMsgResultMsgReverseC extends DTOParserMsgResultMsgC
 
   /**
    * @soap
-   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => int
+   * @var array $aCoords array of (coords_gal,coords_sol,coords_pla) => integer
    */
   public $aCoords = array();
 

@@ -62,7 +62,7 @@ class DTOParserIndexKoloInfosResultKoloInfoC
 
   /**
    * @soap
-   * @var array $aScanRange
+   * @var array $aScanRange Scanrange in seconds
    */
   public $aScanRange = array();
 

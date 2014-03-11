@@ -55,13 +55,13 @@ class DTOParserIndexSchiffResultSchiffC
    
   /**
    * @soap
-   * @var date
+   * @var date $iSchiffEnd unixtime until build
    */
   public $iSchiffEnd = 0;
   
   /**
    * @soap
-   * @var date
+   * @var integer $iSchiffEndIn build duration in seconds
    */
   public $iSchiffEndIn = 0;
 

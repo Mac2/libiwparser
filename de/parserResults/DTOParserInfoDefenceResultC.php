@@ -25,19 +25,19 @@ class DTOParserInfoDefenceResultC
 {
   /**
    * @soap
-   * @var string $strSchiffName the name of the ship
+   * @var string $strSchiffName the name of the defence
    */
   public $strDefenceName = '';
   public $strAreaName = '';
   /**
    * @soap
-   * @var integer $iProductionTime the default time to produce the ship 
+   * @var integer $iProductionTime the default time to produce the defence in seconds
    */
   public $iProductionTime = 0;
 
   /**
    * @soap
-   * @var array $aResearchs array of researchs, needed for the ship
+   * @var array $aResearchs array of researchs, needed for the defence
    */
   public $aResearchs = array();
 
@@ -55,7 +55,7 @@ class DTOParserInfoDefenceResultC
 
   /**
    * @soap
-   * @var array $aCosts further Costs for this ship
+   * @var array $aCosts further Costs for this defence
    */
   public $aCosts = array();  
 

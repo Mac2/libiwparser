@@ -32,7 +32,7 @@ class DTOParserInfoSchiffResultC
   public $strAreaName = '';
   /**
    * @soap
-   * @var integer $iProductionTime the default time to produce the ship 
+   * @var integer $iProductionTime the default time to produce the ship in seconds
    */
   public $iProductionTime = 0;
 

@@ -73,37 +73,37 @@ class DTOParserInfoUserResultC
 
   /**
    * @soap
-   * @var int $iEntryDate
+   * @var integer $iEntryDate
    */
   public $iEntryDate;
 
   /**
    * @soap
-   * @var int $iGebPkt
+   * @var integer $iGebPkt
    */
   public $iGebPkt;
 
   /**
    * @soap
-   * @var int $iFP
+   * @var integer $iFP
    */
   public $iFP;
 
   /**
    * @soap
-   * @var int $iHSPos
+   * @var integer $iHSPos
    */
   public $iHSPos;
 
     /**
    * @soap
-   * @var int $iHSChange
+   * @var integer $iHSChange
    */
   public $iHSChange;
 
     /**
    * @soap
-   * @var int $iEvo
+   * @var integer $iEvo
    */
   public $iEvo;
 

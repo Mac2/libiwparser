@@ -41,13 +41,13 @@ class DTOParserBauenAktuellResultBuildingC
 
   /**
    * @soap
-   * @var int $iDateToExpire the number of seconds the building need to be built
+   * @var integer $iDateToExpire the number of seconds the building need to be built
    */
   public $iDateToExpire = 0;
 
   /**
    * @soap
-   * @var int $iDateOfFinish the number of seconds since 1900
+   * @var integer $iDateOfFinish the number of seconds since 1900
    */
   public $iDateOfFinish = 0;
 }

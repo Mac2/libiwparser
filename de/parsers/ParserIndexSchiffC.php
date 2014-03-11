@@ -99,7 +99,7 @@ class ParserIndexSchiffC extends ParserMsgBaseC implements ParserMsgI
                 $retObj1->strSchiffName = PropertyValueC::ensureString($result['strSchiffName']);
                 $retObj1->iSchiffEnd    = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
                 if (!empty($result['mtMixedTime'])) {
-                    $retObj1->iSchiffEndIn = HelperC::convertMixedTimeToTimestamp($result['mtMixedTime']);
+                    $retObj1->iSchiffEndIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
                 }
                 $retObj1->iAnzSchiff  = PropertyValueC::ensureInteger($result['iAnzahlSchiff']);
                 $retObj1->iAnzWerften = PropertyValueC::ensureInteger($result['iAnzahlWerft']);

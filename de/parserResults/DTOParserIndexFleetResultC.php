@@ -99,7 +99,7 @@ class DTOParserIndexFleetResultFleetC
 
   /**
    * @soap
-   * @var int|null $iAnkunftIn duration in seconds
+   * @var integer|null $iAnkunftIn duration in seconds
    */
   public $iAnkunftIn = null;
 

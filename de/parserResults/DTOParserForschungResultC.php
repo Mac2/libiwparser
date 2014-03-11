@@ -117,7 +117,7 @@ class DTOParserForschungResearchedResultC
 
    /**
    * @soap
-   * @var integer $iUserResearchTime how long the user needs to research
+   * @var integer $iUserResearchTime how long the user needs to research in seconds
    */
   public $iUserResearchTime = '';
 
@@ -277,13 +277,13 @@ class DTOParserForschungProgressResultC
 
    /**
    * @soap
-   * @var integer $iResearchCosts the prozent of the full fp because of the people step
+   * @var integer $iResearchCosts the percentage of the full fp because of the people step
    */
   public $iResearchCosts = ''; 
 
    /**
    * @soap
-   * @var integer $iUserResearchTime how long the user needs to research
+   * @var integer $iUserResearchTime unixtime until research
    */
   public $iUserResearchTime = '';
 

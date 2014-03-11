@@ -27,19 +27,19 @@ class DTOCoordinatesC
 {
   /**
    * @soap
-   * @var int $iGalaxy
+   * @var integer $iGalaxy
    */
   public $iGalaxy = 0;
 
   /**
    * @soap
-   * @var int $iSystem
+   * @var integer $iSystem
    */
   public $iSystem = 0;
 
   /**
    * @soap
-   * @var int $iPlanet
+   * @var integer $iPlanet
    */
   public $iPlanet = 0;
 }

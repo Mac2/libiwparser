@@ -26,7 +26,7 @@ class DTOParserUniversumResultC
 {
     /**
      * @soap
-     * @var int $iTimestamp when has the info has been populated
+     * @var integer $iTimestamp when has the info has been populated
      */
     public $iTimestamp = 0;
 

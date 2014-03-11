@@ -53,11 +53,11 @@ class ParserFunctionC
   /////////////////////////////////////////////////////////////////////////////
 
   /**
-   * returns a regular expression class matching comma seperator
+   * returns a regular expression class matching comma separator
    *
-   * IceWars gives users the possibility to specify their own seperators.
-   * In this method, we define those seperators we support for the thousand
-   * seperator. It's meant to be used within other regular expressions.
+   * IceWars gives users the possibility to specify their own separators.
+   * In this method, we define those separators we support for the thousand
+   * separator. It's meant to be used within other regular expressions.
    *
    */
   private function getRegExpCommaSeperator()
@@ -70,9 +70,9 @@ class ParserFunctionC
   /**
    * returns a regular expression class matching floating point seperator
    *
-   * IceWars gives users the possibility to specify their own seperators.
-   * In this method, we define those seperators we support for the floating
-   * point seperator. It's meant to be used within other regular expressions.
+   * IceWars gives users the possibility to specify their own separators.
+   * In this method, we define those separators we support for the floating
+   * point separator. It's meant to be used within other regular expressions.
    *
    * For the moment, we support: "." and ",".
    */
@@ -86,7 +86,7 @@ class ParserFunctionC
   /**
    * returns a regular expression class matching a bracket string
    *
-   * reserachs/ships and buildings are often shown as a bracket string
+   * researches/ships and buildings are often shown as a bracket string
    * like (Area 42 (unterirdischer Forschungskomplex))
    * or (Tarnung von großen Sachen mittels einer Decke) (Verstehen der Zusammenhänge)
    */
@@ -100,9 +100,9 @@ class ParserFunctionC
   /**
    * returns a regular expression pattern matching building points
    *
-   * Building points may be seperated by thousand seperator. Building points
+   * Building points may be separated by thousand separator. Building points
    * start and end with digits. If there are three digits at the right, there
-   * may be a thousand seperator left of them.
+   * may be a thousand separator left of them.
    *
    * The following regExp is used:
    * (?<![\d]|[\.])(\d+|\d{1,3}([\.]\d{3})*)(?![\d\w]|[\.])
@@ -111,7 +111,7 @@ class ParserFunctionC
    * 1. no digit or dot before the regExp   (?<![\d]|[\.])
    * 2. a dezimal value                     (\d+|\d{1,3}([\.]\d{3})*)
    *  2.1 a dezimal value is either a       \d+
-   *      repetition of dezimals...
+   *      repetition of decimals...
    *  2.2 ... OR ...                        |
    *  2.3 a sequence of one to three digits \d{1,3}
    *  2.4 that might be followed by a       ([\.]\d{3})*
@@ -120,13 +120,13 @@ class ParserFunctionC
    * 3. no digits, characters or dots       (?![\d\w]|[\.])
    *    behind the regExp
    *
-   *@TODO: use a backreference to always match the same seperator. Something
+   *@TODO: use a back reference to always match the same separator. Something
    *       like: \d{1,3}(([\.])\d{3})?(\1\d{3})*
    *                     ^    ^         ^
    *                     |    |         |
    *                 Start    End       Reuse
    *       This won't match 123.456'789 any more but only decimals that always
-   *       use the same seperator (123.456.789 or 123'456'789).
+   *       use the same separator (123.456.789 or 123'456'789).
    */
   protected function getRegExpDecimalNumber()
   {
@@ -134,7 +134,7 @@ class ParserFunctionC
     $reThousandSeperator = $this->getRegExpThousandSeperator();
 
     $retVal .=  '(?:(?<=\s)|(?<=^)|(?<=\())'; //the decimal number shall start in a whitesace or start of line or a braket
-    $retVal .=  '(?:\-){0,1}'; //value can be negative
+    $retVal .=  '(?:\-)?'; //value can be negative
     $retVal .=  '(?:\d{1,3}';         //1) a sequence of one to three digits
     $retVal .=  '(?:' .
                 $reThousandSeperator .
@@ -157,11 +157,11 @@ class ParserFunctionC
   {
     
     $reThousandSeperator = $this->getRegExpThousandSeperator();
-  $reCommaSeperator = $this->getRegExpCommaSeperator();
+    $reCommaSeperator = $this->getRegExpCommaSeperator();
 
     $retVal = '(?:';
-    $retVal .=  '(?:(?<=\s)|(?<=^)|(?<=\())'; //the decimal number shall start in a whitesace or start of line or a braket
-    $retVal .=  '(?:\-|\+){0,1}';             //value can be negative (or explicit positive)
+    $retVal .=  '(?:(?<=\s)|(?<=^)|(?<=\())'; //the decimal number shall start in a whitesace or start of line or a bracket
+    $retVal .=  '(?:\-|\+)?';             //value can be negative (or explicit positive)
     $retVal .=  '(?:\d{1,3}';                   //1) a sequence of one to three digits
     $retVal .=  '(?:' .
                 $reThousandSeperator .
@@ -170,9 +170,9 @@ class ParserFunctionC
     $retVal .=  '\d+)';                //2) a decimal value is either a repetition of decimals...
     $retVal .=  '(?:' .
                 $reCommaSeperator .
-                '\d{2}';        //there can be a comma seperated part of 2 digits
-    $retVal .= '){0,1}';        //but needn't to be
-    $retVal .= '(?=\s|$|\)|\*|\%|\\\%)';            //the decimal number shall end in a whitesace or end of line or a braket or a * or a %
+                '\d{2}';        //there can be a comma separated part of 2 digits
+    $retVal .= ')?';        //but needn't to be
+    $retVal .= '(?=\s|$|\)|\*|\%|\\\%)';            //the decimal number shall end in a whitesace or end of line or a bracket or a * or a %
     $retVal .= ')';
     
     return $retVal;
@@ -191,7 +191,7 @@ class ParserFunctionC
     $reThousandSeperator = $this->getRegExpThousandSeperator();
     $reCommaSeperator = $this->getRegExpCommaSeperator();
     
-    $retVal .=  '(?:(?<=\s)|(?<=^)|(?<=\+)|(?<=\())'; //the decimal number shall start in a whitespace or start of line or a braket
+    $retVal .=  '(?:(?<=\s)|(?<=^)|(?<=\+)|(?<=\())'; //the decimal number shall start in a whitespace or start of line or a bracket
     $retVal .=  '(?:\d{1,3}';         //1) a sequence of one to three digits
     $retVal .=  '(?:' .
                 $reThousandSeperator .
@@ -200,9 +200,9 @@ class ParserFunctionC
     $retVal .= '\d+)';                //2) a decimal value is either a repetition of decimals...
     $retVal .= '(?:' .
                 $reCommaSeperator .
-                '\d{2}';                //there can be a comma seperated part of 2 digits
-    $retVal .= '){0,1}';                //but needn't to be
-    $retVal .= '(?=\s|$|\)|\+)';            //the decimal number shall end in a whitesace or end of line or a braket
+                '\d{2}';                //there can be a comma separated part of 2 digits
+    $retVal .= ')?';                //but needn't to be
+    $retVal .= '(?=\s|$|\)|\+)';            //the decimal number shall end in a whitesace or end of line or a bracket
 
     return $retVal;
   }
@@ -217,9 +217,9 @@ class ParserFunctionC
    *
    * From the german IW forum:
    * "Anmeldung in IW:
-   *  Name enhält unerlaubte Zeichen. Erlaubt sind a-z0-9.-_ +*()={} und keine
+   *  Name enthält unerlaubte Zeichen. Erlaubt sind a-z0-9.-_ +*()={} und keine
    *  Leerzeichen am Anfang/Ende oder mehrfache Leerzeichen. Mindestens 1
-   *  zeichen, maximal 30."
+   *  Zeichen, maximal 30."
    * (http://www.icewars-forum.de/index.php?topic=23486.msg514075#msg514075)
    *
    * From the highscore, we can see that also upper case letters are allowed.
@@ -232,7 +232,7 @@ class ParserFunctionC
     $retVal .= '(?!\s\s)';            //the user name must not contain multiple spaces
 
     $retVal .= '[a-zA-Z0-9\.\-_\+\*\(\)=\{\}]';         //first character must not be a space
-    $retVal .= '(?:';                                   //propably, there will be more characters
+    $retVal .= '(?:';                                   //probably, there will be more characters
     $retVal .= '[a-zA-Z0-9\.\-_\+\*\(\)=\{\} ]{0,28}';  //one to thirty characters
     $retVal .= '[a-zA-Z0-9\.\-_\+\*\(\)=\{\}]';         //last character must not be a space
     $retVal .= ')?';
@@ -255,7 +255,7 @@ class ParserFunctionC
     $retVal = '';
 
     $retVal .= '[a-zA-Z0-9\.\-_\+\*\(\)=\{\}]';         //first character must not be a space
-    $retVal .= '(?:';                                   //propably, there will be more characters
+    $retVal .= '(?:';                                   //probably, there will be more characters
     $retVal .= '[a-zA-Z0-9\.\-_\+\*\(\)=\{\} ]{0,28}';  //one to thirty characters
     $retVal .= '[a-zA-Z0-9\.\-_\+\*\(\)=\{\}]';         //last character must not be a space
     $retVal .= ')?';
@@ -333,9 +333,9 @@ class ParserFunctionC
   /**
    * returns a regular expression pattern matching building points
    *
-   * Building points may be seperated by thousand seperator. Building points
+   * Building points may be separated by thousand separator. Building points
    * start and end with digits. If at the right are three digits, there may
-   * be a thousand seperator left of them.
+   * be a thousand separator left of them.
    *
    * Building points are decimal numbers.
    */
@@ -365,9 +365,9 @@ class ParserFunctionC
   /**
    * returns a regular expression pattern matching total points
    *
-   * Total points may be seperated by thousand seperator. Total points
+   * Total points may be separated by thousand separator. Total points
    * start and end with digits. If at the right are three digits, there may
-   * be a thousand seperator left of them.
+   * be a thousand separator left of them.
    *
    * Total points are decimal numbers.
    */
@@ -381,13 +381,13 @@ class ParserFunctionC
   /**
    * returns a regular expression pattern matching points per day
    *
-   * Points per day may be seperated by thousand seperator and may be seperated
-   * by floating point seperator. Total points start and end with digits.
-   * If at the right are three digits (left of the floating point seperator),
-   * there may be a thousand seperator left of them.
+   * Points per day may be separated by thousand separator and may be separated
+   * by floating point separator. Total points start and end with digits.
+   * If at the right are three digits (left of the floating point separator),
+   * there may be a thousand separator left of them.
    *
    * In fact, they are like the other points that additionally may be followed
-   * by a floating point seperator and two digits.
+   * by a floating point separator and two digits.
    */
   protected function getRegExpPointsPerDay()
   {
@@ -457,6 +457,7 @@ class ParserFunctionC
     $retVal .= '\d{1,3}';
     $retVal .= '\:';
     $retVal .= '\d{1,2}';
+
     $retVal .= ')';
     
     return $retVal;
@@ -467,7 +468,7 @@ class ParserFunctionC
   /**
    * returns a regular expression pattern matching a date
    *
-   * @TODO support the other date formats availible in IW (Settings -> Administration -> Time formats)
+   * @TODO support the other date formats available in IW (Settings -> Administration -> Time formats)
    * @TODO don't match wrong dates like 51.45.2208 or 30.02.2009
    */
   protected function getRegExpDate()
@@ -494,11 +495,11 @@ class ParserFunctionC
 
     $retVal .= '(?:\b)';  //the date shall start in a word boundary
     $retVal .= '(?:';
-    $retVal .= '\d{1,2}\D{0,2}(?:\s|\.)(?:\d{1,2}|\D+)(?:\s|\.)\d{4}\s\d{1,2}\:\d{1,2}(?:\:(?:\d{1,2})|)';
+    $retVal .= '\d{1,2}\D{0,2}[\s\.](?:\d{1,2}|\D+)[\s\.]\d{4}\s\d{1,2}\:\d{1,2}(?:\:(?:\d{1,2}))?';
     $retVal .= '|';
-    $retVal .= '(?:\d{4})(?:\-|\.)(?:\d{1,2})(?:\-|\.)(?:\d{1,2})(?:\s)(?:\d{1,2})\:(?:\d{1,2})(?:\:(?:\d{1,2})|)';
+    $retVal .= '(?:\d{4})[\-\.](?:\d{1,2})[\-\.](?:\d{1,2})\s(?:\d{1,2})\:(?:\d{1,2})(?:\:(?:\d{1,2}))?';
     $retVal .= '|';
-    $retVal .= '(?:\D+)(?:\s)(?:\d{1,2})\D{0,2}(?:\s|\,\s)(?:\d{4})(?:\s|\,\s)(?:\d{1,2})\:(?:\d{1,2})(?:\:(?:\d{1,2})|)(?:\s(?:am|pm)|)';
+    $retVal .= '(?:\D+)\s(?:\d{1,2})\D{0,2}\,?\s(?:\d{4})\,?\s(?:\d{1,2})\:(?:\d{1,2})(?:\:(?:\d{1,2})|)(?:\s(?:am|pm))?';
     $retVal .= ')';
     $retVal .= '(?=\b)';  //the date shall end in a word boundary
 
@@ -554,7 +555,7 @@ class ParserFunctionC
    */
   protected function getRegExpShipTexts()
   {
-    // Texte fuer angekommende Fluege (zuefaellig)
+    // Texte für angekommende Flüge (zufällig)
     $retVal = '';
     $retVal .= '(?:';
     $retVal .= 'Lädt\sRess\sein\sund\saus|';
@@ -676,8 +677,8 @@ class ParserFunctionC
 
     $retVal .= '(?:(?<=\s)|(?<=^))';    //the date shall start in a whitesace or start of line
     $retVal .= '(?:';
-    $retVal .= '(?:\d+\s(?:Tag|Tage)\s+|)';
-    $retVal .= '(?:\d{1,2})\:(?:\d{1,2})(?:\:(?:\d{1,2})|)(?:\s(?:am|pm)|)';
+    $retVal .= '(?:\d+\s(?:Tag|Tage|day|days)\s+)?';
+    $retVal .= '(?:\d{1,2})\:(?:\d{1,2})(?:\:(?:\d{1,2}))?(?:\s(?:am|pm))?';
     $retVal .= ')';
     $retVal .= '(?=\s|$)';              //the date shall end in a whitesace or end of line
 

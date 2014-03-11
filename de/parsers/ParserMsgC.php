@@ -375,7 +375,7 @@ class ParserMsgC extends ParserBaseC implements ParserI
     $regExp .= '[\s\n\r]+';
     $regExp .= '(?P<msgUserType>Spielernachricht|Outbox)';
     $regExp .= '[\t\s]+';
-    $regExp .= '(?:Antworten[\s|\t]+Petzen\s\-\sDem\sAdmin\smelden)';
+    $regExp .= '(?:Antworten[\s\t]+Petzen\s\-\sDem\sAdmin\smelden)';
     $regExp .= '[\s\n\r]+';
     $regExp .= '|';
     $regExp .= '(?P<msgIsSystem>Systemnachricht|von:Systemnachricht)';

@@ -114,7 +114,7 @@ class DTOPlanetC
 
   /**
    * @soap
-   * @var int $iTimestamp when will the planet be reset. This class
+   * @var integer $iTimestamp when will the planet be reset. This class
    *      really delivers the unix timestamp, instead of the offset
    *      the geoscan itself delivers.
    */

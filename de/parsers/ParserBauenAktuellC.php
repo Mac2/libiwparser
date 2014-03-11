@@ -65,11 +65,7 @@ class ParserBauenAktuellC extends ParserBaseC implements ParserI
 
       foreach( $aResult as $result )
       {
-        $iDateToExpire = -1;
-        $iDateOfFinish = -1;
-        $strBuilding = '';
-
-        $iDateToExpire = HelperC::convertMixedTimeToTimestamp($result['dateToExpire']);
+        $iDateToExpire = HelperC::convertMixedDurationToSeconds($result['dateToExpire']);
         $iDateOfFinish = HelperC::convertDateTimeToTimestamp($result['dateOfFinish']);
         $strBuilding = $result['building'];
 

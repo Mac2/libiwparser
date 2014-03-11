@@ -77,7 +77,7 @@ class DTOParserHighscoreResultMemberC
 
   /**
    * @soap
-   * @var int $iDabeiSeit since when the member is in IW
+   * @var integer $iDabeiSeit since when the member is in IW
    */
   public $iDabeiSeit = -1;
 

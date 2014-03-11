@@ -46,13 +46,13 @@ class DTOParserPersonalStatForschungenResearchResultC
 
   /**
    * @soap
-   * @var int $iDateExpired the number of seconds since the user exists ingame
+   * @var integer $iDateExpired the number of seconds since the user exists ingame
    */
   public $iDateExpired = 0;
 
   /**
    * @soap
-   * @var int $iDateOfResearch the number of seconds since 1900
+   * @var integer $iDateOfResearch the number of seconds since 1900
    */
   public $iDateOfResearch = 0;
 }

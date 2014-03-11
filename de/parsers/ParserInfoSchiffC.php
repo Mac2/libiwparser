@@ -69,7 +69,7 @@ class ParserInfoSchiffC extends ParserBaseC implements ParserI
       	$parserResult->bSuccessfullyParsed = true;
 	
 	$retVal->strSchiffName = $aResult['strSchiffName'];
-	$retVal->iProductionTime = HelperC::convertMixedTimeToTimestamp( $aResult['strTime'] );
+	$retVal->iProductionTime = HelperC::convertMixedDurationToSeconds( $aResult['strTime'] );
 	$retVal->aResearchs = HelperC::convertBracketStringToArray($aResult['strResearchs']);
 
  	$treffer = array();

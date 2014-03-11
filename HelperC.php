@@ -11,6 +11,7 @@
 /**
  * @author Benjamin Wöster <benjamin.woester@googlemail.com>
  * @author Martin Martimeo <martin@martimeo.de>
+ * @author masel <masel789@gmail.com>
  * @package libIwParsers
  * @subpackage helpers
  */
@@ -37,17 +38,26 @@ class HelperC
      */
     static public function convertMixedDurationToSeconds($value)
     {
-        $value = trim($value);
+        $value   = trim($value);
 
-        $aResult = array();
-        if (preg_match('/^(?:(?P<days>\d+)\s(?:Tag|Tage|day|days)\s+|)(?P<hours>\d{1,2})\:(?P<minutes>[0-5]\d|\d)(?:\:(?P<seconds>[0-5]\d|\d))?$/', $value, $aResult) != false) {
+        $mktime  = array(
+            'days'    => 0,
+            'hours'   => 0,
+            'minutes' => 0,
+            'seconds' => 0,
+        );
 
-            if (!isset($aResult['seconds'])) {
-                $aResult['seconds'] = 0;
+        if (preg_match('/((?P<days>\d+)\s(Tag|Tage|day|days)\s+)?(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-6]?\d)(\:(?P<seconds>[0-6]?\d))?/', $value, $aResult)) {
+            if (!empty($aResult['days'])) {
+                $mktime['days'] = (int)$aResult['days'];
+            }
+            $mktime['hours']   = (int)$aResult['hours'];
+            $mktime['minutes'] = (int)$aResult['minutes'];
+            if (!empty($aResult['seconds'])) {
+                $mktime['seconds'] = (int)$aResult['seconds'];
             }
 
-            return ((int)$aResult['days'] * 24 * 60 * 60 + (int)$aResult['hours'] * 60 * 60 + (int)$aResult['minutes'] * 60 + (int)$aResult['seconds']);
-
+            return $mktime['days'] * 24 * 60 * 60 + $mktime['hours'] * 60 * 60 + $mktime['minutes'] * 60 + $mktime['seconds'];
         } else {
             return false;
         }
@@ -56,7 +66,7 @@ class HelperC
   /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Tries to convert the given parameter into a unix timestamp.
+     * Tries to convert the given date into a unix timestamp.
      *
      *
      * @param $value string timestring
@@ -65,88 +75,80 @@ class HelperC
      *                 boolean false if the provided parameter couldn't be
      *                 recognized as a date
      */
-  static public function convertDateToTimestamp( $value )
-  {
-    static $month2int = array(
-      'January'=>1,
-      'Jan'=>1,
-      'Januar'=>1,
-      'February'=>2,
-      'Feb'=>2,
-      'Februar'=>2,
-      'March'=>3,
-      'Mar'=>3,
-      'März'=>3,
-      'April'=>4,
-      'Apr'=>4,
-      'May'=>5,
-      'Mai'=>5,
-      'June'=>6,
-      'Juni'=>6,
-      'July'=>7,
-      'Juli'=>7,
-      'August'=>8,
-      'Aug'=>8,
-      'September'=>9,
-      'Sept'=>9,
-      'October'=>10,
-      'Oct'=>10,
-      'Oktober'=>10,
-      'November'=>11,
-      'Nov'=>11,
-      'December'=>12,
-      'Dez'=>12,
-      'Dec'=>12,
-      'Dezember'=>12
-    );
-    
-    $aResult  = array();
-    $mktime  = array();
-    if (preg_match('@(\d{1,2})\w{0,2}(\s|\.)(\d{1,2}|\w+)(\s|\.)(\d{4})@i', $value, $aResult ) != false)
+    static public function convertDateToTimestamp($value)
     {
-      $mktime['d'] = (int) $aResult[1];
-      $aResult3 = (int) $aResult[3];
-      if (!empty($aResult3))
-      {
-        $mktime['m'] = (int) $aResult[3];
-      }
-      else
-      {
-        $mktime['m'] = (int) $month2int[$aResult3];
-      }
-      $mktime['y'] = (int) $aResult[5];
-      $mktime['h'] = 0;
-      $mktime['i'] = 0;
+        $value = trim($value);
+
+        static $month2int = array(
+            'January'   => 1,
+            'Jan'       => 1,
+            'Januar'    => 1,
+            'February'  => 2,
+            'Feb'       => 2,
+            'Februar'   => 2,
+            'March'     => 3,
+            'Mar'       => 3,
+            'März'      => 3,
+            'April'     => 4,
+            'Apr'       => 4,
+            'May'       => 5,
+            'Mai'       => 5,
+            'June'      => 6,
+            'Juni'      => 6,
+            'July'      => 7,
+            'Juli'      => 7,
+            'August'    => 8,
+            'Aug'       => 8,
+            'September' => 9,
+            'Sept'      => 9,
+            'October'   => 10,
+            'Oct'       => 10,
+            'Oktober'   => 10,
+            'November'  => 11,
+            'Nov'       => 11,
+            'December'  => 12,
+            'Dez'       => 12,
+            'Dec'       => 12,
+            'Dezember'  => 12
+        );
+
+        $mktime = array(
+            'day'   => 0,
+            'month' => 0,
+            'year'  => 0,
+        );
+
+        if (preg_match('/(?P<day>[0-3]?\d)\D{0,2}?[\s\.](?:(?P<month_num>[0-1]?\d)|(?P<month_str>\D+))[\s\.](?P<year>20\d\d)/', $value, $aResult) OR
+            preg_match('/(?P<year>20\d\d)[\-\.](?P<month_num>[0-1]?\d)[\-|\.](?P<day>[0-3]?\d)/', $value, $aResult) OR
+            preg_match('/(?P<month_str>\D+)\s(?P<day>[0-3]?\d)\D{0,2}\,?\s(?P<year>20\d\d)/', $value, $aResult)
+        ) {
+
+            $mktime['year'] = (int)$aResult['year'];
+
+            if (!empty($aResult['month_num'])) { //a month number
+                $mktime['month'] = (int)$aResult['month_num'];
+            } elseif (!empty($aResult['month_str']) AND isset($month2int[$aResult['month_str']])) { //a valid month string
+                $mktime['month'] = (int)$month2int[$aResult['month_str']];
+            } else {
+                trigger_error('Invalid month conversation in HelperC::convertDateTimeToTimestamp Value:' . $aResult['month_str'], E_USER_NOTICE);
+
+                return false;
+            }
+
+            $mktime['day'] = (int)$aResult['day'];
+
+            return mktime(0, 0, 0, $mktime['month'], $mktime['day'], $mktime['year']);
+
+        } else {
+            return false;
+        }
+
     }
-    elseif (preg_match('@(\d{4})(\-|\.)(\d{1,2})(\-|\.)(\d{1,2})@i', $value, $aResult ) != false)
-    {
-      $mktime['d'] = (int) $aResult[5];
-      $mktime['m'] = (int) $aResult[3];
-      $mktime['y'] = (int) $aResult[1];
-      $mktime['h'] = 0;
-      $mktime['i'] = 0;
-    }
-    elseif (preg_match('@(\w+)(\s)(\d{1,2})\w{0,2}(\s|\,\s)(\d{4})@i', $value, $aResult ) != false)
-    {
-      $mktime['d'] = (int) $aResult[3];
-      $mktime['m'] = (int) $month2int[$aResult[1]];
-      $mktime['y'] = (int) $aResult[5];
-      $mktime['h'] = 0;
-      $mktime['i'] = 0;
-    }
-    else
-    {
-      return false;
-    }
-    
-    $mktime['unix'] = mktime($mktime['h'], $mktime['i'], 0, $mktime['m'], $mktime['d'], $mktime['y'] );
-    return $mktime['unix'];
-  }
   
   /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Tries to convert the given parameter into a unix timestamp.
+     * Tries to convert the given duration into a unix timestamp.
      *
      *
      * @param $value String timestring
@@ -155,40 +157,41 @@ class HelperC
      *                 boolean false if the provided parameter couldn't be
      *                 recognized as a date
      */
-  static public function convertMixedTimeToTimestamp( $value )
-  {
-      $aResult  = array();
-      $aMktime  = array();
-      if (preg_match('@((\d+)\s(Tag|Tage)\s+|)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)@i', $value, $aResult ) != false)
-      {
-          $mktime['d'] = (int) $aResult[2];
-          $mktime['h'] = (int) $aResult[4];
-          $mktime['i'] = (int) $aResult[5];
-          if (isset($aResult[7])) $mktime['s'] = (int) $aResult[7];
-          else $mktime['s'] = 0;
-      }
-      elseif (preg_match('@((\d+)\s(Tag|Tage)\s+|)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)(\s(am|pm)|)@i', $value, $aResult ) != false)
-      {
-          $mktime['d'] = (int) $aResult[2];
-          $mktime['h'] = (int) $aResult[4];
-          $mktime['i'] = (int) $aResult[5];
-          if (isset($aResult[7])) $mktime['s'] = (int) $aResult[7];
-          else $mktime['s'] = 0;
-          if (isset($aResult[9]) && $aResult[9] == 'pm') $mktime['h'] += 12;
-      }
-      else
-      {
-          return false;
-      }
-  
-      $mktime['unix'] = $mktime['d']*24*60*60 + $mktime['h']*60*60 + $mktime['i']*60 + $mktime['s'];
-      return $mktime['unix'];
-  }
+    static public function convertMixedDurationToTimestamp($value)
+    {
+        $value   = trim($value);
+
+        $mktime  = array(
+            'days'    => 0,
+            'hours'   => 0,
+            'minutes' => 0,
+            'seconds' => 0,
+        );
+
+        if (preg_match('/((?P<days>\d+)\s(Tag|Tage|day|days)\s+)?(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-6]?\d)(\:(?P<seconds>[0-6]?\d))?/', $value, $aResult) != false) {
+
+            $mktime['hours']   = (int)$aResult['hours'];
+            $mktime['minutes'] = (int)$aResult['minutes'];
+            if (!empty($aResult['seconds'])) {
+                $mktime['seconds'] = (int)$aResult['seconds'];
+            }
+
+            if (!empty($aResult['days'])) {
+                $mktime['hours'] = ((int)$aResult['days'])*24;
+            }
+
+            return mktime($mktime['hours'], $mktime['minutes'], $mktime['seconds']);
+
+        } else {
+            return false;
+        }
+
+    }
 
   /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Tries to convert the given parameter into a unix timestamp.
+     * Tries to convert the given time into a unix timestamp.
      *
      *
      * @param $value string timestring
@@ -197,31 +200,34 @@ class HelperC
      *                 boolean false if the provided parameter couldn't be
      *                 recognized as a date
      */
-  static public function convertTimeToTimestamp( $value )
-  {
-    $aResult  = array();
-    $aMktime  = array();
-    if (preg_match('@(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)@i', $value, $aResult ) != false)
+    static public function convertTimeToTimestamp($value)
     {
-      $mktime['h'] = (int) $aResult[1];
-      $mktime['i'] = (int) $aResult[2];
-      $mktime['s'] = (int) $aResult[4];
+        $value   = trim($value);
+
+        $mktime  = array(
+            'hours'   => 0,
+            'minutes' => 0,
+            'seconds' => 0,
+        );
+
+        if (preg_match('/(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-5]?\d)(\:(?P<seconds>[0-5]?\d))?(\s(?P<pm>pm)|am)?/i', $value, $aResult) != false) {
+
+            $mktime['hours']   = (int)$aResult['hours'];
+            $mktime['minutes'] = (int)$aResult['minutes'];
+            if (!empty($aResult['seconds'])) {
+                $mktime['seconds'] = (int)$aResult['seconds'];
+            }
+            if (isset($aResult['pm']) AND $aResult['pm'] == 'pm') {
+                $mktime['hours'] += 12;
+            }
+
+            return mktime($mktime['hours'], $mktime['minutes'], $mktime['seconds']);
+
+        } else {
+            return false;
+        }
+
     }
-    elseif (preg_match('@(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)(\s(am|pm)|)@i', $value, $aResult ) != false)
-    {
-      $mktime['h'] = (int) $aResult[1];
-      $mktime['i'] = (int) $aResult[2];
-      $mktime['s'] = (int) $aResult[4];
-      if (isset($aResult[6]) && $aResult[6] == 'pm') $mktime['h'] += 12;
-    }
-    else
-    {
-      return false;
-    }
-    
-    $mktime['unix'] = mktime( $mktime['h'], $mktime['i'], $mktime['s'] );
-    return $mktime['unix'];
-  }
 
   /////////////////////////////////////////////////////////////////////////////
   
@@ -261,7 +267,7 @@ class HelperC
   /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Tries to convert the given parameter into a unix timestamp.
+     * Tries to convert the given datetime into a unix timestamp.
      *
      *
      * @param $value string timestring
@@ -305,7 +311,6 @@ class HelperC
       'Dezember' => 12
     );
     
-    $aResult  = array();
     $mktime  = array(
       'unix'    => 0,
       'hours'   => 0,
@@ -317,112 +322,61 @@ class HelperC
     );
     
     /*
-     * match standard date.
-     * See IW Account => Settings => Administration => Time
-     * Format TT.MM.JJJJ HH:MM:SS (german)
-     * 
-     * I define that the parts only are in a certain range, to make it
-     * less likely the expression matches other formats (english ones?).
-     * 
-     * TT   :=   00 -   39 [0-3]\d
-     * MM   :=   00 -   19 [0-1]\d
-     * JJJJ := 2000 - 2099 20\d\d
-     * HH   :=   00 -   29 [0-2]\d
-     * MM   :=   00 -   69 [0-6]\d
-     * SS   :=   00 -   69 [0-6]\d
+     * match date.
+     * See IW Account => Settings => Administration => Time formats
+     *
+     * TT   :=   0 -   39 => [0-3]?\d
+     * MM   :=   0 -   19 => [0-1]?\d
+     * JJJJ := 2000 - 2099 => 20\d\d
+     * HH   :=   0 -   24 => 2[0-4]|[01]\d|\d
+     * MM   :=   0 -   69 => [0-6]?\d
+     * SS   :=   0 -   69 => [0-6]?\d
+     * optional am or pm
      */
-    if( preg_match( '/^(?P<day>[0-3]\d)\.(?P<month>[0-1]\d)\.(?P<year>20\d\d) (?P<hours>[0-2]\d):(?P<minutes>[0-6]\d):(?P<seconds>[0-6]\d)$/', $value, $aResult ) != false )
-    {
-      $mktime['day']      = (int)$aResult['day'];
-      $mktime['month']    = (int)$aResult['month'];
-      $mktime['year']     = (int)$aResult['year'];
-      $mktime['hours']    = (int)$aResult['hours'];
-      $mktime['minutes']  = (int)$aResult['minutes'];
-      $mktime['seconds']  = (int)$aResult['seconds'];
-    }
-    else if (preg_match('@(\d{1,2})\w{0,2}(\s|\.)(\d{1,2}|\w+)(\s|\.)(\d{4})(\s)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)@i', $value, $aResult ) != false)
-    {
-      $mktime['day'] = (int) $aResult[1];
-      $aResult3 = (int) $aResult[3];
-      if (!empty($aResult3))
-      {
-        $mktime['month'] = (int) $aResult[3];
+      if (preg_match('/^(?P<day>[0-3]?\d)\.(?P<month_num>[0-1]?\d)\.(?P<year>20\d\d)\s(?P<hours>2[0-4]|[01]\d|\d):(?P<minutes>[0-6]?\d):(?P<seconds>[0-6]?\d)$/', $value, $aResult) OR
+          preg_match('/^(?P<day>[0-3]?\d)\D{0,2}?[\s\.](?:(?P<month_num>[0-1]?\d)|(?P<month_str>\D+))[\s\.](?P<year>20\d\d)\s(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-6]?\d)(?:\:(?P<second>[0-6]?\d))?$/', $value, $aResult) OR
+          preg_match('/(?P<year>20\d\d)[\-\.](?P<month_num>[0-1]?\d)[\-\.](?P<day>[0-3]?\d)\s(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-6]?\d)(?:\:(?P<seconds>[0-6]?\d))?/', $value, $aResult) OR
+          preg_match('/(?P<month_str>\D+)\s(?P<day>[0-3]?\d)\D{0,2}?\,?\s(?P<year>20\d\d)\,?\s(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-6]?\d)(?:\:(?P<seconds>[0-6]?\d))?(\s(?P<pm>pm)|am)?/i', $value, $aResult) OR
+          preg_match('/(?P<day>[0-3]?\d)\D{0,2}?[\s\.](?:(?P<month_num>[0-1]?\d)|(?P<month_str>\D+))[\s\.](?P<year>20\d\d)/', $value, $aResult) OR
+          preg_match('/(?P<year>20\d\d)[\-\.](?P<month_num>[0-1]?\d)[\-\.](?P<day>[0-3]?\d)/', $value, $aResult) OR
+          preg_match('/(?P<month_str>\D+)\s(?P<day>[0-3]?\d)\D{0,2}?\,?\s(?P<year>20\d\d)/', $value, $aResult)
+      ) {
+
+          $mktime['year'] = (int)$aResult['year'];
+
+          if (!empty($aResult['month_num'])) { //a month number
+              $mktime['month'] = (int)$aResult['month_num'];
+          } elseif (!empty($aResult['month_str']) AND isset($month2int[$aResult['month_str']])) { //a valid month string
+              $mktime['month'] = (int)$month2int[$aResult['month_str']];
+          } else {
+              trigger_error('Invalid month conversation in HelperC::convertDateTimeToTimestamp Value:' . $aResult['month_str'], E_USER_NOTICE);
+
+              return false;
+          }
+
+          $mktime['day'] = (int)$aResult['day'];
+
+          if (!empty($aResult['hour'])) {
+              $mktime['hours'] = (int)$aResult['hours'];
+          }
+
+          if (!empty($aResult['minute'])) {
+              $mktime['minutes'] = (int)$aResult['minutes'];
+          }
+
+          if (!empty($aResult['seconds'])) {
+              $mktime['seconds'] = (int)$aResult['seconds'];
+          }
+
+          if (isset($aResult['pm']) AND $aResult['pm'] == 'pm') {
+              $mktime['hours'] += 12;
+          }
+
+          return mktime($mktime['hours'], $mktime['minutes'], $mktime['seconds'], $mktime['month'], $mktime['day'], $mktime['year']);
+
+      } else {
+          return false;
       }
-      else
-      {
-        $mktime['month'] = (int) $month2int[$aResult3];
-        if (!isset($month2int[$aResult3]))
-            error(E_NOTICE,__FILE__,__LINE__,1,$value,$aResult);
-      }
-      $mktime['year'] = (int) $aResult[5];
-      $mktime['hours'] = (int) $aResult[7];
-      $mktime['minutes'] = (int) $aResult[8];
-      if (isset($aResult[10]))
-          $mktime["seconds"] = (int) $aResult[10];
-    }
-    elseif (preg_match('@(\d{4})(\-|\.)(\d{1,2})(\-|\.)(\d{1,2})(\s)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)@i', $value, $aResult ) != false)
-    {
-      $mktime['day'] = (int) $aResult[5];
-      $mktime['month'] = (int) $aResult[3];
-      $mktime['year'] = (int) $aResult[1];
-      $mktime['hours'] = (int) $aResult[7];
-      $mktime['minutes'] = (int) $aResult[8];
-      if (isset($aResult[10]))
-          $mktime["seconds"] = (int) $aResult[10];
-    }
-    elseif (preg_match('@(\w+)(\s)(\d{1,2})\w{0,2}(\s|\,\s)(\d{4})(\s|\,\s)(\d{1,2})\:(\d{1,2})(\:(\d{1,2})|)(\s(am|pm)|)@i', $value, $aResult ) != false)
-    {
-      $mktime['day'] = (int) $aResult[3];
-      $mktime['month'] = (int) $month2int[$aResult[1]];
-      $mktime['year'] = (int) $aResult[5];
-      $mktime['hours'] = (int) $aResult[7];
-      $mktime['minutes'] = (int) $aResult[8];
-      if (isset($aResult[10]))
-          $mktime["seconds"] = (int) $aResult[10];
-      if (isset($aResult[13]) && $aResult[13] == 'pm') $mktime['hours'] += 12;
-    }
-    elseif (preg_match('@(\d{1,2})\w{0,2}(\s|\.)(\d{1,2}|\w+)(\s|\.)(\d{4})@i', $value, $aResult ) != false)
-    {
-      $mktime['day'] = (int) $aResult[1];
-      $aResult3 = (int) $aResult[3];
-      if (!empty($aResult3))
-      {
-        $mktime['month'] = (int) $aResult[3];
-      }
-      else
-      {
-        $mktime['month'] = (int) $month2int[$aResult3];
-      }
-      $mktime['year'] = (int) $aResult[5];
-      $mktime['hours'] = 0;
-      $mktime['minutes'] = 0;
-      $mktime['seconds'] = 0;
-    }
-    elseif (preg_match('@(\d{4})(\-|\.)(\d{1,2})(\-|\.)(\d{1,2})@i', $value, $aResult ) != false)
-    {
-      $mktime['day'] = (int) $aResult[5];
-      $mktime['month'] = (int) $aResult[3];
-      $mktime['year'] = (int) $aResult[1];
-      $mktime['hours'] = 0;
-      $mktime['minutes'] = 0;
-      $mktime['seconds'] = 0;
-    }
-    elseif (preg_match('@(\w+)(\s)(\d{1,2})\w{0,2}(\s|\,\s)(\d{4})@i', $value, $aResult ) != false)
-    {
-      $mktime['day'] = (int) $aResult[3];
-      $mktime['month'] = (int) $month2int[$aResult[1]];
-      $mktime['year'] = (int) $aResult[5];
-      $mktime['hours'] = 0;
-      $mktime['minutes'] = 0;
-      $mktime['seconds'] = 0;
-    }
-    else
-    {
-      return false;
-    }
-    
-    $mktime['unix'] = mktime( $mktime['hours'], $mktime['minutes'], $mktime['seconds'], $mktime['month'], $mktime['day'], $mktime['year'] );
-    return $mktime['unix'];
   }
   
   /////////////////////////////////////////////////////////////////////////////

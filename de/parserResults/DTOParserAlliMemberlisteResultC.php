@@ -72,7 +72,7 @@ class DTOParserAlliMemberlisteResultMemberC
 
   /**
    * @soap
-   * @var int $iDabeiSeit since when the member is in the alliance
+   * @var integer $iDabeiSeit since when the member is in the alliance
    */
   public $iDabeiSeit = 0;
 
