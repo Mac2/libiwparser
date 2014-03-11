@@ -65,19 +65,15 @@ class ParserPersonalStatForschungenC extends ParserBaseC implements ParserI
 
       foreach( $aResult as $result )
       {
-        $iDateExpired    = -1;
-        $iDateOfResearch = -1;
-        $strResearch = '';
-
         $iDateOfResearch = HelperC::convertDateTimeToTimestamp($result['dateOfResearch']);
-        $iDateExpired = HelperC::convertMixedTimeToSeconds($result['dateExpired']);
+        $iDateExpired = HelperC::convertMixedDurationToSeconds($result['dateExpired']);
         $strResearch = $result['research'];
 
         $research = new DTOParserPersonalStatForschungenResearchResultC;
 
         $research->iDateExpired    = PropertyValueC::ensureInteger( $iDateExpired );
-        $research->iDateOfResearch      = PropertyValueC::ensureInteger( $iDateOfResearch );
-        $research->strResearch      = PropertyValueC::ensureString( trim ($strResearch) );
+        $research->iDateOfResearch = PropertyValueC::ensureInteger( $iDateOfResearch );
+        $research->strResearch     = PropertyValueC::ensureString( trim ($strResearch) );
 
         $retVal->aResearchs[] = $research;
       }

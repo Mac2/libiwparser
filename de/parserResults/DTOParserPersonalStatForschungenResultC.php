@@ -52,7 +52,7 @@ class DTOParserPersonalStatForschungenResearchResultC
 
   /**
    * @soap
-   * @var integer $iDateOfResearch the number of seconds since 1900
+   * @var integer $iDateOfResearch unixtime of research end
    */
   public $iDateOfResearch = 0;
 }
