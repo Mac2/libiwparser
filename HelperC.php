@@ -313,9 +313,9 @@ class HelperC
     
     $mktime  = array(
       'unix'    => 0,
-      'hours'   => 0,
-      'minutes' => 0,
-      'seconds' => 0,
+      'hour'   => 0,
+      'minute' => 0,
+      'second' => 0,
       'month'   => 0,
       'day'     => 0,
       'year'    => 0,
@@ -333,10 +333,10 @@ class HelperC
      * SS   :=   0 -   69 => [0-6]?\d
      * optional am or pm
      */
-      if (preg_match('/^(?P<day>[0-3]?\d)\.(?P<month_num>[0-1]?\d)\.(?P<year>20\d\d)\s(?P<hours>2[0-4]|[01]\d|\d):(?P<minutes>[0-6]?\d):(?P<seconds>[0-6]?\d)$/', $value, $aResult) OR
+      if (preg_match('/^(?P<day>[0-3]?\d)\.(?P<month_num>[0-1]?\d)\.(?P<year>20\d\d)\s(?P<hour>2[0-4]|[01]\d|\d):(?P<minute>[0-6]?\d):(?P<second>[0-6]?\d)$/', $value, $aResult) OR
           preg_match('/^(?P<day>[0-3]?\d)\D{0,2}?[\s\.](?:(?P<month_num>[0-1]?\d)|(?P<month_str>\D+))[\s\.](?P<year>20\d\d)\s(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-6]?\d)(?:\:(?P<second>[0-6]?\d))?$/', $value, $aResult) OR
-          preg_match('/(?P<year>20\d\d)[\-\.](?P<month_num>[0-1]?\d)[\-\.](?P<day>[0-3]?\d)\s(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-6]?\d)(?:\:(?P<seconds>[0-6]?\d))?/', $value, $aResult) OR
-          preg_match('/(?P<month_str>\D+)\s(?P<day>[0-3]?\d)\D{0,2}?\,?\s(?P<year>20\d\d)\,?\s(?P<hours>2[0-4]|[01]\d|\d)\:(?P<minutes>[0-6]?\d)(?:\:(?P<seconds>[0-6]?\d))?(\s(?P<pm>pm)|am)?/i', $value, $aResult) OR
+          preg_match('/(?P<year>20\d\d)[\-\.](?P<month_num>[0-1]?\d)[\-\.](?P<day>[0-3]?\d)\s(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-6]?\d)(?:\:(?P<second>[0-6]?\d))?/', $value, $aResult) OR
+          preg_match('/(?P<month_str>\D+)\s(?P<day>[0-3]?\d)\D{0,2}?\,?\s(?P<year>20\d\d)\,?\s(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-6]?\d)(?:\:(?P<second>[0-6]?\d))?(\s(?P<pm>pm)|am)?/i', $value, $aResult) OR
           preg_match('/(?P<day>[0-3]?\d)\D{0,2}?[\s\.](?:(?P<month_num>[0-1]?\d)|(?P<month_str>\D+))[\s\.](?P<year>20\d\d)/', $value, $aResult) OR
           preg_match('/(?P<year>20\d\d)[\-\.](?P<month_num>[0-1]?\d)[\-\.](?P<day>[0-3]?\d)/', $value, $aResult) OR
           preg_match('/(?P<month_str>\D+)\s(?P<day>[0-3]?\d)\D{0,2}?\,?\s(?P<year>20\d\d)/', $value, $aResult)
@@ -356,23 +356,23 @@ class HelperC
 
           $mktime['day'] = (int)$aResult['day'];
 
-          if (!empty($aResult['hour'])) {
-              $mktime['hours'] = (int)$aResult['hours'];
+          if (isset($aResult['hour']) AND !empty($aResult['hour'])) {
+              $mktime['hour'] = (int)$aResult['hour'];
           }
 
           if (!empty($aResult['minute'])) {
-              $mktime['minutes'] = (int)$aResult['minutes'];
+              $mktime['minute'] = (int)$aResult['minute'];
           }
 
-          if (!empty($aResult['seconds'])) {
-              $mktime['seconds'] = (int)$aResult['seconds'];
+          if (!empty($aResult['second'])) {
+              $mktime['second'] = (int)$aResult['second'];
           }
 
           if (isset($aResult['pm']) AND $aResult['pm'] == 'pm') {
-              $mktime['hours'] += 12;
+              $mktime['hour'] += 12;
           }
 
-          return mktime($mktime['hours'], $mktime['minutes'], $mktime['seconds'], $mktime['month'], $mktime['day'], $mktime['year']);
+          return mktime($mktime['hour'], $mktime['minute'], $mktime['second'], $mktime['month'], $mktime['day'], $mktime['year']);
 
       } else {
           return false;
