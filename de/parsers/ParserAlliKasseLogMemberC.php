@@ -9,9 +9,9 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -29,28 +29,28 @@
 class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-    $this->setIdentifier('de_alli_kasse_log_member');
-    $this->setName("Allianzkasse Auszahlungen(Mitglieder)");
-    $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData('/Auszahlungslog\san\sSpieler\sw.{1,5}hrend\sder\sletzten\sdrei\sWochen/');
-    $this->setRegExpEndData('/Auszahlungslog\san\sWings\/etc\sder\sletzten/');
-  }
+        $this->setIdentifier('de_alli_kasse_log_member');
+        $this->setName("Allianzkasse Auszahlungen(Mitglieder)");
+        $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
+        $this->setRegExpBeginData('/Auszahlungslog\san\sSpieler\sw.{1,5}hrend\sder\sletzten\sdrei\sWochen/');
+        $this->setRegExpEndData('/Auszahlungslog\san\sWings\/etc\sder\sletzten/');
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * @see ParserI::parseText()
-   */
+    /**
+     * @see ParserI::parseText()
+     */
     public function parseText(DTOParserResultC $parserResult)
     {
         $parserResult->objResultData = new DTOParserAlliKasseLogResultC();
-        $retVal                      =& $parserResult->objResultData;
+        $retVal =& $parserResult->objResultData;
 
         $this->stripTextToData();
 
@@ -85,50 +85,34 @@ class ParserAlliKasseLogMemberC extends ParserBaseC implements ParserI
 
     }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  private function getRegularExpression()
-  {
-    $reDateTime = $this->getRegExpDateTime();
-    $reFromUser = $this->getRegExpUserName();
-    $reToUser   = $this->getRegExpUserName();
-    $reInteger  = $this->getRegExpDecimalNumber();
-    $reReason   = '[^\n]*?';
+    private function getRegularExpression()
+    {
+        $reDateTime = $this->getRegExpDateTime();
+        $reFromUser = $this->getRegExpUserName();
+        $reToUser   = $this->getRegExpUserName();
+        $reInteger  = $this->getRegExpDecimalNumber();
+        $reReason   = '[^\n]*?';
 
-    $regExp  = '/';
+        $regExp = '/';
 
-    $regExp .= '(?P<reDateTime>'        . $reDateTime       . ')';
-    $regExp .= '\svon\s';
-    $regExp .= '(?P<strFromUser>'        . $reFromUser       . ')';
-    $regExp .= '\san\s';
-    $regExp .= '(?P<strToUser>'        . $reToUser       . ')';
-    $regExp .= '\s';
-    $regExp .= '(?P<iCredits>'        . $reInteger       . ')';
-    $regExp .= '\sCredits\sausgezahlt';
+        $regExp .= '(?P<reDateTime>' . $reDateTime . ')';
+        $regExp .= '\svon\s';
+        $regExp .= '(?P<strFromUser>' . $reFromUser . ')';
+        $regExp .= '\san\s';
+        $regExp .= '(?P<strToUser>' . $reToUser . ')';
+        $regExp .= '\s';
+        $regExp .= '(?P<iCredits>' . $reInteger . ')';
+        $regExp .= '\sCredits\sausgezahlt';
 
-    $regExp .= '(?:\sGrund\swar\s';
-    $regExp .=  '(?P<strReason>'        . $reReason       . ')';
-    $regExp .= '\.)?';
+        $regExp .= '(?:\sGrund\swar\s';
+        $regExp .= '(?P<strReason>' . $reReason . ')';
+        $regExp .= '\.)?';
 
-    $regExp .= '/';
+        $regExp .= '/';
 
-    return $regExp;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    return HelperC::removeNamedGroups( $this->getRegularExpression() );
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
+        return $regExp;
+    }
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

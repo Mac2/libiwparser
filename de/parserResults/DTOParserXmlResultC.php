@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,24 +23,23 @@
  */
 class DTOParserXmlResultC
 {
-  /**
-   * @soap
-   * @var array $aKbLinks an array of objects of type DTOParserXmlResultLinkC
-   */
-  public $aKbLinks = array();
+    /**
+     * @soap
+     * @var array $aKbLinks an array of objects of type DTOParserXmlResultLinkC
+     */
+    public $aKbLinks = array();
 
-  /**
-   * @soap
-   * @var array $aSbLinks an array of objects of type DTOParserXmlResultLinkC
-   */
-  public $aSbLinks = array();
+    /**
+     * @soap
+     * @var array $aSbLinks an array of objects of type DTOParserXmlResultLinkC
+     */
+    public $aSbLinks = array();
 
-  /**
-   * @soap
-   * @var array $aUniversumLinks an array of objects of type DTOParserXmlResultLinkC
-   */
-  public $aUniversumLinks = array();
-
+    /**
+     * @soap
+     * @var array $aUniversumLinks an array of objects of type DTOParserXmlResultLinkC
+     */
+    public $aUniversumLinks = array();
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -49,32 +48,27 @@ class DTOParserXmlResultC
 
 class DTOParserXmlResultLinkC
 {
-  /**
-   * @soap
-   * @var string $strUrl the url of the xml-link
-   */
-  public $strUrl = '';
+    /**
+     * @soap
+     * @var string $strUrl the url of the xml-link
+     */
+    public $strUrl = '';
 
-  /**
-   * @soap
-   * @var integer $iId the ID of the xml-link
-   */
-  public $iId = 0;
+    /**
+     * @soap
+     * @var integer $iId the ID of the xml-link
+     */
+    public $iId = 0;
 
-  /**
-   * @soap
-   * @var string $strHash the hash of the xml-link
-   */
-  public $strHash = '';
+    /**
+     * @soap
+     * @var string $strHash the hash of the xml-link
+     */
+    public $strHash = '';
 
-  /**
-   * @soap
-   * @var string $strType the type of the xml-link
-   */
-  public $strType = '';
-
+    /**
+     * @soap
+     * @var string $strType the type of the xml-link
+     */
+    public $strType = '';
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

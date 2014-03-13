@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -28,28 +28,28 @@
 class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-    $this->setIdentifier('de_alli_kasse_inhalt');
-    $this->setName("Allianzkasse Kontostand");
-    $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData('/Kasseninhalt/');
-    $this->setRegExpEndData('/Auszahlung/');
-  }
+        $this->setIdentifier('de_alli_kasse_inhalt');
+        $this->setName("Allianzkasse Kontostand");
+        $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
+        $this->setRegExpBeginData('/Kasseninhalt/');
+        $this->setRegExpEndData('/Auszahlung/');
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * @see ParserI::parseText()
-   */
+    /**
+     * @see ParserI::parseText()
+     */
     public function parseText(DTOParserResultC $parserResult)
     {
         $parserResult->objResultData = new DTOParserAlliKasseInhaltResultC();
-        $retVal                      =& $parserResult->objResultData;
+        $retVal =& $parserResult->objResultData;
 
         $this->stripTextToData();
 
@@ -67,31 +67,15 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
 
     }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  private function getRegularExpression()
-  {
-    $reFloatingDouble       = $this->getRegExpFloatingDouble();
+    private function getRegularExpression()
+    {
+        $reFloatingDouble = $this->getRegExpFloatingDouble();
 
-    $regExp  = '/^(?P<fCredits>'.$reFloatingDouble.')\sCredits$/';
+        $regExp = '/^(?P<fCredits>' . $reFloatingDouble . ')\sCredits$/';
 
-    return $regExp;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    return HelperC::removeNamedGroups( $this->getRegularExpression() );
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
+        return $regExp;
+    }
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

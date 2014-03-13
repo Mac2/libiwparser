@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,118 +23,112 @@
  */
 class DTOParserInfoUserResultC
 {
-  /**
-   * @soap
-   * @var string $strUserName the user of the object
-   */
-  public $strUserName;
-
-  /**
-   * @soap
-   * @var string $strUserAlliance the alliance of the user
-   */
-  public $strUserAlliance;
-
-  /**
-   * @soap
-   * @var string $strUserAllianceTag
-   */
-  public $strUserAllianceTag;
-
-  /**
-   * @soap
-   * @var string $strUserAllianceJob
-   */
-  public $strUserAllianceJob;
-
-  /**
-   * @soap
-   * @var string $bAccType
-   */
-  public $strAccType;
-
-  /**
-   * @soap
-   * @var string $strPlanetName name of the object
-   */
-  public $strPlanetName;
-
-  /**
-   * @soap
-   * @var array $aCoords
-   */
-  public $aCoords = array();
-
-  /**
-   * @soap
-   * @var array $strCoords
-   */
-  public $strCoords = null;
-
-  /**
-   * @soap
-   * @var integer $iEntryDate
-   */
-  public $iEntryDate;
-
-  /**
-   * @soap
-   * @var integer $iGebPkt
-   */
-  public $iGebPkt;
-
-  /**
-   * @soap
-   * @var integer $iFP
-   */
-  public $iFP;
-
-  /**
-   * @soap
-   * @var integer $iHSPos
-   */
-  public $iHSPos;
+    /**
+     * @soap
+     * @var string $strUserName the user of the object
+     */
+    public $strUserName;
 
     /**
-   * @soap
-   * @var integer $iHSChange
-   */
-  public $iHSChange;
+     * @soap
+     * @var string $strUserAlliance the alliance of the user
+     */
+    public $strUserAlliance;
 
     /**
-   * @soap
-   * @var integer $iEvo
-   */
-  public $iEvo;
+     * @soap
+     * @var string $strUserAllianceTag
+     */
+    public $strUserAllianceTag;
 
     /**
-   * @soap
-   * @var string $strStaatform
-   */
-  public $strStaatsform;
+     * @soap
+     * @var string $strUserAllianceJob
+     */
+    public $strUserAllianceJob;
 
     /**
-   * @soap
-   * @var string $strTitel
-   */
-  public $strTitel;
+     * @soap
+     * @var string $bAccType
+     */
+    public $strAccType;
 
     /**
-   * @soap
-   * @var string $strDescr
-   */
-  public $strDescr;
+     * @soap
+     * @var string $strPlanetName name of the object
+     */
+    public $strPlanetName;
 
-  /**
-   * @soap
-   * @var string $strMisc
-   */
-  public $strMisc;
-  
+    /**
+     * @soap
+     * @var array $aCoords
+     */
+    public $aCoords = array();
+
+    /**
+     * @soap
+     * @var array $strCoords
+     */
+    public $strCoords = null;
+
+    /**
+     * @soap
+     * @var int $iEntryDate
+     */
+    public $iEntryDate;
+
+    /**
+     * @soap
+     * @var int $iGebPkt
+     */
+    public $iGebPkt;
+
+    /**
+     * @soap
+     * @var int $iFP
+     */
+    public $iFP;
+
+    /**
+     * @soap
+     * @var int $iHSPos
+     */
+    public $iHSPos;
+
+    /**
+     * @soap
+     * @var int $iHSChange
+     */
+    public $iHSChange;
+
+    /**
+     * @soap
+     * @var int $iEvo
+     */
+    public $iEvo;
+
+    /**
+     * @soap
+     * @var string $strStaatform
+     */
+    public $strStaatsform;
+
+    /**
+     * @soap
+     * @var string $strTitel
+     */
+    public $strTitel;
+
+    /**
+     * @soap
+     * @var string $strDescr
+     */
+    public $strDescr;
+
+    /**
+     * @soap
+     * @var string $strMisc
+     */
+    public $strMisc;
+
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-
-?>

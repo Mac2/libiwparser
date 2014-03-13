@@ -9,49 +9,41 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage enums
  */
 
-
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
 
 class ePlanetTypes
 {
-  const Steinklumpen   = 'chunkOfStone';
-  const Asteroiden     = 'asteroid';
-  const Eisplanet      = 'icePlanet';
-  const Gasgigant      = 'gasGiant';
-  const Nichts         = 'void';
-  const Elektrosturm   = 'electricityStorm';
-  const Ionensturm     = 'ionStorm';
-  const Raumverzerrung = 'spaceDistortion';
-  const gravAnomalie   = 'gravimetricAnomaly';
-  const Sonne          = 'sun';
-  const schwarzesLoch  = 'blackHole';
+    const Steinklumpen   = 'Steinklumpen';
+    const Asteroiden     = 'Asteroiden';
+    const Eisplanet      = 'Eisplanet';
+    const Gasgigant      = 'Gasgigant';
+    const Nichts         = 'Nichts';
+    const Elektrosturm   = 'Elektrosturm';
+    const Ionensturm     = 'Ionensturm';
+    const Raumverzerrung = 'Raumverzerrung';
+    const gravAnomalie   = 'grav. Anomalie';
+    const Sonne          = 'Sonne';
+    const schwarzesLoch  = 'schwarzes Loch';
 
-  //TODO: validate englisch constants
-  const Chunkofstone       = 'chunkOfStone';
-  const Asteroid           = 'asteroid';
-  const Iceplanet          = 'icePlanet';
-  const Giantgasball       = 'gasGiant';
-  const Nothing            = 'void';
-  const Electricitystorm   = 'electricityStorm';
-  const Ionstorm           = 'ionStorm';
-  const Spacedistortion    = 'spaceDistortion';
-  const Gravitationanomaly = 'gravimetricAnomaly';
-  const Sun                = 'sun';
-  const BlackHole          = 'blackHole';
+    //TODO: validate englisch constants
+    /*
+    const Chunkofstone       = 'chunkOfStone';
+    const Asteroid           = 'asteroid';
+    const Iceplanet          = 'icePlanet';
+    const Giantgasball       = 'gasGiant';
+    const Nothing            = 'void';
+    const Electricitystorm   = 'electricityStorm';
+    const Ionstorm           = 'ionStorm';
+    const Spacedistortion    = 'spaceDistortion';
+    const Gravitationanomaly = 'gravimetricAnomaly';
+    const Sun                = 'sun';
+    const BlackHole          = 'blackHole';
+    */
 }
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -18,22 +18,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-
 /**
  * Result DTO of parser de_account_highscore
  */
 class DTOParserAccountHighscoreResultC
 {
- 
-  /**
-   * @soap
-   * @var array $aData holds all datas in tree structure
-   */
-	public $aData = array();
+    /**
+     * @soap
+     * @var array $aData holds all datas in tree structure
+     */
+    public $aData = array();
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-
-?>

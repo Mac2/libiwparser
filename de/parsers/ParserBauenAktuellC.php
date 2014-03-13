@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -28,102 +28,77 @@
 class ParserBauenAktuellC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
-
-    $this->setIdentifier('de_bauen_aktuell');
-    $this->setName('aktueller Geb&auml;udebau');
-    $this->setRegExpCanParseText('/aktuell\sim\sBau\sauf\sdiesem\sPlaneten/sm');
-    $this->setRegExpBeginData( $this->getRegExpCanParseText() );
-    $this->setRegExpEndData( '/Ausbau/sm' );
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * @see ParserI::parseText()
-   */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserBauenAktuellResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $this->stripTextToData();
-
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match_all( $regExp, $this->getText(), $aResult, PREG_SET_ORDER );
-
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function __construct()
     {
-      $parserResult->bSuccessfullyParsed = true;
+        parent::__construct();
 
-      foreach( $aResult as $result )
-      {
-        $iDateToExpire = HelperC::convertMixedDurationToSeconds($result['dateToExpire']);
-        $iDateOfFinish = HelperC::convertDateTimeToTimestamp($result['dateOfFinish']);
-        $strBuilding = $result['building'];
-
-        $entry = new DTOParserBauenAktuellResultBuildingC();
-        $entry->iDateToExpire    = PropertyValueC::ensureInteger( $iDateToExpire );
-        $entry->iDateOfFinish    = PropertyValueC::ensureInteger( $iDateOfFinish );
-        $entry->strBuilding      = PropertyValueC::ensureString( trim ($strBuilding) );
-
-        $retVal->aBuildings[] = $entry;
-      }
-    }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
+        $this->setIdentifier('de_bauen_aktuell');
+        $this->setName('aktueller Geb&auml;udebau');
+        $this->setRegExpCanParseText('/aktuell\sim\sBau\sauf\sdiesem\sPlaneten/sm');
+        $this->setRegExpBeginData($this->getRegExpCanParseText());
+        $this->setRegExpEndData('/Ausbau/sm');
     }
 
-  }
+    /////////////////////////////////////////////////////////////////////////////
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  private function getRegularExpression()
-  {
     /**
-    * die Daten sind Zeilen, von denen jede folgendermaßen aussieht:
-    * Datum | Vergangene Zeit | Forschung
-    */
+     * @see ParserI::parseText()
+     */
+    public function parseText(DTOParserResultC $parserResult)
+    {
+        $parserResult->objResultData = new DTOParserBauenAktuellResultC();
+        $retVal =& $parserResult->objResultData;
 
-    $reDateOfFinish        = $this->getRegExpDateTime();
-    $reDateToExpire       = $this->getRegExpMixedTime();
+        $this->stripTextToData();
 
-    $regExp  = '/';
-    $regExp .= '(?P<building>'           . '[^\n\t\r]+'     . ')\s+?';
-    $regExp .= 'bis\s(?P<dateOfFinish>'     . $reDateOfFinish   . ')[\n\s]+?';
-    $regExp .= '(?P<dateToExpire>'      . $reDateToExpire   . '|abgeschlossen|)';
-    $regExp .= '/m';
+        $regExp = $this->getRegularExpression();
 
-    return $regExp;
-  }
+        $aResult = array();
+        $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
-  /////////////////////////////////////////////////////////////////////////////
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
 
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    $retVal = $this->getRegularExpression();
+            foreach ($aResult as $result) {
+                $iDateToExpire = HelperC::convertMixedDurationToSeconds($result['dateToExpire']);
+                $iDateOfFinish = HelperC::convertDateTimeToTimestamp($result['dateOfFinish']);
+                $strBuilding   = $result['building'];
 
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
+                $entry                = new DTOParserBauenAktuellResultBuildingC();
+                $entry->iDateToExpire = PropertyValueC::ensureInteger($iDateToExpire);
+                $entry->iDateOfFinish = PropertyValueC::ensureInteger($iDateOfFinish);
+                $entry->strBuilding   = PropertyValueC::ensureString(trim($strBuilding));
 
-    return $retVal;
-  }
+                $retVal->aBuildings[] = $entry;
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+        }
 
-  /////////////////////////////////////////////////////////////////////////////
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    private function getRegularExpression()
+    {
+        /**
+         * die Daten sind Zeilen, von denen jede folgendermaßen aussieht:
+         * Datum | Vergangene Zeit | Forschung
+         */
+
+        $reDateOfFinish = $this->getRegExpDateTime();
+        $reDateToExpire = $this->getRegExpMixedTime();
+
+        $regExp = '/';
+        $regExp .= '(?P<building>' . '[^\n\t]+' . ')\s+?';
+        $regExp .= 'bis\s(?P<dateOfFinish>' . $reDateOfFinish . ')[\n\s]+?';
+        $regExp .= '(?P<dateToExpire>' . $reDateToExpire . '|abgeschlossen|)';
+        $regExp .= '/m';
+
+        return $regExp;
+    }
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

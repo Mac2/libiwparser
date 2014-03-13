@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,25 +23,21 @@
  */
 class DTOOwnedObjectsCounterC
 {
-  /**
-   * @soap
-   * @var string $strOwnerName identifies the owner of the object
-   */
-  public $strOwnerName = "";
+    /**
+     * @soap
+     * @var string $strOwnerName identifies the owner of the object
+     */
+    public $strOwnerName = "";
 
-  /**
-   * @soap
-   * @var string $strObjectName some string that identifies your object
-   */
-  public $strObjectName = "";
+    /**
+     * @soap
+     * @var string $strObjectName some string that identifies your object
+     */
+    public $strObjectName = "";
 
-  /**
-   * @soap
-   * @var integer $iCounter number of objects
-   */
-  public $iCounter = 0;
+    /**
+     * @soap
+     * @var integer $iCounter number of objects
+     */
+    public $iCounter = 0;
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

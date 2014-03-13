@@ -9,31 +9,14 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'ParserBaseC.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'ParserI.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'HelperC.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'parserResults'   . DIRECTORY_SEPARATOR .
-              'DTOParserMsgResultC.php' );
 
 /**
  * Parser for SubMessages Sondierung (Schiffe/Def/Ress)
@@ -45,25 +28,25 @@ require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
 class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-    $this->setIdentifier('de_msg_scan_schiffedefress');
-    $this->setCanParseMsg('Sondierung (Schiffe/Def/Ress)');
-  }
+        $this->setIdentifier('de_msg_scan_schiffedefress');
+        $this->setCanParseMsg('Sondierung (Schiffe/Def/Ress)');
+    }
 
- /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * @see ParserMsgI::parseMsg()
-   */
+    /**
+     * @see ParserMsgI::parseMsg()
+     */
     public function parseMsg(DTOParserResultC $parserResult)
     {
         $parserResult->objResultData = new DTOParserMsgResultMsgScanSchiffeDefRessC();
-        $retVal                      =& $parserResult->objResultData;
+        $retVal =& $parserResult->objResultData;
 
         $regExpText = $this->getRegularExpressionText();
         $msg        = $this->getMsg();
@@ -78,16 +61,6 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
         if ($fRetValText !== false && $fRetValText > 0) {
 
             $retVal->bSuccessfullyParsed = true;
-
-            $strCoords    = "";
-            $strOwner     = "";
-            $strOwnerAlly = "";
-            $strPlanetTyp = "";
-            $strObjektTyp = "";
-            $aCoords      = array();
-            $iCoordsGal   = -1;
-            $iCoordsSol   = -1;
-            $iCoordsPla   = -1;
             $aSchiffe     = array();
             $astatSchiffe = array();
             $aResources   = array();
@@ -176,7 +149,7 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
                     foreach ($aResultResources as $result) {
                         $strResourceName = $result['resource_name'];
                         $iResourceCount  = $result['resource_count'];
-                        $strResourceName = PropertyValueC::ensureResource($strResourceName);
+                        $strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources');
                         $iResourceCount  = PropertyValueC::ensureInteger($iResourceCount);
                         if ($strResourceName == "-???-") {
                             continue;
@@ -207,149 +180,132 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
 
     }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   */
+    protected function getRegularExpressionResources()
+    {
+        $reResource      = $this->getRegExpSingleLineText3();
+        $reDecimalNumber = $this->getRegExpDecimalNumber();
 
-  protected function getRegularExpressionResources()
-  {
-	$reResource     = $this->getRegExpSingleLineText3();
-	$reDecimalNumber= $this->getRegExpDecimalNumber();
-
-	$regExp = '/';
-	$regExp .= '(?P<resource_name>('.$reResource.'|-\?\?\?-))
-			[\s\t]+
-			(?P<resource_count>('.$reDecimalNumber.'|-\?\?\?-))
-			[\s\n\r\t]*
-		';
-	$regExp .= '/mx';
-
-	return $regExp;
-  }
-
-  protected function getRegularExpressionSchiffe()
-  {
-	$reSchiffe      = $this->getRegExpSingleLineText3();
-	$reDecimalNumber= $this->getRegExpDecimalNumber();
-
-	$regExp = '/';
-	$regExp .= '(?P<schiff_name>'.$reSchiffe.')
-			[\s\t]+
-			(?P<schiffe_count>('.$reDecimalNumber.'|-\?\?\?-))
-			[\s\n\r\t]*
-		';
-	$regExp .= '/mx';
-
-	return $regExp;
-  }
-
-  protected function getRegularExpressionDefence()
-  {
-	$reDecimalNumber= $this->getRegExpDecimalNumber();
-	$reDefence     = $this->getRegExpSingleLineText3();
-
-	$regExp = '/';
-	$regExp .= '(?P<defence_name>('.$reDefence.'|-\?\?\?-))
-			[\s\t]+
-			(?P<defence_count>('.$reDecimalNumber.'|-\?\?\?-))
-			[\s\n\r\t]*
-		';
-	$regExp .= '/mx';
-
-	return $regExp;
-  }
-
-  protected function getRegularExpressionStatSchiffe()
-  {
-	$reSchiffe      = $this->getRegExpSingleLineText3();
-	$reDecimalNumber= $this->getRegExpDecimalNumber();
- 	$reUserName     = $this->getRegExpUserName();
-
-	$regExp = '/';
-	$regExp  .= '	Stationierte\sFlotte\svon\s(?P<owner_stat>('.$reUserName.'|-\?\?\?-))\s\(('.$reDecimalNumber.'|-\?\?\?-)\sSchiffe\)
-			[\s\n\r\t]+
-			(?P<stat_fleet>(
-			(('.$reSchiffe.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
-			))';
-	$regExp .= '/mx';
-
-	return $regExp;
-  }
-
-  private function getRegularExpressionText()
-  {
-
-    $reUserName     = $this->getRegExpUserName();
-    $reSchiffe      = $this->getRegExpSchiffe();
-    $reMixedTime    = $this->getRegExpDateTime();
-    $reBasisTyp     = $this->getRegExpSingleLineText();
-    $rePlanetTyp    = $this->getRegExpPlanetTypes();
-    $reObjektTyp    = $this->getRegExpObjectTypes();
-    $reDecimalNumber= $this->getRegExpDecimalNumber();
-    $reResource     = $this->getRegExpResource();
-
-    $regExp  = '/
-			Sondierungsbericht\s\(Schiffe\)\svon\s
-			(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
-	$regExp .= 	'\sam\s(?P<datetime>'.$reMixedTime.')\.';
-	$regExp .=	'\sBesitzer\sist\s((?P<owner>'.$reUserName.')\s(\[(?P<alliance>'.$reBasisTyp.')\])?)?\.';
-	$regExp  .= '	\s*Planetentyp\s+(?P<planettyp>('.$rePlanetTyp.'|-\?\?\?-))\s*
-			\s*Objekttyp\s+(?P<objekttyp>('.$reObjektTyp.'|-\?\?\?-))\s*
-			(?:(\s*Basistyp\s+.*\s*)|)';
-	$regExp  .= '	(?:
-			Schiffe[\s\n]*Planetare\sFlotte
-			[\s\n\r\t]+
-			(?P<schiffe>
-			(('.$reBasisTyp.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
-			)?
-			|)';
-	$regExp  .= '	(?:(?P<stat_fleet>(
-			Stationierte\sFlotte\svon\s('.$reUserName.'|-\?\?\?-)\s\(('.$reDecimalNumber.'|-\?\?\?-)\sSchiffe\)
-			[\s\n\r\t]+
-			(('.$reBasisTyp.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
-			)+)
-			|)';
-	$regExp  .= '	(?:
-			Defence
-			[\s\n\r\t]+
-			(?P<defence>
-			(('.$reBasisTyp.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
-			)?
-			|)';
-	$regExp  .= '	(?:
-			Ressourcen
-			[\s\n\r\t]+
-			(?P<resources>
-			(('.$reResource.'|-\?\?\?-)[\s\t]+('.$reDecimalNumber.'|-\?\?\?-)[\s\n\r\t]*)+
-			)
-			|)';
-	$regExp .=	'^Hinweise\s';
-	$regExp .=	'(.*[\n]){1,5}';
-	$regExp .= 	'(^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';
+        $regExp  = '/';
+        $regExp .= '(?P<resource_name>(' . $reResource . '|-\?\?\?-))';
+		$regExp .= '\s+';
+        $regExp .= '(?P<resource_count>(' . $reDecimalNumber . '|-\?\?\?-))';
+		$regExp .= '[\s\n]*';
         $regExp .= '/mx';
 
-    return $regExp;
-  }
+        return $regExp;
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    $retVal = $this->getRegularExpressionText();
+    protected function getRegularExpressionSchiffe()
+    {
+        $reSchiffe       = $this->getRegExpSingleLineText3();
+        $reDecimalNumber = $this->getRegExpDecimalNumber();
 
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
+        $regExp  = '/';
+        $regExp .= '(?P<schiff_name>' . $reSchiffe . ')';
+		$regExp .= '\s+';
+        $regExp .= '(?P<schiffe_count>(' . $reDecimalNumber . '|-\?\?\?-))';
+		$regExp .= '[\s\n]*';
+        $regExp .= '/mx';
 
-    return $retVal;
-  }
+        return $regExp;
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
+
+    protected function getRegularExpressionDefence()
+    {
+        $reDecimalNumber = $this->getRegExpDecimalNumber();
+        $reDefence       = $this->getRegExpSingleLineText3();
+
+        $regExp = '/';
+        $regExp .= '(?P<defence_name>(' . $reDefence . '|-\?\?\?-))';
+		$regExp .= '\s+';
+        $regExp .= '(?P<defence_count>(' . $reDecimalNumber . '|-\?\?\?-))';
+		$regExp .= '[\s\n]*';
+        $regExp .= '/mx';
+
+        return $regExp;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    protected function getRegularExpressionStatSchiffe()
+    {
+        $reSchiffe       = $this->getRegExpSingleLineText3();
+        $reDecimalNumber = $this->getRegExpDecimalNumber();
+        $reUserName      = $this->getRegExpUserName();
+
+        $regExp = '/';
+        $regExp .= '	Stationierte\sFlotte\svon\s(?P<owner_stat>(' . $reUserName . '|-\?\?\?-))\s\((' . $reDecimalNumber . '|-\?\?\?-)\sSchiffe\)';
+		$regExp .= '	[\s\n]+';
+        $regExp .= '	(?P<stat_fleet>(';
+		$regExp .= '	((' . $reSchiffe . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+';
+        $regExp .= '	))';
+        $regExp .= '/mx';
+
+        return $regExp;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    private function getRegularExpressionText()
+    {
+        $reUserName      = $this->getRegExpUserName();
+        $reMixedTime     = $this->getRegExpDateTime();
+        $reBasisTyp      = $this->getRegExpSingleLineText();
+        $rePlanetTyp     = $this->getRegExpPlanetTypes();
+        $reObjektTyp     = $this->getRegExpObjectTypes();
+        $reDecimalNumber = $this->getRegExpDecimalNumber();
+        $reResource      = $this->getRegExpResource();
+
+        $regExp  = '/';
+		$regExp .= 'Sondierungsbericht\s\(Schiffe\)\svon\s';
+		$regExp .= '(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
+        $regExp .= '\sam\s(?P<datetime>' . $reMixedTime . ')\.';
+        $regExp .= '\sBesitzer\sist\s((?P<owner>' . $reUserName . ')\s(\[(?P<alliance>' . $reBasisTyp . ')\])?)?\.';
+        $regExp .= '\s*Planetentyp\s+(?P<planettyp>(' . $rePlanetTyp . '|-\?\?\?-))\s*';
+		$regExp .= '\s*Objekttyp\s+(?P<objekttyp>(' . $reObjektTyp . '|-\?\?\?-))\s*';
+        $regExp .= '(?:(\s*Basistyp\s+.*\s*)|)';
+        $regExp .= '(?:';
+        $regExp .= '	Schiffe[\s\n]*Planetare\sFlotte';
+		$regExp .= '	[\s\n]+';
+        $regExp .= '	(?P<schiffe>';
+		$regExp .= '	    ((' . $reBasisTyp . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+';
+        $regExp .= '	)?';
+		$regExp .= '|)';
+        $regExp .= '(?:';
+        $regExp .= '    (?P<stat_fleet>';
+        $regExp .= '        (';
+		$regExp .= '            Stationierte\sFlotte\svon\s(' . $reUserName . '|-\?\?\?-)\s\((' . $reDecimalNumber . '|-\?\?\?-)\sSchiffe\)';
+		$regExp .= '            [\s\n]+';
+		$regExp .= '            ((' . $reBasisTyp . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+';
+        $regExp .= '        )+';
+        $regExp .= '	)';
+		$regExp .= '|)';
+        $regExp .= '(?:';
+		$regExp .= '    Defence';
+		$regExp .= '    [\s\n]+';
+		$regExp .= '    (?P<defence>';
+		$regExp .= '        ((' . $reBasisTyp . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+';
+        $regExp .= '    )?';
+		$regExp .= '|)';
+        $regExp .= '(?:';
+		$regExp .= '    Ressourcen';
+		$regExp .= '    [\s\n]+';
+		$regExp .= '    (?P<resources>';
+		$regExp .= '        ((' . $reResource . '|-\?\?\?-)\s+(' . $reDecimalNumber . '|-\?\?\?-)[\s\n]*)+';
+		$regExp .= '    )';
+		$regExp .= '|)';
+        $regExp .= '^Hinweise\s';
+        $regExp .= '(.*\n){1,5}';
+        $regExp .= '(^(?P<link>http:\/\/www\.icewars\.de\/portal\/kb\/de\/sb\.php\?id=(\d+)\&md_hash=([\w\d]+)))?';
+        $regExp .= '/mx';
+
+        return $regExp;
+    }
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

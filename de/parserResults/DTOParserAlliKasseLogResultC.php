@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,15 +23,9 @@
  */
 class DTOParserAlliKasseLogResultC
 {
-
-   /**
-   * @soap
-   * @var array $aLogs the array of logs
-   */
-  public $aLogs = array(); 
-
+    /**
+     * @soap
+     * @var array $aLogs the array of logs
+     */
+    public $aLogs = array();
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -24,11 +24,11 @@
 class DTOParserAlliKasseMemberResultC
 {
 
-   /**
-   * @soap
-   * @var array $aMember the array of DTOParserAlliKasseMemberResultMemberC
-   */
-  public $aMember = array(); 
+    /**
+     * @soap
+     * @var array $aMember the array of DTOParserAlliKasseMemberResultMemberC
+     */
+    public $aMember = array();
 
 }
 
@@ -38,39 +38,33 @@ class DTOParserAlliKasseMemberResultC
 
 class DTOParserAlliKasseMemberResultMemberC
 {
+    /**
+     * @soap
+     * @var boolean $bHasAccepted has the user accepted the alli taxes?
+     */
+    public $bHasAccepted = false;
 
-   /**
-   * @soap
-   * @var boolean $bHasAccepted has the user accepted the alli taxes?
-   */
-  public $bHasAccepted = false;
+    /**
+     * @soap
+     * @var string $strUser user
+     */
+    public $strUser = "";
 
-  /**
-   * @soap
-   * @var string $strUser user
-   */
-  public $strUser = ""; 
+    /**
+     * @soap
+     * @var integer $iCreditsPerDay how many credits does the user pay the alliance per day
+     */
+    public $iCreditsPerDay = "";
 
-  /**
-   * @soap
-   * @var integer $iCreditsPerDay how many credits does the user pay the alliance per day
-   */
-  public $iCreditsPerDay = ""; 
+    /**
+     * @soap
+     * @var integer $iDateTime when does the user acceptet the taxes?
+     */
+    public $iDateTime = 0;
 
-  /**
-   * @soap
-   * @var integer $iDateTime when does the user acceptet the taxes?
-   */
-  public $iDateTime = 0; 
-
-  /**
-   * @soap
-   * @var float $fCreditsPaid the sum of credits tha the user paid the alliance
-   */
-  public $fCreditsPaid = 0;   
-
+    /**
+     * @soap
+     * @var float $fCreditsPaid the sum of credits tha the user paid the alliance
+     */
+    public $fCreditsPaid = 0;
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

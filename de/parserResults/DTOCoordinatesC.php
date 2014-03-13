@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -18,34 +18,26 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-
-
 /**
  * A DTO describing coordinates in the IW universe
  */
 class DTOCoordinatesC
 {
-  /**
-   * @soap
-   * @var integer $iGalaxy
-   */
-  public $iGalaxy = 0;
+    /**
+     * @soap
+     * @var integer $iGalaxy
+     */
+    public $iGalaxy = 0;
 
-  /**
-   * @soap
-   * @var integer $iSystem
-   */
-  public $iSystem = 0;
+    /**
+     * @soap
+     * @var integer $iSystem
+     */
+    public $iSystem = 0;
 
-  /**
-   * @soap
-   * @var integer $iPlanet
-   */
-  public $iPlanet = 0;
+    /**
+     * @soap
+     * @var integer $iPlanet
+     */
+    public $iPlanet = 0;
 }
-
-
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

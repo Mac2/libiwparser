@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,13 +23,13 @@
  */
 class DTOParserPersonalStatForschungenResultC
 {
-  /**
-   * @soap
-   * @var array $aResearchs an array of objects of type
-   *      DTOParserPersonalStatForschungenResearchResultC, which represent the researchs
-   *      of the user
-   */
-  public $aResearchs = array();
+    /**
+     * @soap
+     * @var array $aResearchs an array of objects of type
+     *      DTOParserPersonalStatForschungenResearchResultC, which represent the researchs
+     *      of the user
+     */
+    public $aResearchs = array();
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -38,25 +38,21 @@ class DTOParserPersonalStatForschungenResultC
 
 class DTOParserPersonalStatForschungenResearchResultC
 {
-  /**
-   * @soap
-   * @var string $strResearch the name of the research
-   */
-  public $strResearch = '';
+    /**
+     * @soap
+     * @var string $strResearch the name of the research
+     */
+    public $strResearch = '';
 
-  /**
-   * @soap
-   * @var integer $iDateExpired the number of seconds since the user exists ingame
-   */
-  public $iDateExpired = 0;
+    /**
+     * @soap
+     * @var integer $iDateExpired the number of seconds since the user exists ingame
+     */
+    public $iDateExpired = 0;
 
-  /**
-   * @soap
-   * @var integer $iDateOfResearch unixtime of research end
-   */
-  public $iDateOfResearch = 0;
+    /**
+     * @soap
+     * @var integer $iDateOfResearch unixtime of research end
+     */
+    public $iDateOfResearch = 0;
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

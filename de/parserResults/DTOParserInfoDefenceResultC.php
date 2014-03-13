@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,63 +23,59 @@
  */
 class DTOParserInfoDefenceResultC
 {
-  /**
-   * @soap
-   * @var string $strSchiffName the name of the defence
-   */
-  public $strDefenceName = '';
-  public $strAreaName = '';
-  /**
-   * @soap
-   * @var integer $iProductionTime the default time to produce the defence in seconds
-   */
-  public $iProductionTime = 0;
+    /**
+     * @soap
+     * @var string $strSchiffName the name of the ship
+     */
+    public $strDefenceName = '';
+    public $strAreaName = '';
+    /**
+     * @soap
+     * @var integer $iProductionTime the default time to produce the ship
+     */
+    public $iProductionTime = 0;
 
-  /**
-   * @soap
-   * @var array $aResearchs array of researchs, needed for the defence
-   */
-  public $aResearchs = array();
+    /**
+     * @soap
+     * @var array $aResearchs array of researchs, needed for the ship
+     */
+    public $aResearchs = array();
 
-  /**
-   * @soap
-   * @var integer $iVerbrauchBrause the chemie costs
-   */
-  public $iVerbrauchBrause = 0;  
+    /**
+     * @soap
+     * @var integer $iVerbrauchBrause the chemie costs
+     */
+    public $iVerbrauchBrause = 0;
 
-  /**
-   * @soap
-   * @var integer $iVerbrauchEnergie the energy costs
-   */
-  public $iVerbrauchEnergie = 0;  
+    /**
+     * @soap
+     * @var integer $iVerbrauchEnergie the energy costs
+     */
+    public $iVerbrauchEnergie = 0;
 
-  /**
-   * @soap
-   * @var array $aCosts further Costs for this defence
-   */
-  public $aCosts = array();  
+    /**
+     * @soap
+     * @var array $aCosts further Costs for this ship
+     */
+    public $aCosts = array();
 
-  /**
-   * @soap
-   * @var array $aEffectivity to other ship classes
-   */
-  public $aEffectivity = array();
+    /**
+     * @soap
+     * @var array $aEffectivity to other ship classes
+     */
+    public $aEffectivity = array();
 
- /**
-   * @soap
-   * @var integer value for Battle
-   */
-  public $iAttack = 0;
-  public $iDefence = 0;  
-  public $strWeaponClass = '';
+    /**
+     * @soap
+     * @var integer value for Battle
+     */
+    public $iAttack = 0;
+    public $iDefence = 0;
+    public $strWeaponClass = '';
 //  public $iArmour_kin = 0;
 //  public $iArmour_grav = 0;
 //  public $iArmour_electr = 0;
-  public $iShields = 0;  
-  public $iAccuracy = 0;  	//! Zielgenauigkeit
+    public $iShields = 0;
+    public $iAccuracy = 0; //! Zielgenauigkeit
 
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

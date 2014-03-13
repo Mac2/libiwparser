@@ -31,7 +31,7 @@
 class ParserUniversumC extends ParserBaseC implements ParserI
 {
     const ID_PARSER_PLAIN_TEXT = 'plainText';
-    const ID_PARSER_XML = 'xml';
+    const ID_PARSER_XML        = 'xml';
 
     private $_parserXml;
     private $_parserPlainText;
@@ -44,7 +44,7 @@ class ParserUniversumC extends ParserBaseC implements ParserI
         parent::__construct();
 
         $this->_parserPlainText = new ParserUniversumPlainTextC();
-        $this->_parserXml = new ParserUniversumXmlC();
+        $this->_parserXml       = new ParserUniversumXmlC();
 
         $this->setIdentifier('de_universum');
         $this->setName('Universum');
@@ -85,7 +85,7 @@ class ParserUniversumC extends ParserBaseC implements ParserI
         $retVal = false;
 
         if ($this->_parserXml->canParseText($text)) {
-            $retVal = true;
+            $retVal                = true;
             $this->_strParserToUse = self::ID_PARSER_XML;
         }
 
@@ -108,7 +108,7 @@ class ParserUniversumC extends ParserBaseC implements ParserI
     {
         $parser = $this->getParserToUse();
 
-        return $parser->parseText($parserResult);
+        $parser->parseText($parserResult);
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
         $this->setIdentifier('de_universum');
         $this->setName('Universum (Text)');
         //because the parser currently only can parse xml, we include the <?xml
-        $this->setStringCanParseText('Das\sUniversum\s\-\sunendliche\sWeiten.+<?xml', 's');
+        $this->setStringCanParseText('Das\sUniversum\s\-\sunendliche\sWeiten.+\<?xml', 's');
         $this->setRegExpBeginData('');
         $this->setRegExpEndData('');
     }
@@ -160,7 +160,7 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
 
     private function setStringCanParseText($value, $modifier)
     {
-        $value = PropertyValueC::ensureString($value);
+        $value    = PropertyValueC::ensureString($value);
         $modifier = PropertyValueC::ensureString($modifier);
 
         $this->setRegExpCanParseText("/$value/$modifier");
@@ -176,11 +176,11 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
     {
         $parserResult->objResultData = new DTOParserUniversumResultC();
         $retVal =& $parserResult->objResultData;
-        $fRetVal = 0;
+
         $this->stripTextToData();
 
         $regText = $this->getText();
-        $regExp = $this->getRegularExpression();
+        $regExp  = $this->getRegularExpression();
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $regText, $aResult, PREG_SET_ORDER);
 
@@ -190,7 +190,7 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
             $iCoordsGal = 0;
             $iCoordsSol = 0;
             foreach ($aResult as $result) {
-                $planet = new DTOParserUniversumPlanetResultC();
+                $planet         = new DTOParserUniversumPlanetResultC();
                 $objCoordinates = new DTOCoordinatesC();
 
                 //! Gal & Sol gelten jeweils fuer alle Planeten
@@ -205,96 +205,79 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
                 $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPla']);
 
 
-                $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
+                $aCoords   = array(
+                    'coords_gal' => $iCoordsGal,
+                    'coords_sol' => $iCoordsSol,
+                    'coords_pla' => $iCoordsPla
+                );
                 $strCoords = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
 
                 $objCoordinates->iGalaxy = $iCoordsGal;
                 $objCoordinates->iPlanet = $iCoordsPla;
                 $objCoordinates->iSystem = $iCoordsSol;
 
-                $planet->aCoords = $aCoords;
+                $planet->aCoords        = $aCoords;
                 $planet->objCoordinates = $objCoordinates;
-                $planet->strCoords = $strCoords;
+                $planet->strCoords      = $strCoords;
 
-                $planet->strUserName = PropertyValueC::ensureString($result['strUserName']);
+                $planet->strUserName     = PropertyValueC::ensureString($result['strUserName']);
                 $planet->strUserAlliance = PropertyValueC::ensureString($result['strAlliance']);
-                $planet->strPlanetName = trim(PropertyValueC::ensureString($result['strPlanetName']));
+                $planet->strPlanetName   = trim(PropertyValueC::ensureString($result['strPlanetName']));
                 if ($planet->strPlanetName == "-" && empty($planet->strUserName)) {
                     $planet->strPlanetName = "";
                 }
 
                 $planet->strObjectType = PropertyValueC::ensureString($result['strObjectType']);
-                if (empty($planet->strObjectType)) //! damit das ensureEnum korrekt funktioniert
-                {
+                if (empty($planet->strObjectType)) {    //! damit das ensureEnum korrekt funktioniert
                     $planet->strObjectType = "---";
                 }
 
                 $planet->strPlanetType = PropertyValueC::ensureString($result['strPlanetType']);
-                if ($iCoordsPla == 0 && empty($planet->strPlanetType)) //! damit das ensureEnum korrekt funktioniert
-                {
+                if ($iCoordsPla == 0 && empty($planet->strPlanetType)) {    //! damit das ensureEnum korrekt funktioniert
                     $planet->strPlanetType = "Sonne";
                 }
 
-                //! Mac: Problem Opera liefert keine Informationen ueber den Planetentyp!
+                //! Mac: Problem Opera liefert keine Informationen über den Planetentyp!
                 $planet->eObjectType = PropertyValueC::ensureEnum($planet->strObjectType, "eObjectTypes");
                 $planet->ePlanetType = PropertyValueC::ensureEnum($planet->strPlanetType, "ePlanetTypes");
 
-//      if (isset($result['strNebel']) && !empty($result['strNebel']))
-//      {
-//        $planet->strNebula = PropertyValueC::ensureString($result['strNebel']);
-//        $planet->bHasNebula = true;
-//        $planet->eNebula = PropertyValueC::ensureEnum( $result['strNebel'], 'ePlanetSpecials' );
-//      }
+//              if (isset($result['strNebel']) && !empty($result['strNebel'])) {
+//                  $planet->strNebula = PropertyValueC::ensureString($result['strNebel']);
+//                  $planet->bHasNebula = true;
+//                  $planet->eNebula = PropertyValueC::ensureEnum( $result['strNebel'], 'ePlanetSpecials' );
+//              }
 
-//      if ($result['strObjectType'] == "Raumstation")
-//      {
-//        $retVal->aPlanets[$iCoordsGal.':'.$iCoordsSol.':0'] = new DTOParserUniversumPlanetResultC();
-//        $retVal->aPlanets[$iCoordsGal.':'.$iCoordsSol.':0']->strPlanetType = 'Raumstation';
-//      }
-//      else {
-                $retVal->aPlanets[$strCoords] = $planet;
-//      }
+//              if ($result['strObjectType'] == "Raumstation") {
+//                  $retVal->aPlanets[$iCoordsGal.':'.$iCoordsSol.':0'] = new DTOParserUniversumPlanetResultC();
+//                  $retVal->aPlanets[$iCoordsGal.':'.$iCoordsSol.':0']->strPlanetType = 'Raumstation';
+//              } else {
+                    $retVal->aPlanets[$strCoords] = $planet;
+//              }
             }
 
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[] = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
         }
 
     }
 
     /////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * For debugging with "The Regex Coach" which doesn't support named groups
-     */
-    private function getRegularExpressionWithoutNamedGroups()
-    {
-        $retValLine = $this->getRegularExpression();
-
-        $retValLine = preg_replace('/\?P<\w+>/', '', $retValLine);
-
-        return $retValLine;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////
-
     private function getRegularExpression()
     {
-        /**
-         */
         $reCoordsGal = '\d+';
         $reCoordsSol = '\d+';
 
         $rePlanetType = $this->getRegExpPlanetTypes();
         $reObjectType = $this->getRegExpKoloTypes();
-        $reName = $this->getRegExpUserName();
-        $reAlliance = $this->getRegExpSingleLineText();
+        $reName       = $this->getRegExpUserName();
+        $reAlliance   = $this->getRegExpSingleLineText();
         $rePlanetName = $this->getRegExpSingleLineText();
-        $reText = $this->getRegExpSingleLineText();
-        $reCoordsPla = '\d+';
-//  $rePlanetPoints     = '\d+';
-//  $reNebel       = $this->getRegExpSingleLineText();
+        $reText       = $this->getRegExpSingleLineText();
+        $reCoordsPla  = '\d+';
+//      $rePlanetPoints     = '\d+';
+//      $reNebel       = $this->getRegExpSingleLineText();
         $reRank = $this->getRegExpUserRank_de();
 
         $regExp = '/';
@@ -336,9 +319,6 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
         return $regExp;
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -358,8 +338,6 @@ class ParserUniversumPlainTextC extends ParserBaseC implements ParserI
  *
  * Its identifier: de_universum
  */
-
-
 class ParserUniversumXmlC extends ParserBaseC implements ParserI
 {
 
@@ -371,8 +349,8 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
 
         $this->setIdentifier('de_universum');
         $this->setName('Universum (XML)');
-        $this->setRegExpBeginData('/(?=<\?xml)/s');
-        $this->setRegExpEndData('/(?<=<\/planeten_data>)/');
+        $this->setRegExpBeginData('/(?=\<\?xml)/s');
+        $this->setRegExpEndData('/(?<=\<\/planeten_data\>)/');
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -393,10 +371,9 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
      */
     public function canParseText($text)
     {
-        $retVal = false;
-        $fRetVal = false;
-        $dom = new DOMDocument();
-        $xmlString = '';
+        $retVal          = false;
+
+        $dom             = new DOMDocument();
         $rngFileUniverse = $this->getRngFileUniverse();
 
         //dont modify the text that is provided!
@@ -413,7 +390,7 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
             $aStart = preg_split($reStartData, $xmlStrings);
 
             for ($n = 1; $n < count($aStart); $n++) { //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
-                if (isset($aStart[$n]) && !empty($aStart[$n])) {
+                if (!empty($aStart[$n])) {
                     //supress errors, otherwise this parser may crash the
                     //application if it is provided non-xml data!
                     $fRetVal = @$dom->loadXml($aStart[$n], LIBXML_NOERROR);
@@ -440,6 +417,7 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
     {
         $parserResult->objResultData = new DTOParserUniversumXmlTextC();
         $retVal =& $parserResult->objResultData;
+
         $this->stripTextToData();
 
         $xmlStrings = array();
@@ -450,13 +428,13 @@ class ParserUniversumXmlC extends ParserBaseC implements ParserI
             $aStart = preg_split($reStartData, $this->getText());
 
             for ($n = 1; $n < count($aStart); $n++) { //! bei Mehrfach-Berichten (Universum, Highscore, etc) alle verarbeiten
-                if (isset($aStart[$n]) && !empty($aStart[$n])) {
+                if (!empty($aStart[$n])) {
                     $xmlStrings[] = $aStart[$n];
                 }
             }
         }
 
-        $retVal->aXmlText = $xmlStrings;           //give the text to unixml-parser -> nothing more here
+        $retVal->aXmlText = $xmlStrings; //give the text to unixml-parser -> nothing more here
 
         $parserResult->bSuccessfullyParsed = true;
     }

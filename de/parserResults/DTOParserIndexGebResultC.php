@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -18,18 +18,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-
 /**
  * Result DTO of parser de_index_geb
  */
 class DTOParserIndexGebResultC
 {
-  /**
-   * @soap
-   * @var array $aGeb
-   */
-  public $aGeb = array ();
-
+    /**
+     * @soap
+     * @var array $aGeb
+     */
+    public $aGeb = array();
 }
 
 /**
@@ -37,28 +35,27 @@ class DTOParserIndexGebResultC
  */
 class DTOParserIndexGebResultGebC
 {
-  /**
-   * @soap
-   * @var string $strPlanetName string with the name of the planet
-   */
-  public $strPlanetName = '';
+    /**
+     * @soap
+     * @var string $strPlanetName string with the name of the planet
+     */
+    public $strPlanetName = '';
 
-  /**
-   * @soap
-   * @var string $strCoords string with planetary coordinates
-   */
-  public $strCoords = '';
+    /**
+     * @soap
+     * @var string $strCoords string with planetary coordinates
+     */
+    public $strCoords = '';
 
-  /**
-   * @soap
-   * @var array $aCoords associative array with planetary coordinates
-   */
-  public $aCoords = array();
+    /**
+     * @soap
+     * @var array $aCoords associative array with planetary coordinates
+     */
+    public $aCoords = array();
 
-  /**
- * @soap
- * @var array $aGebName associative array with the buildings in the queue
- */
- public $aGebName = array();
-
+    /**
+     * @soap
+     * @var array $aGebName associative array with the buildings in the queue
+     */
+    public $aGebName = array();
 }

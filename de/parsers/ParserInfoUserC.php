@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -28,171 +28,162 @@
 class ParserInfoUserC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
-
-    $this->setIdentifier('de_info_user');
-    $this->setName("Spielerinformation");
-    $this->setRegExpCanParseText('/Spielerinfo.+Schreibe\sNachricht/s');
-    $this->setRegExpBeginData( '/Spielerinfo\s+Spielerinfo/' );
-    $this->setRegExpEndData( '/Schreibe\sNachricht/' );
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * @see ParserI::parseText()
-   */
-  public function parseText( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserInfoUserResultC();
-    $retVal =& $parserResult->objResultData;
-    $fRetVal = 0;
-
-    $this->stripTextToData();
-
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match( $regExp, $this->getText(), $aResult );
-
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function __construct()
     {
-        $parserResult->bSuccessfullyParsed = true;
+        parent::__construct();
 
-        $retVal->strUserName = PropertyValueC::ensureString( $aResult['strUserName'] );
-        $retVal->strUserAlliance = PropertyValueC::ensureString( $aResult['strUserAlliance'] );
-        $retVal->strUserAllianceTag = PropertyValueC::ensureString( $aResult['strUserAllianceTag'] );
-        $retVal->strUserAllianceJob = PropertyValueC::ensureString( $aResult['strUserAllianceJob'] );
-
-        if (!empty($aResult['strPlanetName'])) {          //Informationen über den Hauptplanet vorhanden
-
-            $iCoordsGal = PropertyValueC::ensureInteger($aResult['iCoordsGal']);
-            $iCoordsSol = PropertyValueC::ensureInteger($aResult['iCoordsSol']);
-            $iCoordsPla = PropertyValueC::ensureInteger($aResult['iCoordsPla']);
-            $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-            $retVal->aCoords = $aCoords;
-            $retVal->strCoords = $iCoordsGal.':'.$iCoordsSol.':'.$iCoordsPla;
-
-            $planetname = HelperC::convertBracketStringToArray($aResult['strPlanetName']);
-            $retVal->strPlanetName = PropertyValueC::ensureString( $planetname[0] );
-
-        }
-
-        if (!empty($aResult['AdminAcc'])) {
-            $retVal->strAccType = 'Admin';
-        } elseif (!empty($aResult['IWBPAcc'])) {
-            $retVal->strAccType = 'IWBP';
-        } else {
-            $retVal->strAccType = 'Spieler';
-        }
-
-        $retVal->iEntryDate = HelperC::convertDateTimeToTimestamp($aResult['iEntryDate']);
-
-        $retVal->iGebPkt = PropertyValueC::ensureInteger($aResult['iGebPkt']);
-        $retVal->iFP = PropertyValueC::ensureInteger($aResult['iFP']);
-        $retVal->iHSPos = PropertyValueC::ensureInteger($aResult['iHSPos']);
-        $retVal->iHSChange = PropertyValueC::ensureInteger($aResult['iHSChange']);
-        $retVal->iEvo = PropertyValueC::ensureInteger($aResult['iEvo']);
-
-        $retVal->strStaatsform = PropertyValueC::ensureString( $aResult['strStaatsform'] );
-        if (isset($aResult['strTitel']))
-            $retVal->strTitel = PropertyValueC::ensureString( $aResult['strTitel'] );
-        if (isset($aResult['strDescr']))
-            $retVal->strDescr = PropertyValueC::ensureString($aResult['strDescr']);
-    }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
+        $this->setIdentifier('de_info_user');
+        $this->setName("Spielerinformation");
+        $this->setRegExpCanParseText('/Spielerinfo.+Schreibe\sNachricht/s');
+        $this->setRegExpBeginData('/Spielerinfo\s+Spielerinfo/');
+        $this->setRegExpEndData('/Schreibe\sNachricht/');
     }
 
-  }
+    /////////////////////////////////////////////////////////////////////////////
 
-  /////////////////////////////////////////////////////////////////////////////
-
-  private function getRegularExpression()
-  {
     /**
-    */
+     * @see ParserI::parseText()
+     */
+    public function parseText(DTOParserResultC $parserResult)
+    {
+        $parserResult->objResultData = new DTOParserInfoUserResultC();
+        $retVal =& $parserResult->objResultData;
 
-      $reText       = $this->getRegExpSingleLineText3();
-      $reName       = $this->getRegExpUserName();
-      $reAlliance   = $this->getRegExpSingleLineText();
-      $rePlanetName = $this->getRegExpBracketString();
-      $reCoordsGal  = '\d+';
-      $reCoordsSol  = '\d+';
-      $reCoordsPla  = '\d+';
-      $reEntryDate  = $this->getRegExpDate();
-      $rePoints     = $this->getRegExpDecimalNumber();
-      $reNumber     = $this->getRegExpFloatingDouble();
-      $reDescr      = $this->getRegExpSingleLineText();
+        $this->stripTextToData();
 
-      $regExp  = '/';
-      $regExp  .= 'Name\s+?';
-      $regExp  .= '(?P<strUserName>'.$reName.')\s*?';
-      $regExp  .= '[\n\r]+';
-      $regExp  .= '  (?:Allianz\s+?';
-      $regExp  .= '  (?P<strUserAlliance>'.$reAlliance.')\s*';
-      $regExp  .= '  \[(?P<strUserAllianceTag>'.$reAlliance.')\]\s*';
-      $regExp  .= '  (?:\((?P<strUserAllianceJob>'.$reAlliance.')\)\s*)?';
-      $regExp  .= '  [\n\r]+';
-      $regExp  .= ')?';
-      $regExp  .= '(?:';        //! Mac: seit Runde 11 nur optional, bzw. ab 2 Planeten ?
-      $regExp  .= '  Hauptplanet\s+(?P<iCoordsGal>'.$reCoordsGal.')';
-      $regExp  .= '  \s:\s';
-      $regExp  .= '  (?P<iCoordsSol>'.$reCoordsSol.')';
-      $regExp  .= '  \s:\s';
-      $regExp  .= '  (?P<iCoordsPla>'.$reCoordsPla.')';
-      $regExp  .= '  \s';
-      $regExp  .= '  (?P<strPlanetName>'.$rePlanetName.')';
-      $regExp  .= '  [\n\s]+?';
-      $regExp  .= ')?';
-      $regExp  .= '(?P<AdminAcc>Admin\sAccount[\n\s]+)?';
-      $regExp  .= 'dabei\sseit\s+?';
-      $regExp  .= '(?P<iEntryDate>'.$reEntryDate.')\s*?';
-      $regExp  .= '[\n\r]+';
-      $regExp  .= 'Geb.{1,4}udepunkte\s+';
-      $regExp  .= '(?P<iGebPkt>'.$rePoints.')\s*?';
-      $regExp  .= '[\n\r]+';
-      $regExp  .= 'Forschungspunkte\s+';
-      $regExp  .= '(?P<iFP>'.$rePoints.')\s*?';
-      $regExp  .= '[\n\r]+';
-      $regExp  .= 'Position\sin\sder\sHighscore\s+';
-      $regExp  .= '(?P<iHSPos>'.$rePoints.')\s*?';
-      $regExp  .= '[\n\r]+';
-      $regExp  .= 'Ver.{1,4}nderung\sin\sder\sHighscore\s+';
-      $regExp  .= '(?P<iHSChange>'.$reNumber.')\sPl.{1,4}tze\s*?';
-      $regExp  .= '[\n\r]+';
-      $regExp  .= 'Evolutionsstufe\s+';
-      $regExp  .= '(?P<iEvo>'.$rePoints.')\s*?';
-      $regExp  .= '[\n\r]+';
-      $regExp  .= 'Titel\s+';
-      $regExp  .= '(?P<strStaatsform>'.$reText.')\s*?';
-      $regExp  .= '[\n\r]+';
-      $regExp  .= 'eigener\sTitel\s+';
-      $regExp  .= '(?:(?P<strTitel>'.$reText.')\s*)?';
-      $regExp  .= '[\n\r]+';
-      $regExp  .= 'Beschreibung\s+';
-      $regExp  .= '(?:(?P<strDescr>(?:'.$reDescr.'[\n\r]+)+))?';
-      $regExp  .= '[\n\r]?';
-      $regExp  .= 'Diverses\s+';
-      $regExp  .= '(?:(?P<IWBPAcc>besoffener\sPinguin\sAccount\sBesitzer)|(?P<strMisc>'.$reText.')\s*)?';
-      $regExp  .= '[\n\r]+';
-      $regExp  .= '/mx';
+        $regExp = $this->getRegularExpression();
 
-    return $regExp;
-  }  
+        $aResult = array();
+        $fRetVal = preg_match($regExp, $this->getText(), $aResult);
 
-  /////////////////////////////////////////////////////////////////////////////  
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
+
+            $retVal->strUserName        = PropertyValueC::ensureString($aResult['strUserName']);
+            $retVal->strUserAlliance    = PropertyValueC::ensureString($aResult['strUserAlliance']);
+            $retVal->strUserAllianceTag = PropertyValueC::ensureString($aResult['strUserAllianceTag']);
+            $retVal->strUserAllianceJob = PropertyValueC::ensureString($aResult['strUserAllianceJob']);
+
+            if (!empty($aResult['strPlanetName'])) { //Informationen über den Hauptplanet vorhanden
+
+                $iCoordsGal        = PropertyValueC::ensureInteger($aResult['iCoordsGal']);
+                $iCoordsSol        = PropertyValueC::ensureInteger($aResult['iCoordsSol']);
+                $iCoordsPla        = PropertyValueC::ensureInteger($aResult['iCoordsPla']);
+                $aCoords           = array(
+                    'coords_gal' => $iCoordsGal,
+                    'coords_sol' => $iCoordsSol,
+                    'coords_pla' => $iCoordsPla
+                );
+                $retVal->aCoords   = $aCoords;
+                $retVal->strCoords = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
+
+                $planetname            = HelperC::convertBracketStringToArray($aResult['strPlanetName']);
+                $retVal->strPlanetName = PropertyValueC::ensureString($planetname[0]);
+
+            }
+
+            if (!empty($aResult['AdminAcc'])) {
+                $retVal->strAccType = 'Admin';
+            } elseif (!empty($aResult['IWBPAcc'])) {
+                $retVal->strAccType = 'IWBP';
+            } else {
+                $retVal->strAccType = 'Spieler';
+            }
+
+            $retVal->iEntryDate = HelperC::convertDateTimeToTimestamp($aResult['iEntryDate']);
+
+            $retVal->iGebPkt   = PropertyValueC::ensureInteger($aResult['iGebPkt']);
+            $retVal->iFP       = PropertyValueC::ensureInteger($aResult['iFP']);
+            $retVal->iHSPos    = PropertyValueC::ensureInteger($aResult['iHSPos']);
+            $retVal->iHSChange = PropertyValueC::ensureInteger($aResult['iHSChange']);
+            $retVal->iEvo      = PropertyValueC::ensureInteger($aResult['iEvo']);
+
+            $retVal->strStaatsform = PropertyValueC::ensureString($aResult['strStaatsform']);
+            if (isset($aResult['strTitel'])) {
+                $retVal->strTitel = PropertyValueC::ensureString($aResult['strTitel']);
+            }
+            if (isset($aResult['strDescr'])) {
+                $retVal->strDescr = PropertyValueC::ensureString($aResult['strDescr']);
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+        }
+
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    private function getRegularExpression()
+    {
+        $reText       = $this->getRegExpSingleLineText3();
+        $reName       = $this->getRegExpUserName();
+        $reAlliance   = $this->getRegExpSingleLineText();
+        $rePlanetName = $this->getRegExpBracketString();
+        $reCoordsGal  = '\d+';
+        $reCoordsSol  = '\d+';
+        $reCoordsPla  = '\d+';
+        $reEntryDate  = $this->getRegExpDate();
+        $rePoints     = $this->getRegExpDecimalNumber();
+        $reNumber     = $this->getRegExpFloatingDouble();
+        $reDescr      = $this->getRegExpSingleLineText();
+
+        $regExp = '/';
+        $regExp .= 'Name\s+?';
+        $regExp .= '(?P<strUserName>' . $reName . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= '  (?:Allianz\s+?';
+        $regExp .= '  (?P<strUserAlliance>' . $reAlliance . ')\s*';
+        $regExp .= '  \[(?P<strUserAllianceTag>' . $reAlliance . ')\]\s*';
+        $regExp .= '  (?:\((?P<strUserAllianceJob>' . $reAlliance . ')\)\s*)?';
+        $regExp .= '  \n+';
+        $regExp .= ')?';
+        $regExp .= '(?:'; //! Mac: seit Runde 11 nur optional, bzw. ab 2 Planeten ?
+        $regExp .= '  Hauptplanet\s+(?P<iCoordsGal>' . $reCoordsGal . ')';
+        $regExp .= '  \s:\s';
+        $regExp .= '  (?P<iCoordsSol>' . $reCoordsSol . ')';
+        $regExp .= '  \s:\s';
+        $regExp .= '  (?P<iCoordsPla>' . $reCoordsPla . ')';
+        $regExp .= '  \s';
+        $regExp .= '  (?P<strPlanetName>' . $rePlanetName . ')';
+        $regExp .= '  [\n\s]+?';
+        $regExp .= ')?';
+        $regExp .= '(?P<AdminAcc>Admin\sAccount[\n\s]+)?';
+        $regExp .= 'dabei\sseit\s+?';
+        $regExp .= '(?P<iEntryDate>' . $reEntryDate . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= 'Geb.{1,4}udepunkte\s+';
+        $regExp .= '(?P<iGebPkt>' . $rePoints . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= 'Forschungspunkte\s+';
+        $regExp .= '(?P<iFP>' . $rePoints . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= 'Position\sin\sder\sHighscore\s+';
+        $regExp .= '(?P<iHSPos>' . $rePoints . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= 'Ver.{1,4}nderung\sin\sder\sHighscore\s+';
+        $regExp .= '(?P<iHSChange>' . $reNumber . ')\sPl.{1,4}tze\s*?';
+        $regExp .= '\n+';
+        $regExp .= 'Evolutionsstufe\s+';
+        $regExp .= '(?P<iEvo>' . $rePoints . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= 'Titel\s+';
+        $regExp .= '(?P<strStaatsform>' . $reText . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= 'eigener\sTitel\s+';
+        $regExp .= '(?:(?P<strTitel>' . $reText . ')\s*)?';
+        $regExp .= '\n+';
+        $regExp .= 'Beschreibung\s+';
+        $regExp .= '(?:(?P<strDescr>(?:' . $reDescr . '\n+)+))?';
+        $regExp .= '\n*';
+        $regExp .= 'Diverses\s+';
+        $regExp .= '(?:(?P<IWBPAcc>besoffener\sPinguin\sAccount\sBesitzer)|(?P<strMisc>' . $reText . ')\s*)?';
+        $regExp .= '\n+';
+        $regExp .= '/mx';
+
+        return $regExp;
+    }
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-?>

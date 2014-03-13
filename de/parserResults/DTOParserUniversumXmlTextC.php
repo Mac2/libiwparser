@@ -18,7 +18,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-
 /**
  * Result DTO of parser de_universum
  */
@@ -29,5 +28,4 @@ class DTOParserUniversumXmlTextC
      * @var array $aXmlText Array with unixml-strings for unixml-parser
      */
     public $aXmlText = array();
-
 }

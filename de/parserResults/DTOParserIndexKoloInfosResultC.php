@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,12 +23,11 @@
  */
 class DTOParserIndexKoloInfosResultC
 {
-  /**
-   * @soap
-   * @var array $aKolos
-   */
-  public $aKolos = array ();
-
+    /**
+     * @soap
+     * @var array $aKolos
+     */
+    public $aKolos = array();
 }
 
 /**
@@ -36,75 +35,75 @@ class DTOParserIndexKoloInfosResultC
  */
 class DTOParserIndexKoloInfosResultKoloInfoC
 {
-  /**
-   * @soap
-   * @var string $strPlanetName
-   */
-  public $strPlanetName = '';
+    /**
+     * @soap
+     * @var string $strPlanetName
+     */
+    public $strPlanetName = '';
 
-  /**
-   * @soap
-   * @var string $strCoords
-   */
-  public $strCoords = '';
+    /**
+     * @soap
+     * @var string $strCoords
+     */
+    public $strCoords = '';
 
-  /**
-   * @soap
-   * @var string $strObjectTyp
-   */
-  public $strObjectTyp = '';
-  
-  /**
-   * @soap
-   * @var array $aCoords
-   */
-  public $aCoords = array();
+    /**
+     * @soap
+     * @var string $strObjectTyp
+     */
+    public $strObjectTyp = '';
 
-  /**
-   * @soap
-   * @var array $aScanRange Scanrange in seconds
-   */
-  public $aScanRange = array();
+    /**
+     * @soap
+     * @var array $aCoords
+     */
+    public $aCoords = array();
 
-  /**
-   * @soap
-   * @var array $aLastScan
-   */
-  public $aLastScan = array();
+    /**
+     * @soap
+     * @var array $aScanRange Scanrange in seconds
+     */
+    public $aScanRange = array();
 
-  /**
-   * @soap
-   * @var string $iLB
-   */
-  public $iLB = "";
+    /**
+     * @soap
+     * @var array $aLastScan
+     */
+    public $aLastScan = array();
 
-  /**
-   * @soap
-   * @var array $aKB
-   */
-  public $aKB = array();
+    /**
+     * @soap
+     * @var string $iLB
+     */
+    public $iLB = "";
 
-  /**
-   * @soap
-   * @var array $aSB
-   */
-  public $aSB = array();
+    /**
+     * @soap
+     * @var array $aKB
+     */
+    public $aKB = array();
 
-  /**
-   * @soap
-   * @var array $aAB
-   */
-  public $aAB = array();
+    /**
+     * @soap
+     * @var array $aSB
+     */
+    public $aSB = array();
 
-  /**
-   * @soap
-   * @var array $aSB
-   */
-  public $aKolo = array();
+    /**
+     * @soap
+     * @var array $aAB
+     */
+    public $aAB = array();
 
-  public $aPlanDeff = array();
+    /**
+     * @soap
+     * @var array $aSB
+     */
+    public $aKolo = array();
 
-  public $aSchiffe = array();
+    public $aPlanDeff = array();
 
-  public $strProblems = "";
+    public $aSchiffe = array();
+
+    public $strProblems = "";
 }

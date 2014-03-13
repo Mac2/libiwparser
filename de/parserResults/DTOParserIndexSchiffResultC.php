@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -18,23 +18,22 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-
 /**
  * Result DTO of parser de_index_schiff
  */
 class DTOParserIndexSchiffResultC
 {
-  /**
-   * @soap
-   * @var array $aSchiff
-   */
-  public $aSchiff = array ();
+    /**
+     * @soap
+     * @var array $aSchiff
+     */
+    public $aSchiff = array();
 
-  /**
-   * @soap
-   * @var array $aWerftBelegt
-   */
-  public $aWerftBelegt = array ();
+    /**
+     * @soap
+     * @var array $aWerftBelegt
+     */
+    public $aWerftBelegt = array();
 
 }
 
@@ -43,31 +42,30 @@ class DTOParserIndexSchiffResultC
  */
 class DTOParserIndexSchiffResultSchiffC
 {
-  /**
-   * @soap
-   * @var string $strPlanetName
-   */
-  public $strPlanetName = '';
+    /**
+     * @soap
+     * @var string $strPlanetName
+     */
+    public $strPlanetName = '';
 
-  public $strSchiffName = '';
-  public $strCoords = '';
-  public $strWerftTyp = '';
-   
-  /**
-   * @soap
-   * @var date $iSchiffEnd unixtime until build
-   */
-  public $iSchiffEnd = 0;
-  
-  /**
-   * @soap
-   * @var integer $iSchiffEndIn build duration in seconds
-   */
-  public $iSchiffEndIn = 0;
+    public $strSchiffName = '';
+    public $strCoords = '';
+    public $strWerftTyp = '';
 
-  public $iAnzSchiff = 0;
-  public $iAnzWerften = 0;
+    /**
+     * @soap
+     * @var date $iSchiffEnd unixtime until build
+     */
+    public $iSchiffEnd = 0;
 
+    /**
+     * @soap
+     * @var integer $iSchiffEndIn build duration in seconds
+     */
+    public $iSchiffEndIn = 0;
+
+    public $iAnzSchiff = 0;
+    public $iAnzWerften = 0;
 }
 
 /**

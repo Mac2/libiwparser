@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Benjamin Wöster <benjamin.woester@googlemail.com>
- * @package libIwParsers
+ * @author     Benjamin Wöster <benjamin.woester@googlemail.com>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,50 +23,45 @@
  */
 class DTOResourcesC
 {
-  /**
-   * @soap
-   * @var integer $iIron
-   */
-  public $iIron = 0;
+    /**
+     * @soap
+     * @var integer $iIron
+     */
+    public $iIron = 0;
 
-  /**
-   * @soap
-   * @var integer $iSteel
-   */
-  public $iSteel = 0;
+    /**
+     * @soap
+     * @var integer $iSteel
+     */
+    public $iSteel = 0;
 
-  /**
-   * @soap
-   * @var integer $iVv4a
-   */
-  public $iVv4a = 0;
+    /**
+     * @soap
+     * @var integer $iVv4a
+     */
+    public $iVv4a = 0;
 
-  /**
-   * @soap
-   * @var integer $iChemicals
-   */
-  public $iChemicals = 0;
+    /**
+     * @soap
+     * @var integer $iChemicals
+     */
+    public $iChemicals = 0;
 
-  /**
-   * @soap
-   * @var integer $iIce
-   */
-  public $iIce = 0;
+    /**
+     * @soap
+     * @var integer $iIce
+     */
+    public $iIce = 0;
 
-  /**
-   * @soap
-   * @var integer $iWater
-   */
-  public $iWater = 0;
+    /**
+     * @soap
+     * @var integer $iWater
+     */
+    public $iWater = 0;
 
-  /**
-   * @soap
-   * @var integer $iEnergy
-   */
-  public $iEnergy = 0;
-
+    /**
+     * @soap
+     * @var integer $iEnergy
+     */
+    public $iEnergy = 0;
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

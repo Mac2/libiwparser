@@ -9,9 +9,9 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -29,32 +29,32 @@
 class ParserWirtschaftGebC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-    $this->setIdentifier('de_wirtschaft_geb');
-    $this->setName('Geb&auml;ude&uuml;bersicht');
-    $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s+Forschungs.{1,3}bersicht\s+Werft.{1,3}bersicht\s+Defence.{1,3}bersicht.*Geb.{1,3}ude.{1,3}bersicht(?:.*Geb.{1,3}ude.{1,3}bersicht)?/sm');
-    $this->setRegExpBeginData( '/Geb.+ude.+bersicht/sm' );
-    $this->setRegExpEndData( '' );
-  }
+        $this->setIdentifier('de_wirtschaft_geb');
+        $this->setName('Geb&auml;ude&uuml;bersicht');
+        $this->setRegExpCanParseText('/Geb.{1,3}ude.{1,3}bersicht\s+Forschungs.{1,3}bersicht\s+Werft.{1,3}bersicht\s+Defence.{1,3}bersicht.*Geb.{1,3}ude.{1,3}bersicht(?:.*Geb.{1,3}ude.{1,3}bersicht)?/sm');
+        $this->setRegExpBeginData('/Geb.+ude.+bersicht/sm');
+        $this->setRegExpEndData('');
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * @see ParserI::parseText()
-   */
+    /**
+     * @see ParserI::parseText()
+     */
     public function parseText(DTOParserResultC $parserResult)
     {
         $parserResult->objResultData = new DTOParserWirtschaftGebResultC();
-        $retVal                      =& $parserResult->objResultData;
+        $retVal =& $parserResult->objResultData;
 
         $this->stripTextToData();
 
-        $regExp = $this->getRegularExpression();
+        $regExp  = $this->getRegularExpression();
         $aResult = array();
         $fRetVal = preg_match_all($regExp, $this->getText(), $aResult, PREG_SET_ORDER);
 
@@ -73,10 +73,12 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
                 $area->strAreaName = PropertyValueC::ensureString($strAreaName);
 
                 if (empty($aKolos)) {
+                    $regExpKolo = $this->getRegularExpressionKolo();
 
                     $aResultKolo = array();
-                    $regExpKolo = $this->getRegularExpressionKolo();
-                    $fRetValKolo = preg_match_all($regExpKolo, $strKoloLine, $aResultKolo, PREG_SET_ORDER);
+
+                    preg_match_all($regExpKolo, $strKoloLine, $aResultKolo, PREG_SET_ORDER);
+
                     foreach ($aResultKolo as $resultKolo) {
                         $strKoloType = $resultKolo['kolo_type'];
                         $strCoords   = $resultKolo['coords'];
@@ -106,9 +108,13 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
                     $building                  = new DTOParserWirtschaftGebBuildingResultC;
                     $building->strBuildingName = PropertyValueC::ensureString($strBuildingName);
 
-                    if (empty($strBuildingName)) continue;
+                    if (empty($strBuildingName)) {
+                        continue;
+                    }
                     foreach ($aDataLine as $i => $strData) {
-                        if ($i == count($aDataLine) - 1) continue; //! Mac: letzte Spalte Summe ignorieren
+                        if ($i == count($aDataLine) - 1) {
+                            continue;
+                        } //! Mac: letzte Spalte Summe ignorieren
                         $building->aCounts[$aKolos[$i]] = PropertyValueC::ensureInteger($strData);
                     }
 
@@ -125,29 +131,26 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
 
     }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  private function getRegularExpression()
-  {
-    /**
-    */
+    private function getRegularExpression()
+    {
+        $reKoloTypes  = $this->getRegExpKoloTypes();
+        $reKoloCoords = $this->getRegExpKoloCoords();
 
-    $reKoloTypes         = $this->getRegExpKoloTypes();
-    $reKoloCoords        = $this->getRegExpKoloCoords();
-
-    $regExp  = '/^
+        $regExp = '/^
           (?P<area_name>[\w\s\&üÜäÄöÖ]+)\n+
           \t?
           (?P<kolo_line>
-          '.$reKoloCoords.'
+          ' . $reKoloCoords . '
             (?:
               \n+
-              \('.$reKoloTypes.'\)
+              \(' . $reKoloTypes . '\)
               \t
-              '.$reKoloCoords.'
+              ' . $reKoloCoords . '
             )*
             \n+
-            \('.$reKoloTypes.'\)\sSumme
+            \(' . $reKoloTypes . '\)\sSumme
           )
           (?P<data_lines>(?:
             \n+
@@ -156,45 +159,22 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
           )+)
     $/mx';
 
-    return $regExp;
-  }
+        return $regExp;
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  private function getRegularExpressionKolo()
-  {
-    /**
-    */
+    private function getRegularExpressionKolo()
+    {
+        $reKoloTypes = $this->getRegExpKoloTypes();
 
-    $reKoloTypes         = $this->getRegExpKoloTypes();
+        $regExpKolo  = '/';
+        $regExpKolo .= '(?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))';
+        $regExpKolo .= '\n+';
+        $regExpKolo .= '\((?P<kolo_type>' . $reKoloTypes . ')\)';
+        $regExpKolo .= '/mx';
 
-    $regExpKolo  = '/
-          (?P<coords>(?P<coords_gal>\d{1,2})\:(?P<coords_sol>\d{1,3})\:(?P<coords_pla>\d{1,2}))
-          \n+
-          \((?P<kolo_type>'.$reKoloTypes.')\)
-    /mx';
-
-    return $regExpKolo;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    $retVal = $this->getRegularExpression();
-
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
-
-    return $retVal;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
+        return $regExpKolo;
+    }
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,39 +23,33 @@
  */
 class DTOParserAlliKasseLogAllisResultC
 {
+    /**
+     * @soap
+     * @var integer $iDateTime unix timestamp of log
+     */
+    public $iDateTime = 0;
 
-   /**
-   * @soap
-   * @var integer $iDateTime unix timestamp of log
-   */
-  public $iDateTime = 0;
+    /**
+     * @soap
+     * @var string $strFromUser user that paid
+     */
+    public $strFromUser = "";
 
-  /**
-   * @soap
-   * @var string $strFromUser user that paid
-   */
-  public $strFromUser = "";
+    /**
+     * @soap
+     * @var string $strAlliName name of alliance that got paid
+     */
+    public $strAlliName = "";
 
-  /**
-   * @soap
-   * @var string $strAlliName name of alliance that got paid
-   */
-  public $strAlliName = ""; 
+    /**
+     * @soap
+     * @var string $strAlliTag tag of alliance that got paid
+     */
+    public $strAlliTag = "";
 
-  /**
-   * @soap
-   * @var string $strAlliTag tag of alliance that got paid
-   */
-  public $strAlliTag = ""; 
-
-  /**
-   * @soap
-   * @var integer $iCredits amount of paid credits
-   */
-  public $iCredits = 0;
-
+    /**
+     * @soap
+     * @var integer $iCredits amount of paid credits
+     */
+    public $iCredits = 0;
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

@@ -74,9 +74,6 @@ class ParserWirtschaftUniverseC extends ParserBaseC implements ParserI
 
     private function getRegularExpression()
     {
-        /**
-         */
-
         $reDateTime = $this->getRegExpDateTime();
 
         $regExp = '~';
@@ -88,24 +85,4 @@ class ParserWirtschaftUniverseC extends ParserBaseC implements ParserI
         return $regExp;
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * For debugging with "The Regex Coach" which doesn't support named groups
-     */
-    private function getRegularExpressionWithoutNamedGroups()
-    {
-        $retVal = $this->getRegularExpression();
-
-        $retVal = preg_replace('/\?P<\w+>/', '', $retVal);
-
-        return $retVal;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////
-
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

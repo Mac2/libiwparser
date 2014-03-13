@@ -9,33 +9,14 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'ParserBaseC.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'ParserI.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'HelperC.php' );
-require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
-              '..'              . DIRECTORY_SEPARATOR .
-              'parserResults'   . DIRECTORY_SEPARATOR .
-              'DTOParserMsgResultC.php' );
 
 /**
  * Parser for Mainpage
@@ -47,243 +28,217 @@ require_once( dirname(__FILE__) . DIRECTORY_SEPARATOR .
 class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
 {
 
-  private $type = '';
+    private $type = '';
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
-
-    $this->setIdentifier('de_index_fleet');
-    $this->setCanParseMsg('Fleet');
-  }
-
- /////////////////////////////////////////////////////////////////////////////
-
-  public function setType( $type )
-  {
-    $this->type = $type;
-  }
-
- /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * @see ParserMsgI::parseMsg()
-   */
-  public function parseMsg( DTOParserResultC $parserResult )
-  {
-    $parserResult->objResultData = new DTOParserIndexFleetResultC();
-    $retVal =& $parserResult->objResultData;
-    $retVal->strType = $this->type;
-    $fRetVal = 0;
-
-    $regExp = $this->getRegularExpression();
-    $msg = $this->getMsg();
-
-    $parserResult->strIdentifier = 'de_index_fleet';
-    $aResult = array();
-
-    $fRetVal = preg_match_all( $regExp, $msg->strParserText, $aResult, PREG_SET_ORDER );
-    
-    if( $fRetVal !== false && $fRetVal > 0 )
+    public function __construct()
     {
-      $parserResult->bSuccessfullyParsed = true;
+        parent::__construct();
 
-      if( $this->getObjectsVisible() )
-      {
-        $retVal->bObjectsVisible = true;
-      }
+        $this->setIdentifier('de_index_fleet');
+        $this->setCanParseMsg('Fleet');
+    }
 
-      foreach( $aResult as $result )
-      {
+    /////////////////////////////////////////////////////////////////////////////
 
-        $retObj = new DTOParserIndexFleetResultFleetC();
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
 
-        $planetName = PropertyValueC::ensureString($result['strPlanetNameTo']);
-        if (strpos($planetName,'* +') === FALSE) {
-          $retObj->strPlanetNameTo = $planetName;
-        }
-        $retObj->strPlanetNameFrom = PropertyValueC::ensureString($result['strPlanetNameFrom']);
-        $retObj->strUserNameFrom = PropertyValueC::ensureString($result['strUserNameFrom']);
+    /////////////////////////////////////////////////////////////////////////////
 
-        $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPlaFrom']);
-        $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGalFrom']);
-        $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSolFrom']);
-        $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-        $strCoords = $iCoordsGal.':'.$iCoordsSol.':'.$iCoordsPla;
+    /**
+     * @see ParserMsgI::parseMsg()
+     */
+    public function parseMsg(DTOParserResultC $parserResult)
+    {
+        $parserResult->objResultData = new DTOParserIndexFleetResultC();
+        $retVal =& $parserResult->objResultData;
+        $retVal->strType = $this->type;
 
-        $retObj->aCoordsFrom = $aCoords;
-        $retObj->strCoordsFrom = $strCoords;
-        $retObj->eTransfairType = PropertyValueC::ensureString($result['eTransfairType']);
+        $regExp = $this->getRegularExpression();
+        $msg    = $this->getMsg();
 
-        $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPlaTo']);
-        $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGalTo']);
-        $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSolTo']);
-        $aCoords = array('coords_gal' => $iCoordsGal, 'coords_sol' => $iCoordsSol, 'coords_pla' => $iCoordsPla);
-        $strCoords = $iCoordsGal.':'.$iCoordsSol.':'.$iCoordsPla;
+        $parserResult->strIdentifier = 'de_index_fleet';
+        $aResult = array();
 
-        $retObj->aCoordsTo = $aCoords;
-        $retObj->strCoordsTo = $strCoords;
+        $fRetVal = preg_match_all($regExp, $msg->strParserText, $aResult, PREG_SET_ORDER);
 
-        if (!empty($result['dtDateTime'])) {
-            $retObj->iAnkunft = HelperC::convertDateTimeToTimestamp( $result['dtDateTime'] );    //  $retObj->iAnkunft = GetVar("now");  //! Mac: darf nicht, da sonst parsen innerhalb dieser Zeit, jedesmal als neuer Flug erkannt wird
-		}
+        if ($fRetVal !== false && $fRetVal > 0) {
+            $parserResult->bSuccessfullyParsed = true;
 
-        if (!empty($result['mtMixedTime'])) {
-			$retObj->iAnkunftIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
-        }
+            if ($this->getObjectsVisible()) {
+                $retVal->bObjectsVisible = true;
+            }
 
-        if ($retVal->bObjectsVisible) {
-            if (isset($result['strObjecte'])) {
-                $aoResult = array();
-                $foRetVal = preg_match_all($this->getRegularExpressionObject(), $result['strObjecte'], $aoResult, PREG_SET_ORDER);
-                if ($foRetVal) {
-                    foreach ($aoResult as $ores) {
-                        $ores['iCount']     = PropertyValueC::ensureInteger($ores['iCount']);
-                        $ores['strObject']  = PropertyValueC::ensureString($ores['strObject']);
-                        $retObj->aObjects[] = array('count' => $ores['iCount'], 'object' => $ores['strObject']);
+            foreach ($aResult as $result) {
+
+                $retObj = new DTOParserIndexFleetResultFleetC();
+
+                $planetName = PropertyValueC::ensureString($result['strPlanetNameTo']);
+                if (strpos($planetName, '* +') === false) {
+                    $retObj->strPlanetNameTo = $planetName;
+                }
+                $retObj->strPlanetNameFrom = PropertyValueC::ensureString($result['strPlanetNameFrom']);
+                $retObj->strUserNameFrom   = PropertyValueC::ensureString($result['strUserNameFrom']);
+
+                $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPlaFrom']);
+                $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGalFrom']);
+                $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSolFrom']);
+                $aCoords    = array(
+                    'coords_gal' => $iCoordsGal,
+                    'coords_sol' => $iCoordsSol,
+                    'coords_pla' => $iCoordsPla
+                );
+                $strCoords = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
+
+                $retObj->aCoordsFrom    = $aCoords;
+                $retObj->strCoordsFrom  = $strCoords;
+                $retObj->eTransfairType = PropertyValueC::ensureString($result['eTransfairType']);
+
+                $iCoordsPla = PropertyValueC::ensureInteger($result['iCoordsPlaTo']);
+                $iCoordsGal = PropertyValueC::ensureInteger($result['iCoordsGalTo']);
+                $iCoordsSol = PropertyValueC::ensureInteger($result['iCoordsSolTo']);
+                $aCoords    = array(
+                    'coords_gal' => $iCoordsGal,
+                    'coords_sol' => $iCoordsSol,
+                    'coords_pla' => $iCoordsPla
+                );
+                $strCoords  = $iCoordsGal . ':' . $iCoordsSol . ':' . $iCoordsPla;
+
+                $retObj->aCoordsTo   = $aCoords;
+                $retObj->strCoordsTo = $strCoords;
+
+                if (!empty($result['dtDateTime'])) {
+                    $retObj->iAnkunft = HelperC::convertDateTimeToTimestamp($result['dtDateTime']);
+                }
+
+                if (!empty($result['mtMixedTime'])) {
+                    $retObj->iAnkunftIn = HelperC::convertMixedDurationToSeconds($result['mtMixedTime']);
+                }
+
+                if ($retVal->bObjectsVisible) {
+                    if (isset($result['strObjecte'])) {
+                        $aoResult = array();
+                        $foRetVal = preg_match_all($this->getRegularExpressionObject(), $result['strObjecte'], $aoResult, PREG_SET_ORDER);
+                        if ($foRetVal) {
+                            foreach ($aoResult as $ores) {
+                                $ores['iCount']     = PropertyValueC::ensureInteger($ores['iCount']);
+                                $ores['strObject']  = PropertyValueC::ensureString($ores['strObject']);
+                                $retObj->aObjects[] = array('count' => $ores['iCount'], 'object' => $ores['strObject']);
+                            }
+                        }
                     }
+                }
+
+                $retVal->aFleets[] = $retObj;
+
+            }
+        } else {
+            $parserResult->bSuccessfullyParsed = false;
+            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = $msg->strParserText;
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    private function getRegularExpressionObject()
+    {
+        $reObject = $this->getRegExpSingleLineText3();
+        $reCount  = $this->getRegExpDecimalNumber();
+
+        $regExp  = '/';
+        $regExp .= '(?P<iCount>' . $reCount . ')';
+        $regExp .= '\s+?';
+        $regExp .= '(?P<strObject>' . $reObject . ')';
+        $regExp .= '/mxs';
+
+        return $regExp;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+    private function getObjectsVisible()
+    {
+        $retVal = false;
+        $regExp = $this->getRegularExpression();
+
+        $aResult = array();
+        $fRetVal = preg_match_all($regExp, $this->getMsg()->strParserText, $aResult, PREG_SET_ORDER);
+
+        $onlyReturn = true;
+        if ($fRetVal !== false && $fRetVal > 0) {
+            foreach ($aResult as $result) {
+                if (!empty($result['strObjecte'])) {
+                    $retVal = true;
+                    break;
+                } else if ($onlyReturn && $result["eTransfairType"] != "Rückkehr") { //! Mac: evtl noch andere Schiffaktionen ohne Infos ?
+                    $onlyReturn = false;
                 }
             }
         }
 
-        $retVal->aFleets[] = $retObj;
-
-      }
-    }
-    else
-    {
-      $parserResult->bSuccessfullyParsed = false;
-      $parserResult->aErrors[] = 'Unable to match the pattern.';
-      $parserResult->aErrors[] = $msg->strParserText;
-    }
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   */
-  private function getRegularExpressionObject()
-  {
-    $reObject      = $this->getRegExpSingleLineText3();
-    $reCount       = $this->getRegExpDecimalNumber();
-
-    $regExp  = '/
-        (?P<iCount>'.$reCount.')
-        \s+?
-        (?P<strObject>'.$reObject.')
-        ';
-    $regExp .= '/mxs';
-
-    return $regExp;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  private function getObjectsVisible()
-  {
-    $retVal = false;
-    $regExp = $this->getRegularExpression();
-
-    $aResult = array();
-    $fRetVal = preg_match_all( $regExp, $this->getMsg()->strParserText, $aResult, PREG_SET_ORDER );
-
-    $onlyReturn = true;
-    if( $fRetVal !== false && $fRetVal > 0 )
-    {
-      foreach( $aResult as $result )
-      {
-        if( !empty($result['strObjecte']) )
-        {
-          $retVal = true;
-          break;
+        if ($onlyReturn) {
+            return true;
         }
-        else if ($onlyReturn && $result["eTransfairType"] != "Rückkehr") {  //! Mac: evtl noch andere Schiffaktionen ohne Infos ?
-            $onlyReturn = false;
-        }
-      }
+
+        return $retVal;
     }
 
-    if ($onlyReturn)
-        return true;
+    /////////////////////////////////////////////////////////////////////////////
 
-    return $retVal;
-  }
+    private function getRegularExpression()
+    {
+        $rePlanetName    = $this->getRegExpSingleLineText();
+        $reUserName      = $this->getRegExpUserName();
+        $reDateTime      = $this->getRegExpDateTime();
+        $reCoordsUnnamed = $this->getRegExpKoloCoords();
+        $reMixedTime     = $this->getRegExpMixedTime();
+        $reShipActions   = $this->getRegExpShipActions();
+        $reShipTexts     = $this->getRegExpShipTexts(); //! Mac: zufällige Texte nach Ankunft
+        $reShipNames     = $this->getRegExpSchiffe();
+        $reObject        = '(?:' . $this->getRegExpResource() . '|' . $reShipNames . '|' . $reShipTexts . ')';
+        $reDecimalNumber = $this->getRegExpDecimalNumber();
 
-  /////////////////////////////////////////////////////////////////////////////
+        $regExpOpera = '(?:\s+(?:(?:' . $reDecimalNumber . '\s+?' . $reObject . '\s*)+)\s*)?'; //! Opera kopiert die Objects nochmal ... warum auch immer oO
 
-  /**
-   */
-  private function getRegularExpression()
-  {
-    $rePlanetName     = $this->getRegExpSingleLineText();
-    $reUserName       = $this->getRegExpUserName();
-    $reDateTime       = $this->getRegExpDateTime();
-    $reCoordsUnnamed  = $this->getRegExpKoloCoords();
-    $reMixedTime      = $this->getRegExpMixedTime();
-    $reShipActions    = $this->getRegExpShipActions();
-    $reShipTexts      = $this->getRegExpShipTexts();        //! Mac: zufällige Texte nach Ankunft
-    $reShipNames      = $this->getRegExpSingleLineText3();
-    $reObject         = '(?:'.$this->getRegExpResource() . '|' . $reShipNames . '|' . $reShipTexts . ')';
-    $reDecimalNumber  = $this->getRegExpDecimalNumber();
+        $regExp = '/';
+        $regExp .= '(?P<strPlanetNameTo>' . $rePlanetName . '\s|)';
+        $regExp .= '[\s\n]+';
+        $regExp .= '\((?P<iCoordsGalTo>\d{1,2})\:(?P<iCoordsSolTo>\d{1,3})\:(?P<iCoordsPlaTo>\d{1,2})\)';
+        $regExp .= '[\s\n]+';
+        $regExp .= '(?:\(\s*via\s+' . $reCoordsUnnamed . '\s+via\s+' . $reCoordsUnnamed . '\s\)|)';
+        $regExp .= '\s*';
+        $regExp .= '(?P<strPlanetNameFrom>' . $rePlanetName . '\s|)';
+        $regExp .= '\((?P<iCoordsGalFrom>\d+)\:(?P<iCoordsSolFrom>\d+)\:(?P<iCoordsPlaFrom>\d+)\)';
+        $regExp .= '[\s\n]+';
 
-    $regExpOpera  = '(?:\s+(?:(?:'.$reDecimalNumber.'\s+?'.$reObject.'\s*)+)\s*)?';        //! Opera kopiert die Objects nochmal ... warum auch immer oO
-    
-    $regExp  = '/';
-    $regExp .= '(?P<strPlanetNameTo>'.$rePlanetName.'\s|)';
-    $regExp .= '[\s\n]+';
-    $regExp .= '\((?P<iCoordsGalTo>\d{1,2})\:(?P<iCoordsSolTo>\d{1,3})\:(?P<iCoordsPlaTo>\d{1,2})\)';
-    $regExp .= '[\s\n]+';
-	$regExp .= '(?:\(\s*via\s+'.$reCoordsUnnamed.'\s+via\s+'.$reCoordsUnnamed.'\s\)|)';
-	$regExp .= '\s*';
-	$regExp .= '(?P<strPlanetNameFrom>'.$rePlanetName.'\s|)';
-	$regExp .= '\((?P<iCoordsGalFrom>\d+)\:(?P<iCoordsSolFrom>\d+)\:(?P<iCoordsPlaFrom>\d+)\)';
-	$regExp .= '[\s\n]+';
+        $regExp .= '(?:(?P<strUserNameFrom>^' . $reUserName . ')|)';
 
-    $regExp .= '(?:(?P<strUserNameFrom>^'.$reUserName.')|)';
+        $regExp .= '\s*';
+        $regExp .= '(?:';
+        $regExp .= '    (?P<dtDateTime>' . $reDateTime . '\s*(?: - (?:\s*(?P<mtMixedTime>' . $reMixedTime . '))?)?)';
+        $regExp .= '    (?:\s*(?:\(?angekommen\)?|' . $reMixedTime . ')\s*)?' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')'
+                 . '   |' . $reObject . '\s*-?\s\(?angekommen\)?' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')' //! bei Angriff: beliebiger Text + angekommen
+                 . '   |' . $reObject . '\s*' . $regExpOpera . '(?=[\s\n]+' . $reShipActions . ')' //! nach Ankunft: beliebiger Text
+                 . ')';
+        $regExp .= '[\s\n]+';
 
-	$regExp .= '\s*';
-	$regExp .= '(?:';
-    $regExp .= '    (?P<dtDateTime>'.$reDateTime.'\s*(?: - (?:\s*(?P<mtMixedTime>'.$reMixedTime.'))?)?)';
-    $regExp .= '    (?:\s*(?:\(?angekommen\)?|'.$reMixedTime.')\s*)?'.$regExpOpera.'(?=[\s\n]+'.$reShipActions.')'
-			.  '   |'.$reObject.'\s*-?\s\(?angekommen\)?'.$regExpOpera.'(?=[\s\n]+'.$reShipActions.')'             //! bei Angriff: beliebiger Text + angekommen
-            .  '   |'.$reObject.'\s*'.$regExpOpera.'(?=[\s\n]+'.$reShipActions.')'                        //! nach Ankunft: beliebiger Text
-            .  ')';
-	$regExp .= '[\s\n]+';
+        $regExp .= '(?P<eTransfairType>' . $reShipActions . ')';
+        $regExp .= '([\s\n]+';
+        $regExp .= 'Es\sgibt\s\d+\sweitere\sFlotten\smit\sder\sselben\sAktion,\sselben\sZiel\sund\sselben\sAuftrag\.';
+        $regExp .= '[\s\n]+)?';
+        $regExp .= '(\s+(?<!Rückkehr\s)';
+        $regExp .= '    (?P<strObjecte>(?:' . $reDecimalNumber . '\s+?' . $reObject . '\s*?)+)\s*(?:\*\s\+|\+)';
+        $regExp .= '    |(?:\*\s\+|\+)';
+        $regExp .= ')?';
 
-	$regExp .= '(?P<eTransfairType>'.$reShipActions.')';
-    $regExp .= '([\s\n]+';
-    $regExp .= 'Es\sgibt\s\d+\sweitere\sFlotten\smit\sder\sselben\sAktion,\sselben\sZiel\sund\sselben\sAuftrag\.';
-    $regExp .= '[\s\n]+)?';
-    $regExp .= '(\s+(?<!Rückkehr\s)';
-    $regExp .= '    (?P<strObjecte>(?:'.$reDecimalNumber.'\s+?'.$reObject.'\s*?)+)\s*(?:\*\s\+|\+)';
-    $regExp .= '    |(?:\*\s\+|\+)';
-    $regExp .= ')?';
+        $regExp .= '/mxs';
 
-    $regExp .= '/mxs';
-
-    return $regExp;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    $retVal = $this->getRegularExpression();
-
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
-
-    return $retVal;
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
+        return $regExp;
+    }
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

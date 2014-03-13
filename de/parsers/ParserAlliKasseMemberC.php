@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -28,28 +28,28 @@
 class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-    $this->setIdentifier('de_alli_kasse_member');
-    $this->setName("Allianzkasse Mitglieder");
-    $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
-    $this->setRegExpBeginData('/Name\s+angenommen\s+gesamt\s+pro\s+Tag\s*/sm');
-    $this->setRegExpEndData('/\(\*\)\.\.\snicht angenommen\,\s\(\*\*\)\.\.\shinter\sder\sNoobbarriere/smU');
-  }
+        $this->setIdentifier('de_alli_kasse_member');
+        $this->setName("Allianzkasse Mitglieder");
+        $this->setRegExpCanParseText('/Allianzkasse.*Kasseninhalt.*Auszahlung.*Auszahlungslog.*Auszahlungslog.*der\sletzten\sdrei\sWochen/smU');
+        $this->setRegExpBeginData('/Name\s+angenommen\s+gesamt\s+pro\s+Tag\s*/sm');
+        $this->setRegExpEndData('/\(\*\)\.\.\snicht angenommen\,\s\(\*\*\)\.\.\shinter\sder\sNoobbarriere/smU');
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * @see ParserI::parseText()
-   */
+    /**
+     * @see ParserI::parseText()
+     */
     public function parseText(DTOParserResultC $parserResult)
     {
         $parserResult->objResultData = new DTOParserAlliKasseMemberResultC();
-        $retVal                      =& $parserResult->objResultData;
+        $retVal =& $parserResult->objResultData;
 
         $this->stripTextToData();
 
@@ -88,13 +88,13 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
 
     }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
     private function getRegularExpression()
     {
         $reDateTime = $this->getRegExpDateTime();
-        $reUser = $this->getRegExpUserName();
-        $reInteger = $this->getRegExpDecimalNumber();
+        $reUser     = $this->getRegExpUserName();
+        $reInteger  = $this->getRegExpDecimalNumber();
         $reExtended = $this->getRegExpFloatingDouble();
 
         $regExp = '/^';
@@ -115,20 +115,4 @@ class ParserAlliKasseMemberC extends ParserBaseC implements ParserI
         return $regExp;
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    return HelperC::removeNamedGroups( $this->getRegularExpression() );
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

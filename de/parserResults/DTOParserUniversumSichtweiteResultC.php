@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author masel <masel789@googlemail.com>
- * @package libIwParsers
+ * @author     masel <masel789@googlemail.com>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,14 +23,9 @@
  */
 class DTOParserUniversumSichtweiteResultC
 {
-  /**
-   * @soap
-   * @var array $aKbLinks an array of objects of type DTOParserXmlResultLinkC
-   */
-  public $iNewUniXmlTime = false;
-
+    /**
+     * @soap
+     * @var array $aKbLinks an array of objects of type DTOParserXmlResultLinkC
+     */
+    public $iNewUniXmlTime = false;
 }
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////

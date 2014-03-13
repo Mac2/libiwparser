@@ -9,8 +9,8 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -23,25 +23,24 @@
  */
 class DTOParserIndexFleetResultC
 {
-  /**
-   * @soap
-   * @var string $strType
-   */
-  public $strType = '';
+    /**
+     * @soap
+     * @var string $strType
+     */
+    public $strType = '';
 
 
-  /**
-   * @soap
-   * @var array $aFleets
-   */
-  public $aFleets = array ();
+    /**
+     * @soap
+     * @var array $aFleets
+     */
+    public $aFleets = array();
 
-  /**
-   * @soap
-   * @var bool $bObjectsVisible
-   */
-  public $bObjectsVisible = false;
-
+    /**
+     * @soap
+     * @var bool $bObjectsVisible
+     */
+    public $bObjectsVisible = false;
 }
 
 /**
@@ -49,70 +48,69 @@ class DTOParserIndexFleetResultC
  */
 class DTOParserIndexFleetResultFleetC
 {
-  /**
-   * @soap
-   * @var string $strPlanetNameTo
-   */
-  public $strPlanetNameTo = '';
+    /**
+     * @soap
+     * @var string $strPlanetNameTo
+     */
+    public $strPlanetNameTo = '';
 
-  /**
-   * @soap
-   * @var string $strCoordsTo
-   */
-  public $strCoordsTo = '';
+    /**
+     * @soap
+     * @var string $strCoordsTo
+     */
+    public $strCoordsTo = '';
 
-  /**
-   * @soap
-   * @var array $aCoordsTo
-   */
-  public $aCoordsTo = array();
+    /**
+     * @soap
+     * @var array $aCoordsTo
+     */
+    public $aCoordsTo = array();
 
-  /**
-   * @soap
-   * @var string $strPlanetNameFrom
-   */
-  public $strPlanetNameFrom = '';
+    /**
+     * @soap
+     * @var string $strPlanetNameFrom
+     */
+    public $strPlanetNameFrom = '';
 
-  /**
-   * @soap
-   * @var string $strUserNameFrom
-   */
-  public $strUserNameFrom = '';
+    /**
+     * @soap
+     * @var string $strUserNameFrom
+     */
+    public $strUserNameFrom = '';
 
-  /**
-   * @soap
-   * @var string $strCoordsFrom
-   */
-  public $strCoordsFrom = '';
+    /**
+     * @soap
+     * @var string $strCoordsFrom
+     */
+    public $strCoordsFrom = '';
 
-  /**
-   * @soap
-   * @var array $aCoordsFrom
-   */
-  public $aCoordsFrom = array();
+    /**
+     * @soap
+     * @var array $aCoordsFrom
+     */
+    public $aCoordsFrom = array();
 
-  /**
-   * @soap
-   * @var unixtime|null $iAnkunft
-   */
-  public $iAnkunft = null;
+    /**
+     * @soap
+     * @var unixtime|null $iAnkunft
+     */
+    public $iAnkunft = null;
 
-  /**
-   * @soap
-   * @var integer|null $iAnkunftIn duration in seconds
-   */
-  public $iAnkunftIn = null;
+    /**
+     * @soap
+     * @var integer|null $iAnkunftIn duration in seconds
+     */
+    public $iAnkunftIn = null;
 
-  /**
-   * @soap
-   * @var enum $eTransfairType (übergabe|Transport)
-   */
-  public $eTransfairType = array();
+    /**
+     * @soap
+     * @var enum $eTransfairType (übergabe|Transport)
+     */
+    public $eTransfairType = array();
 
-  /**
-   * @soap
-   * @var array $aObjects the things that will be transporter or that are flying to the planet
-   */
-  public $aObjects = array();
-
+    /**
+     * @soap
+     * @var array $aObjects the things that will be transporter or that are flying to the planet
+     */
+    public $aObjects = array();
 }

@@ -9,9 +9,9 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -24,32 +24,31 @@
  */
 class DTOParserForschungResultC
 {
-  /**
-   * @soap
-   * @var array $aResearchsResearched
-   */
-  public $aResearchsResearched = array();
+    /**
+     * @soap
+     * @var array $aResearchsResearched
+     */
+    public $aResearchsResearched = array();
 
-  /**
-   * @soap
-   * @var array $aResearchsProgress
-   */
-  public $aResearchsProgress = array(); 
+    /**
+     * @soap
+     * @var array $aResearchsProgress
+     */
+    public $aResearchsProgress = array();
 
-  /**
-   * @soap
-   * @var array $aResearchsOpen
-   */
-  public $aResearchsOpen = array();
+    /**
+     * @soap
+     * @var array $aResearchsOpen
+     */
+    public $aResearchsOpen = array();
 
-  /**
-   * @soap
-   * @var integer
-   */
-  public $iMalusRed = 0;
-  public $iBonusRed = 0;
-  public $iverschwFP = 0;
-
+    /**
+     * @soap
+     * @var integer
+     */
+    public $iMalusRed = 0;
+    public $iBonusRed = 0;
+    public $iverschwFP = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,82 +56,81 @@ class DTOParserForschungResultC
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * 
+ *
  */
 class DTOParserForschungResearchedResultC
 {
-   /**
-   * @soap
-   * @var string $strResearchName the name of the research
-   */
-  public $strResearchName = '';
-
-   /**
-   * @soap
-   * @var string $strResearchComment the shortline comment of the research
-   */
-  public $strResearchComment = '';  
-
-   /**
-   * @soap
-   * @var string $strAreaName the area
-   */
-  public $strAreaName = '';      
-
-   /**
-   * @soap
-   * @var integer $iFP the amount of research points to be needed without modificators
-   */
-  public $iFP = '';
-
-   /**
-   * @soap
-   * @var integer $iFP the amount of research points to be needed currently
-   */
-  public $iFP_akt = '';
-
-   /**
-   * @soap
-   * @var integer $iPeopleResearched the people step for this research
-   */
-  public $iPeopleResearched = '';
-
-   /**
-    * @soap
-    * @var integer $iProzent
-    */
-  public $iProzent = '';
-
-   /**
-    * @soap
-    * @var integer $iMalus
-    */
-  public $iMalus = '';
-
-   /**
-    * @soap
-    * @var integer $iResearchCosts the prozent of the full fp because of the people step
-    */
-  public $iResearchCosts = '';
-
-   /**
-   * @soap
-   * @var integer $iUserResearchTime how long the user needs to research in seconds
-   */
-  public $iUserResearchTime = '';
+    /**
+     * @soap
+     * @var string $strResearchName the name of the research
+     */
+    public $strResearchName = '';
 
     /**
-   * @soap
-   * @var array $aCosts further Costs for this research
-   */
-  public $aCosts = array();
+     * @soap
+     * @var string $strResearchComment the shortline comment of the research
+     */
+    public $strResearchComment = '';
 
-   /**
-   * @soap
-   * @var enum $eState researched
-   */
-  public $eState = 'researched';  
+    /**
+     * @soap
+     * @var string $strAreaName the area
+     */
+    public $strAreaName = '';
 
+    /**
+     * @soap
+     * @var integer $iFP the amount of research points to be needed without modificators
+     */
+    public $iFP = '';
+
+    /**
+     * @soap
+     * @var integer $iFP the amount of research points to be needed currently
+     */
+    public $iFP_akt = '';
+
+    /**
+     * @soap
+     * @var integer $iPeopleResearched the people step for this research
+     */
+    public $iPeopleResearched = '';
+
+    /**
+     * @soap
+     * @var integer $iProzent
+     */
+    public $iProzent = '';
+
+    /**
+     * @soap
+     * @var integer $iMalus
+     */
+    public $iMalus = '';
+
+    /**
+     * @soap
+     * @var integer $iResearchCosts the prozent of the full fp because of the people step
+     */
+    public $iResearchCosts = '';
+
+    /**
+     * @soap
+     * @var integer $iUserResearchTime how long the user needs to research in seconds
+     */
+    public $iUserResearchTime = '';
+
+    /**
+     * @soap
+     * @var array $aCosts further Costs for this research
+     */
+    public $aCosts = array();
+
+    /**
+     * @soap
+     * @var enum $eState researched
+     */
+    public $eState = 'researched';
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -140,82 +138,81 @@ class DTOParserForschungResearchedResultC
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * 
+ *
  */
 class DTOParserForschungOpenResultC
 {
-   /**
-   * @soap
-   * @var string $strResearchName the name of the research
-   */
-  public $strResearchName = '';
-
-   /**
-   * @soap
-   * @var string $strResearchComment the shortline comment of the research
-   */
-  public $strResearchComment = '';  
-
-   /**
-   * @soap
-   * @var string $strAreaName the area
-   */
-  public $strAreaName = '';
-
-   /**
-   * @soap
-   * @var integer $iFP the amount of research points to be needed without modificators
-   */
-  public $iFP = '';
-
-   /**
-    * @soap
-    * @var integer $iFP the amount of research points to be needed currently
-    */
-  public $iFP_akt = '';
-
-   /**
-   * @soap
-   * @var integer $iPeopleResearched the people step for this research
-   */
-  public $iPeopleResearched = '';
-
-   /**
-   * @soap
-   * @var integer $iProzent
-   */
-  public $iProzent = '';
-
-   /**
-   * @soap
-   * @var integer $iMalus
-   */
-  public $iMalus = '';
-
-   /**
-   * @soap
-   * @var integer $iResearchCosts the prozent of the full fp because of the people step
-   */
-  public $iResearchCosts = '';
-
-   /**
-   * @soap
-   * @var integer $iUserResearchTime how long the user needs to research
-   */
-  public $iUserResearchTime = '';
+    /**
+     * @soap
+     * @var string $strResearchName the name of the research
+     */
+    public $strResearchName = '';
 
     /**
-   * @soap
-   * @var array $aCosts further Costs for this research
-   */
-  public $aCosts = array();
+     * @soap
+     * @var string $strResearchComment the shortline comment of the research
+     */
+    public $strResearchComment = '';
 
-   /**
-   * @soap
-   * @var enum $eState open
-   */
-  public $eState = 'open';  
+    /**
+     * @soap
+     * @var string $strAreaName the area
+     */
+    public $strAreaName = '';
 
+    /**
+     * @soap
+     * @var integer $iFP the amount of research points to be needed without modificators
+     */
+    public $iFP = '';
+
+    /**
+     * @soap
+     * @var integer $iFP the amount of research points to be needed currently
+     */
+    public $iFP_akt = '';
+
+    /**
+     * @soap
+     * @var integer $iPeopleResearched the people step for this research
+     */
+    public $iPeopleResearched = '';
+
+    /**
+     * @soap
+     * @var integer $iProzent
+     */
+    public $iProzent = '';
+
+    /**
+     * @soap
+     * @var integer $iMalus
+     */
+    public $iMalus = '';
+
+    /**
+     * @soap
+     * @var integer $iResearchCosts the prozent of the full fp because of the people step
+     */
+    public $iResearchCosts = '';
+
+    /**
+     * @soap
+     * @var integer $iUserResearchTime how long the user needs to research
+     */
+    public $iUserResearchTime = '';
+
+    /**
+     * @soap
+     * @var array $aCosts further Costs for this research
+     */
+    public $aCosts = array();
+
+    /**
+     * @soap
+     * @var enum $eState open
+     */
+    public $eState = 'open';
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -223,84 +220,79 @@ class DTOParserForschungOpenResultC
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * 
+ *
  */
 class DTOParserForschungProgressResultC
 {
-   /**
-   * @soap
-   * @var string $strResearchName the name of the research
-   */
-  public $strResearchName = '';
-
-   /**
-   * @soap
-   * @var string $strResearchComment the shortline comment of the research
-   */
-  public $strResearchComment = '';  
-
-   /**
-   * @soap
-   * @var string $strAreaName the area
-   */
-  public $strAreaName = '';
-
-   /**
-   * @soap
-   * @var integer $iFP the amount of research points to be needed without modificators
-   */
-  public $iFP = '';
-
-   /**
-   * @soap
-   * @var integer $iFP the amount of research points to be needed currently
-   */
-  public $iFP_akt = '';
-
-   /**
-   * @soap
-   * @var integer $iPeopleResearched the people step for this research
-   */
-  public $iPeopleResearched = '';
-
-   /**
-   * @soap
-   * @var integer $iProzent
-   */
-  public $iProzent = '';
-
-   /**
-   * @soap
-   * @var integer $iMalus
-   */
-  public $iMalus = '';
-
-   /**
-   * @soap
-   * @var integer $iResearchCosts the percentage of the full fp because of the people step
-   */
-  public $iResearchCosts = ''; 
-
-   /**
-   * @soap
-   * @var integer $iUserResearchTime unixtime until research
-   */
-  public $iUserResearchTime = '';
+    /**
+     * @soap
+     * @var string $strResearchName the name of the research
+     */
+    public $strResearchName = '';
 
     /**
-   * @soap
-   * @var integer $iUserResearchDuration seconds until research
-   */
-  public $iUserResearchDuration = ''; 
+     * @soap
+     * @var string $strResearchComment the shortline comment of the research
+     */
+    public $strResearchComment = '';
 
-   /**
-   * @soap
-   * @var enum $eState progress
-   */
-  public $eState = 'progress';  
+    /**
+     * @soap
+     * @var string $strAreaName the area
+     */
+    public $strAreaName = '';
 
+    /**
+     * @soap
+     * @var integer $iFP the amount of research points to be needed without modificators
+     */
+    public $iFP = '';
+
+    /**
+     * @soap
+     * @var integer $iFP the amount of research points to be needed currently
+     */
+    public $iFP_akt = '';
+
+    /**
+     * @soap
+     * @var integer $iPeopleResearched the people step for this research
+     */
+    public $iPeopleResearched = '';
+
+    /**
+     * @soap
+     * @var integer $iProzent
+     */
+    public $iProzent = '';
+
+    /**
+     * @soap
+     * @var integer $iMalus
+     */
+    public $iMalus = '';
+
+    /**
+     * @soap
+     * @var integer $iResearchCosts the percentage of the full fp because of the people step
+     */
+    public $iResearchCosts = '';
+
+    /**
+     * @soap
+     * @var integer $iUserResearchTime unixtime until research
+     */
+    public $iUserResearchTime = '';
+
+    /**
+     * @soap
+     * @var integer $iUserResearchDuration seconds until research
+     */
+    public $iUserResearchDuration = '';
+
+    /**
+     * @soap
+     * @var enum $eState progress
+     */
+    public $eState = 'progress';
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

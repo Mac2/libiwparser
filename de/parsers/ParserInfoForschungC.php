@@ -9,17 +9,15 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-
-
 
 /**
  * Parses a Forschung Information
@@ -31,29 +29,28 @@
 class ParserInfoForschungC extends ParserBaseC implements ParserI
 {
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  public function __construct()
-  {
-    parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-    $this->setIdentifier('de_info_forschung');
-    $this->setName("Forschungsinfo");
-    $this->setRegExpCanParseText('/Forschungsinfo:.+Status.+Farbenlegende:/sm');
-    $this->setRegExpBeginData( '/Forschungsinfo\:/' );
-    $this->setRegExpEndData( '/Farbenlegende/' );
-  }
+        $this->setIdentifier('de_info_forschung');
+        $this->setName("Forschungsinfo");
+        $this->setRegExpCanParseText('/Forschungsinfo:.+Status.+Farbenlegende:/sm');
+        $this->setRegExpBeginData('/Forschungsinfo\:/');
+        $this->setRegExpEndData('/Farbenlegende/');
+    }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  /**
-   * @see ParserI::parseText()
-   */
+    /**
+     * @see ParserI::parseText()
+     */
     public function parseText(DTOParserResultC $parserResult)
     {
         $parserResult->objResultData = new DTOParserInfoForschungResultC();
-        $retVal                      =& $parserResult->objResultData;
-        $fRetVal                     = 0;
+        $retVal =& $parserResult->objResultData;
 
         $this->stripTextToData();
 
@@ -126,142 +123,115 @@ class ParserInfoForschungC extends ParserBaseC implements ParserI
 
     }
 
-  /////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////
 
-  private function getRegularExpressionRess()
-  {
-    /**
-    */
+    private function getRegularExpressionRess()
+    {
+        $reResource = $this->getRegExpResource();
 
-    $reResource  = $this->getRegExpResource();
+        $regExpRess = '/';
+        $regExpRess .= '(?P<resource_name>' . $reResource . ')\:\s(?P<resource_count>' . $this->getRegExpDecimalNumber() . ')';
+        $regExpRess .= '/mx';
 
-    $regExpRess  = '/';
-    $regExpRess  .= '(?P<resource_name>'.$reResource.')\:\s(?P<resource_count>'.$this->getRegExpDecimalNumber().')';
-    $regExpRess  .= '/mx';
-    
-    return $regExpRess;
-  }
-  
-  /////////////////////////////////////////////////////////////////////////////
+        return $regExpRess;
+    }
 
-  private function getRegularExpression()
-  {
-    /**
-    */
+    /////////////////////////////////////////////////////////////////////////////
 
-    $reResearch         = $this->getRegExpSingleLineText3();        //! accepted also numbers in ResearchName
-    $reSchiffeName      = $this->getRegExpSingleLineText3();
-    $reBracketString    = $this->getRegExpBracketString();
-    $reAreas            = $this->getRegExpAreas();
-    $reFP               = $this->getRegExpDecimalNumber();
-    $reCosts            = $this->getRegExpDecimalNumber();
-    $reResource         = $this->getRegExpResource();
+    private function getRegularExpression()
+    {
+        $reResearch      = $this->getRegExpSingleLineText3(); //! accepted also numbers in ResearchName
+        $reSchiffeName   = $this->getRegExpSingleLineText3();
+        $reBracketString = $this->getRegExpBracketString();
+        $reAreas         = $this->getRegExpAreas();
+        $reFP            = $this->getRegExpDecimalNumber();
+        $reCosts         = $this->getRegExpDecimalNumber();
+        $reResource      = $this->getRegExpResource();
 
-    
-    $regExp  = '/';
-    $regExp  .= '(?P<strResearchName>'.$reResearch.')\s*?';
-    $regExp  .= '[\n\r]+';
-    $regExp  .= 'Status\s+?';
-    $regExp  .= '(?P<strStatus>'.'(?:erforscht|erforschbar|nicht\serforschbar|erforschbar,\saber\sGeb.{1,3}ude\sfehlt)'.')\s*?';
-    $regExp  .= '[\n\r]+';
-    $regExp  .= 'Gebiet\s+?';
-    $regExp  .= '(?P<strAreaName>'.$reAreas.')\s*?';
-    $regExp  .= '[\n\r]+';
-    $regExp  .= '(?:';
-    //! schon erforschte Variante
-    $regExp  .= '   (?:(?P<comment>[\s\S]*?)';
-    $regExp  .= '   [\n\r]+|)';
-    $regExp  .= '   (?:Zuerst\serforscht\svon\s*(?P<first>[^\n\r]+?';
-    $regExp  .= '   [\n\r]+))';
-    $regExp  .= '|';
-    //! noch nicht erforschte Variante
-    $regExp  .= '   (?:(?P<commentonly>[\s\S]*?)';
-    $regExp  .= '   [\n\r]+|)';
-    $regExp  .= ')';
-    
-    $regExp  .= 'Kosten\s+?';
-    $regExp .= '(?P<fp>'        . $reFP       . ')\sForschungspunkte';
-    $regExp .= '(?P<kosten>(?:\s' . $reResource . '\:\s' . $reCosts . ')+|(?:\s\:\s' . $reCosts . ')+|)';
-    $regExp  .= '[\n\r\s\t]+';
+        $regExp = '/';
+        $regExp .= '(?P<strResearchName>' . $reResearch . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= 'Status\s+?';
+        $regExp .= '(?P<strStatus>' . '(?:erforscht|erforschbar|nicht\serforschbar|erforschbar,\saber\sGeb.{1,3}ude\sfehlt)' . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= 'Gebiet\s+?';
+        $regExp .= '(?P<strAreaName>' . $reAreas . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= '(?:';
+        //! schon erforschte Variante
+        $regExp .= '   (?:(?P<comment>[\s\S]*?)';
+        $regExp .= '   \n+|)';
+        $regExp .= '   (?:Zuerst\serforscht\svon\s*(?P<first>[^\n\r]+?';
+        $regExp .= '   \n+))';
+        $regExp .= '|';
+        //! noch nicht erforschte Variante
+        $regExp .= '   (?:(?P<commentonly>[\s\S]*?)';
+        $regExp .= '   \n+|)';
+        $regExp .= ')';
 
-    $regExp  .= '(\s+?';
-    $regExp  .= '(?P<strMiscCosts>'.'Die\srealen\sForschungskosten\ssind\svon\sweiteren\sParametern\sabh.{1,3}ngig\.)';
-    $regExp  .= '\s+?)?';
+        $regExp .= 'Kosten\s+?';
+        $regExp .= '(?P<fp>' . $reFP . ')\sForschungspunkte';
+        $regExp .= '(?P<kosten>(?:\s' . $reResource . '\:\s' . $reCosts . ')+|(?:\s\:\s' . $reCosts . ')+|)';
+        $regExp .= '[\n\s]+';
 
-    $regExp .= '(?:\s*?\(von\s(?P<count>\d+)(?:\%|\\\%)\sLeuten\serforscht,\s(?P<prozent>\d+)(?:\%|\\\%)\sFPKosten\)';
-    $regExp  .= '[\n\r]+';
-    $regExp  .= ')?';
+        $regExp .= '(\s+?';
+        $regExp .= '(?P<strMiscCosts>' . 'Die\srealen\sForschungskosten\ssind\svon\sweiteren\sParametern\sabh.{1,3}ngig\.)';
+        $regExp .= '\s+?)?';
 
-    $regExp .= '(?:[\s\t\n\r]*?Aufgrund\svon\sgenerellen\stechnischen\sUnverst.{1,3}ndnis\sim\sUniversum,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s(?:\%|\\\%)\.';
-    $regExp  .= '[\n\r]+';
-    $regExp  .= ')?';
+        $regExp .= '(?:\s*?\(von\s(?P<count>\d+)\%\sLeuten\serforscht,\s(?P<prozent>\d+)\%\sFPKosten\)';
+        $regExp .= '\n+';
+        $regExp .= ')?';
 
-    $regExp .= '[\n\s]*';
+        $regExp .= '(?:[\s\n]*?Aufgrund\svon\sgenerellen\stechnischen\sUnverst.{1,3}ndnis\sim\sUniversum,\sliegen\sdie\sForschungskosten\sbei\s(?P<malus>\d+)\s\%\.';
+        $regExp .= '\n+';
+        $regExp .= ')?';
 
-    $regExp  .= '(?:';
-    $regExp  .= '\s*Prototyp\s+?';
-    $regExp  .= 'Die\sForschung\sbringt\seinen\sPrototyp\svon\s(?P<strPrototypName>'        . $reSchiffeName       . ')\s*?';
-    $regExp  .= '[\n\r]+';
-    $regExp  .= ')?';
-        
-    $regExp  .= '\s*Voraussetzungen\sForschungen\s+?';
-    $regExp  .= '(?P<strResearchsNeeded>'.$reBracketString.'|)';
-    $regExp  .= '\s+?';
+        $regExp .= '[\n\s]*';
 
-    $regExp  .= 'Voraussetzungen\sGeb.{1,3}ude\s+?';
-    $regExp  .= '(?P<strBuildingsNeeded>'.$reBracketString.'|)';
-    $regExp  .= '\s+?';
+        $regExp .= '(?:';
+        $regExp .= '\s*Prototyp\s+?';
+        $regExp .= 'Die\sForschung\sbringt\seinen\sPrototyp\svon\s(?P<strPrototypName>' . $reSchiffeName . ')\s*?';
+        $regExp .= '\n+';
+        $regExp .= ')?';
 
-    $regExp  .= 'Voraussetzungen\sObjekte\s+?';
-    $regExp  .= '(?P<strObjectsNeeded>'.$reBracketString.'|)';
-    $regExp  .= '\s+?';
+        $regExp .= '\s*Voraussetzungen\sForschungen\s+?';
+        $regExp .= '(?P<strResearchsNeeded>' . $reBracketString . '|)';
+        $regExp .= '\s+?';
 
-    $regExp  .= '(?:\s+?';
-    $regExp  .= '(?P<strMiscNeeded>'.'Es\ssind\sweitere\sVoraussetzungen\szu\serf.{1,3}llen,\sum\sdiese\sForschung\serforschen\szu\skönnen\.'.')?';
-    $regExp  .= '\s+?)?';
+        $regExp .= 'Voraussetzungen\sGeb.{1,3}ude\s+?';
+        $regExp .= '(?P<strBuildingsNeeded>' . $reBracketString . '|)';
+        $regExp .= '\s+?';
 
-    $regExp  .= 'Erm.{1,3}glicht\sForschungen\s+?';
-    $regExp  .= '(?P<strResearchsDevelop>('.$reBracketString.')|)';
-    $regExp  .= '\s+?';
+        $regExp .= 'Voraussetzungen\sObjekte\s+?';
+        $regExp .= '(?P<strObjectsNeeded>' . $reBracketString . '|)';
+        $regExp .= '\s+?';
 
-    $regExp  .= 'Erm.{1,3}glicht\sGeb.{1,3}ude\s+?';
-    $regExp  .= '(?P<strBuildingsDevelop>'.$reBracketString.'|)';
-    $regExp  .= '\s+?';
+        $regExp .= '(?:\s+?';
+        $regExp .= '(?P<strMiscNeeded>' . 'Es\ssind\sweitere\sVoraussetzungen\szu\serf.{1,3}llen,\sum\sdiese\sForschung\serforschen\szu\skönnen\.' . ')?';
+        $regExp .= '\s+?)?';
 
-    $regExp  .= 'Erm.{1,3}glicht\sGeb.{1,3}udestufen\s+?';
-    $regExp  .= '(?P<strBuildingLevelsDevelop>'.$reBracketString.'|)';
-    $regExp  .= '\s+?';
+        $regExp .= 'Erm.{1,3}glicht\sForschungen\s+?';
+        $regExp .= '(?P<strResearchsDevelop>(' . $reBracketString . ')|)';
+        $regExp .= '\s+?';
 
-    $regExp  .= 'Erm.{1,3}glicht\sVerteidigungsanlagen\s+?';
-    $regExp  .= '(?P<strDefencesDevelop>'.$reBracketString.'|)';
-    $regExp  .= '\s+?';
+        $regExp .= 'Erm.{1,3}glicht\sGeb.{1,3}ude\s+?';
+        $regExp .= '(?P<strBuildingsDevelop>' . $reBracketString . '|)';
+        $regExp .= '\s+?';
 
-    $regExp  .= 'Erm.{1,3}glicht\sGenetikoptionen\s*?';
-    $regExp  .= '(?P<strGeneticsDevelop>'.$reBracketString.'|)';
+        $regExp .= 'Erm.{1,3}glicht\sGeb.{1,3}udestufen\s+?';
+        $regExp .= '(?P<strBuildingLevelsDevelop>' . $reBracketString . '|)';
+        $regExp .= '\s+?';
 
-    $regExp  .= '/mx';
+        $regExp .= 'Erm.{1,3}glicht\sVerteidigungsanlagen\s+?';
+        $regExp .= '(?P<strDefencesDevelop>' . $reBracketString . '|)';
+        $regExp .= '\s+?';
 
-    return $regExp;
-  }
-  
-  /////////////////////////////////////////////////////////////////////////////
-  
-  /**
-   * For debugging with "The Regex Coach" which doesn't support named groups
-   */
-  private function getRegularExpressionWithoutNamedGroups()
-  {
-    $retVal = $this->getRegularExpression();
-    
-    $retVal = preg_replace( '/\?P<\w+>/', '', $retVal );
-    
-    return $retVal;
-  }
-   
-  /////////////////////////////////////////////////////////////////////////////  
+        $regExp .= 'Erm.{1,3}glicht\sGenetikoptionen\s*?';
+        $regExp .= '(?P<strGeneticsDevelop>' . $reBracketString . '|)';
+
+        $regExp .= '/mx';
+
+        return $regExp;
+    }
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////

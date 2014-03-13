@@ -9,9 +9,9 @@
  * ----------------------------------------------------------------------------
  */
 /**
- * @author Martin Martimeo <martin@martimeo.de>
- * @author Mac <MacXY@herr-der-mails.de>
- * @package libIwParsers
+ * @author     Martin Martimeo <martin@martimeo.de>
+ * @author     Mac <MacXY@herr-der-mails.de>
+ * @package    libIwParsers
  * @subpackage parsers_de
  */
 
@@ -24,43 +24,42 @@
  */
 class DTOParserIndexResultC
 {
-  /**
-   * @soap
-   * @var array $aContainer
-   */
-  public $aContainer = array ();
+    /**
+     * @soap
+     * @var array $aContainer
+     */
+    public $aContainer = array();
 
-  /**
-   * @soap
-   * @var integer $iUnreadMsg
-   */
-  public $iUnreadMsg = 0;
-  
-  /**
-   * @soap
-   * @var integer $iUnreadAllyMsg
-   */
-  public $iUnreadAllyMsg = 0;
-  
-  /**
-   * @soap
-   * @var bool $bOngoingResearch
-   */
-  public $bOngoingResearch = false;
+    /**
+     * @soap
+     * @var integer $iUnreadMsg
+     */
+    public $iUnreadMsg = 0;
+
+    /**
+     * @soap
+     * @var integer $iUnreadAllyMsg
+     */
+    public $iUnreadAllyMsg = 0;
+
+    /**
+     * @soap
+     * @var bool $bOngoingResearch
+     */
+    public $bOngoingResearch = false;
 }
 
 class DTOParserIndexResultIndexC
 {
-  /**
-   * @soap
-   * @var string $eParserType the type of the index container
-   */
-  public $eParserType = '';
+    /**
+     * @soap
+     * @var string $eParserType the type of the index container
+     */
+    public $eParserType = '';
 
-  /**
-   * @soap
-   * @var string $strParserText the text of the index container
-   */
-  public $strParserText = '';
-
+    /**
+     * @soap
+     * @var string $strParserText the text of the index container
+     */
+    public $strParserText = '';
 }
