@@ -96,7 +96,6 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
                 $retVal->aKolos[$strCoords]->eObjectType   = PropertyValueC::ensureEnum($strKoloType, 'eObjectTypes');
                 $retVal->aKolos[$strCoords]->strPlanetName = PropertyValueC::ensureString($strKoloName);
 
-                var_dump($ress);
                 foreach ($ress as $key => $strResourceName) {
 
                     $ordr                  = new DTOParserWirtschaftPlaniressRessResultC();
