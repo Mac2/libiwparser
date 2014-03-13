@@ -238,7 +238,7 @@ class ParserForschungC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the research pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the de_forschung pattern.';
         }
 
     }

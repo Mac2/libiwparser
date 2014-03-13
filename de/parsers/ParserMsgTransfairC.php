@@ -124,7 +124,7 @@ class ParserMsgTransfairC extends ParserMsgBaseC implements ParserMsgI
             $retVal->aFetchedResources = $aFetchedResources;
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the TransfairMsg pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the de_msg_transfair pattern.';
         }
     }
 

@@ -89,8 +89,7 @@ class ParserIndexRessourcenC extends ParserMsgBaseC implements ParserMsgI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern.';
-            $parserResult->aErrors[]           = $msg->strParserText;
+            $parserResult->aErrors[]           = 'Unable to match the de_index_ressourcen pattern.';
         }
     }
 

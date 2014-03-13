@@ -146,7 +146,7 @@ class ParserMsgScanGebRessC extends ParserMsgBaseC implements ParserMsgI
 
         } else {
             $retVal->bSuccessfullyParsed = false;
-            $retVal->aErrors[]           = 'Unable to match the pattern. (Geb/Ress)';
+            $retVal->aErrors[]           = 'Unable to match the de_msg_scan_gebress pattern.';
             $retVal->aErrors[]           = $msg->strParserText;
         }
 

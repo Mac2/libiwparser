@@ -183,7 +183,7 @@ class ParserMsgSondierungC extends ParserMsgBaseC implements ParserMsgI
                 }
             } else {
                 $retVal->bSuccessfullyParsed = false;
-                $retVal->aErrors[]           = 'Unable to match the pattern (Sondierungen).';
+                $retVal->aErrors[]           = 'Unable to match the de_msg_sondierungen pattern.';
             }
         }
     }

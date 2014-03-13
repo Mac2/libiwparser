@@ -114,7 +114,7 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
             }
             if (empty($retVal->aKolos)) {
                 $parserResult->bSuccessfullyParsed = false;
-                $parserResult->aErrors[]           = 'Unable to match the pattern.';
+                $parserResult->aErrors[]           = 'Unable to match the de_wirtschaft_planiress2 pattern (no Kolos).';
             }
             # die Steuer kann leider erst berechnet werden, nachdem die Gesamtwerte ausgelesen wurden -> deshalb extra Schleife
             foreach ($retVal->aKolos as $kolo) {
@@ -122,7 +122,7 @@ class ParserWirtschaftPlaniress2C extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the de_wirtschaft_planiress2 pattern.';
         }
     }
 

@@ -141,7 +141,7 @@ class ParserMsgGaveC extends ParserMsgBaseC implements ParserMsgI
             $retVal->aResources      = $aResources;
         } else {
             $retVal->bSuccessfullyParsed = false;
-            $retVal->aErrors[]           = 'Unable to match the GaveMsg pattern.';
+            $retVal->aErrors[]           = 'Unable to match the de_msg_gave pattern.';
         }
 
     }

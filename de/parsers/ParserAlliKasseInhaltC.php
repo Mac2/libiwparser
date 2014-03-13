@@ -62,7 +62,7 @@ class ParserAlliKasseInhaltC extends ParserBaseC implements ParserI
             $retVal->fCredits = PropertyValueC::ensureFloat($aResult['fCredits']);
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the de_alli_kasse_inhalt pattern.';
         }
 
     }

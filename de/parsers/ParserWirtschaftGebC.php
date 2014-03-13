@@ -126,7 +126,7 @@ class ParserWirtschaftGebC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern (de_wirtschaft_geb).';
+            $parserResult->aErrors[]           = 'Unable to match the de_wirtschaft_geb pattern.';
         }
 
     }

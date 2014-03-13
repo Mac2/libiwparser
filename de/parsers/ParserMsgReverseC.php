@@ -128,7 +128,7 @@ class ParserMsgReverseC extends ParserMsgBaseC implements ParserMsgI
             $retVal->aResources    = $aResources;
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the ReverseMsg pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the de_msg_reverse pattern.';
         }
 
     }

@@ -244,7 +244,7 @@ class ParserInfoGebC extends ParserBaseC implements ParserI
 
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the de_info_geb pattern.';
         }
 
     }

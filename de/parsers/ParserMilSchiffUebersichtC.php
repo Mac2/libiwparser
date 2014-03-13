@@ -125,7 +125,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
 
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern (de_mil_schiff_uebersicht).';
+            $parserResult->aErrors[]           = 'Unable to match the de_mil_schiff_uebersicht pattern.';
         }
 
     }

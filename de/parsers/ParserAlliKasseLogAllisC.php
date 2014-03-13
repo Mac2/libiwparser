@@ -78,7 +78,7 @@ class ParserAlliKasseLogAllisC extends ParserBaseC implements ParserI
             $parserResult->aErrors[]           = 'no Data found';
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the de_alli_kasse_log_allis pattern.';
         }
     }
 

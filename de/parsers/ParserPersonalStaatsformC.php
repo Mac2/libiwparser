@@ -86,7 +86,7 @@ class ParserPersonalStaatsformC extends ParserBaseC implements ParserI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern.';
+            $parserResult->aErrors[]           = 'Unable to match the de_personal_staatsform pattern.';
         }
 
     }

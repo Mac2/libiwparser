@@ -174,8 +174,7 @@ class ParserMsgScanSchiffeDefRessC extends ParserMsgBaseC implements ParserMsgI
             $retVal->aDefences    = $aDefence;
         } else {
             $retVal->bSuccessfullyParsed = false;
-            $retVal->aErrors[]           = 'Unable to match the pattern (Schiffe/Deff/Ress).';
-            $retVal->aErrors[]           = '...' . $msg->strParserText;
+            $retVal->aErrors[]           = 'Unable to match the de_msg_scan_schiffedefress pattern.';
         }
 
     }

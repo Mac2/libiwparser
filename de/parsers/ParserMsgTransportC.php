@@ -131,7 +131,7 @@ class ParserMsgTransportC extends ParserMsgBaseC implements ParserMsgI
             $retVal->aResources      = $aResources;
         } else {
             $retVal->bSuccessfullyParsed = false;
-            $retVal->aErrors[]           = 'Unable to match the TransportMsg pattern.';
+            $retVal->aErrors[]           = 'Unable to match the de_msg_transport pattern.';
         }
     }
 

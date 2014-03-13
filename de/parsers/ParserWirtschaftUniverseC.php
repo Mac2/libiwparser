@@ -66,7 +66,7 @@ class ParserWirtschaftUniverseC extends ParserBaseC implements ParserI
             $parserResult->bSuccessfullyParsed = true;
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = "unable to match Pattern";
+            $parserResult->aErrors[]           = "Unable to match de_wirtschaft_universe pattern.";
         }
     }
 
