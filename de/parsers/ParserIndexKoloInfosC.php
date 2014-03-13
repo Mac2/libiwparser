@@ -136,8 +136,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
 
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern.';
-            $parserResult->aErrors[]           = $msg->strParserText;
+            $parserResult->aErrors[]           = 'Unable to match the de_index_koloinfos part1 pattern.';
         }
 
         // ### Part2 : Kolonieprobleme ###
@@ -154,8 +153,7 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
 
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the pattern.';
-            $parserResult->aErrors[]           = $msg->strParserText;
+            $parserResult->aErrors[]           = 'Unable to match the de_index_koloinfos part2 pattern.';
         }
 
         // ### Part3 : Schiffe und Deff ###
@@ -250,8 +248,6 @@ class ParserIndexKoloInfosC extends ParserMsgBaseC implements ParserMsgI
 
         $regExp = '/';
 
-        $regExp .= 'Kolonieinformation';
-        $regExp .= '\n+';
         $regExp .= '(?P<strKoloTyp>' . $reKoloType . ')';
         $regExp .= '\s+';
         $regExp .= '(?P<strPlanetName>' . $rePlanetName . ')';

@@ -61,7 +61,7 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
             'eisen'  => 'Eisen',
             'stahl'  => 'Stahl',
             'vv4a'   => 'VV4A',
-            'chemie' => 'Brause',
+            'chemie' => 'chemie',
             'eis'    => 'Eis',
             'wasser' => 'Wasser',
             'nrg'    => 'Energie'
@@ -96,7 +96,9 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
                 $retVal->aKolos[$strCoords]->eObjectType   = PropertyValueC::ensureEnum($strKoloType, 'eObjectTypes');
                 $retVal->aKolos[$strCoords]->strPlanetName = PropertyValueC::ensureString($strKoloName);
 
+                var_dump($ress);
                 foreach ($ress as $key => $strResourceName) {
+
                     $ordr                  = new DTOParserWirtschaftPlaniressRessResultC();
                     $ordr->strResourceName = PropertyValueC::ensureEnum($strResourceName, 'eResources');
                     if (isset($result[$key . '_vorrat'])) {
