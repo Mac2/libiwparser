@@ -24,7 +24,7 @@ class eResources
     const Stahl            = 'Stahl';
     const VV4A             = 'VV4A';
     const chemElemente     = 'chem. Elemente';
-    const chemie           = 'chem. Elemente';
+    const Chemie           = 'chem. Elemente';
     const Eis              = 'Eis';
     const Wasser           = 'Wasser';
     const Energie          = 'Energie';

@@ -61,7 +61,7 @@ class ParserWirtschaftPlaniressC extends ParserBaseC implements ParserI
             'eisen'  => 'Eisen',
             'stahl'  => 'Stahl',
             'vv4a'   => 'VV4A',
-            'chemie' => 'chemie',
+            'chemie' => 'Chemie',
             'eis'    => 'Eis',
             'wasser' => 'Wasser',
             'nrg'    => 'Energie'
