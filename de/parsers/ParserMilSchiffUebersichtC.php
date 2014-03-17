@@ -148,7 +148,7 @@ class ParserMilSchiffUebersichtC extends ParserBaseC implements ParserI
         $regExp .= '(?P<data_lines>';
         $regExp .= '    (?:';
         $regExp .= '        \n+';
-        $regExp .= '        [^\t\n]+';
+        $regExp .= '        [^\n]+';
         $regExp .= '    )*';
         $regExp .= ')';
         $regExp .= '$/mx';
