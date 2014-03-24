@@ -326,8 +326,8 @@ class HelperC
          * SS   :=    0 -   69 => [0-6]?\d
          * optional am or pm
          */
-        if (preg_match('/^(?P<day>[0-3]?\d)\.(?P<month_num>[0-1]?\d)\.(?P<year>20\d\d)\s(?P<hour>2[0-4]|[01]\d|\d):(?P<minute>[0-6]?\d):(?P<second>[0-6]?\d)$/', $value, $aResult) OR
-            preg_match('/^(?P<day>[0-3]?\d)\D{0,2}?[\s\.](?:(?P<month_num>[0-1]?\d)|(?P<month_str>\D+))[\s\.](?P<year>20\d\d)\s(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-6]?\d)(?:\:(?P<second>[0-6]?\d))?$/', $value, $aResult) OR
+        if (preg_match('/^(?P<day>[0-3]?\d)\.(?P<month_num>[0-1]?\d)\.(?P<year>20\d\d)\s(?P<hour>2[0-4]|[01]\d|\d):(?P<minute>[0-6]?\d):(?P<second>[0-6]?\d)/', $value, $aResult) OR
+            preg_match('/^(?P<day>[0-3]?\d)\D{0,2}?[\s\.](?:(?P<month_num>[0-1]?\d)|(?P<month_str>\D+))[\s\.](?P<year>20\d\d)\s(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-6]?\d)(?:\:(?P<second>[0-6]?\d))?/', $value, $aResult) OR
             preg_match('/(?P<year>20\d\d)[\-\.](?P<month_num>[0-1]?\d)[\-\.](?P<day>[0-3]?\d)\s(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-6]?\d)(?:\:(?P<second>[0-6]?\d))?/', $value, $aResult) OR
             preg_match('/(?P<month_str>\D+)\s(?P<day>[0-3]?\d)\D{0,2}?\,?\s(?P<year>20\d\d)\,?\s(?P<hour>2[0-4]|[01]\d|\d)\:(?P<minute>[0-6]?\d)(?:\:(?P<second>[0-6]?\d))?(\s(?P<pm>pm)|am)?/i', $value, $aResult) OR
             preg_match('/(?P<day>[0-3]?\d)\D{0,2}?[\s\.](?:(?P<month_num>[0-1]?\d)|(?P<month_str>\D+))[\s\.](?P<year>20\d\d)/', $value, $aResult) OR
