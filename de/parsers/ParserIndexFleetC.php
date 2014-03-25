@@ -65,8 +65,7 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
         $aResult = array();
 
         $fRetVal = preg_match_all($regExp, $msg->strParserText, $aResult, PREG_SET_ORDER);
-
-        if ($fRetVal !== false && $fRetVal > 0) {
+        if ($fRetVal !== false) {
             $parserResult->bSuccessfullyParsed = true;
 
             if ($this->getObjectsVisible()) {
@@ -138,7 +137,6 @@ class ParserIndexFleetC extends ParserMsgBaseC implements ParserMsgI
             }
         } else {
             $parserResult->bSuccessfullyParsed = false;
-            $parserResult->aErrors[]           = 'Unable to match the de_index_fleet pattern.';
         }
     }
 
