@@ -329,35 +329,38 @@ class ParserMsgC extends ParserBaseC implements ParserI
         $reAuthor      = $this->getRegExpLowUserName();
         $reDateTime    = $this->getRegExpDateTime();
         $reShipActions = $this->getRegExpShipActions();
-        $reLine        = $this->getRegExpSingleLineText();
-
-        $reHeader = $this->getRegularExpressionHeader();
+        $reHeader      = $this->getRegularExpressionHeader();
 
         //Just even don't think to ask anything about this regexp, fu!
         $regExp = '/';
-        $regExp .= '(?:\b(?P<msgTitle>' . $reTitle . ')';
-        $regExp .= '\s+';
-        $regExp .= '(?:(?P<msgAuthor>' . $reAuthor . ')';
-        $regExp .= '\s+';
-        $regExp .= '(?P<msgUserDateTime>' . $reDateTime . ')';
-        $regExp .= '[\s\n]+';
-        $regExp .= '(?P<msgUserType>Spielernachricht|Outbox)';
-        $regExp .= '[\t\s]+';
-        $regExp .= '(?:Antworten[\s\t]+Petzen\s\-\sDem\sAdmin\smelden)';
-        $regExp .= '[\s\n]+';
-        $regExp .= '|';
-        $regExp .= '(?P<msgIsSystem>Systemnachricht|von:Systemnachricht)';
-        $regExp .= '\s+';
-        $regExp .= '(?P<msgSystemDateTime>' . $reDateTime . ')';
-        $regExp .= '[\s\n]+';
-        $regExp .= '(?P<msgSystemType>' . $reShipActions . ')';
-        $regExp .= '[\s\n]+';
+
+        $regExp .= '(?:';
+        $regExp .= ' \b(?P<msgTitle>' . $reTitle . ')';
+        $regExp .= ' \s+';
+        $regExp .= ' (?:';
+        $regExp .= '  (?P<msgAuthor>' . $reAuthor . ')';
+        $regExp .= '  \s+';
+        $regExp .= '  (?P<msgUserDateTime>' . $reDateTime . ')';
+        $regExp .= '  [\s\n]+';
+        $regExp .= '  (?P<msgUserType>Spielernachricht|Outbox)';
+        $regExp .= '  [\t\s]+';
+        $regExp .= '  (?:Antworten[\s\t]+Petzen\s\-\sDem\sAdmin\smelden)';
+        $regExp .= '  [\s\n]+';
+        $regExp .= '  |';
+        $regExp .= '  (?P<msgIsSystem>Systemnachricht|von:Systemnachricht)';
+        $regExp .= '  \s+';
+        $regExp .= '  (?P<msgSystemDateTime>' . $reDateTime . ')';
+        $regExp .= '  [\s\n]+';
+        $regExp .= '  (?P<msgSystemType>' . $reShipActions . ')';
+        $regExp .= '  [\s\n]+';
+        $regExp .= ' )';
         $regExp .= ')';
+        $regExp .= '(?:';
+        $regExp .= ' (?P<msgText>.+)';
+        $regExp .= ' (?=' . $reHeader . '|\Z)';
         $regExp .= ')';
-        $regExp .= '(?:(?P<msgText>(' . $reLine . '(?:\n+|\Z))+)';
-        $regExp .= '(?=' . $reHeader . '|\Z)';
-        $regExp .= ')';
-        $regExp .= '/mxU';
+
+        $regExp .= '/smxU';
 
         return $regExp;
     }
